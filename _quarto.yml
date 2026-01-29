@@ -8,7 +8,7 @@ book:
   page-footer: 
     left: "© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0"
     right: This book was built with <a href="https://quarto.org/">Quarto</a>.
-  site-url: https://cw4e.ozanozbeker.com/
+  # site-url: https://cw4e.ozanozbeker.com/
   repo-url: https://github.com/ozanozbeker/cw4e
   repo-branch: main
   repo-actions: [edit, issue]

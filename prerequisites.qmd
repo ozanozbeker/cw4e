@@ -14,7 +14,7 @@ A stable internet connection is required for downloading tools and, later, for p
 
 ## Foundations Module
 
-These tools support @sec-foundations and should be installed before or during the first week of work.
+These tools support should be installed before or during the first week of work.
 
 ### GitHub Account
 
