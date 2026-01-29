@@ -1,0 +1,43 @@
+# Welcome {.unnumbered}
+
+This is the website for **"Computational Workflows for Engineers"**. This book will teach you how to build data products using SQL, Python, and the professional tools that connect them. You'll learn to extract data from various sources, transform it into useful forms, create reports and analyses, and share your results through packaging and automation.
+
+In this book, you will find a practicum of skills for engineering data work. Just as a machinist learns to read blueprints and maintain equipment before cutting metal, you'll learn to navigate file systems and use version control before writing analysis code. These foundational skills aren't prerequisites to rush through. They're the professional practices that separate engineers who can reliably build and maintain data systems from those who produce fragile, one-off scripts. You'll learn to think in workflows: how data moves from source to insight, how code moves from your laptop to production, and how projects move from idea to deliverable. Along the way, you'll develop the mental models that make debugging systematic rather than desperate, and the habits that make collaboration natural rather than painful.
+
+This book exists because there's a gap between "knowing how to code" and "knowing how to build things with code." Many engineers can write a Python script that works once on their machine. Fewer can build a data pipeline that runs reliably, produces traceable results, and can be maintained by someone else six months later. This book bridges that gap by teaching not just the *what* of data engineering tools, but the *why* behind professional practices. When you understand why version control matters, you use it consistently. When you understand why SQL and Python serve different purposes, you choose the right tool for each job. When you understand what makes a data product different from a one-time analysis, you build things that last.
+
+## Who This Book Is For
+
+This book is designed for engineering students and professionals who need to work with data but aren't pursuing careers as software developers. You might be an industrial engineer optimizing manufacturing processes, a civil engineer analyzing infrastructure data, a mechanical engineer processing sensor readings, or any engineer whose work increasingly involves computational analysis.
+
+The book assumes no prior programming experience. If you've never opened a terminal or written a line of code, you'll find everything you need here. If you have some programming background, you'll likely discover gaps in your workflow knowledge, the professional practices that experienced engineers take for granted but tutorials rarely teach.
+
+## How This Book Is Organized
+
+The book progresses through five modules, each building on the previous:
+
+**Foundations** covers the computational environment: how computers store and process data, how to navigate using the command line, and how to track your work with Git and GitHub. These skills underpin everything else.
+
+**Databases** introduces databases and the query language that powers analytical work. You'll learn to think in sets rather than loops, and to let the database do the heavy lifting.
+
+**Programming** teaches programming as a tool for orchestrating workflows. Rather than treating Python as a general-purpose language, we focus on the patterns most useful for data work: reading files, calling APIs, transforming data, and generating outputs.
+
+**Integration** brings SQL and Python together, showing how to build complete data pipelines that extract, transform, and load data reliably.
+
+**Delivery** covers the skills that turn projects into products: documentation, testing, packaging, and deployment.
+
+## What You Won't Find Here
+
+This is not a data science book. We won't cover statistical modeling, machine learning, or experimental design. Those topics deserve their own treatment, and many excellent resources exist for them.
+
+This is not a software engineering book. We won't build web applications, design APIs, or discuss system architecture at scale. Our focus is narrower: the data pipelines and analytical workflows that engineers build to support their domain work.
+
+This is not a comprehensive reference for any single tool. Python has hundreds of libraries; we'll use a handful. SQL has dozens of dialects; we'll focus on patterns that transfer. The goal is working fluency, not encyclopedic knowledge.
+
+## Acknowledgments
+
+This book draws on ideas from David Perkins' *Making Learning Whole*, which shaped the pedagogical approach of learning through complete, meaningful projects rather than isolated skill drills.
+
+## License
+
+This website is free to use and is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) License. The code examples are licensed under the [MIT License](https://opensource.org/license/mit).

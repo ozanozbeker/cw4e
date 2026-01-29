@@ -1,0 +1,11 @@
+# Quarto
+/.quarto/
+**/*.quarto_ipynb
+_book/
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/

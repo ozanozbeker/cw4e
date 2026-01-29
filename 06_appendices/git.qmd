@@ -1,0 +1,239 @@
+# Git Configuration {#sec-git-config}
+
+Before you can use Git effectively, you need to configure it with your identity and preferences. Git configurations are settings stored in configuration files that customize how Git behaves. This appendix walks you through the essential setup and common configuration options.
+
+## Configuration Levels
+
+Git stores configurations at three levels, each overriding the previous:
+
+1. **System** (`/etc/gitconfig`): Applies to all users on the machine. Rarely modified unless you're a system administrator.
+
+2. **Global** (`~/.gitconfig` or `~/.config/git/config`): Applies to all repositories for the current user. This is where you set your identity and preferences.
+
+3. **Local** (`.git/config` in a repository): Applies only to that specific repository. Useful for project-specific settings, like using a work email for work projects.
+
+When you run `git config`, you specify which level to modify with `--system`, `--global`, or `--local` (the default).
+
+## Checking Your Configuration
+
+To see your current configuration, including where each setting comes from:
+
+```{.bash filename="terminal"}
+git config --list --show-origin
+```
+
+This displays all active settings and which configuration file defines each one.
+
+To check a specific setting:
+
+```{.bash filename="terminal"}
+git config user.name
+git config user.email
+```
+
+## Required: Your Identity
+
+Git requires your name and email address. Every commit you make is stamped with this information, creating an audit trail of who made which changes. This isn't about authentication, but about attribution within the repository history.
+
+Set your identity globally:
+
+```{.bash filename="terminal"}
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+These values should match how you want to appear in commit logs. For professional work, use your full name. The email address will be visible to anyone who can see the repository, so choose one you're comfortable sharing publicly.
+
+::: {.callout-tip}
+## Using Different Identities
+
+If you use Git for both personal and work projects, you might want different identities. Set your personal identity globally, then override it for work repositories:
+
+```{.bash filename="terminal"}
+cd ~/work/company-project
+git config --local user.email "your.name@company.com"
+```
+
+Only this repository will use the work email; others will use your global setting.
+:::
+
+## Verifying Installation
+
+Before configuring, confirm Git is installed and check the version:
+
+```{.bash filename="terminal"}
+git --version
+```
+
+You should see output like `git version 2.43.0`. If you get a "command not found" error, you need to install Git.
+
+### Installing Git
+
+On **Windows**, the recommended approach is using WinGet:
+
+```{.powershell filename="terminal"}
+winget install Git.Git
+```
+
+After installation, close and reopen your terminal for the `git` command to be available.
+
+On **macOS**, install via Homebrew:
+
+```{.bash filename="terminal"}
+brew install git
+```
+
+After installation, verify with `git --version` and ensure you have version 2.28 or higher.
+
+## Default Branch Name
+
+Historically, Git's default branch was called `master`. The community has largely moved to `main` as a more neutral default. Configure Git to use `main` for new repositories:
+
+```{.bash filename="terminal"}
+git config --global init.defaultBranch main
+```
+
+This only affects repositories you create with `git init` going forward. Existing repositories keep their current branch names.
+
+## Line Endings
+
+Different operating systems use different characters to represent line endings. Windows uses `CRLF` (carriage return + line feed), while macOS and Linux use `LF` (line feed only). This can cause problems when collaborators use different systems.
+
+Configure Git to handle this automatically:
+
+On **Windows**:
+
+```{.bash filename="terminal"}
+git config --global core.autocrlf true
+```
+
+This converts `LF` to `CRLF` when checking out files and converts back to `LF` when committing.
+
+On **macOS**:
+
+```{.bash filename="terminal"}
+git config --global core.autocrlf input
+```
+
+This keeps `LF` endings in the repository and only converts `CRLF` to `LF` on commit (in case Windows files sneak in).
+
+## Default Editor
+
+When Git needs you to write a commit message or resolve a conflict, it opens a text editor. By default, this is often `vim`, which can be confusing for beginners.
+
+Set your preferred editor:
+
+```{.bash filename="terminal"}
+# For Zed
+git config --global core.editor "zed --wait"
+```
+
+The `--wait` flag tells Git to wait until you close the editor before continuing.
+
+## Useful Aliases
+
+Git aliases create shortcuts for common commands. They save typing and can make Git more intuitive:
+
+```{.bash filename="terminal"}
+# Short status
+git config --global alias.s "status --short"
+
+# Compact log with graph
+git config --global alias.lg "log --oneline --graph --all"
+
+# Amend the last commit without editing the message
+git config --global alias.amend "commit --amend --no-edit"
+
+# Undo the last commit but keep changes staged
+git config --global alias.undo "reset --soft HEAD~1"
+
+# Show what you're about to push
+git config --global alias.unpushed "log @{u}.. --oneline"
+```
+
+Now you can use `git s` instead of `git status --short`, and so on.
+
+## Modern Authentication
+
+For GitHub specifically, using the GitHub CLI (`gh auth login`) or SSH keys is more secure and convenient than HTTPS credentials. See @sec-github-config for details.
+
+## Viewing Your Configuration File
+
+Your global configuration is stored in a plain text file. You can view and edit it directly:
+
+```{.bash filename="terminal"}
+git config --global --edit
+```
+
+This opens your configuration file in your default editor. A typical configuration looks like:
+
+```{.ini filename="~/.gitconfig"}
+[user]
+    name = Your Name
+    email = your.email@example.com
+[init]
+    defaultBranch = main
+[core]
+    editor = code --wait
+    autocrlf = input
+[alias]
+    s = status --short
+    lg = log --oneline --graph --all
+[pull]
+    rebase = false
+[credential]
+    helper = osxkeychain
+```
+
+You can edit this file directly instead of using `git config` commands.
+
+## Recommended Starter Configuration
+
+Here's a complete configuration script to run after installing Git. Customize the name and email:
+
+```{.bash filename="terminal"}
+# Identity
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Modern defaults
+git config --global init.defaultBranch main
+git config --global core.autocrlf input  # Use 'true' on Windows
+
+# Editor (choose one)
+git config --global core.editor "zed --wait"
+
+# Helpful aliases
+git config --global alias.s "status --short"
+git config --global alias.lg "log --oneline --graph --all"
+git config --global alias.amend "commit --amend --no-edit"
+
+# Verify
+git config --list
+```
+
+## Summary
+
+Git configuration establishes your identity and customizes Git's behavior. You learned how Git stores configurations at system, global, and local levels, how to set the required identity settings (`user.name` and `user.email`), how to configure defaults for branch names, line endings, and editors, and how to create aliases for common commands. With these settings in place, Git will work smoothly and your commits will be properly attributed.
+
+## Glossary
+
+**Configuration Level**
+: The scope at which a Git setting applies, either system (all users), global (current user), or local (current repository).
+
+**Line Endings**
+: Characters that mark the end of a line in text files. Windows uses CRLF, while macOS/Linux use LF.
+
+**Alias**
+: A shortcut name for a Git command or sequence of commands.
+
+**Credential Helper**
+: A Git feature that caches or stores authentication credentials so you don't have to enter them repeatedly.
+
+## Resources
+
+- [First-Time Git Setup](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup) - Official Git documentation
+- [Customizing Git Configuration](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) - Deep dive into all configuration options
+- [Set Up Git](https://docs.github.com/en/get-started/git-basics/set-up-git) - GitHub's setup guide
+- [Setting Your Username in Git](https://docs.github.com/en/get-started/git-basics/setting-your-username-in-git) - GitHub's identity configuration guide
+- [Pro Git Book](https://git-scm.com/book/en/v2) - Free comprehensive Git reference

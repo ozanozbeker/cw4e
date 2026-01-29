@@ -1,0 +1,47 @@
+# Foundations {#sec-foundations .unnumbered}
+
+Before you write a single line of Python or craft your first SQL query, you need to understand the environment where your code will run. This module builds the computational foundation that makes everything else in the book possible.
+
+Most engineering students arrive with years of experience using computers, but that experience is often as a *passenger*. You've clicked through interfaces, waited for applications to respond, and restarted when things went wrong. That approach works fine for everyday tasks, but it breaks down when you're building data products. Building requires understanding what's actually happening inside the machine, how files are organized and accessed, how tools communicate with each other, and how to track and collaborate on complex projects.
+
+This module transforms you from passenger to *driver*. By the end, you'll have mental models for how computers store and process data, fluency with the command line as your primary interface for professional work, and a complete version control workflow using Git and GitHub. These aren't just prerequisites to check off before the "real" content begins. They're the foundation that professionals use every day, and mastering them early will make everything else you learn more intuitive and effective.
+
+## What You'll Learn
+
+**Computer Fundamentals** (@sec-fundamentals) establishes the mental models that explain why computers behave the way they do. You'll understand the critical distinction between memory and storage, why unsaved work can vanish, and what it means for code to exist as plain text. These concepts will resurface constantly as you work with data.
+
+**Files and the File System** (@sec-files) explores how computers organize information. You'll learn to think in terms of paths and directories, understand the difference between text and binary files, and survey the file formats you'll encounter when building data products. This knowledge is essential for writing code that reads data from one location and writes results to another.
+
+**The Command Line** (@sec-cli) introduces the text-based interface that connects all your tools. While graphical interfaces hide complexity behind buttons and menus, the command line gives you direct access to your computer's capabilities. You'll learn the core commands for navigation and file manipulation, building vocabulary that transfers to every other tool in the book.
+
+**Version Control with Git** (@sec-git) solves a problem every engineer faces: tracking changes to a project over time. Git provides intentional checkpoints, the ability to experiment without risk, and a complete history of how your work evolved. You'll learn to think in commits and branches, a mental model that fundamentally changes how you approach project work.
+
+**Collaboration with GitHub** (@sec-github) extends version control to team settings. GitHub hosts your repositories in the cloud, enables code review, and provides project management tools. The workflows you learn here, pushing, pulling, branching, and merging, are how professional engineering teams coordinate their efforts.
+
+## Why This Order?
+
+Each chapter builds on the previous one. Understanding memory and storage explains why you must save files before Git can see them. Understanding the file system explains the paths you'll type on the command line. Command line fluency is required to run Git commands. And Git mastery is the prerequisite for GitHub collaboration.
+
+This progression mirrors how you'll actually work. When you eventually write a Python script that processes data files and commits the results to a Git repository, you'll be using concepts from every chapter in this module. The foundations aren't separate from "real" programming. They're woven into every task you'll perform.
+
+## The Passenger-to-Driver Transformation
+
+There's a difference between knowing *that* something works and understanding *why* it works. Passengers know that clicking "Save" preserves their document. Drivers understand that clicking "Save" writes the in-memory representation to disk, replacing the previous version. This deeper understanding matters because it lets you reason about problems when things go wrong, and things always go wrong eventually.
+
+Throughout this module, we'll build these deeper mental models. When you encounter a "file not found" error later in the book, you'll understand it as a path problem, not a mysterious failure. When a Git merge conflict appears, you'll recognize it as a natural consequence of parallel development, not a catastrophe. This understanding is what separates professionals from perpetual beginners.
+
+## Prerequisites
+
+This module assumes you can use a computer for everyday tasks: browsing the web, creating documents, installing applications. If you've never opened a terminal or typed a command, that's perfectly fine. We'll start from the beginning.
+
+You will need a computer (Windows, macOS, or Linux) where you can install software. Some tools require administrator access to install, so if you're using a managed machine, ensure you have the necessary permissions or contact your IT department.
+
+## How to Learn This Material
+
+These chapters are designed to be read actively. When you see a command, type it yourself rather than copying and pasting. When you see a concept explained, pause and make sure you can explain it back in your own words. The command line in particular rewards muscle memory. The more you type, the faster the commands become automatic.
+
+Don't rush through this module to get to the "interesting" parts. The hours you invest here will pay dividends throughout the rest of the book and throughout your career. Version control alone will save you from countless disasters, but only if you've internalized the workflow deeply enough to use it consistently.
+
+If you already have experience with some of these topics, skim the familiar sections but pay attention to the mental models being developed. You might know *how* to use Git without having a clear picture of *why* the staging area exists. Those conceptual gaps tend to cause problems later.
+
+Let's begin.

@@ -1,0 +1,508 @@
+# Files and the File System {#sec-files}
+
+Before you can work with the command line, you need to understand the landscape you'll be navigating: your computer's file system. This might seem obvious, you've been saving documents and opening folders for years. But there's a growing disconnect between how modern software presents files and how computers actually organize them, and that gap creates real problems when you start building data products.
+
+A recent study found that many students who grew up with smartphones and search-based interfaces struggle with the fundamental concept of files stored in hierarchical folders. They're used to apps that abstract away storage entirely: photos appear in Photos, documents in Google Docs, music in Spotify. The underlying organization, that everything ultimately lives as files in directories on some storage device, has become invisible.
+
+This invisibility is fine for casual use, but it breaks down quickly in professional computing. When you write a Python script that reads data from one location and writes results to another, you need to specify *exactly* where those locations are. When you organize a project with code, data, documentation, and outputs, you need a mental model of how directories nest inside each other. When something goes wrong, you need to find the actual file and examine it.
+
+This chapter builds that foundation. We'll explore what files actually are, how they're organized into directories, and how you identify locations using paths. We'll also survey the common file formats you'll encounter when building data products, because knowing that a `.csv` is plain text you can read while a `.xlsx` is a compressed archive of XML files changes how you approach both.
+
+## What Is a File?
+
+At the most fundamental level, your computer stores everything as sequences of binary digits: ones and zeros. Every photo, document, program, and dataset ultimately reduces to patterns of electrical charges or magnetic orientations representing these binary values. A **file** is simply a named collection of this binary data stored on a disk or other storage medium.
+
+```{mermaid}
+%%| label: fig-file-binary
+%%| fig-cap: "Every file is ultimately a sequence of binary data interpreted according to its format"
+flowchart LR
+    A[Binary Data<br/>01001000 01100101 01101100 01101100 01101111] --> B{File Format}
+    B --> C[Text Editor<br/>sees 'Hello']
+    B --> D[Hex Editor<br/>sees '48 65 6C 6C 6F']
+    B --> E[Image Viewer<br/>sees nothing useful]
+```
+
+What makes files useful is *interpretation*. The same sequence of bytes means different things depending on what kind of file it is and what program reads it. This is where file formats come in, agreed-upon conventions that specify how to interpret a file's bytes.
+
+Files fall into two broad categories: **text files** and **binary files**.
+
+### Text Files
+
+Text files store human-readable characters using an encoding standard (typically UTF-8 in modern systems). Each character maps to a specific number, and those numbers are stored as bytes. When you open a text file in any text editor, you can read its contents directly.
+
+Common text file formats include:
+
+- **Plain text** (`.txt`): Unformatted text with no special structure
+- **Markdown** (`.md`): Text with lightweight formatting syntax (what this book is written in)
+- **CSV** (`.csv`): Comma-separated values, tabular data as plain text
+- **JSON** (`.json`): JavaScript Object Notation, structured data in a human-readable format
+- **YAML** (`.yaml`, `.yml`): Yet Another Markup Language, configuration files with readable structure
+- **TOML** (`.toml`): Tom's Obvious Minimal Language, another configuration format
+- **Source code** (`.py`, `.sql`, `.r`, `.js`): Programming instructions as text
+
+The beauty of text files is their transparency. You can open any text file in any text editor and see exactly what's inside. This makes them easy to inspect, debug, and version control. When something goes wrong with a CSV file, you can open it in a text editor and see the raw data.
+
+Here's what a CSV file actually looks like inside:
+
+```{.text filename="products.csv"}
+product_id,name,price,quantity
+1001,Widget A,29.99,150
+1002,Widget B,49.99,75
+1003,Gadget X,99.99,200
+```
+
+It's just text with commas separating values and newlines separating rows. Any program that understands the CSV convention can read it.
+
+### Binary Files
+
+Binary files store data in formats that aren't meant to be human-readable. The bytes represent something other than text characters, perhaps image pixels, compressed data, or complex document structures.
+
+Common binary file formats include:
+
+- **Images** (`.jpg`, `.png`, `.gif`): Pixel data, often compressed
+- **Excel spreadsheets** (`.xlsx`): Actually a ZIP archive containing XML files
+- **PDF documents** (`.pdf`): Portable Document Format, complex layout information
+- **Parquet** (`.parquet`): Columnar data storage optimized for analytics
+- **SQLite databases** (`.db`, `.sqlite`): Self-contained relational databases
+- **Compiled programs** (`.exe`, `.app`): Machine code instructions
+
+If you open a binary file in a text editor, you'll see gibberish, random characters, special symbols, and unprintable sequences. This isn't corruption; it's simply that the bytes weren't meant to be interpreted as text.
+
+::: {.callout-note}
+## File Extensions Are Just Conventions
+The `.csv` or `.xlsx` extension tells programs (and humans) how to interpret the file, but it's not enforced by the operating system. You could rename a JPEG image to have a `.txt` extension, it wouldn't change the actual content, just confuse programs trying to open it. When troubleshooting, remember that the extension is a hint, not a guarantee.
+:::
+
+### Why This Matters for Data Work
+
+Understanding the text/binary distinction has practical implications:
+
+1. **Version control** (Git, which we'll cover in @sec-git) works excellently with text files because it can track line-by-line changes. Binary files can be stored but changes can't be meaningfully compared.
+
+2. **Debugging** text-based data is straightforward, open the file and look at it. Binary formats require specialized tools.
+
+3. **Interoperability**: Text formats like CSV and JSON can be read by virtually any programming language or tool. Binary formats often require specific libraries.
+
+4. **Size vs. readability tradeoff**: Binary formats like Parquet are more compact and faster to process at scale, but text formats are easier to inspect and share.
+
+For this course, we'll primarily work with text-based formats (CSV, JSON, SQL) and occasionally encounter binary formats when using specialized tools.
+
+## Common Data File Formats
+
+Let's look more closely at the file formats you'll encounter most often when building data products.
+
+### CSV: The Universal Exchange Format
+
+CSV (Comma-Separated Values) is the lowest-common-denominator format for tabular data. Nearly every tool can read and write CSV files, making them ideal for data exchange.
+
+```{.text filename="sales.csv"}
+date,region,product,units,revenue
+2024-01-15,North,Widget,100,2999.00
+2024-01-15,South,Widget,75,2249.25
+2024-01-16,North,Gadget,50,4999.50
+```
+
+The first row typically contains column headers. Each subsequent row is a record, with values separated by commas. Simple, portable, universal.
+
+CSV's simplicity is also its limitation. There's no standard way to indicate data types (is "100" a number or text?), handle values containing commas, or represent nested structures. Various dialects exist with different quoting rules and delimiters, which can cause compatibility issues.
+
+### JSON: Structured Data as Text
+
+JSON (JavaScript Object Notation) represents structured data with nested objects and arrays. It's become the standard format for web APIs and configuration files.
+
+```{.json filename="config.json"}
+{
+  "project": "sales-analysis",
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "name": "sales_db"
+  },
+  "output_formats": ["csv", "parquet"],
+  "debug": false
+}
+```
+
+JSON can represent hierarchical data that would be awkward in CSV. It explicitly distinguishes between strings (`"text"`), numbers (`42`), booleans (`true`/`false`), arrays (`[]`), and objects (`{}`). This type information makes parsing more reliable.
+
+### YAML and TOML: Configuration Files
+
+YAML and TOML are both used for configuration files, settings that control how programs behave. They prioritize human readability over machine efficiency.
+
+```{.yaml filename="config.yaml"}
+project: sales-analysis
+database:
+  host: localhost
+  port: 5432
+  name: sales_db
+output_formats:
+  - csv
+  - parquet
+debug: false
+```
+
+```{.toml filename="config.toml"}
+[project]
+name = "sales-analysis"
+
+[database]
+host = "localhost"
+port = 5432
+name = "sales_db"
+
+[output]
+formats = ["csv", "parquet"]
+
+[settings]
+debug = false
+```
+
+You'll encounter YAML in Quarto document headers and many DevOps tools. TOML appears in Python project configuration (`pyproject.toml`) and Rust's Cargo system. Both are easy to read and edit by hand.
+
+### Markdown: Documentation as Text
+
+Markdown (`.md`) is a lightweight way to add formatting to plain text. The text remains readable without any special viewer, but tools can render it with headers, bold text, lists, and links.
+
+```{.markdown filename="README.md"}
+# Project Title
+
+This project analyzes **sales data** to identify trends.
+
+## Getting Started
+
+1. Install dependencies
+2. Configure the database connection
+3. Run the analysis script
+
+See [documentation](docs/guide.md) for details.
+```
+
+This book is written in Markdown (specifically, Quarto's extended Markdown). When you write documentation for your projects, and you will, Markdown is the standard choice.
+
+### Excel: The Enterprise Reality
+
+Microsoft Excel files (`.xlsx`) are ubiquitous in business environments. Despite being binary, they're worth understanding because you'll inevitably receive data in this format.
+
+An `.xlsx` file is actually a ZIP archive containing XML files that describe the spreadsheet's content, formatting, and formulas. This complexity means Excel files:
+
+- Support multiple worksheets in one file
+- Can contain formatting, formulas, charts, and images
+- Are harder to version control or process programmatically
+- Sometimes contain hidden surprises (embedded objects, macros)
+
+When possible, prefer exporting data from Excel to CSV for analysis. When you must work with Excel files directly, Python libraries like `openpyxl` can help.
+
+### Parquet: The Analytics Format
+
+Parquet is a columnar binary format designed for analytical workloads. Unlike CSV (where data is organized by rows), Parquet stores data by columns, which allows for efficient compression and fast queries that only need certain columns.
+
+You can't open Parquet files in a text editor, but tools like DuckDB and Python's pandas/polars can read them efficiently. For large datasets, Parquet offers dramatic performance improvements over CSV.
+
+## Directories and File Organization
+
+Files don't exist in isolation, they live in **directories** (also called folders). Directories can contain files and other directories, creating a hierarchical tree structure.
+
+```{mermaid}
+%%| label: fig-directory-tree
+%%| fig-cap: "Files are organized in a hierarchical tree of directories"
+flowchart TB
+    Root["/"] --> Users["Users/"]
+    Root --> Applications["Applications/"]
+    Users --> Ozan["ozan/"]
+    Ozan --> Documents["Documents/"]
+    Ozan --> Projects["Projects/"]
+    Projects --> Analysis["sales-analysis/"]
+    Analysis --> Data["data/"]
+    Analysis --> Scripts["scripts/"]
+    Analysis --> README["README.md"]
+    Data --> Raw["raw/"]
+    Data --> Processed["processed/"]
+    Raw --> SalesCSV["sales.csv"]
+    Scripts --> MainPy["main.py"]
+```
+
+This tree structure provides organization and namespace separation. You might have multiple files named `data.csv` on your computer, the directory path distinguishes them.
+
+### The Root Directory
+
+Every file system has a **root**, the top of the tree from which everything else descends. On macOS and Linux, the root is simply `/`. On Windows, each drive has its own root: `C:\`, `D:\`, etc.
+
+### Home Directory
+
+Each user on a computer has a **home directory**, a personal space for their files. On macOS, this is typically `/Users/yourname`. On Windows, it's `C:\Users\yourname`. The tilde (`~`) is a universal shortcut meaning "my home directory."
+
+Your home directory typically contains standard subdirectories like Desktop, Documents, and Downloads, plus hidden configuration files that store preferences for various applications.
+
+### Visible and Hidden Files
+
+Files and directories come in two visibility states: **visible** and **hidden**.
+
+**Visible items** appear normally in file browsers and directory listings. These are the files you work with day-to-day: documents, code, data.
+
+**Hidden items** have names beginning with a dot (`.`) on macOS/Linux, or a special "hidden" attribute on Windows. They're excluded from normal directory listings to reduce clutter. Hidden files typically store configuration and preferences that you don't need to see during normal work.
+
+Examples of hidden files you'll encounter:
+
+- `.gitignore`, tells Git which files to ignore
+- `.git/`, tracks your changes with Git
+- `.zshrc`, Zsh shell configuration
+- `.venv/`, Python virtual environment directory
+- `.DS_Store`, macOS folder metadata (often a nuisance)
+
+To see hidden files:
+
+- **macOS Finder**: Press `Cmd+Shift+.` to toggle visibility
+- **Windows Explorer**: View → Show → Hidden items
+- **Command line**: We'll cover this in @sec-cli
+
+::: {.callout-warning}
+## Don't Modify Hidden Files Carelessly
+Hidden files are hidden for a reason, they're typically configuration files that programs depend on. Deleting or modifying them without understanding their purpose can break applications or system features. As you learn more, you'll become comfortable editing certain hidden files (like `.gitignore`), but approach unknown ones with caution.
+:::
+
+## Understanding Paths
+
+A **path** is a string that specifies a location in the file system. Paths are how you tell programs exactly where to find or put files.
+
+### Absolute Paths
+
+An **absolute path** specifies a location starting from the root of the file system. It's the complete "address" that works regardless of where you currently are.
+
+macOS/Linux absolute paths start with `/`:
+
+```
+/Users/ozan/Projects/sales-analysis/data/sales.csv
+```
+
+Windows absolute paths start with a drive letter:
+
+```
+C:\Users\ozan\Projects\sales-analysis\data\sales.csv
+```
+
+Reading a path from left to right traces a route through the directory tree: start at root, enter Users, enter ozan, enter Projects, and so on until you reach the file.
+
+### Relative Paths
+
+A **relative path** specifies a location relative to some starting point, usually your current directory. They're shorter and often more portable.
+
+```
+data/sales.csv
+```
+
+This means "from wherever I am, go into the data directory, and the file is sales.csv." If you're in `/Users/ozan/Projects/sales-analysis`, this relative path points to `/Users/ozan/Projects/sales-analysis/data/sales.csv`.
+
+### Path Separators
+
+The character separating directory names differs by operating system:
+
+- macOS/Linux use forward slash: `/Users/ozan/file.txt`
+- Windows uses backslash: `C:\Users\ozan\file.txt`
+
+This difference causes occasional headaches when sharing code between systems. Python's `pathlib` module handles this automatically, which is why we'll use it when writing code that works with files.
+
+### Special Path Symbols
+
+Several symbols have special meaning in paths:
+
+| Symbol | Meaning | Example |
+|--------|---------|---------|
+| `.` | Current directory | `./script.py` |
+| `..` | Parent directory | `../other-project/` |
+| `~` | Home directory | `~/Documents/` |
+
+: Special path symbols and their meanings {#tbl-path-symbols}
+
+The double-dot (`..`) is particularly useful for navigating "up" the tree:
+
+```
+../../shared/data/reference.csv
+```
+
+This means: go up one directory, go up another directory, then descend into shared, then data, and find reference.csv.
+
+### Path Best Practices
+
+When organizing your own projects:
+
+1. **Avoid spaces** in file and directory names. Use hyphens (`my-project`) or underscores (`my_project`) instead. Spaces require special handling in many tools.
+
+2. **Use lowercase** for directories and files when possible. Some systems are case-sensitive (`Data` and `data` are different), others aren't. Lowercase avoids confusion.
+
+3. **Be consistent** with naming conventions within a project. Pick a style and stick with it.
+
+4. **Keep paths reasonable** in length. Deeply nested structures with long names become unwieldy.
+
+## Project Organization
+
+How you organize files within a project affects how easily you (and others) can understand and work with it. A well-organized project is easier to navigate, debug, and share.
+
+A typical data project structure might look like:
+
+```
+sales-analysis/
+├── README.md           # Project description and instructions
+├── data/
+│   ├── raw/            # Original, unmodified data
+│   └── processed/      # Cleaned/transformed data
+├── scripts/            # Python/SQL code
+├── outputs/            # Generated reports, figures
+└── docs/               # Additional documentation
+```
+
+Key principles:
+
+- **Separate raw from processed data**. Never modify original data files; create processed versions instead. This ensures you can always reproduce your work from the source.
+
+- **Keep code in one place**. Don't scatter scripts throughout the project.
+
+- **Include a README**. Anyone opening your project should immediately understand what it is and how to use it.
+
+- **Put outputs in their own directory**. Generated files (reports, figures, exports) should be clearly distinguished from source materials.
+
+We'll revisit project organization throughout this course, especially when we learn Git for version control in @sec-git.
+
+## Summary
+
+Files are the fundamental unit of persistent storage on computers, named collections of binary data that programs read and write. Understanding files as either text (human-readable) or binary (requiring specialized interpretation) helps you choose appropriate tools and formats for different tasks.
+
+The file system organizes files into a hierarchical tree of directories. Every location can be specified by a path, either absolute (from the root) or relative (from some starting point). Special symbols like `.`, `..`, and `~` provide shortcuts for common navigation patterns.
+
+Different file formats serve different purposes: CSV for universal tabular data exchange, JSON for structured data and APIs, YAML and TOML for configuration, Markdown for documentation, and specialized formats like Parquet for high-performance analytics. Knowing what's inside each format, and whether you can open it in a text editor, guides how you work with it.
+
+With this foundation, you're ready to explore the command line in @sec-cli, where you'll navigate this file system and manipulate files by typing commands rather than clicking through graphical interfaces.
+
+## Glossary
+
+**Absolute path**
+: A path that specifies a location starting from the root of the file system, such as `/Users/ozan/Documents/file.txt`. Works regardless of current directory.
+
+**Binary file**
+: A file whose contents are not meant to be interpreted as text characters. Examples include images, compiled programs, and Excel spreadsheets.
+
+**CSV (Comma-Separated Values)**
+: A text-based format for tabular data where values are separated by commas and rows by newlines.
+
+**Directory**
+: A container in the file system that can hold files and other directories. Also called a folder.
+
+**File**
+: A named collection of data stored on a disk or other storage medium.
+
+**File extension**
+: The suffix after the dot in a filename (like `.csv` or `.py`) that indicates the file's format.
+
+**File system**
+: The method and structure an operating system uses to organize and store files on storage devices.
+
+**Hidden file**
+: A file (typically starting with `.`) that doesn't appear in normal directory listings. Often used for configuration.
+
+**Home directory**
+: A user's personal directory, represented by `~`. On macOS: `/Users/username`. On Windows: `C:\Users\username`.
+
+**JSON (JavaScript Object Notation)**
+: A text-based format for structured data that supports nested objects, arrays, and typed values.
+
+**Markdown**
+: A lightweight text formatting syntax that remains human-readable while allowing rendering into formatted documents.
+
+**Path**
+: A string that specifies a location in the file system by listing the directories (and optionally filename) to traverse.
+
+**Path separator**
+: The character used to separate directory names in a path. Forward slash (`/`) on macOS/Linux, backslash (`\`) on Windows.
+
+**Relative path**
+: A path specified relative to some starting location (usually the current directory) rather than from the file system root.
+
+**Root directory**
+: The top-level directory of a file system, from which all other directories descend. Represented as `/` on macOS/Linux.
+
+**Text file**
+: A file whose contents are encoded as human-readable characters. Can be opened and read in any text editor.
+
+**YAML/TOML**
+: Text-based configuration file formats designed for human readability.
+
+## Exercises
+
+### Question 2.1
+Which of the following is a **text file** that can be opened and read in any text editor?
+
+A) .xlsx (Excel spreadsheet)  
+B) .jpg (image file)  
+C) .csv (comma-separated values)   
+D) .pdf (portable document format)  
+
+### Question 2.2
+What does an **absolute path** specify?
+
+A) A location relative to the current directory  
+B) A location starting from the root of the file system   
+C) A location relative to the home directory  
+D) A location that changes based on the operating system  
+
+### Question 2.3
+On macOS and Linux, what character is used to separate directories in a path?
+
+A) Backslash `\`  
+B) Forward slash `/`   
+C) Colon `:`  
+D) Period `.`  
+
+### Question 2.4
+What does the symbol `~` represent in a file path?
+
+A) The root directory  
+B) The current directory  
+C) The home directory   
+D) The parent directory  
+
+### Question 2.5
+What does the symbol `..` represent in a file path?
+
+A) The root directory  
+B) The current directory  
+C) The home directory  
+D) The parent directory (one level up)   
+
+### Question 2.6
+Why are hidden files (those starting with `.`) hidden by default?
+
+A) They contain viruses and malware  
+B) They are typically configuration files that reduce clutter when hidden   
+C) They are encrypted and cannot be read  
+D) They are system files that will crash the computer if viewed  
+
+### Question 2.7
+What is TRUE about file extensions like `.csv` or `.py`?
+
+A) They determine what programs can create the file  
+B) They are enforced by the operating system and cannot be changed  
+C) They are conventions that tell programs how to interpret the file   
+D) They affect the actual binary content of the file  
+
+### Question 2.8
+Which file format is described as "actually a ZIP archive containing XML files"?
+
+A) .csv  
+B) .json  
+C) .xlsx   
+D) .parquet  
+
+### Question 2.9
+Why does version control (like Git) work better with text files than binary files?
+
+A) Binary files are too large to store  
+B) Text files can track line-by-line changes meaningfully   
+C) Binary files cannot be committed to repositories  
+D) Text files compress better than binary files  
+
+### Question 2.10
+Given the path `../../shared/data/file.csv`, how many directory levels up does this path navigate before descending?
+
+A) 0  
+B) 1  
+C) 2   
+D) 3  

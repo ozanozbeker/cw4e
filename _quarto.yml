@@ -1,0 +1,61 @@
+project:
+  type: book
+
+book:
+  title: "Computational Workflows for Engineers"
+  reader-mode: true
+
+  page-footer: 
+    left: "© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0"
+    right: This book was built with <a href="https://quarto.org/">Quarto</a>.
+  site-url: https://cw4e.ozanozbeker.com/
+  repo-url: https://github.com/ozanozbeker/cw4e
+  repo-branch: main
+  repo-actions: [edit, issue]
+  
+  chapters:
+    - index.qmd
+    - introduction.qmd
+    - prerequisites.qmd
+
+    - part: 01_foundations/index.qmd
+      chapters: 
+        - 01_foundations/computers.qmd
+        - 01_foundations/files.qmd
+        - 01_foundations/cli.qmd
+        - 01_foundations/git.qmd
+        - 01_foundations/github.qmd
+    # - part: 02_databases/index.qmd
+    # - part: 03_programming/index.qmd
+    # - part: 04_integration/index.qmd
+    # - part: 05_delivery/index.qmd
+
+    # - references.qmd
+
+  appendices:
+    # - appendices/basedpyright.qmd
+    - 06_appendices/brew.qmd
+    # - appendices/duckdb.qmd
+    - 06_appendices/git.qmd
+    - 06_appendices/github.qmd
+    # - appendices/marimo.qmd
+    # - appendices/uv.qmd
+    # - appendices/ruff.qmd
+    - 06_appendices/winget.qmd
+    - 06_appendices/zed.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - styles.scss
+    author-meta: "Ozan Ozbeker"
+    callout-appearance: "simple"
+    highlight-style: nord
+
+  pdf:
+    documentclass: scrreprt
+
+editor: source

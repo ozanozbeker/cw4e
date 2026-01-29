@@ -1,0 +1,73 @@
+# Introduction {.unnumbered}
+
+Every piece of data you encounter in your engineering career started somewhere and is going somewhere. A sensor reading captured at a manufacturing station will travel through databases, transformations, and reports before influencing a production decision. A survey response will join thousands of others, get cleaned and aggregated, and eventually appear in a dashboard that shapes policy. Understanding this journey, and knowing how to build the infrastructure that makes it reliable, is what this book is about.
+
+## What Is a Data Product?
+
+A **data product** is any system that takes data as input and produces value as output. This definition is deliberately broad. A data product might be a weekly report that summarizes production quality metrics. It might be a dashboard that updates in real-time as new readings arrive. It might be a trained machine learning model that predicts equipment failures. It might be a cleaned and documented dataset that other analysts can trust and reuse.
+
+What unites these examples is that they're not one-time analyses. Someone ran a script once and got an answer. Data products are *systems* designed to produce value repeatedly and reliably. They have inputs that might change. They have logic that transforms those inputs. They have outputs that someone depends on. And crucially, they have lifecycles: they need to be maintained, updated, and eventually retired.
+
+This distinction between a one-time analysis and a data product is the central theme of this book. Anyone can write a script that works once on their laptop with today's data. Building something that works next week, with new data, run by someone else, on a different machine, requires a different set of skills. Those skills are what we'll develop here.
+
+Consider the difference through an analogy from manufacturing. A machinist can create a single prototype part by hand, adjusting as they go, using craft knowledge to achieve the desired result. But manufacturing that part at scale requires something different: documented processes, quality controls, standardized tooling, and systems that work reliably without constant human intervention. The prototype might be beautiful, but it's not a product. The skills this book teaches are the engineering equivalent of moving from prototype to production.
+
+## The Problem with "Just Code"
+
+Many introductions to programming treat coding as the core skill. Learn the syntax, understand the concepts, write programs that produce correct output. This approach works for learning to program, but it fails to prepare you for building data products.
+
+In professional data work, the code is often the easy part. Getting data from where it lives into your program is hard. Ensuring your transformations are correct when the input changes is hard. Making your work reproducible so a colleague (or your future self) can understand and modify it is hard. Deploying your solution so it runs reliably without your intervention is hard. Communicating your results so stakeholders can act on them is hard.
+
+The code itself, the Python script or SQL query that performs the transformation, might be twenty lines long. But the infrastructure around that code, the version control, the data connections, the error handling, the documentation, the automation, is what determines whether you've built a prototype or a product.
+
+This book teaches both the code and the infrastructure. We'll certainly write Python and SQL. But we'll spend equal time on the professional practices that make code useful: organizing projects so they're navigable, tracking changes so they're reversible, documenting decisions so they're understandable, and automating execution so results are reproducible.
+
+## Why These Tools?
+
+This book focuses on a specific toolkit: the command line for navigation and automation, Git for version control, SQL for data manipulation, Python for orchestration and transformation, and Quarto for documentation and reporting. This is a deliberate choice, not an accident of the author's preferences.
+
+**SQL** is the language of data. Every major database speaks it. Every data warehouse, every analytics platform, every business intelligence tool understands SQL queries. When you need to extract, filter, aggregate, or join data, SQL is almost always the right tool. It's declarative (you describe *what* you want, not *how* to compute it), which makes it concise and lets the database optimize execution. Learning SQL gives you access to decades of engineering investment in making data operations fast and reliable.
+
+**Python** is the connective tissue. It's not the best language for any single task, but it's good enough at everything and excellent at connecting things together. Python can read files in any format, call any API, invoke any command-line tool, and generate any output. When you need to orchestrate a workflow that touches multiple systems, Python is the natural choice. Its ecosystem of libraries for data work (pandas, polars, DuckDB, httpx) is unmatched.
+
+**The command line** is the universal interface. Every tool you'll encounter, from Git to Python to database clients to cloud services, can be operated through text commands. Learning the command line gives you access to every tool, including ones that haven't been invented yet. It also enables automation: anything you can type, you can script.
+
+**Git** solves the problem that every engineer eventually encounters: "I made changes and now everything is broken, how do I get back to the version that worked?" But Git is much more than an undo system. It's a collaboration protocol, a deployment mechanism, and a documentation tool. Professional software development runs on Git, and data engineering is increasingly adopting the same practices.
+
+These tools share a philosophy: they're composable, scriptable, and open. You can combine them in ways their creators never imagined. You can automate anything you can do manually. And you can inspect and understand what they're doing, rather than trusting a black box.
+
+## Learning by Doing
+
+This book follows a pedagogical approach called "learning by wholes," developed by David Perkins in *Making Learning Whole*. The core idea is that learners should engage with complete, meaningful activities from the beginning, rather than accumulating isolated skills that only make sense later.
+
+In practice, this means we won't spend weeks on Python syntax before writing useful programs. Instead, you'll build small but complete data products from early in the book. Each project will be a "junior version of the game," simplified enough to be achievable but complete enough to be meaningful. As you progress, the projects become more sophisticated, but the basic shape remains: data comes in, transformations happen, value goes out.
+
+This approach requires a different relationship with confusion. When you're playing the whole game, you'll encounter concepts before you fully understand them. You'll use tools before you've mastered them. This is intentional. Understanding often follows use, not the other way around. Trust the process, and return to earlier material as later chapters illuminate what you learned before.
+
+The alternative, mastering each component in isolation before combining them, produces a different kind of confusion: the confusion of not knowing why any of this matters. Students who learn syntax without context struggle to apply their knowledge to real problems. Students who build complete projects, even imperfect ones, develop intuition that transfers.
+
+## The Passenger and the Driver
+
+There's a metaphor we'll return to throughout this book: the difference between a *passenger* and a *driver*.
+
+A passenger uses a computer by clicking buttons and hoping for the best. When something goes wrong, they restart and try again. When they need to accomplish a task, they search for a tutorial with step-by-step instructions. They can get things done, but they're dependent on tools behaving exactly as expected and tutorials existing for exactly their situation.
+
+A driver understands what's happening under the interface. When something goes wrong, they can reason about the cause. When they need to accomplish a new task, they can combine familiar tools in new ways. They're not dependent on tutorials because they have mental models that generate solutions.
+
+This book aims to transform you from passenger to driver. That transformation requires more than learning commands and syntax. It requires building mental models: understanding why files are organized into directories, why version control requires explicit commits, why SQL and Python serve different purposes. These mental models are what let you adapt when circumstances change, debug when things break, and create when no tutorial exists.
+
+The transformation isn't instant. You'll start as a passenger in each new domain, following instructions without full understanding. That's fine. Understanding develops through use. But the goal is always to reach the point where you could teach someone else, where you understand not just *what* to do but *why* it works.
+
+## What You'll Build
+
+By the end of this book, you'll have built several complete data products:
+
+You'll create automated reports that pull data from sources, perform transformations, and generate formatted output, all triggered by a single command or scheduled to run automatically.
+
+You'll build data pipelines that extract information from files and APIs, clean and transform it using SQL, and load it into databases where it can be queried and analyzed.
+
+You'll develop documentation that explains not just what your code does, but why it's designed that way, rendered into professional formats that stakeholders can read.
+
+And you'll assemble a portfolio of projects tracked in Git, hosted on GitHub, demonstrating your ability to build maintainable, reproducible data systems.
+
+These aren't hypothetical exercises. They're the actual deliverables that data-focused engineering roles require. The skills you develop building them are the skills employers are looking for.

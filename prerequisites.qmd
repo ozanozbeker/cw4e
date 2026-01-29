@@ -1,0 +1,181 @@
+# Prerequisites {.unnumbered}
+
+This chapter lists the tools you'll need throughout the book. Rather than installing everything at once, you'll set up each tool as it becomes relevant. This approach lets you start quickly and spreads the installation work across the course.
+
+Each tool listing includes what it does, when you'll need it, and a reference to installation instructions. If you encounter problems during installation, check the appendix for troubleshooting steps specific to your operating system.
+
+## Before You Begin
+
+You'll need a computer running Windows 11, macOS, or Linux. Most tools work across all platforms, though installation steps differ. The book provides instructions for both Windows and macOS; Linux users can generally follow the macOS instructions with minor adjustments.
+
+You should have administrator access to install software. If you're using a managed computer (such as a university lab machine), verify that you can install programs or contact your IT department for assistance.
+
+A stable internet connection is required for downloading tools and, later, for pushing code to GitHub and accessing online data sources.
+
+## Foundations Module
+
+These tools support @sec-foundations and should be installed before or during the first week of work.
+
+### GitHub Account
+
+**What it is:** A free account on [github.com](https://github.com), the platform for hosting Git repositories and collaborating on projects.
+
+**When you need it:** @sec-github (Collaboration with GitHub), though creating the account early is recommended.
+
+**How to get it:** Visit [github.com](https://github.com) and sign up with your email address. Choose a professional username since this account may become part of your portfolio. Enable two-factor authentication for security.
+
+**Notes:** Use your personal email rather than a school email, so you retain access after graduation. GitHub offers free features that are sufficient for this course; you don't need a paid plan.
+
+### Package Manager (Homebrew or WinGet)
+
+**What it is:** A tool that automates installing, updating, and managing software from the command line.
+
+**When you need it:** Immediately, before installing other tools.
+
+**How to get it:**
+
+- **Windows:** WinGet comes pre-installed on Windows 11 and recent Windows 10 versions. Open Windows Terminal and type `winget --version` to verify it's available.
+- **macOS:** Install Homebrew by following instructions at [brew.sh](https://brew.sh). This requires running a command in Terminal.
+
+**Notes:** While technically optional (you can install everything manually), a package manager makes installation and updates dramatically easier. The small upfront investment pays off immediately.
+
+### Git
+
+**What it is:** A version control system that tracks changes to files and enables collaboration.
+
+**When you need it:** @sec-git (Version Control with Git).
+
+**How to get it:**
+
+- **Windows:** `winget install Git.Git`
+- **macOS:** `brew install git`
+
+After installation, configure your identity:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+**Notes:** Use the same email address you used for your GitHub account. This links your commits to your GitHub profile.
+
+### Zed
+
+**What it is:** A modern text editor designed for programming, with features like syntax highlighting, auto-completion, and an integrated terminal.
+
+**When you need it:** @sec-fundamentals (Computer Fundamentals) and throughout the book.
+
+**How to get it:**
+
+- **Windows:** `winget install Zed.Zed`
+- **macOS:** `brew install --cask zed`
+
+Alternatively, download from [zed.dev](https://zed.dev).
+
+**Notes:** Other text editors (VS Code, Sublime Text, etc.) work fine if you have a strong preference. The book uses Zed for examples because of its clean interface and excellent Git integration, but the concepts transfer to any editor.
+
+### Windows Terminal (Windows Only)
+
+**What it is:** Microsoft's modern terminal application, providing a clean interface for command-line work.
+
+**When you need it:** @sec-cli (The Command Line).
+
+**How to get it:** Install from the [Microsoft Store](https://aka.ms/terminal) or via `winget install Microsoft.WindowsTerminal`.
+
+**Notes:** Windows Terminal should be your default terminal application for this course. Avoid using the legacy Command Prompt or standalone PowerShell applications.
+
+## Database Module
+
+These tools support the SQL and database chapters.
+
+### DuckDB
+
+**What it is:** An embedded analytical database that runs SQL queries on local files without server setup.
+
+**When you need it:** The SQL chapters (to be referenced once written).
+
+**How to get it:**
+
+- **Windows:** `winget install DuckDB.cli`
+- **macOS:** `brew install duckdb`
+
+**Notes:** DuckDB can query CSV, Parquet, and JSON files directly, making it ideal for learning SQL without database administration overhead.
+
+## Programming Module
+
+These tools support the Python chapters.
+
+### Python (via uv)
+
+**What it is:** The Python programming language, installed and managed through the `uv` tool for reliable dependency management.
+
+**When you need it:** The Python chapters (to be referenced once written).
+
+**How to get it:**
+
+- **Windows:** `winget install astral-sh.uv`
+- **macOS:** `brew install uv`
+
+Then install Python: `uv python install 3.13`
+
+**Notes:** We use `uv` rather than installing Python directly because `uv` handles virtual environments and dependencies more reliably. This avoids the "it works on my machine" problems that plague Python development.
+
+## Integration Module
+
+These tools support the chapters on combining SQL, Python, and documentation.
+
+### Quarto
+
+**What it is:** A publishing system that renders Markdown documents into HTML, PDF, presentations, and other formats.
+
+**When you need it:** The documentation and reporting chapters (to be referenced once written).
+
+**How to get it:**
+
+- **Windows:** `winget install Posit.Quarto`
+- **macOS:** `brew install --cask quarto`
+
+**Notes:** Quarto is what renders this book. Learning it gives you the ability to create professional documentation for your own projects.
+
+## Verification Checklist
+
+After installing tools for each module, verify they're working:
+
+### Foundations Module
+
+```bash
+git --version        # Should print version number
+zed --version        # Should print version number (or open Zed)
+```
+
+### Data Engineering Module
+
+```bash
+duckdb --version     # Should print version number
+```
+
+### Python Module
+
+```bash
+uv --version         # Should print version number
+python --version     # Should print Python 3.13.x (after uv python install)
+```
+
+### Integration Module
+
+```bash
+quarto --version     # Should print version number
+```
+
+If any command fails with "command not found" or similar, revisit the installation instructions or check the troubleshooting appendix.
+
+## Getting Help
+
+Installation problems are common and usually solvable. If you encounter issues:
+
+1. Read the error message carefully. It often contains clues about what went wrong.
+2. Search the error message online. Someone has likely encountered the same problem.
+3. Check the tool's official documentation for platform-specific instructions.
+4. Ask for help in class or office hours, bringing the exact error message.
+
+Don't let installation friction discourage you. Setting up a development environment is genuinely tricky, even for experienced developers. Once configured, these tools will serve you throughout the course and beyond.
