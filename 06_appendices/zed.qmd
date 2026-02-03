@@ -1,1 +1,139 @@
 # Zed (WIP)
+
+```{.json filename="settings.json"}
+// Zed settings
+//
+// Notes:
+// - Zed excludes `.git/` from editor be default: https://zed.dev/docs/reference/all-settings?highlight=file%20scan#file-scan-exclusions
+{
+  // ==========
+  // General
+  // ----------
+  // General Settings
+  "when_closing_with_no_tabs": "keep_window_open",
+  "on_last_window_closed": "quit_app",
+
+  // Security
+  "session": {
+    "trust_all_worktrees": true,
+
+    // Workspace Restoration
+    "restore_unsaved_buffers": false,
+  },
+  "restore_on_startup": "launchpad",
+
+  // ==========
+  // Appearance
+  // ----------
+  // Theme
+  "theme": "Kanso Zen",
+  "icon_theme": "Catppuccin Mocha",
+
+  // Buffer Font
+  "buffer_line_height": {
+    "custom": 1.45,
+  },
+  "buffer_font_size": 16,
+
+  // UI Font
+  "ui_font_size": 16,
+
+  // Cursor
+  "multi_cursor_modifier": "cmd_or_ctrl",
+
+  // Highlighting
+  "current_line_highlight": "gutter",
+
+  // ==========
+  // Editor
+  // ----------
+  // Whick-key Menu
+  "which_key": {
+    "enabled": true,
+  },
+
+  // Scrolling
+  "autoscroll_on_clicks": true,
+
+  // Signature Help
+  "auto_signature_help": true,
+  "show_signature_help_after_edits": true,
+
+  // Hover Popover
+  "hover_popover_delay": 100,
+
+  // Inlay Hints
+  // ...Setup after week 12
+
+  // Miscellaneous
+  "extend_comment_on_newline": false,
+
+  // ==========
+  // Languages & Tools
+  // ----------
+  // File Types
+  "file_types": {
+    "Markdown": ["qmd"],
+  },
+
+  // Inline Diagnostics
+  // ...Setup after week 12
+
+  // Languages
+  "languages": {
+    "Python": {
+      // Wrapping
+      "preferred_line_length": 88,
+      "wrap_guides": [88],
+    },
+    "Markdown": {
+      "remove_trailing_whitespace_on_save": true,
+      "show_wrap_guides": false,
+    },
+  },
+
+  // ==============
+  // Search & Files
+  // --------------
+  "search": {
+    "center_on_match": true,
+  },
+
+  // File Scan
+  "restore_on_file_reopen": false,
+  "close_on_file_delete": false, // True after Week 12
+
+  // ==========
+  // Window & Layout
+  // ----------
+  // Title Bar
+  "title_bar": {
+    "show_branch_icon": true,
+    "show_menus": false, // personal preference
+  },
+
+  // ==========
+  // Panels
+  // ----------
+  // Git Panel
+  "git_panel": {
+    "tree_view": true,
+  },
+
+  // ===============
+  // Version Control
+  // ---------------
+  // Git Panel
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true,
+    },
+  },
+
+  // ==========
+  // AI
+  // ----------
+  // General
+  "disable_ai": true, // false after week 12
+}
+```

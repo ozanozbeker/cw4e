@@ -1,6 +1,0 @@
-# Databases (UNRELEASED)
-
-- Discuss differences between relational modeling (normalizing data) vs dimensional modeling (star schema)
-	- The SQL modules also apply to good Excel practice
-
-SQLModel database overview: https://sqlmodel.tiangolo.com/databases/
