@@ -8,7 +8,7 @@
 
 <meta name="author" content="Ozan Ozbeker">
 
-<title>Appendix B — Git Configuration – Computational Workflows for Engineers</title>
+<title>Appendix F — The Northwind Dataset – Computational Workflows for Engineers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,8 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../06_appendices/github.html" rel="next">
-<link href="../06_appendices/brew.html" rel="prev">
+<link href="../06_appendices/zed.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -106,6 +105,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -119,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06_appendices/brew.html">Appendices</a></li><li class="breadcrumb-item"><a href="../06_appendices/git.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Git Configuration</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06_appendices/brew.html">Appendices</a></li><li class="breadcrumb-item"><a href="../06_appendices/northwind.html"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">The Northwind Dataset</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -269,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../06_appendices/git.html" class="sidebar-item-text sidebar-link active">
+  <a href="../06_appendices/git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
   </div>
 </li>
@@ -293,7 +295,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../06_appendices/northwind.html" class="sidebar-item-text sidebar-link">
+  <a href="../06_appendices/northwind.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">The Northwind Dataset</span></span></a>
   </div>
 </li>
@@ -309,32 +311,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#configuration-levels" id="toc-configuration-levels" class="nav-link active" data-scroll-target="#configuration-levels">Configuration Levels</a></li>
-  <li><a href="#checking-your-configuration" id="toc-checking-your-configuration" class="nav-link" data-scroll-target="#checking-your-configuration">Checking Your Configuration</a></li>
-  <li><a href="#required-your-identity" id="toc-required-your-identity" class="nav-link" data-scroll-target="#required-your-identity">Required: Your Identity</a></li>
-  <li><a href="#verifying-installation" id="toc-verifying-installation" class="nav-link" data-scroll-target="#verifying-installation">Verifying Installation</a>
+  <li><a href="#a-brief-history" id="toc-a-brief-history" class="nav-link active" data-scroll-target="#a-brief-history">A Brief History</a></li>
+  <li><a href="#the-business-domain" id="toc-the-business-domain" class="nav-link" data-scroll-target="#the-business-domain">The Business Domain</a></li>
+  <li><a href="#sec-northwind-tables" id="toc-sec-northwind-tables" class="nav-link" data-scroll-target="#sec-northwind-tables">The Tables</a></li>
+  <li><a href="#table-relationships" id="toc-table-relationships" class="nav-link" data-scroll-target="#table-relationships">Table Relationships</a></li>
+  <li><a href="#sec-northwind-access" id="toc-sec-northwind-access" class="nav-link" data-scroll-target="#sec-northwind-access">Getting the Data</a>
   <ul class="collapse">
-  <li><a href="#installing-git" id="toc-installing-git" class="nav-link" data-scroll-target="#installing-git">Installing Git</a></li>
+  <li><a href="#option-1-download-from-the-website" id="toc-option-1-download-from-the-website" class="nav-link" data-scroll-target="#option-1-download-from-the-website">Option 1: Download from the Website</a></li>
+  <li><a href="#option-2-clone-with-git" id="toc-option-2-clone-with-git" class="nav-link" data-scroll-target="#option-2-clone-with-git">Option 2: Clone with Git</a></li>
+  <li><a href="#option-3-read-directly-in-duckdb" id="toc-option-3-read-directly-in-duckdb" class="nav-link" data-scroll-target="#option-3-read-directly-in-duckdb">Option 3: Read Directly in DuckDB</a></li>
+  <li><a href="#option-4-load-from-local-csv-files" id="toc-option-4-load-from-local-csv-files" class="nav-link" data-scroll-target="#option-4-load-from-local-csv-files">Option 4: Load from Local CSV Files</a></li>
   </ul></li>
-  <li><a href="#default-branch-name" id="toc-default-branch-name" class="nav-link" data-scroll-target="#default-branch-name">Default Branch Name</a></li>
-  <li><a href="#line-endings" id="toc-line-endings" class="nav-link" data-scroll-target="#line-endings">Line Endings</a></li>
-  <li><a href="#default-editor" id="toc-default-editor" class="nav-link" data-scroll-target="#default-editor">Default Editor</a></li>
-  <li><a href="#useful-aliases" id="toc-useful-aliases" class="nav-link" data-scroll-target="#useful-aliases">Useful Aliases</a></li>
-  <li><a href="#modern-authentication" id="toc-modern-authentication" class="nav-link" data-scroll-target="#modern-authentication">Modern Authentication</a></li>
-  <li><a href="#viewing-your-configuration-file" id="toc-viewing-your-configuration-file" class="nav-link" data-scroll-target="#viewing-your-configuration-file">Viewing Your Configuration File</a></li>
-  <li><a href="#recommended-starter-configuration" id="toc-recommended-starter-configuration" class="nav-link" data-scroll-target="#recommended-starter-configuration">Recommended Starter Configuration</a></li>
+  <li><a href="#a-first-look" id="toc-a-first-look" class="nav-link" data-scroll-target="#a-first-look">A First Look</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
   <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/06_appendices/git.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/06_appendices/northwind.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06_appendices/brew.html">Appendices</a></li><li class="breadcrumb-item"><a href="../06_appendices/git.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Git Configuration</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06_appendices/brew.html">Appendices</a></li><li class="breadcrumb-item"><a href="../06_appendices/northwind.html"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">The Northwind Dataset</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-git-config" class="quarto-section-identifier">Appendix B — Git Configuration</span></h1>
+<h1 class="title"><span id="sec-northwind" class="quarto-section-identifier">Appendix F — The Northwind Dataset</span></h1>
 </div>
 
 
@@ -351,265 +351,315 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Before you can use Git effectively, you need to configure it with your identity and preferences. Git configurations are settings stored in configuration files that customize how Git behaves. This appendix walks you through the essential setup and common configuration options.</p>
-<section id="configuration-levels" class="level2">
-<h2 class="anchored" data-anchor-id="configuration-levels">Configuration Levels</h2>
-<p>Git stores configurations at three levels, each overriding the previous:</p>
-<ol type="1">
-<li><p><strong>System</strong> (<code>/etc/gitconfig</code>): Applies to all users on the machine. Rarely modified unless you’re a system administrator.</p></li>
-<li><p><strong>Global</strong> (<code>~/.gitconfig</code> or <code>~/.config/git/config</code>): Applies to all repositories for the current user. This is where you set your identity and preferences.</p></li>
-<li><p><strong>Local</strong> (<code>.git/config</code> in a repository): Applies only to that specific repository. Useful for project-specific settings, like using a work email for work projects.</p></li>
-</ol>
-<p>When you run <code>git config</code>, you specify which level to modify with <code>--system</code>, <code>--global</code>, or <code>--local</code> (the default).</p>
+<p>Throughout the Databases &amp; SQL unit, we work with a dataset called Northwind. Before we start writing queries against it, it’s worth understanding where it comes from, what it represents, and how to get it onto your machine.</p>
+<section id="a-brief-history" class="level2">
+<h2 class="anchored" data-anchor-id="a-brief-history">A Brief History</h2>
+<p>Northwind is one of the most widely used sample databases in the world. Microsoft created it in the mid-1990s as a teaching dataset bundled with Microsoft Access 97, and it went on to ship with nearly every Microsoft database product for over a decade, including SQL Server 2000. The original purpose was simple: give people a realistic, self-contained dataset to learn relational databases with, without needing access to proprietary business data.</p>
+<p>The dataset models a fictional company called <strong>Northwind Traders</strong>, a small business that imports and exports specialty food products from around the world. Think of it as a mid-size wholesale distributor: they buy products from suppliers in various countries, organize those products into categories, and sell them to customers through orders that get shipped via third-party carriers. This business model naturally produces the kinds of questions that SQL excels at answering: which products are selling well, which suppliers are most reliable, where are orders shipping to, and how do employees perform over time.</p>
+<p>Microsoft eventually deprecated Northwind in favor of a more complex sample database called AdventureWorks, but by then, Northwind had taken on a life of its own. It has been ported to PostgreSQL, MySQL, SQLite, MongoDB, Neo4j, and, of course, DuckDB. Its longevity comes from its simplicity: the schema is small enough to hold in your head, the data is rich enough to support genuinely interesting queries, and the business domain (buying and selling products) is intuitive for virtually any audience. If you go on to take database courses, read SQL textbooks, or work through online tutorials, there’s a good chance you’ll run into Northwind again.</p>
+<p>The version we use in this book is adapted from the original Microsoft dataset and distributed as a set of CSV files. The schema and data have been lightly cleaned for consistency, but the core structure is faithful to the original.</p>
 </section>
-<section id="checking-your-configuration" class="level2">
-<h2 class="anchored" data-anchor-id="checking-your-configuration">Checking Your Configuration</h2>
-<p>To see your current configuration, including where each setting comes from:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--list</span> <span class="at">--show-origin</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This displays all active settings and which configuration file defines each one.</p>
-<p>To check a specific setting:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config user.name</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config user.email</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<section id="the-business-domain" class="level2">
+<h2 class="anchored" data-anchor-id="the-business-domain">The Business Domain</h2>
+<p>Northwind Traders operates a straightforward supply chain. Understanding the flow of goods through the business will help you reason about queries later, because every table exists to track some part of this process.</p>
+<p><strong>Suppliers</strong> around the world produce specialty food products: cheeses from France, seafood from Norway, sauces from Louisiana. Northwind buys these products and organizes them into <strong>categories</strong> like Beverages, Condiments, Dairy Products, and Seafood. Each <strong>product</strong> has a price, a stock level, and a reorder threshold, the point at which the company should place a new order with the supplier.</p>
+<p><strong>Customers</strong> are businesses (restaurants, grocery stores, specialty shops) that buy from Northwind. When a customer places an <strong>order</strong>, it contains one or more line items, each specifying a product, a quantity, a unit price, and sometimes a discount. The order also records which <strong>employee</strong> handled the sale and which <strong>shipper</strong> will deliver it. Shipping details like the destination address and freight cost are tracked on the order itself.</p>
+<p>This gives us a complete picture: suppliers → products → orders → customers, with employees and shippers facilitating the process. Most of the interesting analytical questions involve connecting these pieces. “Which category generates the most revenue?” requires joining products to order details to categories. “Which employee handles the most orders shipping to Germany?” requires joining orders to employees and filtering by ship country.</p>
 </section>
-<section id="required-your-identity" class="level2">
-<h2 class="anchored" data-anchor-id="required-your-identity">Required: Your Identity</h2>
-<p>Git requires your name and email address. Every commit you make is stamped with this information, creating an audit trail of who made which changes. This isn’t about authentication, but about attribution within the repository history.</p>
-<p>Set your identity globally:</p>
+<section id="sec-northwind-tables" class="level2">
+<h2 class="anchored" data-anchor-id="sec-northwind-tables">The Tables</h2>
+<p>The dataset consists of the following core tables. Each table’s purpose maps directly to a concept in the business domain described above.</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Core Northwind tables</caption>
+<colgroup>
+<col style="width: 28%">
+<col style="width: 52%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Table</th>
+<th>Description</th>
+<th style="text-align: center;">Approximate Rows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>categories</code></td>
+<td>Product categories (Beverages, Condiments, etc.) with names and descriptions</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr class="even">
+<td><code>customers</code></td>
+<td>Customer companies with contact information and addresses</td>
+<td style="text-align: center;">91</td>
+</tr>
+<tr class="odd">
+<td><code>employees</code></td>
+<td>Northwind sales staff with personal details and reporting structure</td>
+<td style="text-align: center;">9</td>
+</tr>
+<tr class="even">
+<td><code>orders</code></td>
+<td>Customer orders with dates, shipping info, and freight costs</td>
+<td style="text-align: center;">830</td>
+</tr>
+<tr class="odd">
+<td><code>order_details</code></td>
+<td>Line items for each order: which product, how many, at what price</td>
+<td style="text-align: center;">2,155</td>
+</tr>
+<tr class="even">
+<td><code>products</code></td>
+<td>Products in the catalog with prices, stock levels, and supplier/category links</td>
+<td style="text-align: center;">77</td>
+</tr>
+<tr class="odd">
+<td><code>shippers</code></td>
+<td>Shipping companies used to deliver orders</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td><code>suppliers</code></td>
+<td>Companies that supply products to Northwind, with contact info and location</td>
+<td style="text-align: center;">29</td>
+</tr>
+</tbody>
+</table>
+<p>A few things to notice about these numbers. The dataset is intentionally small, which makes it fast to load, easy to scan visually, and forgiving when you’re experimenting with queries. But “small” doesn’t mean “trivial.” With 830 orders spanning 2,155 line items across 77 products from 29 suppliers, there’s plenty of structure to write meaningful aggregations, joins, and window functions against. The size also means you can verify your query results by hand when you’re unsure whether your logic is correct, a luxury you rarely have with production data.</p>
+</section>
+<section id="table-relationships" class="level2">
+<h2 class="anchored" data-anchor-id="table-relationships">Table Relationships</h2>
+<p>The tables connect through foreign keys, columns in one table that reference the primary key of another. <a href="#fig-northwind-erd" class="quarto-xref">Figure&nbsp;<span>F.1</span></a> shows these relationships.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-northwind-erd" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-northwind-erd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-northwind-erd">erDiagram
+    suppliers ||--o{ products : "supplies"
+    categories ||--o{ products : "contains"
+    products ||--o{ order_details : "appears in"
+    orders ||--o{ order_details : "has"
+    customers ||--o{ orders : "places"
+    employees ||--o{ orders : "handles"
+    shippers ||--o{ orders : "delivers"
+    employees ||--o{ employees : "reports to"
+
+    suppliers {
+        int supplier_id PK
+        string company_name
+        string contact_name
+        string country
+    }
+
+    categories {
+        int category_id PK
+        string category_name
+        string description
+    }
+
+    products {
+        int product_id PK
+        string product_name
+        int supplier_id FK
+        int category_id FK
+        float unit_price
+        int units_in_stock
+        bool discontinued
+    }
+
+    order_details {
+        int order_id FK
+        int product_id FK
+        float unit_price
+        int quantity
+        float discount
+    }
+
+    orders {
+        int order_id PK
+        int customer_id FK
+        int employee_id FK
+        int ship_via FK
+        date order_date
+        date shipped_date
+        float freight
+    }
+
+    customers {
+        int customer_id PK
+        string company_name
+        string contact_name
+        string country
+    }
+
+    employees {
+        int employee_id PK
+        string last_name
+        string first_name
+        string title
+        int reports_to FK
+    }
+
+    shippers {
+        int shipper_id PK
+        string company_name
+        string phone
+    }
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-northwind-erd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;F.1: Entity-relationship diagram for the Northwind database. Lines connect foreign keys to their referenced primary keys.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The central relationship in the schema is between <code>orders</code> and <code>order_details</code>. An order is a single transaction (one customer, one date, one shipment), while order details are the individual line items within that transaction. This is a classic <strong>header-detail</strong> pattern you’ll encounter in virtually every transactional database: invoices and invoice lines, purchase orders and purchase order lines, shipments and shipment items. Understanding this one-to-many relationship, where one order can contain many line items, is fundamental to writing correct queries against Northwind.</p>
+<p>The <code>employees</code> table also has an interesting structural feature: the <code>reports_to</code> column references another row in the same table. This is called a <strong>self-referential relationship</strong>, and it represents the org chart. Employee 5 might report to Employee 2, who reports to no one (the boss). You’ll encounter this pattern again in <a href="#sec-northwind" class="quarto-xref"><span>Appendix F — The Northwind Dataset</span></a> when we discuss self-joins.</p>
+</section>
+<section id="sec-northwind-access" class="level2">
+<h2 class="anchored" data-anchor-id="sec-northwind-access">Getting the Data</h2>
+<p>The Northwind CSV files live in this book’s GitHub repository at <a href="https://github.com/ozanozbeker/cw4e/tree/main/data/northwind"><code>data/northwind/</code></a>. There are several ways to get them onto your machine, depending on what you’re comfortable with.</p>
+<section id="option-1-download-from-the-website" class="level3">
+<h3 class="anchored" data-anchor-id="option-1-download-from-the-website">Option 1: Download from the Website</h3>
+<p>Navigate to <a href="https://github.com/ozanozbeker/cw4e/tree/main/data/northwind">the data directory on GitHub</a> in your browser. You can download individual CSV files by clicking on a file and then clicking the download button (the downward arrow icon), or download the entire repository as a ZIP file by clicking the green <strong>Code</strong> button on the <a href="https://github.com/ozanozbeker/cw4e">repository’s main page</a> and selecting <strong>Download ZIP</strong>.</p>
+</section>
+<section id="option-2-clone-with-git" class="level3">
+<h3 class="anchored" data-anchor-id="option-2-clone-with-git">Option 2: Clone with Git</h3>
+<p>If you’ve worked through <a href="../01_foundations/git.html" class="quarto-xref"><span>4&nbsp; Version Control with Git</span></a>, you already have Git installed. Cloning the repository gives you all the book’s data files at once and makes it easy to pull updates later:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"Your Name"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"your.email@example.com"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/ozanozbeker/cw4e.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>These values should match how you want to appear in commit logs. For professional work, use your full name. The email address will be visible to anyone who can see the repository, so choose one you’re comfortable sharing publicly.</p>
-<div class="callout callout-style-simple callout-tip callout-titled">
+<p>The CSV files will be in <code>cw4e/data/northwind/</code> inside whatever directory you ran the command from.</p>
+</section>
+<section id="option-3-read-directly-in-duckdb" class="level3">
+<h3 class="anchored" data-anchor-id="option-3-read-directly-in-duckdb">Option 3: Read Directly in DuckDB</h3>
+<p>One of DuckDB’s strengths is its ability to read CSV files directly from URLs without downloading them first. Once you have DuckDB open (see <span class="quarto-unresolved-ref">?sec-duckdb-setup</span>), you can query any Northwind table straight from GitHub:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>duckdb</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="st">'https://raw.githubusercontent.com/ozanozbeker/cw4e/main/data/northwind/products.csv'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is convenient for quick exploration, but for repeated use throughout the course, downloading the files locally is faster and doesn’t depend on an internet connection.</p>
+</section>
+<section id="option-4-load-from-local-csv-files" class="level3">
+<h3 class="anchored" data-anchor-id="option-4-load-from-local-csv-files">Option 4: Load from Local CSV Files</h3>
+<p>If you’ve downloaded or cloned the files, you can point DuckDB at the local directory. Assuming the CSV files are in a folder called <code>northwind/</code> relative to where you launched DuckDB:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>duckdb</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="st">'northwind/products.csv'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Or, to create a persistent table from the CSV that you can reference by name in future queries:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>duckdb</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products <span class="kw">AS</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="st">'northwind/products.csv'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>After creating tables this way, you can query them with just <code>FROM products;</code> instead of specifying the file path each time. We’ll cover the <code>CREATE TABLE</code> statement in detail in a later chapter, but this pattern, <code>CREATE TABLE ... AS FROM ...</code>, is DuckDB shorthand for “read this file and store it as a named table.”</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Which option should I use?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Using Different Identities
+<span class="screen-reader-only">Tip</span>Which option should I use?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you use Git for both personal and work projects, you might want different identities. Set your personal identity globally, then override it for work repositories:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/work/company-project</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--local</span> user.email <span class="st">"your.name@company.com"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Only this repository will use the work email; others will use your global setting.</p>
+<p>For this course, we recommend <strong>Option 2</strong> (cloning with Git) if you’ve already set up Git, or <strong>Option 3</strong> (reading directly from URLs in DuckDB) if you want to get started immediately. Either way, you’ll have full access to the dataset for every chapter that follows.</p>
 </div>
 </div>
 </section>
-<section id="verifying-installation" class="level2">
-<h2 class="anchored" data-anchor-id="verifying-installation">Verifying Installation</h2>
-<p>Before configuring, confirm Git is installed and check the version:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>You should see output like <code>git version 2.43.0</code>. If you get a “command not found” error, you need to install Git.</p>
-<section id="installing-git" class="level3">
-<h3 class="anchored" data-anchor-id="installing-git">Installing Git</h3>
-<p>On <strong>Windows</strong>, the recommended approach is using WinGet:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="terminal"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>winget install Git<span class="op">.</span><span class="fu">Git</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>After installation, close and reopen your terminal for the <code>git</code> command to be available.</p>
-<p>On <strong>macOS</strong>, install via Homebrew:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>After installation, verify with <code>git --version</code> and ensure you have version 2.28 or higher.</p>
 </section>
-</section>
-<section id="default-branch-name" class="level2">
-<h2 class="anchored" data-anchor-id="default-branch-name">Default Branch Name</h2>
-<p>Historically, Git’s default branch was called <code>master</code>. The community has largely moved to <code>main</code> as a more neutral default. Configure Git to use <code>main</code> for new repositories:</p>
+<section id="a-first-look" class="level2">
+<h2 class="anchored" data-anchor-id="a-first-look">A First Look</h2>
+<p>Once you have access to the data through any of the methods above, you can start exploring. Here’s a quick orientation to get your bearings:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
+<pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> init.defaultBranch main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- How many rows are in each table?</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'categories'</span> <span class="kw">AS</span> table_name, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">AS</span> row_count <span class="kw">FROM</span> <span class="st">'northwind/categories.csv'</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'customers'</span>, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="st">'northwind/customers.csv'</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'employees'</span>, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="st">'northwind/employees.csv'</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'orders'</span>, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="st">'northwind/orders.csv'</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'order_details'</span>, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="st">'northwind/order_details.csv'</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'products'</span>, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="st">'northwind/products.csv'</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'shippers'</span>, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="st">'northwind/shippers.csv'</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'suppliers'</span>, <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="st">'northwind/suppliers.csv'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This only affects repositories you create with <code>git init</code> going forward. Existing repositories keep their current branch names.</p>
-</section>
-<section id="line-endings" class="level2">
-<h2 class="anchored" data-anchor-id="line-endings">Line Endings</h2>
-<p>Different operating systems use different characters to represent line endings. Windows uses <code>CRLF</code> (carriage return + line feed), while macOS and Linux use <code>LF</code> (line feed only). This can cause problems when collaborators use different systems.</p>
-<p>Configure Git to handle this automatically:</p>
-<p>On <strong>Windows</strong>:</p>
+<p>And a peek at the products table, which we’ll use extensively:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
+<pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.autocrlf true</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="st">'northwind/products.csv'</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This converts <code>LF</code> to <code>CRLF</code> when checking out files and converts back to <code>LF</code> when committing.</p>
-<p>On <strong>macOS</strong>:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.autocrlf input</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This keeps <code>LF</code> endings in the repository and only converts <code>CRLF</code> to <code>LF</code> on commit (in case Windows files sneak in).</p>
-</section>
-<section id="default-editor" class="level2">
-<h2 class="anchored" data-anchor-id="default-editor">Default Editor</h2>
-<p>When Git needs you to write a commit message or resolve a conflict, it opens a text editor. By default, this is often <code>vim</code>, which can be confusing for beginners.</p>
-<p>Set your preferred editor:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For Zed</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.editor <span class="st">"zed --wait"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The <code>--wait</code> flag tells Git to wait until you close the editor before continuing.</p>
-</section>
-<section id="useful-aliases" class="level2">
-<h2 class="anchored" data-anchor-id="useful-aliases">Useful Aliases</h2>
-<p>Git aliases create shortcuts for common commands. They save typing and can make Git more intuitive:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Short status</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.s <span class="st">"status --short"</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compact log with graph</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.lg <span class="st">"log --oneline --graph --all"</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Amend the last commit without editing the message</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.amend <span class="st">"commit --amend --no-edit"</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Undo the last commit but keep changes staged</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.undo <span class="st">"reset --soft HEAD~1"</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Show what you're about to push</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.unpushed <span class="st">"log @{u}.. --oneline"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Now you can use <code>git s</code> instead of <code>git status --short</code>, and so on.</p>
-</section>
-<section id="modern-authentication" class="level2">
-<h2 class="anchored" data-anchor-id="modern-authentication">Modern Authentication</h2>
-<p>For GitHub specifically, using the GitHub CLI (<code>gh auth login</code>) or SSH keys is more secure and convenient than HTTPS credentials. See <a href="github.html" class="quarto-xref"><span>Appendix C — GitHub Configuration</span></a> for details.</p>
-</section>
-<section id="viewing-your-configuration-file" class="level2">
-<h2 class="anchored" data-anchor-id="viewing-your-configuration-file">Viewing Your Configuration File</h2>
-<p>Your global configuration is stored in a plain text file. You can view and edit it directly:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> <span class="at">--edit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This opens your configuration file in your default editor. A typical configuration looks like:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>~/.gitconfig</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="~/.gitconfig"><pre class="sourceCode ini code-with-copy"><code class="sourceCode ini"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[user]</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dt">    name </span><span class="ot">=</span><span class="st"> Your Name</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="dt">    email </span><span class="ot">=</span><span class="st"> your.email@example.com</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[init]</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="dt">    defaultBranch </span><span class="ot">=</span><span class="st"> main</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[core]</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="dt">    editor </span><span class="ot">=</span><span class="st"> code --wait</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="dt">    autocrlf </span><span class="ot">=</span><span class="st"> input</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">[alias]</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="dt">    s </span><span class="ot">=</span><span class="st"> status --short</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="dt">    lg </span><span class="ot">=</span><span class="st"> log --oneline --graph --all</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="kw">[pull]</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="dt">    rebase </span><span class="ot">=</span><span class="st"> </span><span class="kw">false</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="kw">[credential]</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="dt">    helper </span><span class="ot">=</span><span class="st"> osxkeychain</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>You can edit this file directly instead of using <code>git config</code> commands.</p>
-</section>
-<section id="recommended-starter-configuration" class="level2">
-<h2 class="anchored" data-anchor-id="recommended-starter-configuration">Recommended Starter Configuration</h2>
-<p>Here’s a complete configuration script to run after installing Git. Customize the name and email:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identity</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"Your Name"</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"your.email@example.com"</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Modern defaults</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> init.defaultBranch main</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.autocrlf input  <span class="co"># Use 'true' on Windows</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Editor (choose one)</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.editor <span class="st">"zed --wait"</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Helpful aliases</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.s <span class="st">"status --short"</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.lg <span class="st">"log --oneline --graph --all"</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> alias.amend <span class="st">"commit --amend --no-edit"</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--list</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p>Don’t worry about the syntax yet. The SQL chapters will walk through every piece of this. For now, the goal is simply to confirm that the data is accessible and to start building an intuition for what’s in it. Scroll through the results. Look at the column names. Notice how <code>supplier_id</code> and <code>category_id</code> are numbers that reference rows in other tables. That’s the relational model at work, and it’s what we’ll spend the next several chapters learning to navigate.</p>
 </section>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<p>Git configuration establishes your identity and customizes Git’s behavior. You learned how Git stores configurations at system, global, and local levels, how to set the required identity settings (<code>user.name</code> and <code>user.email</code>), how to configure defaults for branch names, line endings, and editors, and how to create aliases for common commands. With these settings in place, Git will work smoothly and your commits will be properly attributed.</p>
+<p>The Northwind dataset is a classic sample database created by Microsoft in the 1990s for teaching relational database concepts. It models a fictional specialty food distributor called Northwind Traders, with tables covering the full supply chain: suppliers provide products organized into categories, customers place orders containing line items, employees handle sales, and shippers deliver the goods. The dataset is small enough to reason about manually (roughly 830 orders across 77 products) but rich enough to support meaningful SQL work including multi-table joins, aggregations, and window functions. The tables connect through foreign keys, with the <code>orders</code> / <code>order_details</code> header-detail pattern being the central relationship. The data is available as CSV files in the book’s GitHub repository and can be accessed by downloading directly, cloning the repository with Git, or reading the files from URLs inside DuckDB.</p>
 </section>
 <section id="glossary" class="level2">
 <h2 class="anchored" data-anchor-id="glossary">Glossary</h2>
 <dl>
-<dt><strong>Configuration Level</strong></dt>
+<dt><strong>CSV (Comma-Separated Values)</strong></dt>
 <dd>
-The scope at which a Git setting applies, either system (all users), global (current user), or local (current repository).
+A plain-text file format where each line represents a row of data and values within a row are separated by commas. CSVs are a common interchange format because virtually every tool can read and write them.
 </dd>
-<dt><strong>Line Endings</strong></dt>
+<dt><strong>Entity-Relationship Diagram (ERD)</strong></dt>
 <dd>
-Characters that mark the end of a line in text files. Windows uses CRLF, while macOS/Linux use LF.
+A visual representation of tables in a database and how they relate to each other through primary and foreign keys.
 </dd>
-<dt><strong>Alias</strong></dt>
+<dt><strong>Foreign Key</strong></dt>
 <dd>
-A shortcut name for a Git command or sequence of commands.
+A column in one table that references the primary key of another table, establishing a relationship between the two. For example, <code>products.supplier_id</code> references <code>suppliers.supplier_id</code>.
 </dd>
-<dt><strong>Credential Helper</strong></dt>
+<dt><strong>Header-Detail Pattern</strong></dt>
 <dd>
-A Git feature that caches or stores authentication credentials so you don’t have to enter them repeatedly.
+A common database design where a “header” table stores general information about a transaction (the order date, the customer) and a “detail” table stores the individual line items within that transaction (which products, how many, at what price).
+</dd>
+<dt><strong>Northwind Traders</strong></dt>
+<dd>
+The fictional company modeled by the Northwind dataset. A specialty food import/export distributor with international suppliers and customers.
+</dd>
+<dt><strong>Primary Key</strong></dt>
+<dd>
+A column (or set of columns) that uniquely identifies each row in a table. No two rows can share the same primary key value, and the value cannot be null.
+</dd>
+<dt><strong>Self-Referential Relationship</strong></dt>
+<dd>
+A foreign key that references the primary key of the same table, creating a hierarchical or recursive structure. The <code>employees.reports_to</code> column is an example, representing the organizational reporting chain.
 </dd>
 </dl>
 </section>
 <section id="resources" class="level2">
 <h2 class="anchored" data-anchor-id="resources">Resources</h2>
 <ul>
-<li><a href="https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup">First-Time Git Setup</a> - Official Git documentation</li>
-<li><a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration">Customizing Git Configuration</a> - Deep dive into all configuration options</li>
-<li><a href="https://docs.github.com/en/get-started/git-basics/set-up-git">Set Up Git</a> - GitHub’s setup guide</li>
-<li><a href="https://docs.github.com/en/get-started/git-basics/setting-your-username-in-git">Setting Your Username in Git</a> - GitHub’s identity configuration guide</li>
-<li><a href="https://git-scm.com/book/en/v2">Pro Git Book</a> - Free comprehensive Git reference</li>
+<li><a href="https://github.com/microsoft/sql-server-samples/tree/master/samples/databases/northwind-pubs">Original Microsoft Northwind scripts</a> on GitHub, the SQL Server 2000-era source</li>
+<li><a href="https://github.com/jpwhite3/northwind-SQLite3">Northwind for SQLite</a> by jpwhite3, a well-maintained port with an ERD and data generation script</li>
+<li><a href="https://github.com/ozanozbeker/cw4e/tree/main/data/northwind">Book data files</a>, the CSV files used throughout this course</li>
 </ul>
 
 
@@ -1018,14 +1068,11 @@ A Git feature that caches or stores authentication credentials so you don’t ha
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../06_appendices/brew.html" class="pagination-link" aria-label="Homebrew">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span>
+      <a href="../06_appendices/zed.html" class="pagination-link" aria-label="Zed (WIP)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Zed (WIP)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../06_appendices/github.html" class="pagination-link" aria-label="GitHub Configuration">
-        <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -1036,7 +1083,7 @@ A Git feature that caches or stores authentication credentials so you don’t ha
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/06_appendices/git.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/06_appendices/northwind.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>

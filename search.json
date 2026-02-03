@@ -1909,5 +1909,104 @@
       "Appendices",
       "<span class='chapter-number'>E</span>  <span class='chapter-title'>Zed (WIP)</span>"
     ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html",
+    "href": "06_appendices/northwind.html",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "",
+    "text": "A Brief History\nThroughout the Databases & SQL unit, we work with a dataset called Northwind. Before we start writing queries against it, it’s worth understanding where it comes from, what it represents, and how to get it onto your machine.\nNorthwind is one of the most widely used sample databases in the world. Microsoft created it in the mid-1990s as a teaching dataset bundled with Microsoft Access 97, and it went on to ship with nearly every Microsoft database product for over a decade, including SQL Server 2000. The original purpose was simple: give people a realistic, self-contained dataset to learn relational databases with, without needing access to proprietary business data.\nThe dataset models a fictional company called Northwind Traders, a small business that imports and exports specialty food products from around the world. Think of it as a mid-size wholesale distributor: they buy products from suppliers in various countries, organize those products into categories, and sell them to customers through orders that get shipped via third-party carriers. This business model naturally produces the kinds of questions that SQL excels at answering: which products are selling well, which suppliers are most reliable, where are orders shipping to, and how do employees perform over time.\nMicrosoft eventually deprecated Northwind in favor of a more complex sample database called AdventureWorks, but by then, Northwind had taken on a life of its own. It has been ported to PostgreSQL, MySQL, SQLite, MongoDB, Neo4j, and, of course, DuckDB. Its longevity comes from its simplicity: the schema is small enough to hold in your head, the data is rich enough to support genuinely interesting queries, and the business domain (buying and selling products) is intuitive for virtually any audience. If you go on to take database courses, read SQL textbooks, or work through online tutorials, there’s a good chance you’ll run into Northwind again.\nThe version we use in this book is adapted from the original Microsoft dataset and distributed as a set of CSV files. The schema and data have been lightly cleaned for consistency, but the core structure is faithful to the original.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#the-business-domain",
+    "href": "06_appendices/northwind.html#the-business-domain",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "The Business Domain",
+    "text": "The Business Domain\nNorthwind Traders operates a straightforward supply chain. Understanding the flow of goods through the business will help you reason about queries later, because every table exists to track some part of this process.\nSuppliers around the world produce specialty food products: cheeses from France, seafood from Norway, sauces from Louisiana. Northwind buys these products and organizes them into categories like Beverages, Condiments, Dairy Products, and Seafood. Each product has a price, a stock level, and a reorder threshold, the point at which the company should place a new order with the supplier.\nCustomers are businesses (restaurants, grocery stores, specialty shops) that buy from Northwind. When a customer places an order, it contains one or more line items, each specifying a product, a quantity, a unit price, and sometimes a discount. The order also records which employee handled the sale and which shipper will deliver it. Shipping details like the destination address and freight cost are tracked on the order itself.\nThis gives us a complete picture: suppliers → products → orders → customers, with employees and shippers facilitating the process. Most of the interesting analytical questions involve connecting these pieces. “Which category generates the most revenue?” requires joining products to order details to categories. “Which employee handles the most orders shipping to Germany?” requires joining orders to employees and filtering by ship country.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#sec-northwind-tables",
+    "href": "06_appendices/northwind.html#sec-northwind-tables",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "The Tables",
+    "text": "The Tables\nThe dataset consists of the following core tables. Each table’s purpose maps directly to a concept in the business domain described above.\n\nCore Northwind tables\n\n\n\n\n\n\n\nTable\nDescription\nApproximate Rows\n\n\n\n\ncategories\nProduct categories (Beverages, Condiments, etc.) with names and descriptions\n8\n\n\ncustomers\nCustomer companies with contact information and addresses\n91\n\n\nemployees\nNorthwind sales staff with personal details and reporting structure\n9\n\n\norders\nCustomer orders with dates, shipping info, and freight costs\n830\n\n\norder_details\nLine items for each order: which product, how many, at what price\n2,155\n\n\nproducts\nProducts in the catalog with prices, stock levels, and supplier/category links\n77\n\n\nshippers\nShipping companies used to deliver orders\n3\n\n\nsuppliers\nCompanies that supply products to Northwind, with contact info and location\n29\n\n\n\nA few things to notice about these numbers. The dataset is intentionally small, which makes it fast to load, easy to scan visually, and forgiving when you’re experimenting with queries. But “small” doesn’t mean “trivial.” With 830 orders spanning 2,155 line items across 77 products from 29 suppliers, there’s plenty of structure to write meaningful aggregations, joins, and window functions against. The size also means you can verify your query results by hand when you’re unsure whether your logic is correct, a luxury you rarely have with production data.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#table-relationships",
+    "href": "06_appendices/northwind.html#table-relationships",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "Table Relationships",
+    "text": "Table Relationships\nThe tables connect through foreign keys, columns in one table that reference the primary key of another. Figure F.1 shows these relationships.\n\n\n\n\n\n\nerDiagram\n    suppliers ||--o{ products : \"supplies\"\n    categories ||--o{ products : \"contains\"\n    products ||--o{ order_details : \"appears in\"\n    orders ||--o{ order_details : \"has\"\n    customers ||--o{ orders : \"places\"\n    employees ||--o{ orders : \"handles\"\n    shippers ||--o{ orders : \"delivers\"\n    employees ||--o{ employees : \"reports to\"\n\n    suppliers {\n        int supplier_id PK\n        string company_name\n        string contact_name\n        string country\n    }\n\n    categories {\n        int category_id PK\n        string category_name\n        string description\n    }\n\n    products {\n        int product_id PK\n        string product_name\n        int supplier_id FK\n        int category_id FK\n        float unit_price\n        int units_in_stock\n        bool discontinued\n    }\n\n    order_details {\n        int order_id FK\n        int product_id FK\n        float unit_price\n        int quantity\n        float discount\n    }\n\n    orders {\n        int order_id PK\n        int customer_id FK\n        int employee_id FK\n        int ship_via FK\n        date order_date\n        date shipped_date\n        float freight\n    }\n\n    customers {\n        int customer_id PK\n        string company_name\n        string contact_name\n        string country\n    }\n\n    employees {\n        int employee_id PK\n        string last_name\n        string first_name\n        string title\n        int reports_to FK\n    }\n\n    shippers {\n        int shipper_id PK\n        string company_name\n        string phone\n    }\n\n\n\n\nFigure F.1: Entity-relationship diagram for the Northwind database. Lines connect foreign keys to their referenced primary keys.\n\n\n\n\n\nThe central relationship in the schema is between orders and order_details. An order is a single transaction (one customer, one date, one shipment), while order details are the individual line items within that transaction. This is a classic header-detail pattern you’ll encounter in virtually every transactional database: invoices and invoice lines, purchase orders and purchase order lines, shipments and shipment items. Understanding this one-to-many relationship, where one order can contain many line items, is fundamental to writing correct queries against Northwind.\nThe employees table also has an interesting structural feature: the reports_to column references another row in the same table. This is called a self-referential relationship, and it represents the org chart. Employee 5 might report to Employee 2, who reports to no one (the boss). You’ll encounter this pattern again in Appendix F — The Northwind Dataset when we discuss self-joins.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#sec-northwind-access",
+    "href": "06_appendices/northwind.html#sec-northwind-access",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "Getting the Data",
+    "text": "Getting the Data\nThe Northwind CSV files live in this book’s GitHub repository at data/northwind/. There are several ways to get them onto your machine, depending on what you’re comfortable with.\n\nOption 1: Download from the Website\nNavigate to the data directory on GitHub in your browser. You can download individual CSV files by clicking on a file and then clicking the download button (the downward arrow icon), or download the entire repository as a ZIP file by clicking the green Code button on the repository’s main page and selecting Download ZIP.\n\n\nOption 2: Clone with Git\nIf you’ve worked through 4  Version Control with Git, you already have Git installed. Cloning the repository gives you all the book’s data files at once and makes it easy to pull updates later:\n\n\nterminal\n\ngit clone https://github.com/ozanozbeker/cw4e.git\n\nThe CSV files will be in cw4e/data/northwind/ inside whatever directory you ran the command from.\n\n\nOption 3: Read Directly in DuckDB\nOne of DuckDB’s strengths is its ability to read CSV files directly from URLs without downloading them first. Once you have DuckDB open (see ?sec-duckdb-setup), you can query any Northwind table straight from GitHub:\n\n\nduckdb\n\nFROM 'https://raw.githubusercontent.com/ozanozbeker/cw4e/main/data/northwind/products.csv';\n\nThis is convenient for quick exploration, but for repeated use throughout the course, downloading the files locally is faster and doesn’t depend on an internet connection.\n\n\nOption 4: Load from Local CSV Files\nIf you’ve downloaded or cloned the files, you can point DuckDB at the local directory. Assuming the CSV files are in a folder called northwind/ relative to where you launched DuckDB:\n\n\nduckdb\n\nFROM 'northwind/products.csv';\n\nOr, to create a persistent table from the CSV that you can reference by name in future queries:\n\n\nduckdb\n\nCREATE TABLE products AS\nFROM 'northwind/products.csv';\n\nAfter creating tables this way, you can query them with just FROM products; instead of specifying the file path each time. We’ll cover the CREATE TABLE statement in detail in a later chapter, but this pattern, CREATE TABLE ... AS FROM ..., is DuckDB shorthand for “read this file and store it as a named table.”\n\n\n\n\n\n\nTipWhich option should I use?\n\n\n\nFor this course, we recommend Option 2 (cloning with Git) if you’ve already set up Git, or Option 3 (reading directly from URLs in DuckDB) if you want to get started immediately. Either way, you’ll have full access to the dataset for every chapter that follows.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#a-first-look",
+    "href": "06_appendices/northwind.html#a-first-look",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "A First Look",
+    "text": "A First Look\nOnce you have access to the data through any of the methods above, you can start exploring. Here’s a quick orientation to get your bearings:\n\n\nduckdb\n\n-- How many rows are in each table?\nSELECT 'categories' AS table_name, count(*) AS row_count FROM 'northwind/categories.csv'\nUNION ALL\nSELECT 'customers', count(*) FROM 'northwind/customers.csv'\nUNION ALL\nSELECT 'employees', count(*) FROM 'northwind/employees.csv'\nUNION ALL\nSELECT 'orders', count(*) FROM 'northwind/orders.csv'\nUNION ALL\nSELECT 'order_details', count(*) FROM 'northwind/order_details.csv'\nUNION ALL\nSELECT 'products', count(*) FROM 'northwind/products.csv'\nUNION ALL\nSELECT 'shippers', count(*) FROM 'northwind/shippers.csv'\nUNION ALL\nSELECT 'suppliers', count(*) FROM 'northwind/suppliers.csv';\n\nAnd a peek at the products table, which we’ll use extensively:\n\n\nduckdb\n\nFROM 'northwind/products.csv'\nLIMIT 5;\n\nDon’t worry about the syntax yet. The SQL chapters will walk through every piece of this. For now, the goal is simply to confirm that the data is accessible and to start building an intuition for what’s in it. Scroll through the results. Look at the column names. Notice how supplier_id and category_id are numbers that reference rows in other tables. That’s the relational model at work, and it’s what we’ll spend the next several chapters learning to navigate.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#summary",
+    "href": "06_appendices/northwind.html#summary",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "Summary",
+    "text": "Summary\nThe Northwind dataset is a classic sample database created by Microsoft in the 1990s for teaching relational database concepts. It models a fictional specialty food distributor called Northwind Traders, with tables covering the full supply chain: suppliers provide products organized into categories, customers place orders containing line items, employees handle sales, and shippers deliver the goods. The dataset is small enough to reason about manually (roughly 830 orders across 77 products) but rich enough to support meaningful SQL work including multi-table joins, aggregations, and window functions. The tables connect through foreign keys, with the orders / order_details header-detail pattern being the central relationship. The data is available as CSV files in the book’s GitHub repository and can be accessed by downloading directly, cloning the repository with Git, or reading the files from URLs inside DuckDB.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#glossary",
+    "href": "06_appendices/northwind.html#glossary",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "Glossary",
+    "text": "Glossary\n\nCSV (Comma-Separated Values)\n\nA plain-text file format where each line represents a row of data and values within a row are separated by commas. CSVs are a common interchange format because virtually every tool can read and write them.\n\nEntity-Relationship Diagram (ERD)\n\nA visual representation of tables in a database and how they relate to each other through primary and foreign keys.\n\nForeign Key\n\nA column in one table that references the primary key of another table, establishing a relationship between the two. For example, products.supplier_id references suppliers.supplier_id.\n\nHeader-Detail Pattern\n\nA common database design where a “header” table stores general information about a transaction (the order date, the customer) and a “detail” table stores the individual line items within that transaction (which products, how many, at what price).\n\nNorthwind Traders\n\nThe fictional company modeled by the Northwind dataset. A specialty food import/export distributor with international suppliers and customers.\n\nPrimary Key\n\nA column (or set of columns) that uniquely identifies each row in a table. No two rows can share the same primary key value, and the value cannot be null.\n\nSelf-Referential Relationship\n\nA foreign key that references the primary key of the same table, creating a hierarchical or recursive structure. The employees.reports_to column is an example, representing the organizational reporting chain.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
+  },
+  {
+    "objectID": "06_appendices/northwind.html#resources",
+    "href": "06_appendices/northwind.html#resources",
+    "title": "Appendix F — The Northwind Dataset",
+    "section": "Resources",
+    "text": "Resources\n\nOriginal Microsoft Northwind scripts on GitHub, the SQL Server 2000-era source\nNorthwind for SQLite by jpwhite3, a well-maintained port with an ERD and data generation script\nBook data files, the CSV files used throughout this course",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>The Northwind Dataset</span>"
+    ]
   }
 ]
