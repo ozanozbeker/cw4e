@@ -8,7 +8,7 @@
 
 <meta name="author" content="Ozan Ozbeker">
 
-<title>Appendix A — Homebrew – Computational Workflows for Engineers</title>
+<title>Databases – Computational Workflows for Engineers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,41 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -66,8 +31,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../06_appendices/git.html" rel="next">
-<link href="../02_databases/modeling.html" rel="prev">
+<link href="../02_databases/databases.html" rel="next">
+<link href="../01_foundations/github.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -119,7 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06_appendices/brew.html">Appendices</a></li><li class="breadcrumb-item"><a href="../06_appendices/brew.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02_databases/index.html">Databases</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -213,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../02_databases/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../02_databases/index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Databases</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -263,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../06_appendices/brew.html" class="sidebar-item-text sidebar-link active">
+  <a href="../06_appendices/brew.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
   </div>
 </li>
@@ -298,24 +263,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#what-problem-does-homebrew-solve" id="toc-what-problem-does-homebrew-solve" class="nav-link active" data-scroll-target="#what-problem-does-homebrew-solve">What Problem Does Homebrew Solve?</a></li>
-  <li><a href="#why-this-matters-for-your-workflow" id="toc-why-this-matters-for-your-workflow" class="nav-link" data-scroll-target="#why-this-matters-for-your-workflow">Why This Matters for Your Workflow</a></li>
-  <li><a href="#installation-instructions" id="toc-installation-instructions" class="nav-link" data-scroll-target="#installation-instructions">Installation Instructions</a></li>
-  <li><a href="#what-happens-next" id="toc-what-happens-next" class="nav-link" data-scroll-target="#what-happens-next">What Happens Next</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/06_appendices/brew.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06_appendices/brew.html">Appendices</a></li><li class="breadcrumb-item"><a href="../06_appendices/brew.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Appendix A — Homebrew</h1>
+<h1 class="title">Databases</h1>
 </div>
 
 
@@ -332,33 +288,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="what-problem-does-homebrew-solve" class="level2">
-<h2 class="anchored" data-anchor-id="what-problem-does-homebrew-solve">What Problem Does Homebrew Solve?</h2>
-<p>When you need a new app on your phone, you open the App Store, search for what you want, and tap “Install.” The App Store handles everything behind the scenes: downloading the app, putting it in the right place, and making sure it works with your device. You never think about <em>where</em> the app lives on your phone or <em>how</em> it got there.</p>
-<p>Now imagine you need to install a programming tool that doesn’t exist in the App Store. Without a package manager, you’d have to visit a website, find the correct download link for your specific computer, extract compressed files, figure out where to put them, and manually configure your system to recognize the new tool. If that tool depends on <em>other</em> tools to work, you’d need to track those down and install them first. It’s tedious, error-prone, and frustrating.</p>
-<p><strong>Homebrew is essentially the App Store for command-line tools and developer software.</strong> It gives your Mac the same convenient installation experience that Linux users have enjoyed for decades. You tell Homebrew what you want, and it handles the rest: downloading, installing, resolving dependencies, and configuring paths.</p>
-</section>
-<section id="why-this-matters-for-your-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="why-this-matters-for-your-workflow">Why This Matters for Your Workflow</h2>
-<p>Throughout this book, you’ll need various tools installed on your computer: version control systems, programming language runtimes, database utilities, and more. Without Homebrew, each installation becomes its own adventure of Googling instructions and hoping nothing breaks. With Homebrew, installing new tools becomes predictable and consistent.</p>
-<p>Homebrew also makes your setup <em>reproducible</em>. If you get a new computer or need to help a classmate configure their machine, you can simply share a list of packages rather than walking through dozens of manual installation steps.</p>
-</section>
-<section id="installation-instructions" class="level2">
-<h2 class="anchored" data-anchor-id="installation-instructions">Installation Instructions</h2>
-<p>Open the <strong>Terminal</strong> application on your Mac. You can find it by pressing <code>Cmd + Space</code> to open Spotlight Search, then typing “Terminal” and pressing Enter.</p>
-<p>Once Terminal is open, copy and paste the following command, then press Enter:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/bin/bash</span> <span class="at">-c</span> <span class="st">"</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="va">)</span><span class="st">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The installer will explain what it plans to do and ask for your password (the same password you use to log into your Mac). As you type your password, you won’t see any characters appear on screen—this is normal security behavior. Just type your password and press Enter.</p>
-<p>The installation takes a few minutes. When it finishes, <strong>read the output carefully</strong>. Homebrew will print instructions telling you to run one or two additional commands to complete the setup. These commands add Homebrew to your system’s PATH, which is how your computer knows where to find programs. Copy and run those commands exactly as shown.</p>
-<p>To verify everything worked, close your Terminal window, open a fresh one, and type <code>brew --version</code>. If you see a version number, you’re all set.</p>
-</section>
-<section id="what-happens-next" class="level2">
-<h2 class="anchored" data-anchor-id="what-happens-next">What Happens Next</h2>
-<p>Once Homebrew is installed, you’ll have access to thousands of tools through simple commands. We’ll introduce specific commands as we need them throughout the book. For now, just know that Homebrew is the foundation that makes installing everything else straightforward.</p>
-<p>If you’re curious, Homebrew’s website at <a href="https://brew.sh">brew.sh</a> has documentation and a searchable list of available packages. But don’t feel pressured to explore on your own yet—we’ll guide you through each tool as it becomes relevant to your work.</p>
+<p>In the Foundations module, you learned to navigate your computer like an engineer: managing files from the command line, tracking changes with Git, and collaborating through GitHub. Those skills gave you the infrastructure to work reliably. Now we need something to work <em>on</em>.</p>
+<p>This module introduces databases, the structured systems that store and organize the data you’ll spend your career analyzing. More importantly, it introduces SQL (Structured Query Language), the language that lets you ask questions of that data. SQL is one of the most enduring and widely-used languages in computing, and for good reason: it lets you express complex analytical questions in a few lines of declarative logic, then lets the database figure out the fastest way to answer them.</p>
+<p>We’ll use DuckDB throughout this module, an analytical database that installs in seconds and runs entirely on your laptop. You won’t need to configure servers, manage permissions, or request access from an IT department. By the end of the first chapter, you’ll be writing real queries against real data.</p>
+<p>The module progresses through five chapters. You start by understanding what databases are, where they fit alongside spreadsheets, and why different kinds exist. Then you learn to query single tables and combine results with set operations. Next you bring multiple tables together through joins, then graduate to advanced analytical patterns like window functions, CTEs, and ABC classification. The final chapter flips the perspective: instead of querying existing databases, you’ll design and build your own, learning about normalization, dimensional modeling, ER diagrams, and the documentation practices that make databases usable.</p>
+<p>Throughout, we’ll work with the Northwind database, a classic dataset representing a food import and export company called Northwind Traders. It has suppliers, products, customers, orders, and shippers, which makes it a natural fit for thinking about supply chain and operations problems. Every chapter opens with a business question that creates genuine need for the SQL concepts being introduced, because SQL is a tool for answering questions, not an abstract syntax to memorize.</p>
+<p>The SQL you learn here is standard SQL, the core that works across PostgreSQL, MySQL, SQL Server, Oracle, and every other major relational database. When we use DuckDB-specific convenience features, we’ll call them out clearly and show the portable alternative. You’re learning a skill that transfers to whatever database you encounter next.</p>
+<p>A note on how to learn SQL effectively: don’t just read the examples. For every query you encounter in this book, predict what you think the output will look like before you run it. When the result surprises you, stop and figure out why. Try modifying the query, break it on purpose, then fix it. SQL rewards experimentation, and the DuckDB UI gives you instant feedback with no risk of damaging anything. The goal isn’t to memorize syntax; it’s to build intuition for how data flows through a query so you can think and act flexibly when facing new problems.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -763,13 +701,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../02_databases/modeling.html" class="pagination-link" aria-label="Data Modeling">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Modeling</span></span>
+      <a href="../01_foundations/github.html" class="pagination-link" aria-label="Collaboration with GitHub">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../06_appendices/git.html" class="pagination-link" aria-label="Git Configuration">
-        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Git Configuration</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../02_databases/databases.html" class="pagination-link" aria-label="Databases">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Databases</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -781,7 +719,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/06_appendices/brew.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/02_databases/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>

@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>6&nbsp; Databases – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../02_databases/querying.html" rel="next">
+<link href="../02_databases/index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-60271156cd8ee7c928ae8b17ec9acf91.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02_databases/index.html">Databases</a></li><li class="breadcrumb-item"><a href="../02_databases/databases.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Databases</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequisites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../01_foundations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_foundations/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_foundations/files.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_foundations/cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_foundations/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01_foundations/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../02_databases/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Databases</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_databases/databases.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_databases/querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_databases/joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_databases/analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02_databases/modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06_appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06_appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06_appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06_appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06_appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Zed (WIP)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#why-databases-exist" id="toc-why-databases-exist" class="nav-link active" data-scroll-target="#why-databases-exist"><span class="header-section-number">6.1</span> Why Databases Exist</a></li>
+  <li><a href="#spreadsheets-and-databases-knowing-when-to-use-each" id="toc-spreadsheets-and-databases-knowing-when-to-use-each" class="nav-link" data-scroll-target="#spreadsheets-and-databases-knowing-when-to-use-each"><span class="header-section-number">6.2</span> Spreadsheets and Databases: Knowing When to Use Each</a></li>
+  <li><a href="#two-kinds-of-work-two-kinds-of-engine" id="toc-two-kinds-of-work-two-kinds-of-engine" class="nav-link" data-scroll-target="#two-kinds-of-work-two-kinds-of-engine"><span class="header-section-number">6.3</span> Two Kinds of Work, Two Kinds of Engine</a>
+  <ul class="collapse">
+  <li><a href="#transactions-vs.-analytics-the-engine-analogy" id="toc-transactions-vs.-analytics-the-engine-analogy" class="nav-link" data-scroll-target="#transactions-vs.-analytics-the-engine-analogy"><span class="header-section-number">6.3.1</span> Transactions vs.&nbsp;Analytics: The Engine Analogy</a></li>
+  </ul></li>
+  <li><a href="#the-database-landscape" id="toc-the-database-landscape" class="nav-link" data-scroll-target="#the-database-landscape"><span class="header-section-number">6.4</span> The Database Landscape</a>
+  <ul class="collapse">
+  <li><a href="#server-based-databases" id="toc-server-based-databases" class="nav-link" data-scroll-target="#server-based-databases"><span class="header-section-number">6.4.1</span> Server-Based Databases</a></li>
+  <li><a href="#embedded-databases" id="toc-embedded-databases" class="nav-link" data-scroll-target="#embedded-databases"><span class="header-section-number">6.4.2</span> Embedded Databases</a></li>
+  <li><a href="#why-duckdb-for-this-course" id="toc-why-duckdb-for-this-course" class="nav-link" data-scroll-target="#why-duckdb-for-this-course"><span class="header-section-number">6.4.3</span> Why DuckDB for This Course</a></li>
+  <li><a href="#sql-the-language-youre-really-learning" id="toc-sql-the-language-youre-really-learning" class="nav-link" data-scroll-target="#sql-the-language-youre-really-learning"><span class="header-section-number">6.4.4</span> SQL: The Language You’re Really Learning</a></li>
+  </ul></li>
+  <li><a href="#setting-up-duckdb" id="toc-setting-up-duckdb" class="nav-link" data-scroll-target="#setting-up-duckdb"><span class="header-section-number">6.5</span> Setting Up DuckDB</a>
+  <ul class="collapse">
+  <li><a href="#the-cli-briefly" id="toc-the-cli-briefly" class="nav-link" data-scroll-target="#the-cli-briefly"><span class="header-section-number">6.5.1</span> The CLI (Briefly)</a></li>
+  <li><a href="#the-duckdb-ui" id="toc-the-duckdb-ui" class="nav-link" data-scroll-target="#the-duckdb-ui"><span class="header-section-number">6.5.2</span> The DuckDB UI</a></li>
+  </ul></li>
+  <li><a href="#loading-the-northwind-dataset" id="toc-loading-the-northwind-dataset" class="nav-link" data-scroll-target="#loading-the-northwind-dataset"><span class="header-section-number">6.6</span> Loading the Northwind Dataset</a></li>
+  <li><a href="#your-first-query" id="toc-your-first-query" class="nav-link" data-scroll-target="#your-first-query"><span class="header-section-number">6.7</span> Your First Query</a></li>
+  <li><a href="#chapter-exercises" id="toc-chapter-exercises" class="nav-link" data-scroll-target="#chapter-exercises"><span class="header-section-number">6.8</span> Chapter Exercises</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6.9</span> Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">6.10</span> Glossary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/02_databases/databases.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02_databases/index.html">Databases</a></li><li class="breadcrumb-item"><a href="../02_databases/databases.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Databases</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Databases</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>You have been using databases your entire life without thinking about it. Every time you check your bank balance, search for a product online, or scan your student ID at the dining hall, a database is answering a question on your behalf. The ATM doesn’t keep your balance in a spreadsheet. The university doesn’t track enrollment in a folder of text files. These systems use databases because when data matters, when it needs to be correct, fast, and accessible to many people at once, flat files aren’t enough.</p>
+<p>This chapter introduces what databases are, why different kinds exist, and why we’ll use one called DuckDB for our analytical work. By the end, you’ll have DuckDB running on your machine, a real dataset loaded, and your first SQL query executed. That might sound like a lot of setup, but DuckDB was designed to get out of your way. You’ll be querying data within minutes.</p>
+<section id="why-databases-exist" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="why-databases-exist"><span class="header-section-number">6.1</span> Why Databases Exist</h2>
+<p>Think about how you might track inventory for a small warehouse using spreadsheets. You’d probably create an Excel file with columns for product name, quantity, supplier, and location. For a dozen products, this works fine. But as the operation grows, problems emerge quickly.</p>
+<p>Your colleague opens the same file and edits it simultaneously, and someone’s changes get overwritten. A new hire accidentally deletes a column. Someone enters “N/A” in a numeric field, and now your formulas break. The file grows to 500,000 rows and takes thirty seconds to open. You need to answer the question “which supplier’s products have the highest defect rate?” but that data lives across three different spreadsheets, and there’s no reliable way to connect them.</p>
+<p>A <strong>database management system</strong> (DBMS) solves all of these problems through structure and rules. It enforces that every product has a valid supplier ID. It prevents two people from corrupting the same record simultaneously. It answers complex questions across millions of rows in milliseconds. It recovers gracefully from crashes. A DBMS is the difference between a filing cabinet where anyone can shove papers in any drawer and a library with a catalog system, a librarian, and a checkout process.</p>
+<p>The key insight is that a database is not just a place to <em>store</em> data. It’s a system that <em>manages</em> data: enforcing rules about what goes in, coordinating who can access it, and providing a powerful language for getting answers out.</p>
+</section>
+<section id="spreadsheets-and-databases-knowing-when-to-use-each" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="spreadsheets-and-databases-knowing-when-to-use-each"><span class="header-section-number">6.2</span> Spreadsheets and Databases: Knowing When to Use Each</h2>
+<p>Before we move on, let’s address the tool you already know well: the spreadsheet. Excel (and Google Sheets) is genuinely excellent software, and dismissing it would be unfair. A spreadsheet combines data entry, storage, analysis, and visualization in a single interface with immediate feedback. You change a cell and see calculation results instantly. Pivot tables give you drag-and-drop aggregation. Built-in charting produces presentation-ready visuals without writing code. Excel is pre-installed on most corporate computers, and roughly 60% of businesses rely on it for daily work. For quick analysis, what-if scenarios, and ad-hoc exploration on small datasets, nothing beats the speed of a well-built spreadsheet.</p>
+<p>But spreadsheets have real limitations that surface as data grows and stakes rise, and engineers should know the specifics.</p>
+<p>Excel’s hard row limit is 1,048,576 rows (the older <code>.xls</code> format caps at 65,536). Performance degrades noticeably above 200,000 to 300,000 rows when complex formulas are involved. There is no referential integrity: any data type can go in any cell, and nothing stops someone from typing “TBD” in a price column. Version control is effectively nonexistent, and concurrent editing creates conflicts. Formula auditing across complex cross-references is, as researchers have described it, “hard to detect and hard to correct even if discovered.”</p>
+<p>These aren’t hypothetical risks. In 2012, a spreadsheet error contributed to JP Morgan’s “London Whale” incident, a $6.2 billion loss partly caused by a Value-at-Risk model in Excel where a formula divided by a sum instead of an average, muting volatility by a factor of two. In 2020, the UK’s Public Health England lost approximately 16,000 positive COVID-19 test results because they used the old <code>.xls</code> format with its 65,536 row limit, and rows were silently truncated. An ongoing problem in genetics research involves Excel’s autocorrect converting gene names like MARCH1 and SEPT1 to calendar dates. A 2020 study found that 31% of published genetic papers contained these errors, and the problem became so pervasive that the HUGO Gene Nomenclature Committee actually renamed genes (SEPT1 became SEPTIN1) because researchers wouldn’t stop using Excel. Broader research from the European Spreadsheet Risk Interest Group estimates that 88% of spreadsheets contain errors.</p>
+<p>The point isn’t that spreadsheets are bad. The point is that different tools serve different purposes.</p>
+<p>Use a spreadsheet when you have fewer than 10,000 rows, a single user, ad-hoc analysis needs, quick visualization, or rapid prototyping. Use a database when you have more than 100,000 rows, multiple users, critical data integrity requirements, audit trail needs, or automation requirements. The transition triggers are concrete: performance degradation, hitting row limits, “who has the file open?” conflicts, version chaos, formula errors propagating silently, or file corruption.</p>
+<p>Many of the good habits you’ll learn from databases actually transfer back to spreadsheet work. Using Excel Tables (Ctrl+T) enforces unique headers and auto-expands ranges. Keeping one header row with unique column names, storing one fact per cell, and organizing rows as observations and columns as variables are database principles that make spreadsheets more reliable. The formal term for this structure is <strong>tidy data</strong>, and it’s a concept that spans both tools.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercises
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>A manufacturing plant tracks machine uptime in a shared Excel file. Three shift supervisors update it at shift changes, and an analyst pulls weekly summaries from it. The file has 800 rows and is growing by about 50 rows per week. What specific problems would you expect to emerge within six months, and at what point would migrating to a database become worthwhile?</p></li>
+<li><p>For each of the following scenarios, would you recommend a spreadsheet or a database? Briefly justify each choice. (a) A graduate student collecting survey responses from 200 participants for a thesis project. (b) An e-commerce company tracking 2 million customer orders per year with data entry from 15 warehouse workers. (c) A project manager building a one-time cost estimate for a client proposal. (d) A hospital system storing patient records that must comply with audit and privacy regulations.</p></li>
+<li><p>The UK COVID-19 data loss occurred because the <code>.xls</code> format has a 65,536 row limit. If the data had been stored in the newer <code>.xlsx</code> format (1,048,576 row limit), would that have prevented the problem? What would a database-first approach have done differently?</p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="two-kinds-of-work-two-kinds-of-engine" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="two-kinds-of-work-two-kinds-of-engine"><span class="header-section-number">6.3</span> Two Kinds of Work, Two Kinds of Engine</h2>
+<p>Not all data work looks the same. Consider two very different questions you might ask about inventory data:</p>
+<p>“Update the quantity of Widget A to reflect that we just shipped 50 units.” This is a <strong>transaction</strong>: a small, precise change to a single record that needs to happen immediately and correctly.</p>
+<p>“What were our average shipping costs by region for each quarter of last year?” This is an <strong>analysis</strong>: a broad sweep across potentially millions of records, aggregating and summarizing to reveal patterns.</p>
+<p>These two kinds of work have fundamentally different performance requirements, and the database world has developed two architectures to handle them. The distinction between them is one of the most important concepts in data engineering.</p>
+<section id="transactions-vs.-analytics-the-engine-analogy" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="transactions-vs.-analytics-the-engine-analogy"><span class="header-section-number">6.3.1</span> Transactions vs.&nbsp;Analytics: The Engine Analogy</h3>
+<p>If you’ve ever compared gasoline and diesel engines, you already have an intuition for this distinction.</p>
+<p>A <strong>gasoline engine</strong> is responsive and quick. It starts instantly, revs up fast, and handles the stop-and-go rhythm of city driving with ease. It’s optimized for lots of small, quick bursts of power. This is like an <strong>OLTP</strong> (Online Transaction Processing) database. OLTP systems handle the day-to-day heartbeat of a business: processing credit card swipes, updating inventory counts, recording new customer registrations. Each operation touches a small number of rows and needs to complete in milliseconds. PostgreSQL, MySQL, and SQL Server are OLTP engines. They store data <strong>row by row</strong>, which means retrieving a complete customer record (name, address, phone, email) is fast, because all those fields sit next to each other on disk.</p>
+<p>A <strong>diesel engine</strong> is built differently. It produces massive torque, efficiently hauling heavy loads over long distances. It’s not as responsive off the line, but it’s relentless once it gets moving. This is like an <strong>OLAP</strong> (Online Analytical Processing) database. OLAP systems handle the questions that managers, analysts, and engineers ask: “What are our defect rates across all production lines for the past two years?” These queries scan millions of rows, aggregate columns, and compute summaries. DuckDB, ClickHouse, and BigQuery are OLAP engines. They store data <strong>column by column</strong>, which means computing the average of a single column across 10 million rows is fast, because all those values sit next to each other on disk, and the engine never wastes time reading the columns you didn’t ask about.</p>
+<p>Here’s what that looks like in practice. Imagine a table with four columns and millions of rows:</p>
+<pre><code>Row-Oriented Storage (OLTP):
+  Row 1: [ID=1] [Name="Widget A"] [Price=12.50] [Stock=340]
+  Row 2: [ID=2] [Name="Widget B"] [Price=8.75]  [Stock=1200]
+  Row 3: [ID=3] [Name="Gadget C"] [Price=45.00] [Stock=89]
+  ...millions more rows...
+
+Column-Oriented Storage (OLAP):
+  ID Column:    [1, 2, 3, 4, 5, ...]
+  Name Column:  ["Widget A", "Widget B", "Gadget C", ...]
+  Price Column: [12.50, 8.75, 45.00, ...]
+  Stock Column: [340, 1200, 89, ...]</code></pre>
+<p>If you ask “give me everything about product #2,” the row-oriented database wins, because that entire record is stored in one contiguous block. If you ask “what’s the average price across all products?”, the column-oriented database wins, because it only reads the Price column and skips everything else.</p>
+<p>Neither architecture is “better.” They’re purpose-built for different workloads, just like you wouldn’t tow a trailer with a sports car or race a semi-truck on a circuit. The important thing is choosing the right engine for the work you’re doing. As engineers analyzing data, our work is overwhelmingly analytical, which is why we’ll use an OLAP database.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercises
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Classify each of the following operations as OLTP or OLAP, and explain which storage layout (row-oriented or column-oriented) would handle it more efficiently. (a) A barcode scanner at a warehouse register deducts one unit from a product’s stock count. (b) A supply chain manager asks, “What was our average shipping cost by carrier for Q3?” (c) A web form creates a new customer account with name, email, and address. (d) An analyst computes the year-over-year revenue growth rate for each product category.</p></li>
+<li><p>A colleague says, “Column-oriented databases are just better because analytics is more important than transactions.” What’s wrong with this reasoning? Give an example of a system where row-oriented storage is clearly the right choice.</p></li>
+<li><p>In the storage diagram above, imagine a table with 50 columns and 10 million rows. You run a query that computes <code>AVG(price)</code>. Roughly how much data does a column-oriented engine read versus a row-oriented engine? Why does this difference grow as the number of columns increases?</p></li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="the-database-landscape" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="the-database-landscape"><span class="header-section-number">6.4</span> The Database Landscape</h2>
+<p>Databases are a mature industry with many providers, each with different strengths. Thinking about them like car manufacturers can help you navigate the landscape without getting lost in marketing.</p>
+<section id="server-based-databases" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="server-based-databases"><span class="header-section-number">6.4.1</span> Server-Based Databases</h3>
+<p>Most databases you’ll encounter in the professional world run as <strong>servers</strong>, separate processes (often on separate machines) that accept connections from clients over a network. This client-server architecture allows many users and applications to share one database simultaneously, and it’s how organizations centralize their data.</p>
+<p>The restaurant analogy helps here. A database server is like the kitchen in a restaurant. You (the client) never walk into the kitchen yourself. Instead, you give your order (a SQL query) to the waiter (the client software, like pgAdmin or a Python driver), who carries it to the kitchen. The kitchen processes your request and returns the prepared food (query results). Multiple customers can be served at the same time by the same kitchen, and customers never interact with the raw ingredients directly. If the kitchen catches fire, though, everyone waits.</p>
+<p>The <strong>database client</strong> is the software that connects to the server to send queries. This might be a graphical tool like pgAdmin or DBeaver, a command-line tool like <code>psql</code>, or an application driver like Python’s <code>psycopg2</code>. The <strong>database server</strong> is the process that manages data storage, processes SQL queries, handles authentication, coordinates concurrent access, and ensures crash recovery. To connect, the client needs a <strong>connection string</strong> specifying the host, port, credentials, and database name, something like <code>postgresql://username:password@host:5432/database</code>.</p>
+<p><strong>PostgreSQL</strong> is the Toyota of databases: reliable, versatile, community-driven, and an excellent default choice for almost any workload. It’s open source, has been developed since the 1980s, and handles everything from small applications to large enterprise systems. If someone says “just use Postgres,” that’s rarely bad advice.</p>
+<p><strong>MySQL</strong> is similar in spirit, like a Honda. It powers enormous portions of the web (WordPress, Wikipedia) and is known for being approachable and well-documented. Oracle acquired it in 2010, which led to the creation of MariaDB as a community fork.</p>
+<p><strong>SQL Server</strong> is Microsoft’s offering, akin to a BMW, tightly integrated with the Microsoft ecosystem (Windows Server, Azure, Excel). Many enterprises, particularly those already invested in Microsoft tools, standardize on it.</p>
+<p><strong>Oracle Database</strong> is the Rolls-Royce: powerful, expensive, and dominant in large enterprise environments, particularly financial services and government. You’ll likely encounter it in your career, but you probably won’t choose it for a personal project.</p>
+<p>These server databases are essential infrastructure for running businesses, but they come with operational complexity: installation, configuration, user management, backups, network security, and ongoing maintenance. You need to install both the server and a client, configure network access (default ports like 5432 for PostgreSQL or 3306 for MySQL), manage authentication credentials, and handle connection pooling since opening database connections is expensive (1 to 100 milliseconds each). For an analyst who wants to explore a dataset on their laptop, that’s significant overhead.</p>
+</section>
+<section id="embedded-databases" class="level3" data-number="6.4.2">
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="embedded-databases"><span class="header-section-number">6.4.2</span> Embedded Databases</h3>
+<p>An <strong>embedded database</strong> takes a radically different approach. Instead of running as a separate server, it compiles directly into your application or runs as a standalone process on your machine. There’s no network, no user management, no configuration. Your database is just a file on your filesystem.</p>
+<p><strong>SQLite</strong> is the most widely-deployed database in the world, and chances are you’ve never installed it on purpose. It’s embedded in every smartphone, every web browser, every copy of macOS and Windows. It’s the bicycle of databases: lightweight, goes everywhere, and perfect for its intended use case. SQLite uses row-oriented storage and handles transactional workloads like application state, configuration, and local caching.</p>
+<p><strong>DuckDB</strong> is the newer counterpart, and the one we’ll use throughout this module. If SQLite is the embedded database for applications, DuckDB is the embedded database for analytics. It uses column-oriented storage, executes queries across multiple CPU cores simultaneously, and can read directly from CSV, Parquet, and JSON files without an import step. Think of it as an electric vehicle in the embedded space: modern, efficient, zero-configuration, and purpose-built for how analysts actually work today.</p>
+<p>The contrast between SQLite and DuckDB reinforces the OLTP/OLAP distinction. Both are embedded, serverless, single-file databases, but they’re optimized for opposite workloads:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dimension</th>
+<th>SQLite</th>
+<th>DuckDB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Storage</td>
+<td>Row-oriented</td>
+<td>Column-oriented</td>
+</tr>
+<tr class="even">
+<td>Optimized for</td>
+<td>Transactions (OLTP)</td>
+<td>Analytics (OLAP)</td>
+</tr>
+<tr class="odd">
+<td>Execution</td>
+<td>Single-threaded, row-at-a-time</td>
+<td>Multi-threaded, vectorized batches</td>
+</tr>
+<tr class="even">
+<td>Best query type</td>
+<td>Point lookups by ID</td>
+<td>Aggregations across millions of rows</td>
+</tr>
+<tr class="odd">
+<td>Read CSV/Parquet</td>
+<td>Must load first</td>
+<td>Native direct querying</td>
+</tr>
+</tbody>
+</table>
+<p>Many production systems use both: SQLite for transactional writes and application state, DuckDB for analytical reads and data exploration. They’re complementary tools, not competitors.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercises
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Using the restaurant analogy, explain what happens when: (a) Two clients send queries to the same server database at the same time. (b) The database server crashes while a client is waiting for results. (c) A new team member needs to start querying the database. What do they need from an administrator?</p></li>
+<li><p>A startup is choosing a database for their new inventory management system. They have 5 employees, expect 10,000 transactions per day, and need their web application to read and write data. Their data analyst also wants to run weekly reports summarizing trends. Recommend a database architecture (which database for what purpose) and justify your choice.</p></li>
+<li><p>Explain why SQLite and DuckDB are described as “complementary, not competitors” despite both being embedded databases. In what scenario would you use both in the same project?</p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="why-duckdb-for-this-course" class="level3" data-number="6.4.3">
+<h3 data-number="6.4.3" class="anchored" data-anchor-id="why-duckdb-for-this-course"><span class="header-section-number">6.4.3</span> Why DuckDB for This Course</h3>
+<p>The choice of DuckDB is deliberate. As analysts and engineers, our primary database interaction is querying data to answer questions. We need a tool that:</p>
+<ol type="1">
+<li>Installs in seconds, with no server to configure or maintain.</li>
+<li>Handles analytical queries across large datasets efficiently.</li>
+<li>Reads common file formats (CSV, Parquet, JSON) directly, without a separate import step.</li>
+<li>Provides a standards-compliant SQL dialect that transfers to other databases.</li>
+<li>Integrates naturally with Python, which we’ll use in later modules.</li>
+</ol>
+<p>DuckDB satisfies all of these. Under the hood, three architectural features make it fast for analytics. <strong>Columnar storage</strong> keeps values from the same column contiguous on disk, so computing <code>AVG(sales)</code> across 10 million rows reads only the sales column (maybe 40 MB) rather than entire rows (maybe 500 MB), with compression ratios of 5 to 10x since similar values compress efficiently. <strong>Vectorized execution</strong> processes data in batches of roughly 2,048 values rather than one row at a time, allowing modern CPUs to apply SIMD (Single Instruction, Multiple Data) operations to these vectors for dramatically improved throughput. <strong>Morsel-driven parallelism</strong> automatically distributes work across all available CPU cores, achieving near-linear scaling for analytical queries without any configuration from you.</p>
+<p>You don’t need to memorize these internals, but understanding them explains why DuckDB can summarize millions of rows on your laptop in seconds while a spreadsheet with the same data would grind to a halt. The architecture is doing real work behind the scenes.</p>
+</section>
+<section id="sql-the-language-youre-really-learning" class="level3" data-number="6.4.4">
+<h3 data-number="6.4.4" class="anchored" data-anchor-id="sql-the-language-youre-really-learning"><span class="header-section-number">6.4.4</span> SQL: The Language You’re Really Learning</h3>
+<p>While DuckDB is our tool, <strong>SQL</strong> (Structured Query Language) is the skill. SQL has been the standard language for relational databases since the 1970s, formalized by the ANSI/ISO standards body through several major revisions: SQL-92 introduced joins and subqueries, SQL:1999 added Common Table Expressions (CTEs), SQL:2003 brought window functions, and SQL:2023 added JSON and graph query support.</p>
+<p>The core SQL you’ll learn in this module, <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, <code>GROUP BY</code>, <code>ORDER BY</code>, joins, subqueries, CTEs, and window functions, is <strong>standard SQL</strong> that works across PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and DuckDB. You’re learning a language that has been in continuous use for over 40 years and shows no signs of declining.</p>
+<p>DuckDB does add some convenience features that extend the standard, things like <code>FROM</code>-first syntax, <code>GROUP BY ALL</code>, and the <code>QUALIFY</code> clause. These are genuinely useful productivity features, and we’ll use them. But whenever we do, we’ll call them out clearly and show the portable alternative. Throughout this book, you’ll see two kinds of annotations:</p>
+<p><strong>Standard SQL</strong> means the syntax works across all major databases. This is the foundation.</p>
+<p><strong>DuckDB extension</strong> means the syntax is a DuckDB convenience. It’s great for productivity, but you should know the standard equivalent for portability.</p>
+<p>This way, you always know what transfers to your next job’s database and what’s specific to the tool we’re using here.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercises
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>A job posting requires “experience with SQL.” Based on what you’ve read about ANSI SQL standards, should you be concerned about which specific database the company uses? What would you need to learn that’s new, and what would transfer from this book?</p></li>
+<li><p>DuckDB’s <code>FROM</code>-first syntax lets you write <code>FROM products;</code> instead of <code>SELECT * FROM products;</code>. Why do you think DuckDB added this extension? What’s the tradeoff between convenience and portability?</p></li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="setting-up-duckdb" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="setting-up-duckdb"><span class="header-section-number">6.5</span> Setting Up DuckDB</h2>
+<p>DuckDB can be installed through the package managers you learned about in the Foundations module. Open your terminal and run the appropriate command for your operating system.</p>
+<p>On macOS with Homebrew:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install duckdb</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>On Windows with WinGet:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">winget</span> install DuckDB.cli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Verify the installation by checking the version:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You should see output showing the installed version number. That’s it. No server to start, no configuration files to edit, no users to create.</p>
+<section id="the-cli-briefly" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="the-cli-briefly"><span class="header-section-number">6.5.1</span> The CLI (Briefly)</h3>
+<p>You can start DuckDB directly in your terminal by typing <code>duckdb</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This drops you into an interactive SQL prompt where you can type queries directly. Try a quick sanity check:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>duckdb</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'Hello, DuckDB!'</span> <span class="kw">AS</span> greeting;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You should see a formatted table with your greeting. This confirms that DuckDB is installed and working.</p>
+<p>The CLI is useful for quick one-off queries and scripting, but for the exploratory analytical work we’ll be doing, a richer interface is more productive. Type <code>.exit</code> or press <code>Ctrl+D</code> to leave the CLI.</p>
+</section>
+<section id="the-duckdb-ui" class="level3" data-number="6.5.2">
+<h3 data-number="6.5.2" class="anchored" data-anchor-id="the-duckdb-ui"><span class="header-section-number">6.5.2</span> The DuckDB UI</h3>
+<p>Starting with version 1.2.1, DuckDB ships with a full-featured web-based user interface, built in collaboration with MotherDuck. It’s a notebook-style environment similar to Jupyter, but designed specifically for SQL work. You get syntax highlighting, autocompletion, an interactive data catalog, and visual column statistics, all running locally on your machine.</p>
+<p>Launch it from the terminal:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-ui</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Your default browser will open to <code>http://localhost:4213</code> with the DuckDB UI loaded. This might seem odd, since opening a browser usually means connecting to the internet, but that’s not what’s happening here. Behind the scenes, DuckDB starts a <strong>local web server</strong> on your own machine. The <code>localhost</code> in the URL literally means “this computer,” and <code>:4213</code> is the port number it’s listening on. Your browser is just being used as the display layer, like a fancy window into DuckDB. No data leaves your computer, no internet connection is required, and nobody else can access this interface. When you close DuckDB in the terminal, the web server shuts down and the URL stops working. This pattern, using a browser as the interface for a locally-running application, is increasingly common in data tools, and you’ll encounter it again with Jupyter notebooks, Quarto previews, and other development tools.</p>
+<p>The interface has three main areas. The <strong>left panel</strong> shows your database catalog: attached databases, tables, and their columns. The <strong>center panel</strong> is your SQL notebook, with cells where you write and execute queries. Press <code>Cmd+Enter</code> (macOS) or <code>Ctrl+Enter</code> (Windows/Linux) to run a cell. The <strong>results</strong> appear directly below each cell as a formatted table, and you can click on column headers to see distribution summaries.</p>
+<p>We’ll use this UI for nearly all of our SQL work in this module. When you need to write longer, more complex SQL that you want to save and version control, you’ll write <code>.sql</code> files in Zed, your code editor. But for exploration and learning, the notebook interface is ideal.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Persistent Databases
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By default, <code>duckdb -ui</code> creates an in-memory database that disappears when you close DuckDB. To persist your work, provide a filename:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-ui</span> northwind.duckdb</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This creates (or opens) a file called <code>northwind.duckdb</code> that stores all your tables and data between sessions. Use this approach when working through the chapters so you don’t have to reload data each time.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="loading-the-northwind-dataset" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="loading-the-northwind-dataset"><span class="header-section-number">6.6</span> Loading the Northwind Dataset</h2>
+<p>Throughout this module, we’ll work with the <strong>Northwind</strong> database, a dataset representing a fictional company called Northwind Traders that imports and exports specialty food products worldwide. Originally created by Microsoft as a teaching database, Northwind has become one of the most widely-used sample datasets in the SQL world, and for good reason: it models a realistic supply chain with suppliers, products, inventory, customer orders, shipping, and employees.</p>
+<p>The Northwind database contains the following tables, each representing an entity in the business:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Table</th>
+<th>What It Represents</th>
+<th>Example Record</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>categories</code></td>
+<td>Product classifications</td>
+<td>“Beverages”, “Condiments”</td>
+</tr>
+<tr class="even">
+<td><code>suppliers</code></td>
+<td>Companies that supply products</td>
+<td>“Tokyo Traders”, Japan</td>
+</tr>
+<tr class="odd">
+<td><code>products</code></td>
+<td>Items Northwind sells</td>
+<td>“Chai”, $18.00, 39 in stock</td>
+</tr>
+<tr class="even">
+<td><code>customers</code></td>
+<td>Companies that buy from Northwind</td>
+<td>“Bottom-Dollar Markets”, Canada</td>
+</tr>
+<tr class="odd">
+<td><code>employees</code></td>
+<td>Northwind staff who process orders</td>
+<td>“Davolio, Nancy”, Sales Rep</td>
+</tr>
+<tr class="even">
+<td><code>orders</code></td>
+<td>Customer purchase transactions</td>
+<td>Order #10248, July 4 1996</td>
+</tr>
+<tr class="odd">
+<td><code>order_details</code></td>
+<td>Line items within each order</td>
+<td>12 units of “Queso Cabrales” at $14</td>
+</tr>
+<tr class="even">
+<td><code>shippers</code></td>
+<td>Delivery carriers</td>
+<td>“Federal Shipping”</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Downloading the Data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Northwind CSV files are available on this book’s website under the data downloads section. Download them into a <code>data/northwind/</code> directory in your working folder before proceeding. If you’re following along in the DuckDB UI, make sure you launched DuckDB from the directory containing your <code>data/</code> folder so the relative paths resolve correctly.</p>
+</div>
+</div>
+<p>In your DuckDB UI notebook, create each table by reading the corresponding CSV file. DuckDB’s <code>read_csv</code> function handles this elegantly:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>duckdb</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Create tables from CSV files</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> categories <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/categories.csv'</span>);</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> suppliers <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/suppliers.csv'</span>);</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/products.csv'</span>);</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> customers <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/customers.csv'</span>);</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> employees <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/employees.csv'</span>);</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> orders <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/orders.csv'</span>);</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> order_details <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/order_details.csv'</span>);</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> shippers <span class="kw">AS</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/shippers.csv'</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice a few things here. <code>CREATE TABLE ... AS</code> creates a new table from the results of a query. <code>read_csv()</code> is a DuckDB function that reads a CSV file and infers column names and types automatically. The <code>FROM</code> keyword without <code>SELECT</code> is a DuckDB convenience, shorthand for <code>SELECT * FROM</code>, which we’ll discuss in the next chapter.</p>
+<p>After running these statements, check the catalog panel on the left side of the DuckDB UI. You should see all eight tables listed under your database, with their columns visible when expanded.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>DuckDB Reads Files Directly
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One of DuckDB’s most powerful features is that you can query files <em>without</em> creating tables first:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>duckdb</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [DUCKDB EXTENSION] Direct file querying</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/products.csv'</span>) <span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is useful for quick exploration. Creating persistent tables, as we did above, is better for repeated work because DuckDB optimizes the storage and doesn’t re-parse the CSV each time. Direct file querying also works with Parquet files (a column-oriented file format common in data engineering) and even supports wildcards like <code>read_parquet('data/*.parquet')</code> to query multiple files at once.</p>
+</div>
+</div>
+</section>
+<section id="your-first-query" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="your-first-query"><span class="header-section-number">6.7</span> Your First Query</h2>
+<p>Let’s close this chapter by actually asking the database a question. Suppose you’ve just started at Northwind Traders and your manager asks: “Which products do we carry, and how are they priced?”</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>duckdb</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This returns every row and every column in the <code>products</code> table. In the DuckDB UI, the results appear as an interactive table below the cell. You can see product names, prices, stock levels, and more. Scroll through the data. Click on column headers to see distributions. Get a feel for what’s here.</p>
+<p>That’s the whole game in miniature: someone has a question, you have data, and SQL is the bridge between them. In the next chapter, you’ll learn to be precise about <em>which</em> columns you want, <em>which</em> rows matter, and <em>how</em> to sort and summarize the results.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercises
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Run <code>FROM products;</code> and examine the output. How many columns does the products table have? How many rows? Which column would you use to connect a product to its supplier?</p></li>
+<li><p>Run <code>FROM categories;</code> and then <code>FROM suppliers;</code>. Without writing any joins (we’ll learn those later), just by reading the data, can you identify which category “Chai” belongs to? Which country supplies the most products?</p></li>
+<li><p>Try running <code>FROM employees;</code> and look at the <code>reports_to</code> column. Some values are numbers and one is empty (NULL). What do you think this column represents? What would it mean for an employee to have a NULL value here?</p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="chapter-exercises" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="chapter-exercises"><span class="header-section-number">6.8</span> Chapter Exercises</h2>
+<p>These exercises bring together concepts from the entire chapter. They require you to think across sections rather than recalling a single idea.</p>
+<ol type="1">
+<li><p><strong>Architecture matching.</strong> A regional hospital network is modernizing their data systems. They have three needs: (a) a system to record patient check-ins, prescription fills, and appointment bookings in real time across 12 clinics, (b) a system for their analytics team to study readmission patterns and treatment outcomes across 5 years of historical data, and (c) a system for a mobile app that caches the current user’s appointment schedule locally on their phone. For each need, recommend a specific database type (OLTP server, OLAP server, embedded OLTP, or embedded OLAP) and name one real database product that fits.</p></li>
+<li><p><strong>Spreadsheet autopsy.</strong> You inherit a 14-tab Excel workbook that tracks product quality inspections for a manufacturing facility. Tab 1 is a lookup table of inspector names. Tabs 2 through 13 are monthly inspection logs (one tab per month) with columns for date, inspector ID, product ID, pass/fail, and notes. Tab 14 contains pivot tables and charts that summarize annual defect rates. The file is 890 MB and takes over a minute to open. Diagnose at least three specific problems with this setup, and describe, at a conceptual level (not SQL syntax), how a database would solve each one.</p></li>
+<li><p><strong>The portability test.</strong> Your team built a reporting system using DuckDB. Your company gets acquired and the new parent company standardizes on PostgreSQL. Review the annotations introduced in this chapter (<code>[STANDARD SQL]</code> vs <code>[DUCKDB EXTENSION]</code>). Which of the following would transfer directly and which would need rewriting? (a) <code>SELECT product_name, unit_price FROM products WHERE unit_price &gt; 20;</code> (b) <code>FROM products;</code> (c) <code>CREATE TABLE products AS FROM read_csv('products.csv');</code> (d) <code>SELECT * FROM products ORDER BY unit_price DESC LIMIT 10;</code></p></li>
+<li><p><strong>Engine internals.</strong> Explain, in your own words, why computing <code>AVG(unit_price)</code> across 1 million products is faster in DuckDB than in PostgreSQL, even if both databases are running on the same laptop. Your explanation should reference at least two of the three DuckDB architectural features discussed in this chapter (columnar storage, vectorized execution, morsel-driven parallelism).</p></li>
+<li><p><strong>Tool selection debate.</strong> A classmate argues: “DuckDB can read CSV files directly, so there’s no reason to ever use <code>CREATE TABLE</code>. Just query the files every time.” Write a response that acknowledges the valid point in their argument but explains when and why creating persistent tables is the better choice.</p></li>
+<li><p><strong>Predict and verify.</strong> Before running each of the following in DuckDB, predict what will happen, then run them and check your prediction. (a) <code>SELECT 1 + NULL;</code> (b) <code>SELECT 'hello' &gt; 'Hello';</code> (c) <code>FROM read_csv('data/northwind/products.csv') LIMIT 3;</code> followed by <code>FROM products LIMIT 3;</code> without first running <code>CREATE TABLE</code>. (d) <code>SELECT typeof(42), typeof(42.0), typeof('42');</code>. Explain each result in terms of how the database handles data types and missing values.</p></li>
+<li><p><strong>Real-world forensics.</strong> A colleague sends you a CSV file of 50,000 sensor readings from a manufacturing floor. They say “I opened it in Excel to check it, and everything looked fine.” Based on what you learned in this chapter about Excel’s limitations, list three specific things that could have gone wrong during that Excel inspection that wouldn’t happen if they’d loaded the file directly into DuckDB. For each, explain the mechanism of failure.</p></li>
+</ol>
+</section>
+<section id="summary" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">6.9</span> Summary</h2>
+<p>Databases exist because structured data at scale requires more discipline than spreadsheets can provide: enforced rules, concurrent access, crash recovery, and a powerful query language. Spreadsheets excel at quick, interactive, small-scale analysis, but documented failures in finance, public health, and science demonstrate the risks of relying on them for large or critical data. The database world divides into two main architectures. OLTP databases (like PostgreSQL and MySQL) use row-oriented storage optimized for transactions, the small, fast operations that keep businesses running. OLAP databases (like DuckDB and ClickHouse) use column-oriented storage optimized for analytics, the broad aggregations and summaries that inform decisions. Server databases follow a client-server architecture (like a restaurant’s kitchen and dining room) where separate processes communicate over a network, supporting many simultaneous users but requiring installation and configuration. Embedded databases like SQLite and DuckDB run locally with zero configuration, trading multi-user access for simplicity. DuckDB is our tool for this module because it combines analytical power, through columnar storage, vectorized execution, and automatic parallelism, with installation simplicity, and it teaches standard SQL that transfers to any relational database. SQL itself is a decades-old standard with core features (SELECT, joins, CTEs, window functions) that work across every major database, and we’ll distinguish clearly between standard SQL and DuckDB-specific extensions throughout this book. The Northwind dataset gives us a realistic supply chain context, with suppliers, products, orders, and customers, to work with throughout the remaining chapters.</p>
+</section>
+<section id="glossary" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="glossary"><span class="header-section-number">6.10</span> Glossary</h2>
+<dl>
+<dt><strong>ADBC (Arrow Database Connectivity)</strong></dt>
+<dd>
+A database connectivity standard built on Apache Arrow, enabling high-performance, zero-copy data transfer between databases and applications.
+</dd>
+<dt><strong>ANSI SQL</strong></dt>
+<dd>
+The standardized version of SQL maintained by the American National Standards Institute and the International Organization for Standardization (ISO). Core features like SELECT, JOIN, CTEs, and window functions are defined in the standard and work across all major databases.
+</dd>
+<dt><strong>Client-Server Architecture</strong></dt>
+<dd>
+A database deployment model where a server process manages data and accepts connections from separate client applications over a network. PostgreSQL, MySQL, and SQL Server use this model.
+</dd>
+<dt><strong>Column-Oriented Storage</strong></dt>
+<dd>
+A database storage format that keeps all values from the same column together on disk, optimizing analytical queries that aggregate across many rows but few columns.
+</dd>
+<dt><strong>Connection String</strong></dt>
+<dd>
+A formatted string specifying the information needed to connect to a database server, typically including the host, port, credentials, and database name.
+</dd>
+<dt><strong>DBMS (Database Management System)</strong></dt>
+<dd>
+Software that manages the storage, retrieval, and manipulation of data in a database, enforcing rules for data integrity, security, and concurrent access.
+</dd>
+<dt><strong>DuckDB</strong></dt>
+<dd>
+An open-source, embedded, column-oriented analytical database designed for OLAP workloads. It runs in-process with no server, reads files directly, and integrates with Python.
+</dd>
+<dt><strong>Embedded Database</strong></dt>
+<dd>
+A database that runs within the application process rather than as a separate server, requiring no network configuration or administration. SQLite and DuckDB are embedded databases.
+</dd>
+<dt><strong>OLAP (Online Analytical Processing)</strong></dt>
+<dd>
+A database workload pattern focused on complex queries that scan and aggregate large volumes of data to support analysis and decision-making.
+</dd>
+<dt><strong>OLTP (Online Transaction Processing)</strong></dt>
+<dd>
+A database workload pattern focused on processing many small, fast transactions like inserts, updates, and point lookups that keep day-to-day business operations running.
+</dd>
+<dt><strong>Row-Oriented Storage</strong></dt>
+<dd>
+A database storage format that keeps all values from the same row together on disk, optimizing transactional queries that retrieve or modify complete records.
+</dd>
+<dt><strong>Server Database</strong></dt>
+<dd>
+A database that runs as a separate process (often on a dedicated machine), accepting connections from multiple clients over a network. PostgreSQL, MySQL, and SQL Server are server databases.
+</dd>
+<dt><strong>SQL (Structured Query Language)</strong></dt>
+<dd>
+The standard language for interacting with relational databases, used to query, manipulate, and define data and database structures. First standardized in 1986 and continuously updated since.
+</dd>
+<dt><strong>Tidy Data</strong></dt>
+<dd>
+A data organization principle where each row represents one observation, each column represents one variable, and each cell contains a single value. Applies to both database tables and spreadsheets.
+</dd>
+<dt><strong>Vectorized Execution</strong></dt>
+<dd>
+A query processing technique that operates on batches of values (vectors) rather than one row at a time, enabling modern CPUs to process data more efficiently through SIMD operations.
+</dd>
+</dl>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../02_databases/index.html" class="pagination-link" aria-label="Databases">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Databases</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../02_databases/querying.html" class="pagination-link" aria-label="Querying Data">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Querying Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/02_databases/databases.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
