@@ -61,7 +61,4 @@ format:
     callout-appearance: "simple"
     highlight-style: nord
 
-  pdf:
-    documentclass: scrreprt
-
 editor: source
