@@ -237,43 +237,64 @@ duckdb -ui northwind.duckdb
 This creates (or opens) a file called `northwind.duckdb` that stores all your tables and data between sessions. Use this approach when working through the chapters so you don't have to reload data each time.
 :::
 
-## Loading the Northwind Dataset
+## The Northwind Dataset
 
-Throughout this module, we'll work with the **Northwind** database, a dataset representing a fictional company called Northwind Traders that imports and exports specialty food products worldwide. Originally created by Microsoft as a teaching database, Northwind has become one of the most widely-used sample datasets in the SQL world, and for good reason: it models a realistic supply chain with suppliers, products, inventory, customer orders, shipping, and employees.
+Throughout this module, we'll work with an enhanced version of the **Northwind** database, a dataset representing a fictional company called Northwind Traders that imports and exports specialty food products worldwide. Originally created by Microsoft as a teaching database, Northwind has become one of the most widely-used sample datasets in the SQL world, and for good reason: it models a realistic supply chain with suppliers, products, inventory, customer orders, shipping, and employees.
 
-The Northwind database contains the following tables, each representing an entity in the business:
+### Getting the Data into Your Computer
 
-| Table | What It Represents | Example Record |
-|---|---|---|
-| `categories` | Product classifications | "Beverages", "Condiments" |
-| `suppliers` | Companies that supply products | "Tokyo Traders", Japan |
-| `products` | Items Northwind sells | "Chai", $18.00, 39 in stock |
-| `customers` | Companies that buy from Northwind | "Bottom-Dollar Markets", Canada |
-| `employees` | Northwind staff who process orders | "Davolio, Nancy", Sales Rep |
-| `orders` | Customer purchase transactions | Order #10248, July 4 1996 |
-| `order_details` | Line items within each order | 12 units of "Queso Cabrales" at $14 |
-| `shippers` | Delivery carriers | "Federal Shipping" |
+The Northwind CSV files live in this book's [GitHub repo]. There are several ways to get them onto your machine, depending on what you're comfortable with.
 
-::: {.callout-note}
-## Downloading the Data
-The Northwind CSV files are available on this book's website under the data downloads section. Download them into a `data/northwind/` directory in your working folder before proceeding. If you're following along in the DuckDB UI, make sure you launched DuckDB from the directory containing your `data/` folder so the relative paths resolve correctly.
-:::
+#### Option 1: Manual Download GitHub
+
+Navigate to [the data directory on GitHub](https://github.com/ozanozbeker/cw4e/tree/main/databases/data) in your browser. You can download individual CSV files by clicking on a file and then clicking the download button (the downward arrow icon), or download the entire repository as a ZIP file by clicking the green **Code** button on the [repository's main page](https://github.com/ozanozbeker/cw4e) and selecting **Download ZIP**.
+
+#### Option 2: Clone with Git
+
+If you've worked through @sec-git, you already have Git installed. Cloning the repository gives you all the book's data files at once and makes it easy to pull updates later:
+
+```{.bash filename="terminal"}
+git clone https://github.com/ozanozbeker/cw4e.git
+```
+
+The CSV files will be in `cw4e/databases/data/*.csv` inside whatever directory you ran the command from.
+
+#### Option 3: Read Directly in DuckDB
+
+One of DuckDB's strengths is its ability to read CSV files directly from URLs without downloading them first. Once you have DuckDB open, you can query any Northwind table straight from GitHub:
+
+```{.sql filename="duckdb"}
+FROM 'https://raw.githubusercontent.com/ozanozbeker/cw4e/main/databases/data/products.csv';
+```
+
+This is convenient for quick exploration, but for repeated use throughout the course, downloading the files locally is faster and doesn't depend on an internet connection.
+
+#### Option 4: Save from this Page manually
+
+On the sidebar to the right, you will see links to download each CSV file individually. Right-click the link and choose "Save Link As..." or "Download Linked File As..." to download the file to your computer.
+
+### Getting the Data into DuckDB
 
 In your DuckDB UI notebook, create each table by reading the corresponding CSV file. DuckDB's `read_csv` function handles this elegantly:
 
 ```{.sql filename="duckdb"}
 -- Create tables from CSV files
-CREATE TABLE categories AS FROM read_csv('data/northwind/categories.csv');
-CREATE TABLE suppliers AS FROM read_csv('data/northwind/suppliers.csv');
-CREATE TABLE products AS FROM read_csv('data/northwind/products.csv');
-CREATE TABLE customers AS FROM read_csv('data/northwind/customers.csv');
-CREATE TABLE employees AS FROM read_csv('data/northwind/employees.csv');
-CREATE TABLE orders AS FROM read_csv('data/northwind/orders.csv');
-CREATE TABLE order_details AS FROM read_csv('data/northwind/order_details.csv');
-CREATE TABLE shippers AS FROM read_csv('data/northwind/shippers.csv');
+CREATE TABLE categories AS SELECT * FROM read_csv('categories.csv');
+CREATE TABLE customers AS SELECT * FROM read_csv('customers.csv');
+CREATE TABLE employees AS SELECT * FROM read_csv('employees.csv');
+CREATE TABLE order_details AS SELECT * FROM read_csv('order_details.csv');
+CREATE TABLE orders AS SELECT * FROM read_csv('orders.csv');
+CREATE TABLE products AS SELECT * FROM read_csv('products.csv');
+CREATE TABLE regions AS SELECT * FROM read_csv('regions.csv');
+CREATE TABLE shippers AS SELECT * FROM read_csv('shippers.csv');
+CREATE TABLE suppliers AS SELECT * FROM read_csv('suppliers.csv');
 ```
 
-Notice a few things here. `CREATE TABLE ... AS` creates a new table from the results of a query. `read_csv()` is a DuckDB function that reads a CSV file and infers column names and types automatically. The `FROM` keyword without `SELECT` is a DuckDB convenience, shorthand for `SELECT * FROM`, which we'll discuss in the next chapter.
+::: {.callout-tip}
+Make sure you launched DuckDB from the directory containing your `data/` folder so the relative paths resolve correctly.
+:::
+
+Notice a few things here. `CREATE TABLE ... AS` creates a new table from the results of a query. `read_csv()` is a DuckDB function that reads a CSV file and infers column names and types automatically.
 
 After running these statements, check the catalog panel on the left side of the DuckDB UI. You should see all eight tables listed under your database, with their columns visible when expanded.
 
@@ -283,7 +304,7 @@ One of DuckDB's most powerful features is that you can query files *without* cre
 
 ```{.sql filename="duckdb"}
 -- [DUCKDB EXTENSION] Direct file querying
-FROM read_csv('data/northwind/products.csv') LIMIT 5;
+SELECT * FROM read_csv('data/northwind/products.csv') LIMIT 5;
 ```
 
 This is useful for quick exploration. Creating persistent tables, as we did above, is better for repeated work because DuckDB optimizes the storage and doesn't re-parse the CSV each time. Direct file querying also works with Parquet files (a column-oriented file format common in data engineering) and even supports wildcards like `read_parquet('data/*.parquet')` to query multiple files at once.
