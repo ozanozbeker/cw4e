@@ -10,7 +10,7 @@ SQL is a **declarative** language. Unlike Python or Java, where you write step-b
 
 The most common SQL statement is `SELECT`, which retrieves data from one or more tables. A basic query has this structure:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT columns
 FROM table
 WHERE conditions
@@ -22,7 +22,7 @@ Each of these clauses plays a specific role, and you'll learn them one at a time
 
 You write `SELECT` first, but the database processes `FROM` first (to know which table to look at), then `WHERE` (to filter rows), then `SELECT` (to choose columns), then `ORDER BY` (to sort), then `LIMIT` (to cap the output). This execution order explains many otherwise-confusing SQL behaviors, and we'll return to it throughout this chapter.
 
-```{.text filename="execution-order"}
+```
 Written Order:     SELECT → FROM → WHERE → ORDER BY → LIMIT
 Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT
 ```
@@ -33,7 +33,7 @@ Keep this mental model handy. When a query doesn't behave the way you expect, th
 
 The simplest useful query asks for specific columns from a table:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName,
     unitPrice,
@@ -45,7 +45,7 @@ This returns three columns from every row in the `products` table. Notice that w
 
 To see everything, you can use `SELECT *`:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT * FROM products;
 ```
 
@@ -55,20 +55,19 @@ The `*` means "all columns." This is useful for exploration, but in production q
 ## DuckDB's FROM-First Shorthand
 DuckDB allows you to write `FROM` without `SELECT`, which is convenient during exploration:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- [DUCKDB EXTENSION] FROM-first syntax
 FROM products;
 ```
 
 This is equivalent to `SELECT * FROM products`. It's useful when you're poking around a new table and want to see what's there. Throughout this book, we'll use the full `SELECT ... FROM` syntax for clarity in teaching, and the shorthand when we're just exploring. This is a DuckDB convenience, not standard SQL, so it won't work in PostgreSQL or MySQL.
-
 :::
 
 ### Column Aliases
 
 Sometimes column names are cryptic or you want to label computed results. The `AS` keyword creates an **alias**:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName AS product,
     unitPrice AS price_usd,
@@ -82,7 +81,7 @@ The alias changes the column name in the output without changing anything in the
 
 SQL lets you create new columns from expressions:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName,
     unitPrice,
@@ -97,7 +96,7 @@ The `inventory_value` column doesn't exist in the table. It's computed on the fl
 
 When you want to see the unique values in a column, `DISTINCT` eliminates duplicate rows:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT DISTINCT country
 FROM suppliers;
 ```
@@ -105,7 +104,6 @@ FROM suppliers;
 This returns each country exactly once, regardless of how many suppliers are in each country. `DISTINCT` applies to the entire row, so `SELECT DISTINCT country, city FROM suppliers` returns unique country-city combinations.
 
 ::: {.callout-note title="Exercises"}
-
 1. Write a query that returns the `companyName`, `contactName`, and `country` columns from the `customers` table.
 
 2. Write a query that computes an `inventory_value` for each product (price times units in stock) and also a `potential_revenue` column that adds in units currently on order. Use appropriate aliases. What happens to `potential_revenue` for products where `unitsOnOrder` is `NULL`?
@@ -114,19 +112,18 @@ This returns each country exactly once, regardless of how many suppliers are in 
 
 4. Predict the output of this query without running it. Then run it to check.
 
-    ```{.sql filename="DuckDB"}
+    ```{.sql filename="duckdb"}
     SELECT DISTINCT categoryID
     FROM products
     ORDER BY categoryID;
     ```
-
 :::
 
 ## WHERE: Filtering Rows
 
 `SELECT` chooses columns. `WHERE` chooses rows. It evaluates a condition for every row and only keeps the rows where the condition is true.
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName,
     unitPrice
@@ -139,14 +136,13 @@ This returns only the products that cost less than $20. The comparison operators
 ::: {.callout-warning}
 ## Equality Uses Single Equals
 SQL uses `=` for equality comparisons, not `==`. If you're coming from Python, this will trip you up at first. In SQL, `WHERE country = 'USA'` is correct. `WHERE country == 'USA'` is a syntax error in most databases (though DuckDB is forgiving and accepts both).
-
 :::
 
 ### Combining Conditions
 
 Use `AND` and `OR` to combine multiple conditions:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- Products under $20 with low stock
 SELECT
     productName,
@@ -157,7 +153,7 @@ WHERE unitPrice < 20
   AND unitsInStock < 30;
 ```
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- Products from supplier 1 or supplier 2
 SELECT
     productName,
@@ -169,7 +165,7 @@ WHERE supplierID = 1
 
 When mixing `AND` and `OR`, use parentheses to be explicit about grouping. SQL evaluates `AND` before `OR` (like multiplication before addition in math), which can produce unexpected results:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- Without parentheses: AND binds tighter, which may surprise you
 SELECT productName, unitPrice, supplierID
 FROM products
@@ -187,7 +183,7 @@ Always use parentheses when combining `AND` and `OR`. Future readers of your cod
 
 **IN** checks membership in a list, replacing multiple `OR` conditions:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- Instead of: WHERE country = 'USA' OR country = 'UK' OR country = 'Germany'
 SELECT companyName, country
 FROM suppliers
@@ -196,7 +192,7 @@ WHERE country IN ('USA', 'UK', 'Germany');
 
 **BETWEEN** checks a range (inclusive on both ends):
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT productName, unitPrice
 FROM products
 WHERE unitPrice BETWEEN 10 AND 30;
@@ -204,7 +200,7 @@ WHERE unitPrice BETWEEN 10 AND 30;
 
 **LIKE** matches text patterns, where `%` represents any sequence of characters and `_` represents a single character:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- Products whose names start with "Ch"
 SELECT productName
 FROM products
@@ -221,7 +217,7 @@ In the Northwind database, the `region` column in the `customers` table contains
 
 The critical rule is: **NULL is not equal to anything, including itself**. This means ordinary comparisons don't work:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- This does NOT find customers with missing regions
 SELECT companyName, region
 FROM customers
@@ -238,12 +234,11 @@ Any arithmetic or comparison involving `NULL` produces `NULL`. If `unitsOnOrder`
 ::: {.callout-important}
 ## The Three-Value Logic of SQL
 Most programming languages have two-value boolean logic: `TRUE` and `FALSE`. SQL has three: `TRUE`, `FALSE`, and `NULL` (unknown). The `WHERE` clause only keeps rows where the condition evaluates to `TRUE`, meaning rows where the condition is `NULL` are filtered out just like rows where it's `FALSE`. This is why `WHERE region = NULL` returns nothing: the comparison yields `NULL`, not `TRUE`.
-
 :::
 
 The `COALESCE` function provides a fallback value when data might be `NULL`:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName,
     COALESCE(unitsOnOrder, 0) AS units_on_order
@@ -253,14 +248,13 @@ FROM products;
 `COALESCE` takes any number of arguments and returns the first non-`NULL` value. It's your primary tool for handling missing data in queries.
 
 ::: {.callout-note title="Exercises"}
-
 1. Write a query that finds all products with a unit price between $15 and $25 that are not discontinued. Return the product name, unit price, and units in stock.
 
 2. Find all customers in either Germany, France, or Brazil whose contact title contains the word "Manager" (use `LIKE`). How many are there?
 
 3. This query has a bug. What's wrong, and what does it actually return?
 
-    ```{.sql filename="DuckDB"}
+    ```{.sql filename="duckdb"}
     SELECT companyName, region
     FROM customers
     WHERE region != NULL;
@@ -269,14 +263,13 @@ FROM products;
 4. Write a query that returns all products, replacing any `NULL` values in `unitsOnOrder` with `0`, and then computes a `total_units` column that adds `unitsInStock` and the cleaned `unitsOnOrder`. Why would the results be different without `COALESCE`?
 
 5. Explain, in one sentence each, the difference between these three expressions: `WHERE region = 'WA'`, `WHERE region IS NULL`, and `WHERE region != 'WA'`. Which customers does the third expression exclude that might surprise you?
-
 :::
 
 ## ORDER BY: Sorting Results
 
 Results from a SQL query have no guaranteed order unless you specify one. The `ORDER BY` clause sorts the output:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName,
     unitPrice
@@ -286,7 +279,7 @@ ORDER BY unitPrice;
 
 By default, `ORDER BY` sorts in ascending order (smallest to largest, A to Z). Add `DESC` for descending order:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- Most expensive products first
 SELECT
     productName,
@@ -297,7 +290,7 @@ ORDER BY unitPrice DESC;
 
 You can sort by multiple columns. The first column is the primary sort, the second breaks ties:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- Sort by category, then by price within each category
 SELECT
     categoryID,
@@ -313,7 +306,7 @@ ORDER BY categoryID, unitPrice DESC;
 
 `LIMIT` restricts how many rows are returned. This is essential for exploration (you rarely want to scroll through 100,000 rows) and for answering "top N" questions:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- The 10 most expensive products
 SELECT
     productName,
@@ -331,7 +324,7 @@ Individual rows tell you about specific products. Aggregate functions tell you a
 
 The five fundamental aggregates are:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     COUNT(*) AS total_products,
     AVG(unitPrice) AS avg_price,
@@ -345,7 +338,7 @@ FROM products;
 
 `COUNT` has a subtle distinction worth knowing:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- COUNT(*) counts all rows, regardless of NULLs
 SELECT COUNT(*) FROM customers;
 
@@ -360,7 +353,7 @@ SELECT COUNT(DISTINCT country) FROM customers;
 
 The `CASE` expression brings if-then logic into SQL. It evaluates conditions in order and returns the value for the first matching condition:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName,
     unitPrice,
@@ -377,7 +370,7 @@ ORDER BY unitPrice DESC;
 
 You can use `CASE` inside aggregate functions to count or sum conditionally:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     COUNT(*) AS total_products,
     COUNT(CASE WHEN discontinued = 1 THEN 1 END) AS discontinued_count,
@@ -386,7 +379,6 @@ FROM products;
 ```
 
 ::: {.callout-note title="Exercises"}
-
 1. Write a query that returns the 5 cheapest products that are not discontinued. Include the product name and price.
 
 2. Using aggregate functions, answer these questions in a single query: How many products does Northwind carry? What is the average unit price? What is the total value of all inventory (sum of price × stock for all products)?
@@ -395,7 +387,7 @@ FROM products;
 
 4. What is wrong with this query? Predict what error you'll get, then run it to confirm.
 
-    ```{.sql filename="DuckDB"}
+    ```{.sql filename="duckdb"}
     SELECT
         productName,
         AVG(unitPrice)
@@ -403,12 +395,11 @@ FROM products;
     ```
 
 5. Using aggregate functions and `CASE` together, write a single query that computes: the total number of products, the number of discontinued products, the number of products currently out of stock (not discontinued but `unitsInStock = 0`), and the average price of active (not discontinued) products. (Hint: use `CASE` expressions inside `COUNT` and `AVG` to compute conditional aggregates without grouping.)
-
 :::
 
 ## Set Operations: Combining Query Results
 
-Sometimes you need to combine the results of two separate queries into one result set. SQL provides **set operations** for this, and if you've encountered set theory in a math course, the concepts will feel familiar: they map directly to union, intersection, and difference.
+Sometimes you need to combine the results of two separate queries into one result set. SQL provides **set operations** for this, and if you've taken a statistics course, the concepts will feel familiar: they map directly to the set theory operations of union, intersection, and difference.
 
 Unlike joins, which combine columns from different tables side by side, set operations stack rows from multiple queries on top of each other. The key requirement is that both queries must return the same number of columns with compatible data types.
 
@@ -416,38 +407,22 @@ Unlike joins, which combine columns from different tables side by side, set oper
 
 `UNION` combines the results of two queries and removes duplicate rows. `UNION ALL` does the same but keeps all rows, including duplicates.
 
-```{.sql filename="DuckDB"}
--- [STANDARD SQL] Unique cities where we have either a supplier or a customer
-SELECT city, country
+```{.sql filename="duckdb"}
+-- [STANDARD SQL] All unique cities where we have either a supplier or a customer
+SELECT city, country, 'Supplier' AS entity_type
 FROM suppliers
 UNION
-SELECT city, country
+SELECT city, country, 'Customer' AS entity_type
 FROM customers
 ORDER BY country, city;
 ```
 
-This query answers: "In which cities do we have a business presence, either through a supplier or a customer?" The `UNION` removes any city-country pair that appears in both tables, giving you the unique set. If London, UK appears as both a supplier location and a customer location, you'd see it once.
+This query answers: "In which cities do we have a business presence, either through a supplier or a customer?" The `UNION` removes any city that appears in both tables, giving you the unique set. If a city like London appears as both a supplier location and a customer location, you'd see it once (with whichever `entity_type` the database kept).
 
-Compare that with `UNION ALL`:
+If you want to preserve both rows, use `UNION ALL`:
 
-```{.sql filename="DuckDB"}
--- [STANDARD SQL] All cities, keeping duplicates from both tables
-SELECT city, country
-FROM suppliers
-UNION ALL
-SELECT city, country
-FROM customers
-ORDER BY country, city;
-```
-
-Run both and compare the row counts. The difference tells you how many city-country pairs appear in both tables.
-
-`UNION ALL` is significantly faster than `UNION` (often 3 to 4x) because it skips the duplicate detection and removal step. Use `UNION ALL` when duplicates are acceptable or when you know they don't exist. In practice, `UNION ALL` is far more common in analytical work because you usually want to preserve all records.
-
-In most analytical queries, you also want to know *which* table each row came from. Adding a label column makes the rows from each query distinct, so `UNION ALL` is the natural choice:
-
-```{.sql filename="DuckDB"}
--- [STANDARD SQL] Labeled directory: every supplier and customer location
+```{.sql filename="duckdb"}
+-- [STANDARD SQL] All cities, keeping supplier and customer entries separate
 SELECT city, country, 'Supplier' AS entity_type
 FROM suppliers
 UNION ALL
@@ -456,13 +431,13 @@ FROM customers
 ORDER BY country, city;
 ```
 
-Notice that using `UNION` instead of `UNION ALL` here would make no difference: since the `entity_type` column is always different between the two queries, no two rows can be identical, so there are no duplicates for `UNION` to remove. When your queries produce structurally distinct rows like this, `UNION ALL` is always the right choice.
+`UNION ALL` is significantly faster than `UNION` (often 3 to 4x) because it skips the duplicate detection and removal step. Use `UNION ALL` when duplicates are acceptable or when you know they don't exist. In practice, `UNION ALL` is far more common in analytical work because you usually want to preserve all records.
 
 ### INTERSECT
 
 `INTERSECT` returns only the rows that appear in both queries:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- [STANDARD SQL] Countries where we have BOTH a supplier and a customer
 SELECT country FROM suppliers
 INTERSECT
@@ -476,7 +451,7 @@ This answers: "Which countries represent both sides of our supply chain?" These 
 
 `EXCEPT` returns rows from the first query that don't appear in the second:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- [STANDARD SQL] Countries where we have customers but no suppliers
 SELECT country FROM customers
 EXCEPT
@@ -488,7 +463,7 @@ This identifies countries where Northwind has customers but no local supplier. T
 
 A particularly useful application of `EXCEPT` is data validation, verifying that two queries produce identical results:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 -- [STANDARD SQL] Check if two queries return the same results
 -- An empty result means the queries match
 (SELECT productID, productName FROM products WHERE unitPrice > 20)
@@ -505,28 +480,26 @@ You'll often see joins explained with Venn diagrams online, but as we'll discuss
 All set operations require the same number of columns in both queries, compatible data types in corresponding positions (you can't union an integer column with a text column), and column names come from the first query only. `ORDER BY` applies to the entire combined result and appears once at the end, not within individual queries.
 
 ::: {.callout-note title="Exercises"}
-
 1. Write a query using `INTERSECT` to find cities that appear in both the `suppliers` and `customers` tables. How many shared cities are there?
 
 2. Write a query using `EXCEPT` to find countries where Northwind has suppliers but no customers. What does this suggest about Northwind's supply chain?
 
 3. A colleague writes this query and gets an error. What's wrong?
 
-    ```{.sql filename="DuckDB"}
+    ```{.sql filename="duckdb"}
     SELECT companyName, city FROM suppliers
     UNION
     SELECT city, country FROM customers;
     ```
 
 4. Write a query using `UNION ALL` that creates a combined directory of all supplier and customer contacts, with columns for `companyName`, `contactName`, `phone`, and a label column (`'Supplier'` or `'Customer'`). Why is `UNION ALL` more appropriate than `UNION` here?
-
 :::
 
 ## Putting It All Together
 
 Let's return to the manager's original question: "What do we sell, what does it cost, and what's running low?" Now you have the vocabulary to answer precisely:
 
-```{.sql filename="DuckDB"}
+```{.sql filename="duckdb"}
 SELECT
     productName AS product,
     unitPrice AS price,
@@ -541,10 +514,11 @@ SELECT
         ELSE 'Adequate'
     END AS stock_status
 FROM products
+WHERE discontinued = 0
 ORDER BY stock_above_reorder;
 ```
 
-This single query retrieves product information, computes how far above (or below) the reorder point each product is, categorizes the stock status (including flagging discontinued items), and sorts so the most urgent items appear first. That's a complete analytical deliverable in 14 lines of SQL.
+This single query retrieves product information, computes how far above (or below) the reorder point each product is, categorizes the stock status, excludes discontinued products, and sorts so the most urgent items appear first. That's a complete analytical deliverable in 15 lines of SQL.
 
 To build your intuition, pick a specific product from the result set and trace through the `CASE` expression by hand. What are the values of `discontinued`, `unitsInStock`, and `reorderLevel` for that product? Which `WHEN` branch does it match? What would happen if you reordered the `WHEN` clauses? Since `CASE` evaluates top-to-bottom and stops at the first match, clause order matters, and tracing through specific rows is the best way to verify that your logic handles every scenario correctly.
 
@@ -560,7 +534,7 @@ These exercises require combining multiple concepts from the chapter. Approach e
 
 3. **Execution order detective.** Explain why this query produces an error, referencing the SQL execution order:
 
-    ```{.sql filename="DuckDB"}
+    ```{.sql filename="duckdb"}
     SELECT
         productName,
         unitPrice * unitsInStock AS inventory_value
@@ -576,7 +550,7 @@ These exercises require combining multiple concepts from the chapter. Approach e
 
 6. **NULL propagation challenge.** Predict the result of each expression *before* running it, then verify. For any that surprise you, explain why SQL produces that result.
 
-    ```{.sql filename="DuckDB"}
+    ```{.sql filename="duckdb"}
     SELECT
         NULL = NULL AS test_1,
         NULL != NULL AS test_2,
@@ -592,7 +566,7 @@ These exercises require combining multiple concepts from the chapter. Approach e
 
 7. **Debug this report.** A colleague wrote the following query to produce an inventory summary, but the results don't look right. There are at least three problems. Find them all and write a corrected version.
 
-    ```{.sql filename="DuckDB"}
+    ```{.sql filename="duckdb"}
     SELECT
         productName,
         unitPrice AS price,
@@ -640,7 +614,7 @@ SQL queries follow a `SELECT ... FROM ... WHERE ... ORDER BY ... LIMIT` structur
 :   A set operation that returns rows from the first query that do not appear in the second query's results. Equivalent to the set difference (A − B) in set theory.
 
 **Execution Order**
-:   The sequence in which the database processes the clauses of a SQL statement, which differs from the order in which they are written. For the clauses covered in this chapter, the logical execution order is `FROM → WHERE → SELECT → ORDER BY → LIMIT`. The full order, including `GROUP BY` and `HAVING` (covered in @sec-analytical-sql), is `FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT`.
+:   The sequence in which the database processes the clauses of a SQL statement, which differs from the order in which they are written. The logical execution order is `FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT`.
 
 **INTERSECT**
 :   A set operation that returns only the rows that appear in both queries' results. Equivalent to the intersection (A ∩ B) in set theory.

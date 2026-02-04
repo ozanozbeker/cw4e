@@ -9,3 +9,6 @@ Thumbs.db
 
 # VS Code
 .vscode/
+
+# DuckDB
+*.wal

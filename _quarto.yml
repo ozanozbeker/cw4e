@@ -1,6 +1,9 @@
 project:
   type: book
 
+resources: 
+  - data/*
+
 book:
   title: "Computational Workflows for Engineers"
   reader-mode: true
@@ -49,7 +52,6 @@ book:
     # - appendices/ruff.qmd
     - appendices/winget.qmd
     - appendices/zed.qmd
-    - appendices/northwind.qmd
 
 bibliography: references.bib
 

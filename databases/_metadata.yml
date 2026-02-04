@@ -1,37 +1,4 @@
-resources:
-  - "data/*.csv"
-
 other-links:
-  - text: "data_dictionary.csv"
-    href: data/data_dictionary.csv
-    icon: filetype-csv
-  - text: "categories.csv"
-    href: data/categories.csv
-    icon: filetype-csv
-  - text: "customers.csv"
-    href: data/customers.csv
-    icon: filetype-csv
-  - text: "employees.csv"
-    href: data/employees.csv
-    icon: filetype-csv
-  - text: "orders.csv"
-    href: data/orders.csv
-    icon: filetype-csv
-  - text: "order_details.csv"
-    href: data/order_details.csv
-    icon: filetype-csv
-  - text: "products.csv"
-    href: data/products.csv
-    icon: filetype-csv
-  - text: "regions.csv"
-    href: data/regions.csv
-    icon: filetype-csv
-  - text: "shippers.csv"
-    href: data/shippers.csv
-    icon: filetype-csv
-  - text: "suppliers.csv"
-    href: data/suppliers.csv
-    icon: filetype-csv
-  - text: "orders_flat.parquet"
-    href: data/orders_flat.parquet
-    icon: table
+  - text: "northwind.duckdb"
+    href: ../data/northwind.duckdb
+    icon: database
