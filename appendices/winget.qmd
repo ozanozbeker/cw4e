@@ -1,0 +1,39 @@
+# WinGet
+
+## What Problem Does WinGet Solve?
+
+When you need a new app on your phone, you open the App Store, search for what you want, and tap "Install." The store handles everything behind the scenes: downloading the app, putting it in the right place, and making sure it works with your device. You never think about *where* the app lives or *how* it got there.
+
+Now imagine you need to install a programming tool that doesn't exist in the Microsoft Store. Without a package manager, you'd visit a website, hunt for the correct download link, run an installer, click through license agreements, choose installation options you may not understand, and hope the tool ends up somewhere your system can find it. If that tool depends on *other* tools to work, you'd need to track those down and install them first. It's tedious, error-prone, and frustrating.
+
+**WinGet is Microsoft's answer to this problem.** It's a command-line package manager built into modern versions of Windows that gives you the same convenient installation experience that Linux and Mac users have enjoyed for years. You tell WinGet what you want, and it handles the rest: downloading, installing, resolving dependencies, and configuring paths.
+
+## Why This Matters for Your Workflow
+
+Throughout this book, you'll need various tools installed on your computer: version control systems, programming language runtimes, database utilities, and more. Without WinGet, each installation becomes its own adventure of Googling instructions and navigating different installer interfaces. With WinGet, installing new tools becomes predictable and consistent.
+
+WinGet also makes your setup *reproducible*. If you get a new computer or need to help a classmate configure their machine, you can share a list of packages rather than walking through dozens of manual installation steps.
+
+## Checking If WinGet Is Already Installed
+
+WinGet comes pre-installed on Windows 11 and recent versions of Windows 10. To check if you already have it, open **PowerShell** or **Command Prompt** by pressing `Win + X` and selecting "Terminal" (on Windows 11) or by searching for "PowerShell" in the Start menu.
+
+Once your terminal is open, type `winget --version` and press Enter. If you see a version number, you're all set and can skip to the next section. If you see an error message saying the command isn't recognized, you'll need to install it.
+
+## Installation Instructions (If Needed)
+
+The easiest way to get WinGet is through the Microsoft Store. Search for "App Installer" in the Microsoft Store and install it (or update it if it's already present). The App Installer package includes WinGet as a component.
+
+Alternatively, you can download the latest release directly from GitHub at `https://github.com/microsoft/winget-cli/releases`. Look for the file ending in `.msixbundle`, download it, and double-click to install.
+
+After installation, close any open terminal windows and open a fresh one. Type `winget --version` again to confirm everything is working. If you see a version number, you're ready to go.
+
+## A Note on Permissions
+
+Some software installations require administrator privileges. When you run a WinGet command that needs elevated permissions, Windows will display a User Account Control (UAC) prompt asking you to confirm. This is normal and expected—just click "Yes" to allow the installation to proceed.
+
+## What Happens Next
+
+Once WinGet is available, you'll have access to thousands of tools through simple commands. We'll introduce specific commands as we need them throughout this book. For now, just know that WinGet is the foundation that makes installing everything else straightforward.
+
+If you're curious, Microsoft's documentation at [learn.microsoft.com/en-us/windows/package-manager](https://learn.microsoft.com/en-us/windows/package-manager/) has more details and a searchable repository of available packages. But don't feel pressured to explore on your own yet, we'll guide you through each tool as it becomes relevant to your work.

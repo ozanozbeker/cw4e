@@ -1,0 +1,625 @@
+# Data Modeling
+
+Every chapter until now has put you in the role of analyst: someone who queries existing databases to answer questions. But someone had to design those databases. Someone decided that products and suppliers should be separate tables, that `supplierID` should link them, that `unitPrice` should be a decimal and not a string. Those design decisions shape every query you'll ever write against that data, and bad design decisions create problems that no amount of clever SQL can fix.
+
+This chapter flips your perspective from consumer to creator. You'll learn to design schemas that organize data logically, create tables with appropriate data types and constraints, understand why tables are structured the way they are, and build views that simplify complex queries for others. You'll also learn the basic data manipulation operations, `INSERT`, `UPDATE`, and `DELETE`, that populate and maintain the tables you create. By the end, you'll be able to look at a business process and translate it into a database schema that stores the data correctly and makes analytical queries natural.
+
+## Thinking in Entities and Relationships
+
+Before writing any SQL, database design starts with identifying the **entities** and **relationships** in your domain. An entity is a distinct thing you need to track: a product, a customer, an order, a machine, a sensor reading. A relationship describes how entities connect: a customer *places* orders, an order *contains* products, a supplier *provides* products.
+
+Consider a quality control process on a manufacturing floor. The entities might include production lines (where products are made), inspection events (when someone checks a batch), defect records (individual problems found), and operators (the people running the lines). The relationships: a production line *hosts* many inspection events, each inspection event *may find* multiple defects, and an operator *conducts* each inspection.
+
+Sketching this out, even informally on paper or a whiteboard, before touching SQL is one of the most valuable habits in data work. The sketch is called an **entity-relationship diagram** (ERD), and even a rough one prevents the most expensive design mistakes.
+
+The process follows three steps:
+
+1. Identify the nouns in your domain. These are candidate entities, each likely becoming a table.
+2. Identify the verbs connecting those nouns. These are relationships, each likely becoming a foreign key.
+3. Identify the attributes of each entity. These become the columns in each table.
+
+For the manufacturing quality control example, that sketch might look like:
+
+```
+production_lines: line_id, line_name, building, capacity
+operators: operator_id, name, shift, certification_level
+inspections: inspection_id, line_id, operator_id, inspection_date, batch_size
+defects: defect_id, inspection_id, defect_type, severity, description
+```
+
+Each entity has a primary key (`line_id`, `operator_id`, etc.), and relationships are expressed through foreign keys (`line_id` in `inspections` references `production_lines`, `inspection_id` in `defects` references `inspections`).
+
+### Drawing ER Diagrams with dbdiagram.io
+
+While hand-drawn sketches work for initial brainstorming, a proper tool makes ER diagrams shareable, version-controllable, and translatable to SQL. **dbdiagram.io** is a free web-based tool that uses a code-to-diagram approach: you type a schema definition in a simple markup language called **DBML** (Database Markup Language) on the left panel, and the diagram auto-generates on the right.
+
+Here's the quality control schema in DBML:
+
+```{.dbml filename="dbdiagram.io"}
+Table production_lines {
+  line_id integer [pk]
+  line_name varchar [not null, unique]
+  building varchar [not null]
+  capacity integer
+}
+
+Table operators {
+  operator_id integer [pk]
+  name varchar [not null]
+  shift varchar [not null]
+  cert_level integer
+}
+
+Table inspections {
+  inspection_id integer [pk]
+  line_id integer [not null, ref: > production_lines.line_id]
+  operator_id integer [not null, ref: > operators.operator_id]
+  inspection_date date [not null]
+  batch_size integer [not null]
+}
+
+Table defects {
+  defect_id integer [pk]
+  inspection_id integer [not null, ref: > inspections.inspection_id]
+  defect_type varchar [not null]
+  severity integer [not null]
+  description varchar
+}
+```
+
+The `ref: >` syntax defines a foreign key relationship (many-to-one, where the arrow points toward the "one" side). Column settings like `pk`, `not null`, `unique`, and `ref` map directly to the SQL constraints you'll learn in this chapter. The free tier gives you unlimited personal diagrams and can export to PNG, PDF, or SQL for PostgreSQL, MySQL, SQL Server, and Oracle.
+
+The code-based approach has an important advantage for engineers: your schema definition is text, which means it can be tracked in Git alongside the rest of your project. The diagram becomes a living document that evolves with your database.
+
+### Crow's Foot Notation
+
+ER diagram tools use a visual language called **Crow's foot notation** to represent relationship types. The symbols at the end of each relationship line tell you two things: whether the relationship is mandatory or optional, and whether it connects to one entity or many.
+
+Three symbols combine to express any relationship. A **vertical bar** (|) means "exactly one" or "mandatory." A **circle** (○) means "zero" or "optional." A **crow's foot** (the forked symbol that looks like a bird's foot) means "many."
+
+Reading a relationship between two tables, you look at the symbols on each end:
+
+`||──||` means one and only one on both sides (one-to-one, both mandatory). `||──○<` means one on the left (mandatory), zero or many on the right (the crow's foot with a circle). This is the classic one-to-many relationship: one production line has zero or many inspections, but each inspection belongs to exactly one production line.
+
+When you see a crow's foot on both ends (`○<──>○`), that signals a many-to-many relationship, which requires a junction table to implement (as you learned with `order_details` in the joins chapter).
+
+You don't need to memorize every combination. The key insight is learning to read these diagrams so you can navigate unfamiliar schemas, because in professional work, you'll encounter ER diagrams long before you encounter the actual data.
+
+::: {.callout-note title="Exercises"}
+1. A university needs to track students, courses, and enrollments. Each student can enroll in many courses, and each course has many students. Sketch the entities, relationships, and key columns (on paper or in text). What type of relationship exists between students and courses, and what table do you need to resolve it?
+
+2. For the Northwind database, identify the relationship type (one-to-one, one-to-many, or many-to-many) between: (a) `suppliers` and `products`, (b) `orders` and `order_details`, (c) `orders` and `products`. For each many-to-many relationship, name the junction table.
+
+3. Open dbdiagram.io and enter the quality control DBML example from this chapter. Examine the generated diagram. Then add a new table called `corrective_actions` that tracks fixes applied after defects are found. Each corrective action references a specific defect. What does the DBML look like?
+:::
+
+## CREATE TABLE: Turning Design into Structure
+
+The `CREATE TABLE` statement defines a table's structure: its name, its columns, and the rules those columns must follow.
+
+```{.sql filename="duckdb"}
+CREATE TABLE production_lines (
+    line_id     INTEGER PRIMARY KEY,
+    line_name   VARCHAR NOT NULL,
+    building    VARCHAR NOT NULL,
+    capacity    INTEGER
+);
+```
+
+Each column declaration has three parts: the **name**, the **data type**, and optional **constraints** that enforce rules about what values are allowed.
+
+### Data Types
+
+Choosing the right data type prevents entire categories of data quality problems. If a column stores prices and you define it as `VARCHAR`, nothing stops someone from inserting "N/A" or "TBD" where a number should be. If you define it as `DECIMAL(10, 2)`, the database rejects anything that isn't a valid number with up to two decimal places.
+
+The essential data types you'll use regularly:
+
+| Type | What It Stores | Example |
+|---|---|---|
+| `INTEGER` | Whole numbers | IDs, counts, quantities |
+| `DECIMAL(p, s)` | Exact decimal numbers with precision `p` and scale `s` | Prices, measurements |
+| `DOUBLE` | Approximate floating-point numbers | Scientific data, calculations |
+| `VARCHAR` | Variable-length text | Names, descriptions, codes |
+| `DATE` | Calendar dates | `2024-03-15` |
+| `TIMESTAMP` | Date and time | `2024-03-15 14:30:00` |
+| `BOOLEAN` | True or false | Flags, yes/no fields |
+
+A few type choices deserve special attention.
+
+Use `DECIMAL` for money, never `DOUBLE`. Floating-point arithmetic introduces rounding errors that accumulate in financial calculations. `DECIMAL(10, 2)` stores values like `1234567.89` exactly as specified.
+
+Use `VARCHAR` without a length limit in DuckDB. Unlike older databases that required you to declare `VARCHAR(255)`, DuckDB handles variable-length strings efficiently without an arbitrary cap.
+
+Use `DATE` for dates and `TIMESTAMP` for dates with times. Storing dates as strings (`"03/15/2024"`) prevents you from using date functions, makes sorting unreliable, and opens the door to format inconsistencies.
+
+### Constraints: Rules the Database Enforces
+
+Constraints are the guardrails that keep your data clean. They define what values are acceptable, and the database rejects any operation that would violate them.
+
+**PRIMARY KEY** uniquely identifies each row. No duplicates, no `NULL` values. Every table should have one.
+
+```{.sql filename="duckdb"}
+CREATE TABLE operators (
+    operator_id INTEGER PRIMARY KEY,
+    name        VARCHAR NOT NULL,
+    shift       VARCHAR NOT NULL,
+    cert_level  INTEGER
+);
+```
+
+**NOT NULL** prevents missing values in a column. Use this for any column that must always have data. An operator must always have a name and shift, so those are `NOT NULL`. The certification level might not yet be recorded for new hires, so it allows `NULL`.
+
+**FOREIGN KEY** enforces referential integrity: it guarantees that a reference to another table actually points to an existing row.
+
+```{.sql filename="duckdb"}
+CREATE TABLE inspections (
+    inspection_id   INTEGER PRIMARY KEY,
+    line_id         INTEGER NOT NULL REFERENCES production_lines(line_id),
+    operator_id     INTEGER NOT NULL REFERENCES operators(operator_id),
+    inspection_date DATE NOT NULL,
+    batch_size      INTEGER NOT NULL
+);
+```
+
+The `REFERENCES` clause says "the value in `line_id` must exist in `production_lines.line_id`." If you try to insert an inspection for a production line that doesn't exist, the database rejects it. This prevents **orphaned records**, rows that reference nonexistent entities.
+
+**UNIQUE** ensures no two rows share the same value in a column (or combination of columns), separate from the primary key. You might require that each production line has a unique name:
+
+```{.sql filename="duckdb"}
+CREATE TABLE production_lines (
+    line_id   INTEGER PRIMARY KEY,
+    line_name VARCHAR NOT NULL UNIQUE,
+    building  VARCHAR NOT NULL,
+    capacity  INTEGER
+);
+```
+
+**CHECK** enforces a custom condition:
+
+```{.sql filename="duckdb"}
+CREATE TABLE defects (
+    defect_id     INTEGER PRIMARY KEY,
+    inspection_id INTEGER NOT NULL REFERENCES inspections(inspection_id),
+    defect_type   VARCHAR NOT NULL,
+    severity      INTEGER NOT NULL CHECK (severity BETWEEN 1 AND 5),
+    description   VARCHAR
+);
+```
+
+The `CHECK` constraint guarantees that severity is always between 1 and 5. Inserting a severity of 0 or 6 fails immediately, rather than silently corrupting your data and surfacing as a mysterious bug weeks later.
+
+::: {.callout-note}
+## DuckDB's Constraint Support
+DuckDB supports `PRIMARY KEY`, `NOT NULL`, `UNIQUE`, and `CHECK` constraints and enforces them. DuckDB also accepts `FOREIGN KEY` syntax, but as of current versions, foreign key constraints are parsed but not fully enforced at the data level. This means DuckDB won't reject an insert with an invalid foreign key reference. The syntax is still valuable for documenting relationships and for writing portable SQL that works in PostgreSQL or other databases where foreign keys are enforced.
+:::
+
+::: {.callout-note title="Exercises"}
+1. Write a `CREATE TABLE` statement for a `machines` table in a manufacturing context. It should have a machine ID (primary key), machine name (unique, required), installation date (required), and a maintenance cost per hour that must be positive. Choose appropriate data types for each column.
+
+2. What constraint would you add to prevent someone from inserting an inspection with a `batch_size` of zero or negative? Write the column definition.
+
+3. Predict what happens when you run each of these statements against the quality control schema, and explain why:
+
+    ```{.sql filename="duckdb"}
+    -- Statement A
+    INSERT INTO operators (operator_id, name, shift, cert_level)
+    VALUES (1, NULL, 'Morning', 3);
+
+    -- Statement B
+    INSERT INTO defects (defect_id, inspection_id, defect_type, severity, description)
+    VALUES (1, 999, 'Scratch', 3, 'Minor surface scratch');
+
+    -- Statement C
+    INSERT INTO defects (defect_id, inspection_id, defect_type, severity, description)
+    VALUES (2, 1, 'Crack', 7, 'Structural crack in housing');
+    ```
+
+4. Why does the text recommend using `DECIMAL(10, 2)` instead of `DOUBLE` for monetary values? What kind of error could `DOUBLE` introduce in a financial report?
+:::
+
+## Why Tables Are Split: Normalization
+
+You already understand *that* data is split across tables (from the joins chapter), but understanding *why*, at a deeper level, prevents you from making poor design decisions in your own work.
+
+**Normalization** is the process of organizing a database to reduce redundancy and prevent inconsistencies. The formal theory involves "normal forms" (1NF, 2NF, 3NF, and beyond), but the practical intuition is simpler: **each fact should live in exactly one place**.
+
+Consider this badly-designed table:
+
+```
+orders_flat:
+| order_id | customer_name | customer_address    | product_name | supplier_name | quantity |
+|----------|---------------|---------------------|--------------|---------------|----------|
+| 1001     | Acme Corp     | 123 Main St, NYC    | Widget A     | Parts Inc     | 50       |
+| 1001     | Acme Corp     | 123 Main St, NYC    | Gadget B     | Tools Ltd     | 20       |
+| 1002     | Acme Corp     | 123 Main St, NYC    | Widget A     | Parts Inc     | 30       |
+| 1003     | Beta LLC      | 456 Oak Ave, Boston | Widget A     | Parts Inc     | 75       |
+```
+
+Three problems are immediately visible.
+
+**Redundancy**: "Acme Corp" and "123 Main St, NYC" are stored three times. "Widget A" and "Parts Inc" are stored three times. This wastes storage, but more importantly, it creates the next two problems.
+
+**Update anomaly**: If Acme Corp moves to a new address, you must update every row that mentions them. Miss one, and the database now says Acme Corp is at two different addresses. Which one is right?
+
+**Delete anomaly**: If you delete order 1003 (the only order from Beta LLC), you lose the fact that Beta LLC exists and their address. The customer information disappears because it was entangled with the order data.
+
+Normalization solves this by splitting into separate tables:
+
+```
+customers: customer_id, customer_name, customer_address
+products:  product_id, product_name, supplier_id
+suppliers: supplier_id, supplier_name
+orders:    order_id, customer_id
+order_details: order_id, product_id, quantity
+```
+
+Now each fact lives once. Updating Acme Corp's address changes one row. Deleting an order doesn't destroy customer data. Adding a new customer doesn't require an order to exist.
+
+### How Much Normalization?
+
+Normalization is a spectrum, not an absolute rule. Analytical databases, the kind you'll work with most, often **denormalize** intentionally, tolerating some redundancy to avoid complex joins in frequent queries.
+
+The practical guidance: normalize your source tables (where data enters the system) to prevent anomalies, and consider strategic denormalization in analytical tables (where data is queried heavily) to simplify queries.
+
+## Dimensional Modeling: How Analytical Databases Are Designed
+
+While normalization is the right approach for operational systems that store and update data, analytical systems that primarily *read* data use a different design philosophy. **Dimensional modeling**, pioneered by Ralph Kimball, organizes analytical databases around two types of tables: **fact tables** and **dimension tables**.
+
+### Fact Tables: The Measurements
+
+A fact table records the measurable events of a business process. Each row represents one discrete event at the lowest level of detail, what Kimball memorably called the "grain." In a retail context, the grain might be the "beep" of the cash register scanner, one row per product scanned. In manufacturing, the grain might be one quality inspection, one sensor reading, or one production run.
+
+The `order_details` table in Northwind is a fact table. Its grain is one line item within one order, and it contains measurements: `quantity`, `unitPrice`, and `discount`. The foreign keys (`orderID`, `productID`) connect each fact to its context.
+
+Fact tables come in three common varieties. **Transaction facts** record discrete events (each sale, each inspection). **Periodic snapshots** summarize events over a standard period (daily inventory levels, weekly production totals). **Accumulating snapshots** track processes with milestones, like an order progressing through stages: ordered, released, shipped, delivered, with a date column for each milestone.
+
+The measurements in fact tables also have important properties. **Additive** measures like revenue and quantity can be summed across all dimensions. **Semi-additive** measures like account balances can be summed across some dimensions but not others (you can sum balances across accounts, but not across time). **Non-additive** measures like ratios and percentages can't be meaningfully summed at all, which is why experienced designers store the components separately and compute the ratio in the query.
+
+### Dimension Tables: The Context
+
+Dimension tables provide the "who, what, where, when, why, and how" context for facts. They're typically wide, flat tables with many text attributes that people use to filter and group data: product names and categories, customer names and regions, dates with year/quarter/month breakdowns.
+
+The `products`, `customers`, `categories`, and `employees` tables in Northwind are all dimension tables. They provide the descriptive context that makes the numbers in `order_details` meaningful.
+
+A well-designed dimension table uses verbose, human-readable descriptions rather than cryptic codes. Instead of storing `status_code = 3`, store `status_description = 'Shipped'`. This makes queries self-documenting and eliminates the need for lookup steps during analysis.
+
+### Star Schema
+
+When you arrange a central fact table with dimension tables radiating outward, the structure looks like a star, hence the name **star schema**. This is the dominant design pattern in analytical databases and data warehouses.
+
+```
+             ┌──────────┐
+             │ products │
+             └────┬─────┘
+                  │
+┌──────────┐     │     ┌────────────┐
+│ customers├─────┼─────┤   dates    │
+└──────────┘     │     └────────────┘
+                  │
+          ┌──────┴───────┐
+          │ order_details │  ← fact table (center)
+          │  (facts)      │
+          └──────┬───────┘
+                  │
+┌──────────┐     │     ┌───────────┐
+│ employees├─────┼─────┤ shippers  │
+└──────────┘     │     └───────────┘
+                  │
+             ┌────┴─────┐
+             │ suppliers │
+             └──────────┘
+```
+
+Star schemas are popular in analytics because they're simple to understand (the design mirrors how business people think about data), they require few joins (usually just one hop from fact to dimension), and database engines are heavily optimized for this pattern.
+
+Think of the fact table as a control panel showing measurements, and each dimension as a selector switch that filters what you see. Want to see sales by region? Join the region dimension. By product category? Join the product dimension. The star schema makes this kind of slicing and dicing natural.
+
+A variation called the **snowflake schema** normalizes the dimension tables further, breaking hierarchies like `product → category → department` into separate tables. Kimball generally advises against snowflaking unless dimension tables are extremely large, because the added joins increase query complexity without significant benefit for most analytical workloads.
+
+You don't need to design star schemas while working through this book, but recognizing the pattern helps you navigate the analytical databases you'll encounter in professional work. When you see a database with a large, narrow table full of numbers surrounded by wider tables full of descriptions, you're looking at a dimensional model.
+
+::: {.callout-note title="Exercises"}
+1. Look at the `orders_flat` example from the normalization section. Identify a specific scenario where an update anomaly would occur (a change to one fact that requires modifying multiple rows). Then show how the normalized design prevents this problem.
+
+2. In the Northwind database, identify which tables are fact tables and which are dimension tables. What is the grain of the `order_details` fact table? What is the grain of the `orders` table?
+
+3. Consider a measure: "average unit price." Is this additive, semi-additive, or non-additive? Why does this matter for how you store and compute it? What should you store in the fact table instead?
+
+4. A data warehouse for a hospital stores patient visits as the fact table. Name four dimension tables that would provide useful context for analyzing patient visits, and list 2-3 example columns for each.
+
+5. Draw (on paper or as text) a star schema for a university course registration system. The fact table records enrollments. What dimensions would surround it?
+:::
+
+## Views: Saved Queries
+
+A **view** is a saved query that behaves like a table. It doesn't store data itself; every time you query a view, DuckDB runs the underlying query and returns the results. Views let you encapsulate complex logic behind a simple name.
+
+```{.sql filename="duckdb"}
+-- Create a view that joins products with their categories and suppliers
+CREATE VIEW product_catalog AS
+SELECT
+    p.productID,
+    p.productName,
+    c.categoryName,
+    s.companyName AS supplier,
+    s.country AS supplier_country,
+    p.unitPrice,
+    p.unitsInStock,
+    p.discontinued
+FROM products AS p
+INNER JOIN categories AS c ON p.categoryID = c.categoryID
+INNER JOIN suppliers AS s ON p.supplierID = s.supplierID;
+```
+
+Now anyone can write:
+
+```{.sql filename="duckdb"}
+-- This simple query hides the complexity of two joins
+SELECT
+    productName,
+    supplier,
+    unitPrice
+FROM product_catalog
+WHERE supplier_country = 'Japan'
+ORDER BY unitPrice DESC;
+```
+
+Views serve two purposes. For you, they save you from rewriting common joins and transformations. For others, they provide a simplified, curated interface to the data. A view named `monthly_sales_summary` is immediately understandable; the seven-join CTE that powers it is not.
+
+To update or remove views:
+
+```{.sql filename="duckdb"}
+-- Replace a view with a new definition
+CREATE OR REPLACE VIEW product_catalog AS
+SELECT ...;  -- new query definition
+
+-- Remove a view entirely
+DROP VIEW product_catalog;
+```
+
+## Documenting Your Data: The Catalog Mindset
+
+Creating tables and views is only half of database design. The other half is making sure people (including future you) can find and understand the data. In a professional setting, the question "where is the data I need, and what does it mean?" consumes an enormous amount of time. Research suggests employees spend roughly 1.8 hours per day searching for information, and the majority of enterprise data goes unanalyzed simply because people don't know it exists.
+
+The solution at scale is a **data catalog**, a system that inventories the data assets in an organization, their definitions, ownership, relationships, and usage patterns. Enterprise tools like DataHub, Alation, and Collibra provide sophisticated catalog capabilities, and teams using the dbt framework get lightweight documentation automatically generated from their code.
+
+You won't build an enterprise data catalog while working through this book, but the habits that catalogs formalize are worth developing now, because they scale to every level of work.
+
+Even DuckDB's UI demonstrates basic catalog principles. The left panel shows your databases, schemas, and tables. The `SHOW TABLES` command lists what's available. `DESCRIBE table_name` reveals column names and types. The `information_schema` tables let you query metadata programmatically:
+
+```{.sql filename="duckdb"}
+-- [STANDARD SQL] What tables exist in the database?
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'main';
+
+-- [STANDARD SQL] What columns does the products table have?
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_name = 'products';
+```
+
+At the simplest level, a README file in your project repository that describes each table, its columns, and what the data represents is a "data catalog." The practice of documenting your schema, including what each table contains, where the data comes from, how frequently it updates, and who owns it, is the same whether you're working with a personal DuckDB file or a petabyte-scale data warehouse. Start the habit now.
+
+Four types of metadata are worth tracking. **Technical metadata** covers the structural aspects: data types, column names, table sizes, constraints. **Business metadata** covers meaning: what does "revenue" mean in this context, who defines the KPI, what business rules apply. **Operational metadata** covers provenance: when was this table last updated, where did the data come from, what transformations were applied. **Social metadata** covers usage: which tables are queried most, who are the primary users, what questions does this data typically answer. You won't track all four for a personal database, but being aware of these categories prepares you for professional data environments.
+
+## Manipulating Data: INSERT, UPDATE, DELETE
+
+Creating tables defines the structure. **Data Manipulation Language** (DML) operations populate and maintain that structure.
+
+### INSERT: Adding Rows
+
+```{.sql filename="duckdb"}
+-- Insert a single row
+INSERT INTO production_lines (line_id, line_name, building, capacity)
+VALUES (1, 'Assembly Line A', 'Building 1', 500);
+
+-- Insert multiple rows at once
+INSERT INTO production_lines (line_id, line_name, building, capacity)
+VALUES
+    (2, 'Assembly Line B', 'Building 1', 450),
+    (3, 'Packaging Line 1', 'Building 2', 800),
+    (4, 'Packaging Line 2', 'Building 2', 750);
+```
+
+The column list after the table name is technically optional if you provide values for every column in order, but always include it. It documents your intent and protects you from column-order surprises if someone modifies the table later.
+
+### INSERT from a Query
+
+One of SQL's most powerful patterns is creating data from queries:
+
+```{.sql filename="duckdb"}
+-- Populate a summary table from raw data
+CREATE TABLE category_summary AS
+SELECT
+    c.categoryName,
+    COUNT(*) AS product_count,
+    ROUND(AVG(p.unitPrice), 2) AS avg_price,
+    SUM(p.unitsInStock) AS total_stock
+FROM products AS p
+INNER JOIN categories AS c ON p.categoryID = c.categoryID
+GROUP BY c.categoryName;
+```
+
+`CREATE TABLE ... AS SELECT` creates a new table and fills it with the query results in one step. This is how you materialize analytical results into persistent tables, a pattern you'll use extensively when building data pipelines.
+
+### UPDATE: Modifying Existing Rows
+
+```{.sql filename="duckdb"}
+-- Increase capacity of a specific line
+UPDATE production_lines
+SET capacity = 600
+WHERE line_id = 1;
+```
+
+Always include a `WHERE` clause with `UPDATE`. An `UPDATE` without `WHERE` modifies every row in the table, which is almost never what you intend.
+
+### DELETE: Removing Rows
+
+```{.sql filename="duckdb"}
+-- Remove a decommissioned line
+DELETE FROM production_lines
+WHERE line_id = 4;
+```
+
+Like `UPDATE`, always use `WHERE` with `DELETE`. A bare `DELETE FROM production_lines` empties the entire table.
+
+::: {.callout-warning}
+## DML in Analytical Workflows
+As an analyst, you'll use `INSERT` and `CREATE TABLE ... AS SELECT` frequently. You'll use `UPDATE` and `DELETE` rarely. Analytical databases are designed for reading, not for frequent row-level modifications. When you need to "update" analytical data, the standard pattern is to rebuild the table from source data (using `CREATE OR REPLACE TABLE ... AS SELECT`) rather than modifying individual rows. This approach is simpler, auditable, and avoids the complications of tracking which rows changed and when.
+:::
+
+::: {.callout-note title="Exercises"}
+1. Create a view called `low_stock_alerts` that joins `products`, `categories`, and `suppliers` and shows only active (not discontinued) products where `unitsInStock` is at or below `reorderLevel`. Include the product name, category name, supplier name, current stock, and reorder level. Then query your view with a simple `SELECT` to verify it works.
+
+2. Write SQL to insert three rows into the `production_lines` table, then update the capacity of one line, then delete another. Verify the state of the table after each operation with a `SELECT`.
+
+3. Run this query against Northwind:
+
+    ```{.sql filename="duckdb"}
+    SELECT column_name, data_type, is_nullable
+    FROM information_schema.columns
+    WHERE table_name = 'products'
+    ORDER BY ordinal_position;
+    ```
+
+    What information does `information_schema` provide that `DESCRIBE products` doesn't? Why is the programmatic approach (`information_schema`) more useful than the interactive approach (`DESCRIBE`) for data catalog automation?
+
+4. Write a short README (3-5 sentences per table) documenting the manufacturing quality control schema from this chapter. For each table, state what it represents, its primary key, its key relationships, and any important constraints. This is the kind of documentation a teammate would need to start querying your data.
+:::
+
+## Working with Real-World Data
+
+Everything in this chapter comes together when you move beyond Northwind's clean, well-structured tables and encounter real data. The transition from classroom dataset to messy data is where database design skills prove their worth.
+
+Real-world data has characteristics that the Northwind data doesn't: inconsistent formatting, missing values, non-English text, duplicate records with subtle variations, and the kind of quality issues that no one warned you about. When you face this kind of data, the workflow is the same set of skills you've been building. You use `CREATE TABLE` to define a clean target schema, `INSERT ... SELECT` to load and transform data, joins to connect related entities, CTEs and window functions to build analytical queries, and views to present clean results. The challenge isn't new syntax. It's applying what you already know to a messier, more realistic context, where the right schema isn't given to you. It's your job to figure it out.
+
+The SQL skills transfer directly. In Perkins' language, you've been playing a junior version of the game with clean data and well-structured tables. Working with real data moves you closer to the full professional game. If you want practice with this transition, try downloading a public dataset from a source like Kaggle, the UCI Machine Learning Repository, or a government open data portal, and design a DuckDB database for it from scratch. You'll discover that modeling decisions, like which columns deserve their own dimension table and which constraints to enforce, are where the real thinking happens.
+
+::: {.callout-note}
+## Looking Ahead: Connecting DuckDB to Python
+The databases you build with these skills become the analytical engine inside larger workflows. In the Integration module, you'll connect DuckDB to Python and run queries programmatically. Here's a preview of what that looks like:
+
+```{.python filename="python"}
+import duckdb
+
+con = duckdb.connect("northwind.duckdb")
+result = con.sql("""
+    SELECT productName, unitPrice
+    FROM products
+    WHERE unitPrice > 20
+    ORDER BY unitPrice DESC
+""")
+result.show()
+```
+
+The SQL is identical to what you've been writing in the DuckDB UI. The difference is that Python can take the results and do things with them: generate reports, feed them into visualizations, trigger alerts, or load them into other systems. Designing a clean, well-structured database now makes that automation dramatically simpler later.
+:::
+
+## Chapter Exercises
+
+These exercises require you to apply the full modeling workflow: identifying entities, designing schemas, writing DDL, and thinking about how design decisions affect downstream analysis.
+
+1. **Schema design from scratch.** A small engineering consultancy tracks projects, clients, employees, and time entries. Each project belongs to one client, but a client can have many projects. Each employee can work on many projects, and each project can have many employees. Time entries record how many hours a specific employee worked on a specific project on a specific date. Design the schema: identify all tables, their columns and data types, primary keys, foreign keys, and any constraints. Write the `CREATE TABLE` statements.
+
+2. **Normalize this.** A colleague shows you their "master spreadsheet" for tracking equipment maintenance:
+
+    ```
+    | machine_name  | building | technician | tech_phone | repair_date | repair_type | parts_used | cost  |
+    | CNC Mill 4    | Bldg A   | Jane Smith | 555-0101   | 2024-01-15  | Preventive  | Belt, Oil  | 45.00 |
+    | CNC Mill 4    | Bldg A   | Jane Smith | 555-0101   | 2024-03-22  | Corrective  | Motor      | 320.00|
+    | Lathe 2       | Bldg B   | Bob Jones  | 555-0202   | 2024-02-10  | Preventive  | Oil        | 15.00 |
+    ```
+
+    Identify the redundancy, describe the anomalies that could occur, and design a normalized schema (at least three tables). Write the `CREATE TABLE` statements and explain how your design prevents each anomaly.
+
+3. **Fact or dimension?** For each table described below, state whether it's a fact table or a dimension table and justify your answer: (a) A table of 50 million rows, each recording a single barcode scan at a warehouse with timestamp, product ID, warehouse ID, and quantity. (b) A table of 200 rows listing warehouse locations with name, address, region, manager name, and square footage. (c) A table of 5,000 rows containing product descriptions with name, category, brand, weight, and shelf life.
+
+4. **View design.** Create two views for the Northwind database that would be useful to different audiences. First, an `order_summary` view for a sales manager that shows each order with the customer name, order date, number of line items, and total order value (all pre-joined and pre-calculated). Second, a `supplier_catalog` view for a procurement manager that shows each supplier with the number of products they provide, average product price, and the categories they cover. Write the `CREATE VIEW` statements and test each with a simple query.
+
+5. **End-to-end design exercise.** A food truck business wants to track daily sales across three trucks that operate in different locations. They need to analyze sales by truck, location, day of week, menu item, and payment method. Design a star schema for this scenario. Identify the fact table and its grain, name all dimension tables with their columns, write the `CREATE TABLE` statements, insert at least 3 sample rows into each table, and write one analytical query that demonstrates the schema works (for example, "total revenue by truck by day of week").
+
+6. **Constraint enforcement test.** DuckDB parses foreign key constraints but does not fully enforce them. Test this yourself: create a small `departments` table with a primary key, then create an `employees` table with a `FOREIGN KEY` referencing `departments`. Insert an employee with a `department_id` that doesn't exist in the `departments` table. Does DuckDB accept or reject the row? Now explain why a production database like PostgreSQL *would* reject it, and describe the specific data quality problem that could occur if foreign keys aren't enforced. What other practices (besides database constraints) can protect against this kind of error?
+
+7. **Debug this schema.** A colleague designed the following schema for tracking machine maintenance at a factory, but there are design problems. Identify at least three issues and explain how to fix each one.
+
+    ```{.sql filename="duckdb"}
+    CREATE TABLE maintenance_log (
+        log_id INTEGER,
+        machine_name VARCHAR,
+        machine_building VARCHAR,
+        technician_name VARCHAR,
+        technician_phone VARCHAR,
+        repair_date DATE,
+        repair_type VARCHAR,
+        parts_used VARCHAR,
+        cost DECIMAL(10, 2)
+    );
+    ```
+
+    (Hints: think about redundancy, constraints, normalization, and what happens when a technician changes their phone number.)
+
+8. **View layering.** Create a view called `product_summary` that joins `products`, `categories`, and `suppliers` to show each product with its category name, supplier name, unit price, and stock status (using a `CASE` expression). Then create a *second* view called `reorder_alert` that queries `product_summary` and filters to only products that need reordering. Write a query against `reorder_alert` and explain how layering views like this creates reusable building blocks for different audiences.
+
+## Summary
+
+Database design begins by identifying entities (things you track) and relationships (how they connect), sketching these as entity-relationship diagrams before writing any SQL. Tools like dbdiagram.io let you define schemas in code (DBML) and generate visual diagrams with Crow's foot notation that show relationship types at a glance. `CREATE TABLE` defines table structure with column names, data types, and constraints. Data types enforce what values a column can hold: `INTEGER` for whole numbers, `DECIMAL` for exact values like money, `VARCHAR` for text, `DATE` and `TIMESTAMP` for temporal data. Constraints enforce data quality rules: `PRIMARY KEY` ensures unique identification, `NOT NULL` prevents missing values, `FOREIGN KEY` maintains referential integrity between tables, `UNIQUE` prevents duplicates, and `CHECK` enforces custom conditions. Normalization organizes tables so each fact lives in one place, preventing update, insertion, and deletion anomalies. Analytical databases often use dimensional modeling instead, organizing data into star schemas with central fact tables (containing measurements from business events) surrounded by dimension tables (containing the descriptive "who, what, where, when" context). Views save complex queries behind simple names, serving as reusable building blocks and simplified interfaces for others. Documenting your data, through README files, metadata tracking, and consistent naming, is the small-scale version of the data catalog practices that professional organizations rely on. `INSERT`, `UPDATE`, and `DELETE` manipulate data within tables, with `CREATE TABLE ... AS SELECT` being the most common analytical pattern for materializing query results into persistent tables.
+
+## Glossary
+
+**CHECK Constraint**
+:   A rule defined on a column that the database evaluates on every insert or update, rejecting values that violate the specified condition.
+
+**Constraint**
+:   A rule applied to a table or column that the database enforces automatically, ensuring data integrity by rejecting operations that would violate the rule.
+
+**CREATE TABLE**
+:   A SQL Data Definition Language (DDL) statement that defines a new table's structure, including column names, data types, and constraints.
+
+**Crow's Foot Notation**
+:   A visual convention used in entity-relationship diagrams where symbols at the ends of relationship lines indicate whether relationships are one-to-one, one-to-many, or many-to-many, and whether they are mandatory or optional.
+
+**Data Catalog**
+:   A system that inventories data assets in an organization, documenting their definitions, ownership, relationships, and usage patterns to help people find and understand available data.
+
+**Data Manipulation Language (DML)**
+:   The subset of SQL used to add, modify, and remove data within tables: `INSERT`, `UPDATE`, and `DELETE`.
+
+**DBML (Database Markup Language)**
+:   A code-based language used by dbdiagram.io to define database schemas, with syntax for tables, columns, constraints, and relationships that generates visual ER diagrams.
+
+**Denormalization**
+:   The deliberate introduction of redundancy into a database schema, typically in analytical tables, to reduce the number of joins needed for frequent queries.
+
+**Dimension Table**
+:   A table in a dimensional model that provides descriptive context (the "who, what, where, when") for filtering and grouping facts. Typically wide, flat, and text-heavy.
+
+**Dimensional Modeling**
+:   A database design approach for analytical systems that organizes data into fact tables (measurements) and dimension tables (context), following star or snowflake schema patterns. Pioneered by Ralph Kimball.
+
+**Entity-Relationship Diagram (ERD)**
+:   A visual representation of the entities (tables), attributes (columns), and relationships (foreign keys) in a database schema.
+
+**Fact Table**
+:   A table in a dimensional model that records measurable events from a business process. Each row represents one event at the declared grain, and columns contain measurements (quantities, amounts) and foreign keys to dimension tables.
+
+**Foreign Key Constraint**
+:   A rule that ensures a column's value references an existing value in another table's primary key column, preventing orphaned records.
+
+**Grain**
+:   In dimensional modeling, the level of detail that each row in a fact table represents. Declaring the grain (e.g., "one row per line item per order") is the first and most important step in designing a fact table.
+
+**Normalization**
+:   The process of organizing a relational database to minimize redundancy and prevent data anomalies, following a series of progressively stricter "normal forms."
+
+**NOT NULL Constraint**
+:   A rule that prevents a column from containing `NULL` values, requiring that every row has a defined value for that column.
+
+**Referential Integrity**
+:   The guarantee that every foreign key value in a table corresponds to an existing primary key value in the referenced table, maintaining valid relationships between entities.
+
+**Star Schema**
+:   A database design pattern used in analytical databases where a central fact table (containing measurements and metrics) connects to surrounding dimension tables (containing descriptive attributes). Named for its star-like visual appearance.
+
+**View**
+:   A saved SQL query that behaves like a virtual table. Views don't store data; they execute the underlying query each time they're accessed, providing a simplified or curated interface to the data.

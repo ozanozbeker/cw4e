@@ -1,0 +1,555 @@
+# The Command Line {#sec-cli}
+
+Every engineer has two ways to communicate with their computer: pointing and clicking through windows and icons, or typing commands directly. The first approach, the graphical user interface (GUI), feels natural because it mirrors the physical world. You see folders, drag files, click buttons. But this intuitive interface hides something powerful underneath: a text-based system where you can tell your computer exactly what to do, one command at a time.
+
+This text-based interface is called the **command line**, and learning it transforms you from a passenger into a driver of your computational environment. Instead of being limited to the options someone else designed into a menu, you gain direct access to your computer's capabilities. You can automate repetitive tasks, chain tools together in ways their creators never imagined, and work with the same professional tooling used by software engineers, data scientists, and researchers worldwide.
+
+The command line might feel foreign at first, you're used to clicking, not typing. But consider this: every supercomputer in the world runs Linux and is operated through a command line. Every cloud server you'll ever deploy to. Every professional data pipeline, every version control system, every modern development tool. The command line isn't just a historical artifact; it's the universal interface that connects everything in computational work.
+
+By the end of this chapter, you'll understand how to navigate your filesystem, run programs, and use the foundational commands that make tools like Git, Quarto, and Python package managers possible. More importantly, you'll understand *why* the command line works the way it does, knowledge that transfers to any tool you encounter in the future.
+
+## Why Learn the Command Line?
+
+Before diving into commands, let's understand what makes this skill worth learning. The command line offers four distinct advantages that matter for building data products.
+
+**The command line enables agility.** Data work is exploratory. You try something, see what happens, adjust, and try again. The command line supports this through what programmers call a "read-eval-print loop" (REPL): you type a command, press Enter, and immediately see the result. This rapid feedback loop, much faster than clicking through menus, matches the experimental nature of working with data. When you need to quickly check a file's contents, count rows in a dataset, or test whether a transformation worked, the command line lets you do it in seconds.
+
+**The command line connects your tools.** You'll learn Python, SQL, Quarto, and Git in this book. Each is powerful alone, but the real magic happens when they work together. The command line acts as the glue: you can take output from one tool and feed it to another, orchestrate complex workflows, and build pipelines that combine multiple technologies. A Python script can call a shell command; a shell script can run Python code. This interoperability is only possible because everything speaks the common language of the command line.
+
+**The command line scales and repeats.** Clicking through a GUI works fine once. But what if you need to process 500 files the same way? What if a colleague needs to reproduce your analysis? What if you need to run the same task every night? Everything you type on the command line can be saved to a script and run automatically, on any schedule, on any machine with the same tools installed. This transforms manual, one-time tasks into automated, reproducible workflows, exactly what professional data products require.
+
+**The command line is everywhere.** The skills you learn here work on your laptop, on a cloud server, on a Raspberry Pi, on a supercomputer. Linux and Unix-style commands have been the standard for over 50 years and remain the foundation of modern computing infrastructure.
+
+## The Layers of Your Computing Environment
+
+When you open a terminal application and start typing commands, several layers of software work together to make things happen. Understanding these layers helps demystify what's actually occurring when you press Enter.
+
+```{mermaid}
+%%| label: fig-cli-layers
+%%| fig-cap: "The layers between you and your computer's hardware, from user interaction down to hardware"
+flowchart TB
+    A[You] --> B[Terminal Application]
+    B --> C[Shell]
+    C --> D[Command-Line Tools]
+    D --> E[Operating System / Kernel]
+    E --> F[Hardware]
+```
+
+**The terminal** (or terminal emulator) is the application window where you type. It's the visual interface, handling the display of text, accepting keyboard input, and showing you output. On macOS, the default is called [Terminal](https://support.apple.com/guide/terminal/what-is-terminal-trmld4c92d55/2.15/mac/26). On Windows, we'll use [Windows Terminal](https://github.com/microsoft/terminal). The terminal is just the window; the real work happens in the layers below.
+
+**The shell** is the program that interprets what you type. When you enter a command, the shell parses your input, figures out what program you want to run, and handles things like connecting programs together or managing variables. Different shells exist, Bash, Zsh, PowerShell, Fish, each with slightly different features. Think of the shell as the interpreter between your human-readable commands and the system calls that actually run programs.
+
+**Command-line tools** are the programs the shell invokes on your behalf: `ls` to list files, `cd` to change directories, `python` to run Python code, `git` to manage version control. These are the workhorses, each tool does something specific, and you'll build up a personal toolkit of favorites.
+
+**The operating system** sits beneath everything, managing hardware resources and executing programs. The kernel, the core of the operating system, handles the actual work of running commands, reading files from disk, and managing memory. When a command-line tool needs to read a file, it asks the kernel; the kernel talks to the hardware.
+
+You don't need to think about these layers constantly, but understanding them explains why certain things work the way they do. When a command "isn't found," the problem is usually in how the shell locates programs. When a terminal looks different from someone else's, it's often just different terminal settings, the underlying commands still work the same way.
+
+## Setting Up Your Terminal
+
+The specific application you use to access the command line depends on your operating system, but the commands you'll learn work across both platforms. This cross-platform compatibility exists because the major shells have converged on a common set of basic commands, what we might call the "Unix vocabulary."
+
+### macOS Users
+
+macOS comes with a terminal application called Terminal, located in Applications → Utilities. Open it and you'll see a window with a prompt waiting for input. Modern macOS uses Zsh (Z shell) as its default shell, which provides an excellent experience with helpful features like better tab completion and spelling correction.
+
+Your default prompt probably shows your username and computer name, followed by a `%` symbol. This prompt tells you the shell is ready to accept a command.
+
+### Windows Users
+
+On Windows, we'll use **Windows Terminal** with **PowerShell** as the shell. Windows Terminal is Microsoft's modern terminal application that provides a clean, tabbed interface for command-line work. PowerShell is the shell that runs inside it.
+
+To get started, install [Windows Terminal from the Microsoft Store](https://aka.ms/terminal) if it's not already on your system. When you open Windows Terminal, it launches PowerShell by default, you'll see a prompt showing your current location followed by a `>` symbol.
+
+::: {.callout-important}
+## Use Windows Terminal, Not the Legacy Apps
+Windows has several command-line applications, which can be confusing. **Always use Windows Terminal** for this book. Avoid the standalone "PowerShell" application (blue icon), "Command Prompt" (black icon), and "Git Bash." These older applications work but lack Windows Terminal's modern features. Windows Terminal gives you a consistent experience and will be what you use inside code editors like VS Code or Zed as well.
+:::
+
+The key insight for Windows users: PowerShell includes built-in aliases that map Unix command names to their PowerShell equivalents. When you type `ls`, PowerShell translates this to its native `Get-ChildItem` command. When you type `pwd`, it runs `Get-Location`. This means the basic commands in this book work on both platforms, even though the underlying implementations differ.
+
+### The Prompt
+
+Regardless of your operating system, you'll see a **prompt**, a short piece of text indicating the shell is ready for input. The prompt typically shows useful information like your current directory location, but its exact appearance varies based on your system and configuration.
+
+Throughout this book, I'll show commands preceded by a `$` symbol:
+
+```{.bash filename="terminal"}
+$ whoami
+```
+
+This dollar sign represents the prompt, it's not something you type. It's simply a convention to indicate "this is a command you should enter." When you see `$ whoami`, you type only `whoami` and press Enter.
+
+Some examples will show both the command and its output:
+
+```text
+$ whoami
+ozan
+
+$ date
+Thu Jan 29 14:30:00 EST 2026
+```
+
+The lines with `$` are commands; the lines without are the output those commands produced.
+
+## Navigating the Filesystem
+
+At any moment in your terminal session, you exist in a particular location within your computer's filesystem, a specific directory. This is your **current working directory**, and it affects how many commands behave. When you list files, you see the files in your current directory. When you create a file without specifying a full path, it appears in your current directory.
+
+### Where Am I? The `pwd` Command
+
+The `pwd` command (print working directory) tells you exactly where you are:
+
+::: {.panel-tabset}
+
+## macOS/Linux
+
+```{.bash filename="terminal"}
+$ pwd
+/Users/ozan
+```
+
+## Windows
+
+```{.powershell filename="terminal"}
+> pwd
+
+Path
+----
+C:\Users\ozan
+```
+
+:::
+
+This output is a **path**, a string that describes a location in your filesystem. The slashes separate directory names. Reading from left to right traces a route through the directory tree: start at the root, go into the Users directory, then into the ozan directory.
+
+When you first open a terminal, you typically start in your **home directory**, your personal space on the computer. On macOS, this is usually `/Users/yourname`. On Windows, it's usually `C:\Users\yourname`. The tilde character (`~`) is a universal shortcut that means "my home directory."
+
+### What's Here? The `ls` Command
+
+The `ls` command (list) shows the contents of your current directory:
+
+```{.bash filename="terminal"}
+$ ls
+Desktop     Downloads   Music       Public
+Documents   Library     Pictures    
+```
+
+By default, `ls` shows only the names of visible files and directories. The output format differs slightly between macOS/Linux and Windows, but the information is similar.
+
+::: {.panel-tabset}
+
+## macOS/Linux
+
+To see more detail, add the `-l` flag (for "long" format):
+
+```{.bash filename="terminal"}
+$ ls -l
+total 0
+drwx------@  4 ozan  staff   128 Jan 20 10:15 Desktop
+drwx------@ 12 ozan  staff   384 Jan 23 14:22 Documents
+drwx------+  5 ozan  staff   160 Jan 21 09:00 Downloads
+```
+
+To see hidden files (those starting with `.`), add the `-a` flag (for "all"):
+
+```{.bash filename="terminal"}
+$ ls -a
+.               .zshrc          Downloads       Pictures
+..              Desktop         Library         Public
+.config         Documents       Music           
+```
+
+You can combine flags: `ls -la` shows all files including hidden ones in long format.
+
+## Windows
+
+PowerShell's default `ls` output already shows detailed information including Mode, LastWriteTime, Length, and Name, similar to the `-l` flag on macOS/Linux.
+
+To see hidden files, add the `-Force` flag:
+
+```{.powershell filename="terminal"}
+> ls -Force
+
+    Directory: C:\Users\ozan
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d--h--        1/20/2026   10:15 AM                .config
+d-----        1/23/2026    2:22 PM                Desktop
+d-----        1/21/2026    9:00 AM                Documents
+d-----        1/21/2026    9:00 AM                Downloads
+```
+
+Files with `h` in the Mode column are hidden.
+
+:::
+
+::: {.callout-note}
+## Flags and Options
+Command-line tools accept **flags** (also called options or switches) that modify their behavior. Flags typically start with a dash. Short flags use a single dash and single letter (`-l`, `-a`). Long flags use two dashes and a word (`--all`, `--help`). The specific flags available vary by command and sometimes by operating system.
+:::
+
+### Moving Around: The `cd` Command
+
+The `cd` command (change directory) moves you to a different location:
+
+```{.bash filename="terminal"}
+$ cd Documents
+$ pwd
+/Users/ozan/Documents
+```
+
+After running `cd Documents`, your current directory changes. Now commands like `ls` show the contents of the Documents folder.
+
+You can navigate using either **relative paths** (relative to your current location) or **absolute paths** (starting from the root of the filesystem). The command `cd Documents` uses a relative path, it means "go into the Documents folder that's inside my current directory." The command `cd /Users/ozan/Documents` (or `cd C:\Users\ozan\Documents` on Windows) uses an absolute path, it works regardless of where you currently are.
+
+Several special shortcuts make navigation easier:
+
+| Symbol | Meaning |
+|--------|---------|
+| `.` | Current directory |
+| `..` | Parent directory (one level up) |
+| `~` | Home directory |
+| `-` | Previous directory (macOS/Linux only) |
+
+: Navigation shortcuts in the command line {#tbl-nav-shortcuts}
+
+Let's see these in action:
+
+```{.bash filename="terminal"}
+$ pwd
+/Users/ozan/Documents
+
+$ cd ..
+$ pwd
+/Users/ozan
+
+$ cd ~
+$ pwd
+/Users/ozan
+
+$ cd ~/Downloads
+$ pwd
+/Users/ozan/Downloads
+```
+
+The double-dot (`..`) moved up one level, from Documents to the home directory. The tilde took us home (which was the same place in this case). Then `~/Downloads` navigated directly to Downloads using an absolute path starting from home.
+
+### Tab Completion: Your Best Friend
+
+Here's a technique that will save you thousands of keystrokes: **tab completion**. Instead of typing full directory or file names, type the first few characters and press Tab. The shell will complete the name if it's unambiguous, or show you the options if multiple matches exist.
+
+```{.bash filename="terminal"}
+$ cd Doc<Tab>
+$ cd Documents/
+```
+
+If you type `cd D` and press Tab, the shell might show you Desktop, Documents, and Downloads. Type one more character to disambiguate (`cd Do<Tab>`) and Tab again.
+
+Tab completion also works for command names and flags. Make it a habit, professionals use it constantly.
+
+## Working with Files and Directories
+
+Now that you can navigate, let's manipulate the filesystem: creating, moving, and removing files and directories.
+
+### Creating Directories: `mkdir`
+
+The `mkdir` command (make directory) creates a new folder:
+
+```{.bash filename="terminal"}
+$ mkdir my-project
+$ ls
+Desktop     Downloads   Music       Public      my-project
+Documents   Library     Pictures    
+```
+
+A new directory called `my-project` now exists in your current location.
+
+::: {.callout-tip}
+## Naming Conventions
+Avoid spaces in file and directory names. While spaces are technically allowed, they complicate command-line work because you need special handling (quotes or backslashes) to reference them. Use hyphens (`my-project`), underscores (`my_project`), or camelCase (`myProject`) instead.
+:::
+
+### Removing Files and Directories: `rm` and `rmdir`
+
+The `rm` command removes files:
+
+```{.bash filename="terminal"}
+$ rm my-project/temp.txt
+```
+
+::: {.callout-warning}
+## There Is No Recycle Bin
+Unlike deleting through the GUI, `rm` does not move files to a trash folder. Removal is immediate and permanent. There's no "undo." Double-check your commands, especially when using wildcards (patterns like `*.txt` that match multiple files).
+:::
+
+To remove directories, use `rmdir` for empty directories or `rm -r` for directories with contents:
+
+```{.bash filename="terminal"}
+$ rmdir empty-folder           # Only works if folder is empty
+$ rm -r folder-with-contents   # Removes everything inside recursively
+```
+
+The `-r` flag means "recursive", delete this directory and everything inside it.
+
+## Understanding Paths
+
+Paths are how you specify locations in the filesystem. Mastering them removes much of the confusion beginners experience. If you've read @sec-files, you'll recognize these concepts.
+
+An **absolute path** starts from the root of the filesystem and provides the complete route to a location:
+
+- macOS/Linux: `/Users/ozan/Documents/project/data.csv`
+- Windows: `C:\Users\ozan\Documents\project\data.csv`
+
+Absolute paths work from anywhere, they don't depend on your current directory.
+
+A **relative path** starts from your current directory:
+
+- `Documents/project/data.csv` (if you're in `/Users/ozan`)
+- `../project/data.csv` (if you're in `/Users/ozan/other-folder`)
+- `./script.py` (file in current directory; the `./` is optional but explicit)
+
+The dot (`.`) represents your current directory. The double-dot (`..`) represents the parent directory. You can chain these: `../../other` means "go up two levels, then into other."
+
+When specifying paths with spaces (which you should avoid creating, but sometimes encounter), wrap the path in quotes:
+
+```{.bash filename="terminal"}
+$ cd "My Documents"
+$ ls "file with spaces.txt"
+```
+
+## Commands, Arguments, and Options
+
+Every command you type follows a pattern: the command name, possibly some options (flags), and possibly some arguments (values the command operates on).
+
+```text
+command [options] [arguments]
+```
+
+Consider this command:
+
+```{.bash filename="terminal"}
+$ ls -la ~/Documents
+```
+
+- `ls` is the command
+- `-la` combines two options: `-l` (long format) and `-a` (all files)
+- `~/Documents` is the argument (the directory to list)
+
+Options modify behavior; arguments specify targets. Some commands require arguments (`cd` needs to know where to go). Some commands have sensible defaults when arguments are omitted (`ls` without arguments lists the current directory).
+
+Most commands support a `--help` flag that displays usage information:
+
+```{.bash filename="terminal"}
+$ ls --help
+$ git --help
+$ python --help
+```
+
+## Types of Commands
+
+Not everything you type in the terminal is the same kind of thing. Understanding the types of command-line tools helps demystify what's happening when you run commands.
+
+**Binary executables** are compiled programs, the classic notion of software. When you run `python` or `git`, you're invoking a binary executable that was compiled from source code. These live somewhere on your system and the shell knows how to find them.
+
+**Shell builtins** are commands built into the shell itself. Commands like `cd` and `pwd` are often builtins rather than separate programs. They're part of the shell, so they can modify the shell's internal state (like the current directory).
+
+**Interpreted scripts** are text files that get executed by an interpreter. A Python script is run by the Python interpreter; a Bash script by the Bash shell. When you write a script, you're creating a new command-line tool.
+
+**Aliases** are shortcuts, one command that expands into another. PowerShell's ability to let you type `ls` and have it run `Get-ChildItem` is achieved through aliases.
+
+You can often determine what type something is using the `type` command:
+
+```{.bash filename="terminal"}
+$ type cd
+cd is a shell builtin
+
+$ type python
+python is /usr/local/bin/python
+```
+
+## Getting Help
+
+When you encounter an unfamiliar command or forget the options for a familiar one, several strategies help.
+
+**The `--help` flag** works with most commands and provides a brief usage summary:
+
+```{.bash filename="terminal"}
+$ git --help
+$ python --help
+```
+
+**Web searches** for "how to [task] command line" or "[command name] examples" usually surface useful Stack Overflow answers and tutorials.
+
+As you gain experience, you'll develop intuition for standard conventions: `-v` often means verbose, `-q` means quiet, `-f` specifies a file, `-o` specifies output. But every tool is different, so checking documentation beats guessing.
+
+## A Taste of What's Coming
+
+The commands covered in this chapter, `pwd`, `ls`, `cd`, `mkdir`, `rm`, form your foundational vocabulary. With them, you can navigate the filesystem and manage files. But the real power of the command line emerges when you combine these basics with more sophisticated tools.
+
+In the coming chapters, you'll use this foundation to:
+
+- Initialize Git repositories and track changes to your projects (see @sec-git)
+- Run Quarto to transform Markdown files into beautiful documents and websites
+- Use `uv` to create Python virtual environments and manage dependencies
+- Execute Python scripts and SQL queries from the command line
+- Build automated pipelines that orchestrate multiple tools
+
+Each of these builds on the patterns you've learned here: typing commands, passing options and arguments, navigating to the right directory, and understanding how your shell finds and runs programs.
+
+The command line rewards regular practice. At first, you'll type slowly and check documentation constantly. Within weeks, muscle memory takes over. Commands that initially seemed cryptic become natural vocabulary. The efficiency gains compound: what takes ten clicks in a GUI takes one command on the command line, and that command can run automatically while you sleep.
+
+## Summary
+
+This chapter introduced the command line as the text-based interface for interacting with your computer. You learned why this skill matters for building data products, namely agility, tool integration, scalability, and ubiquity, and explored the layered architecture from terminal to shell to operating system.
+
+The core navigation commands (`pwd`, `ls`, `cd`) let you understand and traverse the filesystem. File manipulation commands (`mkdir`, `rm`) let you create and delete files and directories. Understanding paths (absolute vs. relative) and special symbols (`.`, `..`, `~`) enables you to reference locations anywhere in the filesystem.
+
+Commands follow a consistent pattern of `command [options] [arguments]`, and options/flags modify behavior while arguments specify targets.
+
+With this foundation, you're ready to learn Git (version control) in @sec-git, Quarto (document rendering), and the other command-line tools that form the backbone of modern data workflows.
+
+## Glossary
+
+**Absolute path**
+: A path that starts from the root of the filesystem and provides the complete route to a location, such as `/Users/ozan/Documents/project`. Absolute paths work regardless of your current directory.
+
+**Alias**
+: A shortcut that makes one command expand into another. PowerShell uses aliases to let Unix-style commands like `ls` work on Windows.
+
+**Argument**
+: A value passed to a command that specifies what the command should operate on. In `ls Documents`, the argument is `Documents`.
+
+**Binary executable**
+: A compiled program stored as machine code that can be run directly by the operating system.
+
+**Command line interface (CLI)**
+: A text-based interface for interacting with a computer by typing commands rather than using graphical elements.
+
+**Current working directory**
+: The directory location you're currently in within the terminal. Commands operate relative to this location unless you specify absolute paths.
+
+**Flag**
+: An option passed to a command that modifies its behavior, typically starting with a dash. Also called an option or switch.
+
+**Graphical user interface (GUI)**
+: The visual interface of windows, icons, menus, and buttons that lets you interact with a computer by pointing and clicking.
+
+**Hidden file**
+: A file whose name starts with a dot (`.`) on macOS/Linux, or has the hidden attribute on Windows, making it invisible to normal directory listings.
+
+**Home directory**
+: Your personal directory on the computer, represented by the `~` symbol. On macOS: `/Users/yourname`. On Windows: `C:\Users\yourname`.
+
+**Kernel**
+: The core of an operating system that manages hardware resources and executes programs.
+
+**Prompt**
+: The text displayed by the shell to indicate it's ready for input. Often shows information like the current directory.
+
+**Read-eval-print loop (REPL)**
+: An interactive environment that reads input, evaluates it, prints the result, and loops back for more input.
+
+**Relative path**
+: A path specified relative to the current directory rather than from the filesystem root. Examples include `Documents/file.txt` or `../other-folder`.
+
+**Root directory**
+: The top-level directory of a filesystem, represented by `/` on macOS/Linux or a drive letter like `C:\` on Windows.
+
+**Shell**
+: A program that interprets commands you type and executes them. Examples include Zsh, Bash, and PowerShell.
+
+**Shell builtin**
+: A command that's built into the shell itself rather than being a separate program. `cd` is typically a builtin.
+
+**Tab completion**
+: A feature where pressing Tab auto-completes file names, directory names, and commands based on what you've typed so far.
+
+**Terminal**
+: The application that provides a window for entering commands and viewing output. It communicates with the shell.
+
+**Windows Terminal**
+: Microsoft's modern terminal application for Windows that provides a clean interface for command-line shells like PowerShell.
+
+## Exercises
+
+### Question 3.1
+What is the relationship between a **terminal** and a **shell**?
+
+A) They are the same thing  
+B) The terminal is the window; the shell interprets commands   
+C) The shell is the window; the terminal interprets commands  
+D) The terminal runs inside the shell  
+
+### Question 3.2
+What does the `pwd` command do?
+
+A) Print the contents of a file  
+B) Print the current working directory   
+C) Create a new directory  
+D) Delete a file  
+
+### Question 3.3
+What does the `ls` command do?
+
+A) List the contents of a directory   
+B) Move to a different directory  
+C) Create a new file  
+D) Remove a directory  
+
+### Question 3.4
+What does the `cd` command do?
+
+A) Copy a directory  
+B) Create a directory  
+C) Change the current directory   
+D) Clear the terminal display  
+
+### Question 3.5
+In the command `ls -la ~/Documents`, what is `-la`?
+
+A) An argument specifying a directory  
+B) A path to a file  
+C) Options/flags that modify the command's behavior   
+D) The name of a file to list  
+
+### Question 3.6
+What happens when you delete a file using `rm` on the command line?
+
+A) The file moves to the Recycle Bin/Trash  
+B) The file is permanently deleted with no undo   
+C) The file is backed up before deletion  
+D) The file is marked as hidden  
+
+### Question 3.7
+What is **tab completion**?
+
+A) A feature that creates new tabs in the terminal  
+B) A feature that auto-completes file and command names when you press Tab   
+C) A feature that indents code automatically  
+D) A feature that opens multiple terminals  
+
+### Question 3.8
+Which of the following is an advantage of using the command line over a GUI?
+
+A) Command line interfaces are more visually appealing  
+B) Commands can be saved to scripts and automated   
+C) Command line interfaces require less learning  
+D) Command line interfaces work without a keyboard  
+
+### Question 3.9
+What is a **shell builtin**?
+
+A) A program installed by the package manager  
+B) A command built into the shell itself, like `cd`   
+C) A hardware component of the computer  
+D) A graphical element of the terminal window  
+
+### Question 3.10
+The command `cd ..` will:
+
+A) Move to the home directory  
+B) Move to the root directory  
+C) Move up one directory level (to the parent)   
+D) Stay in the current directory  

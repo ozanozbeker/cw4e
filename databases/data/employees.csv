@@ -1,0 +1,51 @@
+employeeID,employeeName,title,city,country,reportsTo,regionID,hireDate
+1,Andrew Fuller,Vice President of Sales,New York,USA,,1,2018-03-15
+2,Laura Callahan,Regional Manager,New York,USA,1,1,2018-06-01
+3,Steven Buchanan,Regional Manager,London,UK,1,5,2018-09-01
+4,Carlos Mendez,Regional Manager,São Paulo,Brazil,1,9,2019-01-15
+5,Yuki Tanaka,Regional Manager,Tokyo,Japan,1,11,2019-04-01
+6,Jack Pollard,Sales Manager,Boston,USA,2,1,2020-05-01
+7,Maria Brown,Sales Manager,Philadelphia,USA,2,1,2020-02-07
+8,Carole Green,Sales Manager,London,UK,3,5,2019-10-30
+9,Joel Coates,Sales Manager,London,UK,3,5,2019-08-21
+10,Sr. Davi Lucas Viana,Sales Manager,Rio de Janeiro,Brazil,4,9,2019-02-25
+11,Yuri Costela,Sales Manager,Rio de Janeiro,Brazil,4,9,2020-09-10
+12,杨峰,Sales Manager,Shanghai,China,5,11,2020-10-04
+13,陈峰,Sales Manager,Shanghai,China,5,11,2021-05-13
+14,Rebecca Rodriguez,Account Executive,Seattle,USA,6,2,2024-06-06
+15,Hunter Kramer,Sales Manager,New York,USA,6,1,2023-10-26
+16,Derek Martinez,Senior Sales Representative,Philadelphia,USA,6,1,2022-05-28
+17,Arthur West,Sales Representative,Seattle,USA,6,2,2021-07-21
+18,Jodi Walker,Inside Sales Representative,Los Angeles,USA,6,2,2021-04-02
+19,Susan Hopkins,Account Executive,Philadelphia,USA,6,1,2022-07-16
+20,Amanda Lutz,Account Executive,Atlanta,USA,7,1,2020-12-11
+21,Brian Joseph,Inside Sales Representative,Seattle,USA,7,2,2023-09-20
+22,Erica Hernandez,Sales Representative,Boston,USA,7,1,2021-09-01
+23,Lauren Joseph,Senior Sales Representative,Seattle,USA,7,2,2020-01-21
+24,Elizabeth Wagner,Sales Representative,San Francisco,USA,7,2,2021-05-07
+25,Thijmen van het Heerenveen,Account Executive,Amsterdam,Netherlands,8,6,2021-08-07
+26,Alexandra Price,Sales Representative,London,UK,8,5,2023-01-28
+27,Solveig Bach,Regional Manager,Copenhagen,Denmark,8,5,2020-07-29
+28,Jason van Daal,Sales Representative,Amsterdam,Netherlands,8,6,2021-06-10
+29,Werner Smet,Sales Representative,Brussels,Belgium,8,6,2021-01-01
+30,Bradley Reynolds,Senior Sales Representative,Montreal,Canada,8,4,2021-10-28
+31,Carlos Brown,Senior Sales Representative,Montreal,Canada,9,4,2023-03-13
+32,Megan Heyne,Account Executive,Amsterdam,Netherlands,9,6,2024-04-10
+33,Sylvia Jacobs,Regional Manager,Brussels,Belgium,9,6,2021-07-02
+34,Gianni Devos,Senior Sales Representative,Brussels,Belgium,9,6,2024-01-25
+35,Hadassa Cassiano,Senior Sales Representative,Rio de Janeiro,Brazil,10,9,2019-12-10
+36,Thiago Leonel Lautaro Castro,Sales Manager,Buenos Aires,Argentina,10,10,2022-10-01
+37,Dante Micaela Farias Bravo,Sales Representative,Buenos Aires,Argentina,10,10,2019-12-31
+38,Sr(a). Tomas Dominguez,Senior Sales Representative,Buenos Aires,Argentina,10,10,2023-07-29
+39,Joaquin Quiroga Sanchez,Sales Representative,Buenos Aires,Argentina,10,10,2022-12-09
+40,Darko Weninger,Account Executive,Vienna,Austria,11,8,2021-02-20
+41,Bautista Villalba,Sales Representative,Buenos Aires,Argentina,11,10,2020-02-21
+42,Thiago Valentin Diaz Flores,Sales Representative,Buenos Aires,Argentina,11,10,2024-05-08
+43,Josefina Juan Cruz Acuña Luna,Sales Representative,Buenos Aires,Argentina,11,10,2021-02-22
+44,Emanuel Sá,Senior Sales Representative,Rio de Janeiro,Brazil,11,9,2023-11-26
+45,Aylin Hofbauer-Leonhartsberger,Sales Manager,Vienna,Austria,11,8,2022-07-21
+46,박서준,Account Executive,Seoul,South Korea,12,11,2022-10-11
+47,Jeffrey Campbell,Sales Representative,Melbourne,Australia,12,12,2023-04-02
+48,Mr. Andrew Foster,Account Executive,Sydney,Australia,12,12,2022-11-11
+49,张楠,Senior Sales Representative,Shanghai,China,12,11,2022-06-17
+50,Donna Wilson,Account Executive,Melbourne,Australia,12,12,2023-04-25

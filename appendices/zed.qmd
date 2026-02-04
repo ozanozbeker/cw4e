@@ -1,0 +1,15 @@
+---
+resources:
+  - zed-foundations/settings.json
+  - zed-integrations/settings.json
+
+other-links:
+  - text: "Zed Settings | Foundations"
+    href: zed-foundations/settings.json
+    icon: filetype-json
+  - text: "Zed Settings | Integrations"
+    href: zed-integrations/settings.json
+    icon: filetype-json
+---
+
+# Zed (WIP)

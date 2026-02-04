@@ -1,0 +1,3 @@
+# Programming (UNRELEASED)
+
+- good ideas for debugging: page 186 of think Python - also in automate the boring stuff

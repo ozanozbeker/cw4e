@@ -1,0 +1,16 @@
+categoryID,categoryName,description
+1,Beverages,"Soft drinks, coffees, teas, beers, and ales"
+2,Condiments,"Sweet and savory sauces, relishes, spreads, and seasonings"
+3,Confections,"Desserts, candies, and sweet breads"
+4,Dairy Products,"Cheeses, milk, yogurt, and butter"
+5,Grains & Cereals,"Breads, crackers, pasta, and cereal"
+6,Meat & Poultry,Prepared meats and poultry products
+7,Produce,"Fresh and dried fruits, vegetables, and bean curd"
+8,Seafood,"Fish, shellfish, and seaweed products"
+9,Frozen Foods,"Frozen meals, vegetables, and desserts"
+10,Snacks,"Chips, nuts, pretzels, and trail mixes"
+11,Baking Supplies,"Flour, sugar, baking powder, and mixes"
+12,Canned Goods,"Canned vegetables, fruits, soups, and beans"
+13,Organic & Natural,Certified organic and all-natural products
+14,International Foods,Imported specialty items from around the world
+15,Health & Wellness,"Vitamins, supplements, and health foods"

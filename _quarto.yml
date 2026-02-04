@@ -18,20 +18,20 @@ book:
     - introduction.qmd
     - prerequisites.qmd
 
-    - part: 01_foundations/index.qmd
+    - part: foundations/index.qmd
       chapters:
-        - 01_foundations/computers.qmd
-        - 01_foundations/files.qmd
-        - 01_foundations/cli.qmd
-        - 01_foundations/git.qmd
-        - 01_foundations/github.qmd
-    - part: 02_databases/index.qmd
+        - foundations/computers.qmd
+        - foundations/files.qmd
+        - foundations/cli.qmd
+        - foundations/git.qmd
+        - foundations/github.qmd
+    - part: databases/index.qmd
       chapters:
-        - 02_databases/databases.qmd
-        - 02_databases/querying.qmd
-        - 02_databases/joins.qmd
-        - 02_databases/analytics.qmd
-        - 02_databases/modeling.qmd
+        - databases/databases.qmd
+        - databases/querying.qmd
+        - databases/joins.qmd
+        - databases/analytics.qmd
+        - databases/modeling.qmd
     # - part: 03_programming/index.qmd
     # - part: 04_integration/index.qmd
     # - part: 05_delivery/index.qmd
@@ -40,16 +40,16 @@ book:
 
   appendices:
     # - appendices/basedpyright.qmd
-    - 06_appendices/brew.qmd
+    - appendices/brew.qmd
     # - appendices/duckdb.qmd
-    - 06_appendices/git.qmd
-    - 06_appendices/github.qmd
+    - appendices/git.qmd
+    - appendices/github.qmd
     # - appendices/marimo.qmd
     # - appendices/uv.qmd
     # - appendices/ruff.qmd
-    - 06_appendices/winget.qmd
-    - 06_appendices/zed.qmd
-    - 06_appendices/northwind.qmd
+    - appendices/winget.qmd
+    - appendices/zed.qmd
+    - appendices/northwind.qmd
 
 bibliography: references.bib
 
