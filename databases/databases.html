@@ -319,19 +319,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#setting-up-duckdb" id="toc-setting-up-duckdb" class="nav-link" data-scroll-target="#setting-up-duckdb"><span class="header-section-number">6.5</span> Setting Up DuckDB</a>
   <ul class="collapse">
   <li><a href="#the-cli-briefly" id="toc-the-cli-briefly" class="nav-link" data-scroll-target="#the-cli-briefly"><span class="header-section-number">6.5.1</span> The CLI (Briefly)</a></li>
-  <li><a href="#the-duckdb-ui" id="toc-the-duckdb-ui" class="nav-link" data-scroll-target="#the-duckdb-ui"><span class="header-section-number">6.5.2</span> The DuckDB UI</a></li>
   </ul></li>
   <li><a href="#the-northwind-dataset" id="toc-the-northwind-dataset" class="nav-link" data-scroll-target="#the-northwind-dataset"><span class="header-section-number">6.6</span> The Northwind Dataset</a>
   <ul class="collapse">
   <li><a href="#getting-the-data-into-your-computer" id="toc-getting-the-data-into-your-computer" class="nav-link" data-scroll-target="#getting-the-data-into-your-computer"><span class="header-section-number">6.6.1</span> Getting the Data into Your Computer</a></li>
-  <li><a href="#getting-the-data-into-duckdb" id="toc-getting-the-data-into-duckdb" class="nav-link" data-scroll-target="#getting-the-data-into-duckdb"><span class="header-section-number">6.6.2</span> Getting the Data into DuckDB</a></li>
+  <li><a href="#opening-the-database" id="toc-opening-the-database" class="nav-link" data-scroll-target="#opening-the-database"><span class="header-section-number">6.6.2</span> Opening the Database</a></li>
+  <li><a href="#exploring-the-schema" id="toc-exploring-the-schema" class="nav-link" data-scroll-target="#exploring-the-schema"><span class="header-section-number">6.6.3</span> Exploring the Schema</a></li>
   </ul></li>
   <li><a href="#your-first-query" id="toc-your-first-query" class="nav-link" data-scroll-target="#your-first-query"><span class="header-section-number">6.7</span> Your First Query</a></li>
-  <li><a href="#chapter-exercises" id="toc-chapter-exercises" class="nav-link" data-scroll-target="#chapter-exercises"><span class="header-section-number">6.8</span> Chapter Exercises</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6.9</span> Summary</a></li>
-  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">6.10</span> Glossary</a></li>
+  <li><a href="#the-duckdb-ui" id="toc-the-duckdb-ui" class="nav-link" data-scroll-target="#the-duckdb-ui"><span class="header-section-number">6.8</span> The DuckDB UI</a></li>
+  <li><a href="#chapter-exercises" id="toc-chapter-exercises" class="nav-link" data-scroll-target="#chapter-exercises"><span class="header-section-number">6.9</span> Chapter Exercises</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6.10</span> Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">6.11</span> Glossary</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/databases/databases.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="data/data_dictionary.csv"><i class="bi bi-filetype-csv"></i>data_dictionary.csv</a></li><li><a href="data/categories.csv"><i class="bi bi-filetype-csv"></i>categories.csv</a></li><li><a href="data/customers.csv"><i class="bi bi-filetype-csv"></i>customers.csv</a></li><li><a href="data/employees.csv"><i class="bi bi-filetype-csv"></i>employees.csv</a></li><li><a href="data/orders.csv"><i class="bi bi-filetype-csv"></i>orders.csv</a></li><li><a href="data/order_details.csv"><i class="bi bi-filetype-csv"></i>order_details.csv</a></li><li><a href="data/products.csv"><i class="bi bi-filetype-csv"></i>products.csv</a></li><li><a href="data/regions.csv"><i class="bi bi-filetype-csv"></i>regions.csv</a></li><li><a href="data/shippers.csv"><i class="bi bi-filetype-csv"></i>shippers.csv</a></li><li><a href="data/suppliers.csv"><i class="bi bi-filetype-csv"></i>suppliers.csv</a></li><li><a href="data/orders_flat.parquet"><i class="bi bi-table"></i>orders_flat.parquet</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/databases/databases.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="../data/northwind.duckdb"><i class="bi bi-database"></i>northwind.duckdb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -366,13 +367,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="spreadsheets-and-databases-knowing-when-to-use-each" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="spreadsheets-and-databases-knowing-when-to-use-each"><span class="header-section-number">6.2</span> Spreadsheets and Databases: Knowing When to Use Each</h2>
-<p>Before we move on, let’s address the tool you already know well: the spreadsheet. Excel (and Google Sheets) is genuinely excellent software, and dismissing it would be unfair. A spreadsheet combines data entry, storage, analysis, and visualization in a single interface with immediate feedback. You change a cell and see calculation results instantly. Pivot tables give you drag-and-drop aggregation. Built-in charting produces presentation-ready visuals without writing code. Excel is pre-installed on most corporate computers, and roughly 60% of businesses rely on it for daily work. For quick analysis, what-if scenarios, and ad-hoc exploration on small datasets, nothing beats the speed of a well-built spreadsheet.</p>
+<p>Before we move on, let’s address the tool you already know well: the spreadsheet. Excel (and Google Sheets) is genuinely excellent software, and dismissing it would be unfair. A spreadsheet combines data entry, storage, analysis, and visualization in a single interface with immediate feedback. You change a cell and see calculation results instantly. Pivot tables give you drag-and-drop aggregation. Built-in charting produces presentation-ready visuals without writing code. Excel is pre-installed on most corporate computers. For quick analysis, what-if scenarios, and ad-hoc exploration on small datasets, nothing beats the speed of a well-built spreadsheet.</p>
 <p>But spreadsheets have real limitations that surface as data grows and stakes rise, and engineers should know the specifics.</p>
 <p>Excel’s hard row limit is 1,048,576 rows (the older <code>.xls</code> format caps at 65,536). Performance degrades noticeably above 200,000 to 300,000 rows when complex formulas are involved. There is no referential integrity: any data type can go in any cell, and nothing stops someone from typing “TBD” in a price column. Version control is effectively nonexistent, and concurrent editing creates conflicts. Formula auditing across complex cross-references is, as researchers have described it, “hard to detect and hard to correct even if discovered.”</p>
 <p>These aren’t hypothetical risks. In 2012, a spreadsheet error contributed to JP Morgan’s “London Whale” incident, a $6.2 billion loss partly caused by a Value-at-Risk model in Excel where a formula divided by a sum instead of an average, muting volatility by a factor of two. In 2020, the UK’s Public Health England lost approximately 16,000 positive COVID-19 test results because they used the old <code>.xls</code> format with its 65,536 row limit, and rows were silently truncated. An ongoing problem in genetics research involves Excel’s autocorrect converting gene names like MARCH1 and SEPT1 to calendar dates. A 2020 study found that 31% of published genetic papers contained these errors, and the problem became so pervasive that the HUGO Gene Nomenclature Committee actually renamed genes (SEPT1 became SEPTIN1) because researchers wouldn’t stop using Excel. Broader research from the European Spreadsheet Risk Interest Group estimates that 88% of spreadsheets contain errors.</p>
 <p>The point isn’t that spreadsheets are bad. The point is that different tools serve different purposes.</p>
 <p>Use a spreadsheet when you have fewer than 10,000 rows, a single user, ad-hoc analysis needs, quick visualization, or rapid prototyping. Use a database when you have more than 100,000 rows, multiple users, critical data integrity requirements, audit trail needs, or automation requirements. The transition triggers are concrete: performance degradation, hitting row limits, “who has the file open?” conflicts, version chaos, formula errors propagating silently, or file corruption.</p>
-<p>Many of the good habits you’ll learn from databases actually transfer back to spreadsheet work. Using Excel Tables (Ctrl+T) enforces unique headers and auto-expands ranges. Keeping one header row with unique column names, storing one fact per cell, and organizing rows as observations and columns as variables are database principles that make spreadsheets more reliable. The formal term for this structure is <strong>tidy data</strong>, and it’s a concept that spans both tools.</p>
+<p>Many of the good habits you’ll learn from databases actually transfer back to spreadsheet work. Using Excel Tables (Ctrl+T) enforces unique headers and auto-expands ranges. Keeping one header row with unique column names, storing one fact per cell, and organizing rows as observations and columns as variables are database principles that make spreadsheets more reliable. The formal term for this structure is <strong>tidy data</strong>, and it’s a concept that spans both tools. You’ll revisit this spreadsheet-vs-database decision throughout your career, and the framework you just learned, row count, user count, integrity requirements, is how experienced engineers make the call.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -385,7 +386,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>A manufacturing plant tracks machine uptime in a shared Excel file. Three shift supervisors update it at shift changes, and an analyst pulls weekly summaries from it. The file has 800 rows and is growing by about 50 rows per week. What specific problems would you expect to emerge within six months, and at what point would migrating to a database become worthwhile?</p></li>
-<li><p>For each of the following scenarios, would you recommend a spreadsheet or a database? Briefly justify each choice. (a) A graduate student collecting survey responses from 200 participants for a thesis project. (b) An e-commerce company tracking 2 million customer orders per year with data entry from 15 warehouse workers. (c) A project manager building a one-time cost estimate for a client proposal. (d) A hospital system storing patient records that must comply with audit and privacy regulations.</p></li>
+<li><p>For each of the following scenarios, would you recommend a spreadsheet or a database? Briefly justify each choice.</p>
+<ol type="A">
+<li>A graduate student collecting survey responses from 200 participants for a thesis project.</li>
+<li>An e-commerce company tracking 2 million customer orders per year with data entry from 15 warehouse workers.</li>
+<li>A project manager building a one-time cost estimate for a client proposal.</li>
+<li>A hospital system storing patient records that must comply with audit and privacy regulations.</li>
+</ol></li>
 <li><p>The UK COVID-19 data loss occurred because the <code>.xls</code> format has a 65,536 row limit. If the data had been stored in the newer <code>.xlsx</code> format (1,048,576 row limit), would that have prevented the problem? What would a database-first approach have done differently?</p></li>
 </ol>
 </div>
@@ -403,7 +410,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A <strong>gasoline engine</strong> is responsive and quick. It starts instantly, revs up fast, and handles the stop-and-go rhythm of city driving with ease. It’s optimized for lots of small, quick bursts of power. This is like an <strong>OLTP</strong> (Online Transaction Processing) database. OLTP systems handle the day-to-day heartbeat of a business: processing credit card swipes, updating inventory counts, recording new customer registrations. Each operation touches a small number of rows and needs to complete in milliseconds. PostgreSQL, MySQL, and SQL Server are OLTP engines. They store data <strong>row by row</strong>, which means retrieving a complete customer record (name, address, phone, email) is fast, because all those fields sit next to each other on disk.</p>
 <p>A <strong>diesel engine</strong> is built differently. It produces massive torque, efficiently hauling heavy loads over long distances. It’s not as responsive off the line, but it’s relentless once it gets moving. This is like an <strong>OLAP</strong> (Online Analytical Processing) database. OLAP systems handle the questions that managers, analysts, and engineers ask: “What are our defect rates across all production lines for the past two years?” These queries scan millions of rows, aggregate columns, and compute summaries. DuckDB, ClickHouse, and BigQuery are OLAP engines. They store data <strong>column by column</strong>, which means computing the average of a single column across 10 million rows is fast, because all those values sit next to each other on disk, and the engine never wastes time reading the columns you didn’t ask about.</p>
 <p>Here’s what that looks like in practice. Imagine a table with four columns and millions of rows:</p>
-<pre><code>Row-Oriented Storage (OLTP):
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>storage-layout</strong></pre>
+</div>
+<pre class="text" data-filename="storage-layout"><code>Row-Oriented Storage (OLTP):
   Row 1: [ID=1] [Name="Widget A"] [Price=12.50] [Stock=340]
   Row 2: [ID=2] [Name="Widget B"] [Price=8.75]  [Stock=1200]
   Row 3: [ID=3] [Name="Gadget C"] [Price=45.00] [Stock=89]
@@ -414,6 +425,7 @@ Column-Oriented Storage (OLAP):
   Name Column:  ["Widget A", "Widget B", "Gadget C", ...]
   Price Column: [12.50, 8.75, 45.00, ...]
   Stock Column: [340, 1200, 89, ...]</code></pre>
+</div>
 <p>If you ask “give me everything about product #2,” the row-oriented database wins, because that entire record is stored in one contiguous block. If you ask “what’s the average price across all products?”, the column-oriented database wins, because it only reads the Price column and skips everything else.</p>
 <p>Neither architecture is “better.” They’re purpose-built for different workloads, just like you wouldn’t tow a trailer with a sports car or race a semi-truck on a circuit. The important thing is choosing the right engine for the work you’re doing. As engineers analyzing data, our work is overwhelmingly analytical, which is why we’ll use an OLAP database.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
@@ -427,7 +439,13 @@ Column-Oriented Storage (OLAP):
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><p>Classify each of the following operations as OLTP or OLAP, and explain which storage layout (row-oriented or column-oriented) would handle it more efficiently. (a) A barcode scanner at a warehouse register deducts one unit from a product’s stock count. (b) A supply chain manager asks, “What was our average shipping cost by carrier for Q3?” (c) A web form creates a new customer account with name, email, and address. (d) An analyst computes the year-over-year revenue growth rate for each product category.</p></li>
+<li><p>Classify each of the following operations as OLTP or OLAP, and explain which storage layout (row-oriented or column-oriented) would handle it more efficiently.</p>
+<ol type="A">
+<li>A barcode scanner at a warehouse register deducts one unit from a product’s stock count.</li>
+<li>A supply chain manager asks, “What was our average shipping cost by carrier for Q3?”</li>
+<li>A web form creates a new customer account with name, email, and address.</li>
+<li>An analyst computes the year-over-year revenue growth rate for each product category.</li>
+</ol></li>
 <li><p>A colleague says, “Column-oriented databases are just better because analytics is more important than transactions.” What’s wrong with this reasoning? Give an example of a system where row-oriented storage is clearly the right choice.</p></li>
 <li><p>In the storage diagram above, imagine a table with 50 columns and 10 million rows. You run a query that computes <code>AVG(price)</code>. Roughly how much data does a column-oriented engine read versus a row-oriented engine? Why does this difference grow as the number of columns increases?</p></li>
 </ol>
@@ -441,19 +459,21 @@ Column-Oriented Storage (OLAP):
 <section id="server-based-databases" class="level3" data-number="6.4.1">
 <h3 data-number="6.4.1" class="anchored" data-anchor-id="server-based-databases"><span class="header-section-number">6.4.1</span> Server-Based Databases</h3>
 <p>Most databases you’ll encounter in the professional world run as <strong>servers</strong>, separate processes (often on separate machines) that accept connections from clients over a network. This client-server architecture allows many users and applications to share one database simultaneously, and it’s how organizations centralize their data.</p>
-<p>The restaurant analogy helps here. A database server is like the kitchen in a restaurant. You (the client) never walk into the kitchen yourself. Instead, you give your order (a SQL query) to the waiter (the client software, like pgAdmin or a Python driver), who carries it to the kitchen. The kitchen processes your request and returns the prepared food (query results). Multiple customers can be served at the same time by the same kitchen, and customers never interact with the raw ingredients directly. If the kitchen catches fire, though, everyone waits.</p>
-<p>The <strong>database client</strong> is the software that connects to the server to send queries. This might be a graphical tool like pgAdmin or DBeaver, a command-line tool like <code>psql</code>, or an application driver like Python’s <code>psycopg2</code>. The <strong>database server</strong> is the process that manages data storage, processes SQL queries, handles authentication, coordinates concurrent access, and ensures crash recovery. To connect, the client needs a <strong>connection string</strong> specifying the host, port, credentials, and database name, something like <code>postgresql://username:password@host:5432/database</code>.</p>
+<p>A DoorDash analogy makes this concrete. Think about what happens when you order food through the app. You never walk into the restaurant’s kitchen yourself. Instead, you open the DoorDash app on your phone, browse the menu, and place an order. The app sends your request to the restaurant’s kitchen, which prepares your food. A driver picks it up and delivers the result back to you. You interact with the app, the kitchen does the work, and you never touch the raw ingredients.</p>
+<p>Now map that to databases. The <strong>database server</strong> is the kitchen: the process that stores the data, processes your SQL queries, handles authentication, coordinates access when multiple people query at once, and ensures crash recovery. The <strong>database client</strong> is the DoorDash app: the software you interact with to send requests and receive results. This might be a graphical tool like pgAdmin or DBeaver, a command-line tool like <code>psql</code>, or an application driver like Python’s <code>psycopg2</code>. The network between them, just like the road between your house and the restaurant, means the client and server don’t need to be on the same machine. Multiple clients can send queries to the same server simultaneously, just like multiple customers can order from the same restaurant at the same time.</p>
+<p>To connect a client to a server, you need a <strong>connection string</strong> specifying where the kitchen is and how to get in, something like <code>postgresql://username:password@host:5432/database</code>. The <code>host</code> is the address (like the restaurant’s location), <code>5432</code> is the port (like the specific entrance to use), and the credentials prove you’re allowed to order.</p>
+<p>This analogy extends naturally to the digital tools you already use. When you open the DoorDash <em>app</em> on your phone, your phone is the client and DoorDash’s servers are, well, the servers. When you open Instagram, your phone is the client and Instagram’s servers handle storing and retrieving posts. Every time you use a web or mobile app, you’re using a client that talks to a server. Database client-server architecture is the same pattern.</p>
 <p><strong>PostgreSQL</strong> is the Toyota of databases: reliable, versatile, community-driven, and an excellent default choice for almost any workload. It’s open source, has been developed since the 1980s, and handles everything from small applications to large enterprise systems. If someone says “just use Postgres,” that’s rarely bad advice.</p>
-<p><strong>MySQL</strong> is similar in spirit, like a Honda. It powers enormous portions of the web (WordPress, Wikipedia) and is known for being approachable and well-documented. Oracle acquired it in 2010, which led to the creation of MariaDB as a community fork.</p>
-<p><strong>SQL Server</strong> is Microsoft’s offering, akin to a BMW, tightly integrated with the Microsoft ecosystem (Windows Server, Azure, Excel). Many enterprises, particularly those already invested in Microsoft tools, standardize on it.</p>
-<p><strong>Oracle Database</strong> is the Rolls-Royce: powerful, expensive, and dominant in large enterprise environments, particularly financial services and government. You’ll likely encounter it in your career, but you probably won’t choose it for a personal project.</p>
+<p><strong>MySQL</strong> is similar in spirit, also open source and widely deployed. It powers enormous portions of the web (WordPress, Wikipedia) and is known for being approachable and well-documented. Oracle acquired it in 2010, which led to the creation of MariaDB as a community fork.</p>
+<p><strong>SQL Server</strong> is Microsoft’s offering, tightly integrated with the Microsoft ecosystem (Windows Server, Azure, Excel). Many enterprises, particularly those already invested in Microsoft tools, standardize on it.</p>
+<p><strong>Oracle Database</strong> is the Rolls-Royce of the database world: powerful, expensive, and dominant in large enterprise environments, particularly financial services and government. You’ll likely encounter it in your career, but you probably won’t choose it for a personal project.</p>
 <p>These server databases are essential infrastructure for running businesses, but they come with operational complexity: installation, configuration, user management, backups, network security, and ongoing maintenance. You need to install both the server and a client, configure network access (default ports like 5432 for PostgreSQL or 3306 for MySQL), manage authentication credentials, and handle connection pooling since opening database connections is expensive (1 to 100 milliseconds each). For an analyst who wants to explore a dataset on their laptop, that’s significant overhead.</p>
 </section>
 <section id="embedded-databases" class="level3" data-number="6.4.2">
 <h3 data-number="6.4.2" class="anchored" data-anchor-id="embedded-databases"><span class="header-section-number">6.4.2</span> Embedded Databases</h3>
 <p>An <strong>embedded database</strong> takes a radically different approach. Instead of running as a separate server, it compiles directly into your application or runs as a standalone process on your machine. There’s no network, no user management, no configuration. Your database is just a file on your filesystem.</p>
-<p><strong>SQLite</strong> is the most widely-deployed database in the world, and chances are you’ve never installed it on purpose. It’s embedded in every smartphone, every web browser, every copy of macOS and Windows. It’s the bicycle of databases: lightweight, goes everywhere, and perfect for its intended use case. SQLite uses row-oriented storage and handles transactional workloads like application state, configuration, and local caching.</p>
-<p><strong>DuckDB</strong> is the newer counterpart, and the one we’ll use throughout this module. If SQLite is the embedded database for applications, DuckDB is the embedded database for analytics. It uses column-oriented storage, executes queries across multiple CPU cores simultaneously, and can read directly from CSV, Parquet, and JSON files without an import step. Think of it as an electric vehicle in the embedded space: modern, efficient, zero-configuration, and purpose-built for how analysts actually work today.</p>
+<p><strong>SQLite</strong> is the most widely-deployed database in the world, and chances are you’ve never installed it on purpose. It’s embedded in every smartphone, every web browser, every copy of macOS and Windows. It’s lightweight, goes everywhere, and is perfect for its intended use case. SQLite uses row-oriented storage and handles transactional workloads like application state, configuration, and local caching.</p>
+<p><strong>DuckDB</strong> is the newer counterpart, and the one we’ll use throughout this book. If SQLite is the embedded database for applications, DuckDB is the embedded database for analytics. It uses column-oriented storage, executes queries across multiple CPU cores simultaneously, and is purpose-built for how analysts actually work today: zero-configuration, single-file, and fast on analytical queries right out of the box.</p>
 <p>The contrast between SQLite and DuckDB reinforces the OLTP/OLAP distinction. Both are embedded, serverless, single-file databases, but they’re optimized for opposite workloads:</p>
 <table class="caption-top table">
 <colgroup>
@@ -489,11 +509,6 @@ Column-Oriented Storage (OLAP):
 <td>Point lookups by ID</td>
 <td>Aggregations across millions of rows</td>
 </tr>
-<tr class="odd">
-<td>Read CSV/Parquet</td>
-<td>Must load first</td>
-<td>Native direct querying</td>
-</tr>
 </tbody>
 </table>
 <p>Many production systems use both: SQLite for transactional writes and application state, DuckDB for analytical reads and data exploration. They’re complementary tools, not competitors.</p>
@@ -508,7 +523,12 @@ Column-Oriented Storage (OLAP):
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><p>Using the restaurant analogy, explain what happens when: (a) Two clients send queries to the same server database at the same time. (b) The database server crashes while a client is waiting for results. (c) A new team member needs to start querying the database. What do they need from an administrator?</p></li>
+<li><p>Using the DoorDash analogy, explain what happens when:</p>
+<ol type="A">
+<li>Two clients send queries to the same server database at the same time.</li>
+<li>The database server crashes while a client is waiting for results.</li>
+<li>A new team member needs to start querying the database. What do they need from an administrator?</li>
+</ol></li>
 <li><p>A startup is choosing a database for their new inventory management system. They have 5 employees, expect 10,000 transactions per day, and need their web application to read and write data. Their data analyst also wants to run weekly reports summarizing trends. Recommend a database architecture (which database for what purpose) and justify your choice.</p></li>
 <li><p>Explain why SQLite and DuckDB are described as “complementary, not competitors” despite both being embedded databases. In what scenario would you use both in the same project?</p></li>
 </ol>
@@ -521,21 +541,16 @@ Column-Oriented Storage (OLAP):
 <ol type="1">
 <li>Installs in seconds, with no server to configure or maintain.</li>
 <li>Handles analytical queries across large datasets efficiently.</li>
-<li>Reads common file formats (CSV, Parquet, JSON) directly, without a separate import step.</li>
 <li>Provides a standards-compliant SQL dialect that transfers to other databases.</li>
 <li>Integrates naturally with Python, which we’ll use in later modules.</li>
 </ol>
-<p>DuckDB satisfies all of these. Under the hood, three architectural features make it fast for analytics. <strong>Columnar storage</strong> keeps values from the same column contiguous on disk, so computing <code>AVG(sales)</code> across 10 million rows reads only the sales column (maybe 40 MB) rather than entire rows (maybe 500 MB), with compression ratios of 5 to 10x since similar values compress efficiently. <strong>Vectorized execution</strong> processes data in batches of roughly 2,048 values rather than one row at a time, allowing modern CPUs to apply SIMD (Single Instruction, Multiple Data) operations to these vectors for dramatically improved throughput. <strong>Morsel-driven parallelism</strong> automatically distributes work across all available CPU cores, achieving near-linear scaling for analytical queries without any configuration from you.</p>
+<p>DuckDB satisfies all of these. Under the hood, three architectural features make it fast for analytics. <strong>Columnar storage</strong> keeps values from the same column contiguous on disk, so computing <code>AVG(sales)</code> across 10 million rows reads only the sales column (maybe 40 MB) rather than entire rows (maybe 500 MB), with compression ratios of 5 to 10x since similar values compress efficiently. <strong>Vectorized execution</strong> processes data in batches of roughly 2,048 values rather than one row at a time, allowing modern CPUs to process these vectors with hardware-level optimizations for dramatically improved throughput. <strong>Morsel-driven parallelism</strong> automatically distributes work across all available CPU cores, achieving near-linear scaling for analytical queries without any configuration from you.</p>
 <p>You don’t need to memorize these internals, but understanding them explains why DuckDB can summarize millions of rows on your laptop in seconds while a spreadsheet with the same data would grind to a halt. The architecture is doing real work behind the scenes.</p>
 </section>
 <section id="sql-the-language-youre-really-learning" class="level3" data-number="6.4.4">
 <h3 data-number="6.4.4" class="anchored" data-anchor-id="sql-the-language-youre-really-learning"><span class="header-section-number">6.4.4</span> SQL: The Language You’re Really Learning</h3>
 <p>While DuckDB is our tool, <strong>SQL</strong> (Structured Query Language) is the skill. SQL has been the standard language for relational databases since the 1970s, formalized by the ANSI/ISO standards body through several major revisions: SQL-92 introduced joins and subqueries, SQL:1999 added Common Table Expressions (CTEs), SQL:2003 brought window functions, and SQL:2023 added JSON and graph query support.</p>
 <p>The core SQL you’ll learn in this module, <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, <code>GROUP BY</code>, <code>ORDER BY</code>, joins, subqueries, CTEs, and window functions, is <strong>standard SQL</strong> that works across PostgreSQL, MySQL, SQL Server, Oracle, SQLite, and DuckDB. You’re learning a language that has been in continuous use for over 40 years and shows no signs of declining.</p>
-<p>DuckDB does add some convenience features that extend the standard, things like <code>FROM</code>-first syntax, <code>GROUP BY ALL</code>, and the <code>QUALIFY</code> clause. These are genuinely useful productivity features, and we’ll use them. But whenever we do, we’ll call them out clearly and show the portable alternative. Throughout this book, you’ll see two kinds of annotations:</p>
-<p><strong>Standard SQL</strong> means the syntax works across all major databases. This is the foundation.</p>
-<p><strong>DuckDB extension</strong> means the syntax is a DuckDB convenience. It’s great for productivity, but you should know the standard equivalent for portability.</p>
-<p>This way, you always know what transfers to your next job’s database and what’s specific to the tool we’re using here.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -547,8 +562,7 @@ Column-Oriented Storage (OLAP):
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><p>A job posting requires “experience with SQL.” Based on what you’ve read about ANSI SQL standards, should you be concerned about which specific database the company uses? What would you need to learn that’s new, and what would transfer from this book?</p></li>
-<li><p>DuckDB’s <code>FROM</code>-first syntax lets you write <code>FROM products;</code> instead of <code>SELECT * FROM products;</code>. Why do you think DuckDB added this extension? What’s the tradeoff between convenience and portability?</p></li>
+<li>A job posting requires “experience with SQL.” Based on what you’ve read about ANSI SQL standards, should you be concerned about which specific database the company uses? What would you need to learn that’s new, and what would transfer from this book?</li>
 </ol>
 </div>
 </div>
@@ -588,105 +602,44 @@ Column-Oriented Storage (OLAP):
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This drops you into an interactive SQL prompt where you can type queries directly. Try a quick sanity check:</p>
+<p>This drops you into an interactive SQL prompt where you can type queries directly.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB CLI</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'Hello, DuckDB!'</span> <span class="kw">AS</span> greeting;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text" data-filename="DuckDB CLI"><code>DuckDB v1.4.4 (Andium) 6ddac802ff
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+D </code></pre>
 </div>
-<p>You should see a formatted table with your greeting. This confirms that DuckDB is installed and working.</p>
-<p>The CLI is useful for quick one-off queries and scripting, but for the exploratory analytical work we’ll be doing, a richer interface is more productive. Type <code>.exit</code> or press <code>Ctrl+D</code> to leave the CLI.</p>
-</section>
-<section id="the-duckdb-ui" class="level3" data-number="6.5.2">
-<h3 data-number="6.5.2" class="anchored" data-anchor-id="the-duckdb-ui"><span class="header-section-number">6.5.2</span> The DuckDB UI</h3>
-<p>Starting with version 1.2.1, DuckDB ships with a full-featured web-based user interface, built in collaboration with MotherDuck. It’s a notebook-style environment similar to Jupyter, but designed specifically for SQL work. You get syntax highlighting, autocompletion, an interactive data catalog, and visual column statistics, all running locally on your machine.</p>
-<p>Launch it from the terminal:</p>
+<p>At first glance, it looks similar to anything else in your terminal. But you’re actually inside DuckDB’s own command-line interface (CLI), which interprets your input as SQL commands rather than shell commands. This is an important distinction: if you type <code>ls</code> or <code>cd</code> here, DuckDB won’t understand, because those are shell commands and you’re no longer in the shell.</p>
+<p>The way to tell where you are is to look at your <strong>prompt</strong>, the text that appears before your cursor. Compare these:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
+<pre><strong>macOS / Linux shell</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-ui</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text" data-filename="macOS / Linux shell"><code>ozan@macbook ~/cw4e $</code></pre>
 </div>
-<p>Your default browser will open to <code>http://localhost:4213</code> with the DuckDB UI loaded. This might seem odd, since opening a browser usually means connecting to the internet, but that’s not what’s happening here. Behind the scenes, DuckDB starts a <strong>local web server</strong> on your own machine. The <code>localhost</code> in the URL literally means “this computer,” and <code>:4213</code> is the port number it’s listening on. Your browser is just being used as the display layer, like a fancy window into DuckDB. No data leaves your computer, no internet connection is required, and nobody else can access this interface. When you close DuckDB in the terminal, the web server shuts down and the URL stops working. This pattern, using a browser as the interface for a locally-running application, is increasingly common in data tools, and you’ll encounter it again with Jupyter notebooks, Quarto previews, and other development tools.</p>
-<p>The interface has three main areas. The <strong>left panel</strong> shows your database catalog: attached databases, tables, and their columns. The <strong>center panel</strong> is your SQL notebook, with cells where you write and execute queries. Press <code>Cmd+Enter</code> (macOS) or <code>Ctrl+Enter</code> (Windows/Linux) to run a cell. The <strong>results</strong> appear directly below each cell as a formatted table, and you can click on column headers to see distribution summaries.</p>
-<p>We’ll use this UI for nearly all of our SQL work in this module. When you need to write longer, more complex SQL that you want to save and version control, you’ll write <code>.sql</code> files in Zed, your code editor. But for exploration and learning, the notebook interface is ideal.</p>
-<div class="callout callout-style-simple callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Persistent Databases
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>By default, <code>duckdb -ui</code> creates an in-memory database that disappears when you close DuckDB. To persist your work, provide a filename:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
+<pre><strong>Windows PowerShell</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-ui</span> northwind.duckdb</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text" data-filename="Windows PowerShell"><code>PS C:\Users\ozan\cw4e&gt;</code></pre>
 </div>
-<p>This creates (or opens) a file called <code>northwind.duckdb</code> that stores all your tables and data between sessions. Use this approach when working through the chapters so you don’t have to reload data each time.</p>
-</div>
-</div>
-</section>
-</section>
-<section id="the-northwind-dataset" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="the-northwind-dataset"><span class="header-section-number">6.6</span> The Northwind Dataset</h2>
-<p>Throughout this module, we’ll work with an enhanced version of the <strong>Northwind</strong> database, a dataset representing a fictional company called Northwind Traders that imports and exports specialty food products worldwide. Originally created by Microsoft as a teaching database, Northwind has become one of the most widely-used sample datasets in the SQL world, and for good reason: it models a realistic supply chain with suppliers, products, inventory, customer orders, shipping, and employees.</p>
-<section id="getting-the-data-into-your-computer" class="level3" data-number="6.6.1">
-<h3 data-number="6.6.1" class="anchored" data-anchor-id="getting-the-data-into-your-computer"><span class="header-section-number">6.6.1</span> Getting the Data into Your Computer</h3>
-<p>The Northwind CSV files live in this book’s [GitHub repo]. There are several ways to get them onto your machine, depending on what you’re comfortable with.</p>
-<section id="option-1-manual-download-github" class="level4" data-number="6.6.1.1">
-<h4 data-number="6.6.1.1" class="anchored" data-anchor-id="option-1-manual-download-github"><span class="header-section-number">6.6.1.1</span> Option 1: Manual Download GitHub</h4>
-<p>Navigate to <a href="https://github.com/ozanozbeker/cw4e/tree/main/databases/data">the data directory on GitHub</a> in your browser. You can download individual CSV files by clicking on a file and then clicking the download button (the downward arrow icon), or download the entire repository as a ZIP file by clicking the green <strong>Code</strong> button on the <a href="https://github.com/ozanozbeker/cw4e">repository’s main page</a> and selecting <strong>Download ZIP</strong>.</p>
-</section>
-<section id="option-2-clone-with-git" class="level4" data-number="6.6.1.2">
-<h4 data-number="6.6.1.2" class="anchored" data-anchor-id="option-2-clone-with-git"><span class="header-section-number">6.6.1.2</span> Option 2: Clone with Git</h4>
-<p>If you’ve worked through <a href="../foundations/git.html" class="quarto-xref"><span>Chapter 4</span></a>, you already have Git installed. Cloning the repository gives you all the book’s data files at once and makes it easy to pull updates later:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
+<pre><strong>DuckDB CLI</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/ozanozbeker/cw4e.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="text" data-filename="DuckDB CLI"><code>D</code></pre>
 </div>
-<p>The CSV files will be in <code>cw4e/databases/data/*.csv</code> inside whatever directory you ran the command from.</p>
-</section>
-<section id="option-3-read-directly-in-duckdb" class="level4" data-number="6.6.1.3">
-<h4 data-number="6.6.1.3" class="anchored" data-anchor-id="option-3-read-directly-in-duckdb"><span class="header-section-number">6.6.1.3</span> Option 3: Read Directly in DuckDB</h4>
-<p>One of DuckDB’s strengths is its ability to read CSV files directly from URLs without downloading them first. Once you have DuckDB open, you can query any Northwind table straight from GitHub:</p>
+<p>When you see <code>$</code> at the end (macOS/Linux) or <code>PS</code> at the beginning followed by a path and <code>&gt;</code> (Windows PowerShell), you’re in your operating system’s shell. Commands like <code>ls</code>, <code>cd</code>, <code>mkdir</code>, and <code>duckdb</code> work here. When you see the bare <code>D</code>, you’re inside DuckDB. Only SQL statements and DuckDB dot-commands (like <code>.exit</code>) work here. Getting these mixed up is one of the most common frustrations when you’re learning, and it never fully goes away, even experienced developers occasionally type <code>ls</code> into the wrong prompt.</p>
+<p>Try a quick sanity check:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB CLI</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="st">'https://raw.githubusercontent.com/ozanozbeker/cw4e/main/databases/data/products.csv'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This is convenient for quick exploration, but for repeated use throughout the course, downloading the files locally is faster and doesn’t depend on an internet connection.</p>
-</section>
-<section id="option-4-save-from-this-page-manually" class="level4" data-number="6.6.1.4">
-<h4 data-number="6.6.1.4" class="anchored" data-anchor-id="option-4-save-from-this-page-manually"><span class="header-section-number">6.6.1.4</span> Option 4: Save from this Page manually</h4>
-<p>On the sidebar to the right, you will see links to download each CSV file individually. Right-click the link and choose “Save Link As…” or “Download Linked File As…” to download the file to your computer.</p>
-</section>
-</section>
-<section id="getting-the-data-into-duckdb" class="level3" data-number="6.6.2">
-<h3 data-number="6.6.2" class="anchored" data-anchor-id="getting-the-data-into-duckdb"><span class="header-section-number">6.6.2</span> Getting the Data into DuckDB</h3>
-<p>In your DuckDB UI notebook, create each table by reading the corresponding CSV file. DuckDB’s <code>read_csv</code> function handles this elegantly:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Create tables from CSV files</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> categories <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'categories.csv'</span>);</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> customers <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'customers.csv'</span>);</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> employees <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'employees.csv'</span>);</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> order_details <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'order_details.csv'</span>);</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> orders <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'orders.csv'</span>);</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'products.csv'</span>);</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> regions <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'regions.csv'</span>);</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> shippers <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'shippers.csv'</span>);</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> suppliers <span class="kw">AS</span> <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'suppliers.csv'</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'Hello, DuckDB!'</span> <span class="kw">AS</span> greeting;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
@@ -694,33 +647,94 @@ Column-Oriented Storage (OLAP):
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Make sure you launched DuckDB from the directory containing your <code>data/</code> folder so the relative paths resolve correctly.</p>
+<p>Notice the semicolon, <code>;</code>, at the end of the statement. SQL statements always end with a semicolon. This tells DuckDB that you’ve finished your statement and it’s time to execute it. If you press <code>Enter</code> without a semicolon, DuckDB won’t throw an error. Instead, it will wait for more input, letting you spread a long query across multiple lines. That’s a useful feature once you’re writing complex queries, but it can be confusing at first if you’re used to one-line shell commands. If DuckDB seems to be “stuck” waiting, try typing <code>;</code> and pressing <code>Enter</code>.</p>
 </div>
 </div>
 </div>
-<p>Notice a few things here. <code>CREATE TABLE ... AS</code> creates a new table from the results of a query. <code>read_csv()</code> is a DuckDB function that reads a CSV file and infers column names and types automatically.</p>
-<p>After running these statements, check the catalog panel on the left side of the DuckDB UI. You should see all eight tables listed under your database, with their columns visible when expanded.</p>
-<div class="callout callout-style-simple callout-tip callout-titled">
+<p>You should see a formatted table with your greeting. This confirms that DuckDB is installed and working.</p>
+<p>Type <code>.exit</code> or press <code>Ctrl+D</code> to leave the CLI and return to your normal terminal prompt.</p>
+<div class="callout callout-style-simple callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>DuckDB Reads Files Directly
+<span class="screen-reader-only">Warning</span>You’re Not in the Shell Anymore
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One of DuckDB’s most powerful features is that you can query files <em>without</em> creating tables first:</p>
+<p>A common mistake is forgetting that the DuckDB CLI is a separate environment. If you see errors like <code>Parser Error: syntax error at or near "ls"</code>, it means you’re typing shell commands into DuckDB. Look at your prompt:</p>
+<ul>
+<li><code>D</code> → You’re in <strong>DuckDB</strong>. Type <code>.exit</code> to leave.</li>
+<li><code>$</code> or <code>%</code> at the end → You’re in a <strong>macOS/Linux shell</strong>.</li>
+<li><code>PS C:\...&gt;</code> → You’re in <strong>Windows PowerShell</strong>.</li>
+</ul>
+<p>When in doubt, check the prompt before typing.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="the-northwind-dataset" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="the-northwind-dataset"><span class="header-section-number">6.6</span> The Northwind Dataset</h2>
+<p>Throughout this module, we’ll work with an enhanced version of the <strong>Northwind</strong> database, a dataset representing a fictional company called Northwind Traders that imports and exports specialty food products worldwide. Originally created by Microsoft as a teaching database, Northwind has become one of the most widely-used sample datasets in the SQL world, and for good reason: it models a realistic supply chain with suppliers, products, inventory, customer orders, shipping, and employees.</p>
+<p>In the coming chapters, you’ll use this dataset to answer real business questions: Which product categories generate the most revenue? Are there suppliers we depend on too heavily? Which shipping routes are slowest? These are the kinds of questions that analysts and engineers answer every day, and SQL is how they do it.</p>
+<section id="getting-the-data-into-your-computer" class="level3" data-number="6.6.1">
+<h3 data-number="6.6.1" class="anchored" data-anchor-id="getting-the-data-into-your-computer"><span class="header-section-number">6.6.1</span> Getting the Data into Your Computer</h3>
+<p>Download <code>northwind.duckdb</code> from this page. You will see to the right the file under “Other Links”. Save it somewhere you can find it easily, like a dedicated folder for this book or a course.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [DUCKDB EXTENSION] Direct file querying</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_csv(<span class="st">'data/northwind/products.csv'</span>) <span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/cw4e</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/cw4e</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This is useful for quick exploration. Creating persistent tables, as we did above, is better for repeated work because DuckDB optimizes the storage and doesn’t re-parse the CSV each time. Direct file querying also works with Parquet files (a column-oriented file format common in data engineering) and even supports wildcards like <code>read_parquet('data/*.parquet')</code> to query multiple files at once.</p>
+<p>This is the same concept you learned in <a href="../foundations/cli.html" class="quarto-xref"><span>Chapter 3</span></a>: programs look for files relative to the directory they were launched from. When you type <code>duckdb northwind.duckdb</code>, DuckDB looks for <code>northwind.duckdb</code> in your current directory, just like <code>ls</code> lists the contents of wherever you are right now. If DuckDB can’t find the file, the first thing to check is whether you’re in the right place.</p>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>A Common Pitfall
 </div>
 </div>
+<div class="callout-body-container callout-body">
+<p>If you see an error like <code>IO Error: No such file or directory</code>, DuckDB can’t find the database file. This almost always means you launched DuckDB from a different directory than where the file lives. Close DuckDB, <code>cd</code> to the correct directory, and try again.</p>
+</div>
+</div>
+</section>
+<section id="opening-the-database" class="level3" data-number="6.6.2">
+<h3 data-number="6.6.2" class="anchored" data-anchor-id="opening-the-database"><span class="header-section-number">6.6.2</span> Opening the Database</h3>
+<p>Navigate to the directory where you saved the file and launch DuckDB with it:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/cw4e</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> northwind.duckdb</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You’ll see the familiar <code>D</code> prompt, but this time the startup message will show that you’re connected to <code>northwind.duckdb</code> rather than a transient in-memory database. This means your queries will run against real data, and any changes you make are saved to that file.</p>
+<p>This is exactly what it looks like to connect to an existing database in a professional setting. The tables are already defined, the data is already loaded, and the column types are already set. Your job is to explore what’s there and start asking questions, which is exactly what we’ll do starting in <span class="quarto-unresolved-ref">?sec-querying</span>.</p>
+</section>
+<section id="exploring-the-schema" class="level3" data-number="6.6.3">
+<h3 data-number="6.6.3" class="anchored" data-anchor-id="exploring-the-schema"><span class="header-section-number">6.6.3</span> Exploring the Schema</h3>
+<p>Before writing queries, it’s worth getting a feel for what’s in the database. Run:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>DuckDB CLI</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>SHOW <span class="kw">TABLES</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This lists every table in the database. You should see all nine Northwind tables: <code>categories</code>, <code>customers</code>, <code>employees</code>, <code>order_details</code>, <code>orders</code>, <code>products</code>, <code>regions</code>, <code>shippers</code>, and <code>suppliers</code>. There is also a <code>data_dictionary</code> table, which is a <strong>data dictionary</strong>: a table that describes the other tables. Data dictionaries document what each table and column represents, what values are expected, and how tables relate to each other. In professional environments, a data dictionary is often the first thing you consult when working with an unfamiliar database. We’ll query ours in the exercises below.</p>
+<p>To see the columns and data types for a specific table, use <code>DESCRIBE</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>DuckDB CLI</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>DESCRIBE products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You’ll see columns like <code>productName</code> with type <code>VARCHAR</code> (text), <code>unitPrice</code> with type <code>DOUBLE</code> (decimal numbers), and <code>discontinued</code> with type <code>BIGINT</code> (whole numbers). These <strong>data types</strong> determine what operations are valid on each column: you can calculate an average of <code>DOUBLE</code> values but not of <code>VARCHAR</code> values. We’ll explore data types more in <span class="quarto-unresolved-ref">?sec-modeling</span>, but for now, knowing how to inspect what’s in a database is the important skill.</p>
+<p><code>SHOW TABLES</code> and <code>DESCRIBE</code> are your first tools for orienting yourself in an unfamiliar database. In a professional setting, you’ll use them constantly, every new project starts with figuring out what data is available and how it’s structured.</p>
 </section>
 </section>
 <section id="your-first-query" class="level2" data-number="6.7">
@@ -728,12 +742,12 @@ Column-Oriented Storage (OLAP):
 <p>Let’s close this chapter by actually asking the database a question. Suppose you’ve just started at Northwind Traders and your manager asks: “Which products do we carry, and how are they priced?”</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB CLI</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This returns every row and every column in the <code>products</code> table. In the DuckDB UI, the results appear as an interactive table below the cell. You can see product names, prices, stock levels, and more. Scroll through the data. Click on column headers to see distributions. Get a feel for what’s here.</p>
-<p>That’s the whole game in miniature: someone has a question, you have data, and SQL is the bridge between them. In the next chapter, you’ll learn to be precise about <em>which</em> columns you want, <em>which</em> rows matter, and <em>how</em> to sort and summarize the results.</p>
+<p>This returns every row and every column in the <code>products</code> table. You can see product names, prices, stock levels, and more. Scroll through the data (the CLI paginates long results; press <code>Enter</code> to see more rows, or <code>q</code> to stop). Get a feel for what’s here.</p>
+<p>That’s the whole game in miniature: someone has a question, you have data, and SQL is the bridge between them. How much revenue has Northwind generated? Which suppliers are we most dependent on? Which shipping routes are slowest? You’ll be able to answer all of these by the end of this module. In the next chapter, you’ll learn to be precise about <em>which</em> columns you want, <em>which</em> rows matter, and <em>how</em> to sort and summarize the results.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -745,37 +759,70 @@ Column-Oriented Storage (OLAP):
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><p>Run <code>FROM products;</code> and examine the output. How many columns does the products table have? How many rows? Which column would you use to connect a product to its supplier?</p></li>
-<li><p>Run <code>FROM categories;</code> and then <code>FROM suppliers;</code>. Without writing any joins (we’ll learn those later), just by reading the data, can you identify which category “Chai” belongs to? Which country supplies the most products?</p></li>
-<li><p>Try running <code>FROM employees;</code> and look at the <code>reports_to</code> column. Some values are numbers and one is empty (NULL). What do you think this column represents? What would it mean for an employee to have a NULL value here?</p></li>
+<li><p>Run <code>SELECT * FROM products;</code> and examine the output. How many columns does the products table have? How many rows? Which column would you use to connect a product to its supplier?</p></li>
+<li><p>Run <code>SELECT * FROM categories;</code> and then <code>SELECT * FROM suppliers;</code>. Without writing any joins (we’ll learn those later), just by reading the data, can you identify which category “Chai” belongs to? Which country supplies the most products?</p></li>
+<li><p>Try running <code>SELECT * FROM employees;</code> and look at the <code>reportsTo</code> column. Some values are numbers and one is empty (NULL). What do you think this column represents? What would it mean for an employee to have a NULL value here?</p></li>
+<li><p>Run <code>SELECT * FROM data_dictionary;</code> and read through the results. Pick two tables you haven’t explored yet and use <code>DESCRIBE</code> followed by <code>SELECT *</code> to examine them. Does the data dictionary’s description match what you actually see in the tables?</p></li>
 </ol>
 </div>
 </div>
 </section>
-<section id="chapter-exercises" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="chapter-exercises"><span class="header-section-number">6.8</span> Chapter Exercises</h2>
+<section id="the-duckdb-ui" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="the-duckdb-ui"><span class="header-section-number">6.8</span> The DuckDB UI</h2>
+<p>So far we’ve been working in the DuckDB CLI, which is a good way to build comfort with the terminal and understand that you’re interacting with a database process, not your shell. But for the exploratory analytical work we’ll be doing in the coming chapters, a richer interface is more productive. Starting with version 1.2.1, DuckDB ships with a full-featured web-based user interface, built in collaboration with MotherDuck. It’s a notebook-style environment similar to Jupyter, but designed specifically for SQL work. You get syntax highlighting, autocompletion, an interactive data catalog, and visual column statistics, all running locally on your machine.</p>
+<p>First, exit DuckDB if you’re still in the CLI (<code>.exit</code> or <code>Ctrl+D</code>), then relaunch with the <code>-ui</code> flag:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">duckdb</span> <span class="at">-ui</span> northwind.duckdb</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Your default browser will open to <code>http://localhost:4213</code> with the DuckDB UI loaded. This might seem odd, since opening a browser usually means connecting to the internet, but that’s not what’s happening here. Behind the scenes, DuckDB starts a <strong>local web server</strong> on your own machine. The <strong>localhost</strong> in the URL literally means “this computer.” The <code>:4213</code> is the <strong>port</strong> number it’s listening on. Think of your computer as an apartment building: <code>localhost</code> is the building’s address, and <code>:4213</code> is the apartment number. Different programs listen on different ports so they don’t interfere with each other. Your browser is just being used as the display layer, like a fancy window into DuckDB. No data leaves your computer, no internet connection is required, and nobody else can access this interface. When you close DuckDB in the terminal, the web server shuts down and the URL stops working. This pattern, using a browser as the interface for a locally-running application, is increasingly common in data tools, and you’ll encounter it again with Jupyter notebooks, Quarto previews, and other development tools.</p>
+<p>The interface has three main areas. The <strong>left panel</strong> shows your database catalog: attached databases, tables, and their columns. The <strong>center panel</strong> is your SQL notebook, with cells where you write and execute queries. Press <code>Cmd+Enter</code> (macOS) or <code>Ctrl+Enter</code> (Windows/Linux) to run a cell. The <strong>results</strong> appear directly below each cell as a formatted table, and you can click on column headers to see distribution summaries.</p>
+<p>We’ll use this UI for nearly all of our SQL work in this module. When you need to write longer, more complex SQL that you want to save and version control, you’ll write <code>.sql</code> files in Zed, your code editor. But for exploration and learning, the notebook interface is ideal.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>In-Memory vs.&nbsp;Persistent Databases
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Notice that we launched the UI with <code>duckdb -ui northwind.duckdb</code>, pointing it at our database file. If you run <code>duckdb -ui</code> without a filename, DuckDB creates an <strong>in-memory database</strong>, meaning the data lives only in your computer’s active memory (RAM), not saved as a file on disk. It’s like writing notes on a whiteboard: useful while you’re working, but gone once you close the program. Always provide the filename when working through these chapters so your work persists between sessions.</p>
+</div>
+</div>
+</section>
+<section id="chapter-exercises" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="chapter-exercises"><span class="header-section-number">6.9</span> Chapter Exercises</h2>
 <p>These exercises bring together concepts from the entire chapter. They require you to think across sections rather than recalling a single idea.</p>
 <ol type="1">
-<li><p><strong>Architecture matching.</strong> A regional hospital network is modernizing their data systems. They have three needs: (a) a system to record patient check-ins, prescription fills, and appointment bookings in real time across 12 clinics, (b) a system for their analytics team to study readmission patterns and treatment outcomes across 5 years of historical data, and (c) a system for a mobile app that caches the current user’s appointment schedule locally on their phone. For each need, recommend a specific database type (OLTP server, OLAP server, embedded OLTP, or embedded OLAP) and name one real database product that fits.</p></li>
+<li><p><strong>Architecture matching.</strong> A regional hospital network is modernizing their data systems. They have three needs:</p>
+<ol type="i">
+<li>a system to record patient check-ins, prescription fills, and appointment bookings in real time across 12 clinics</li>
+<li>a system for their analytics team to study readmission patterns and treatment outcomes across 5 years of historical data, and</li>
+<li>a system for a mobile app that caches the current user’s appointment schedule locally on their phone. For each need, recommend a specific database type (OLTP server, OLAP server, embedded OLTP, or embedded OLAP) and name one real database product that fits.</li>
+</ol></li>
 <li><p><strong>Spreadsheet autopsy.</strong> You inherit a 14-tab Excel workbook that tracks product quality inspections for a manufacturing facility. Tab 1 is a lookup table of inspector names. Tabs 2 through 13 are monthly inspection logs (one tab per month) with columns for date, inspector ID, product ID, pass/fail, and notes. Tab 14 contains pivot tables and charts that summarize annual defect rates. The file is 890 MB and takes over a minute to open. Diagnose at least three specific problems with this setup, and describe, at a conceptual level (not SQL syntax), how a database would solve each one.</p></li>
-<li><p><strong>The portability test.</strong> Your team built a reporting system using DuckDB. Your company gets acquired and the new parent company standardizes on PostgreSQL. Review the annotations introduced in this chapter (<code>[STANDARD SQL]</code> vs <code>[DUCKDB EXTENSION]</code>). Which of the following would transfer directly and which would need rewriting? (a) <code>SELECT product_name, unit_price FROM products WHERE unit_price &gt; 20;</code> (b) <code>FROM products;</code> (c) <code>CREATE TABLE products AS FROM read_csv('products.csv');</code> (d) <code>SELECT * FROM products ORDER BY unit_price DESC LIMIT 10;</code></p></li>
 <li><p><strong>Engine internals.</strong> Explain, in your own words, why computing <code>AVG(unit_price)</code> across 1 million products is faster in DuckDB than in PostgreSQL, even if both databases are running on the same laptop. Your explanation should reference at least two of the three DuckDB architectural features discussed in this chapter (columnar storage, vectorized execution, morsel-driven parallelism).</p></li>
-<li><p><strong>Tool selection debate.</strong> A classmate argues: “DuckDB can read CSV files directly, so there’s no reason to ever use <code>CREATE TABLE</code>. Just query the files every time.” Write a response that acknowledges the valid point in their argument but explains when and why creating persistent tables is the better choice.</p></li>
-<li><p><strong>Predict and verify.</strong> Before running each of the following in DuckDB, predict what will happen, then run them and check your prediction. (a) <code>SELECT 1 + NULL;</code> (b) <code>SELECT 'hello' &gt; 'Hello';</code> (c) <code>FROM read_csv('data/northwind/products.csv') LIMIT 3;</code> followed by <code>FROM products LIMIT 3;</code> without first running <code>CREATE TABLE</code>. (d) <code>SELECT typeof(42), typeof(42.0), typeof('42');</code>. Explain each result in terms of how the database handles data types and missing values.</p></li>
-<li><p><strong>Real-world forensics.</strong> A colleague sends you a CSV file of 50,000 sensor readings from a manufacturing floor. They say “I opened it in Excel to check it, and everything looked fine.” Based on what you learned in this chapter about Excel’s limitations, list three specific things that could have gone wrong during that Excel inspection that wouldn’t happen if they’d loaded the file directly into DuckDB. For each, explain the mechanism of failure.</p></li>
+<li><p><strong>Tool selection debate.</strong> After reading the DuckDB documentation, a classmate discovers that DuckDB can query CSV files directly without creating tables first. They argue: “There’s no reason to ever use <code>CREATE TABLE</code>. Just query the files every time.” Write a response that acknowledges the valid point in their argument but explains when and why creating persistent tables is the better choice.</p></li>
+<li><p><strong>Predict and verify.</strong> Before running each of the following in DuckDB, predict what will happen, then run them and check your prediction.</p>
+<ol type="A">
+<li><code>SELECT 1 + NULL;</code></li>
+<li><code>SELECT 'hello' &gt; 'Hello';</code></li>
+<li><code>SELECT * FROM employees WHERE reportsTo IS NULL;</code> followed by <code>SELECT * FROM employees WHERE reportsTo = NULL;</code> Explain each result. In particular, why do the two queries in C return different results?</li>
+</ol></li>
+<li><p><strong>Real-world forensics.</strong> A colleague sends you a CSV file of 50,000 sensor readings from a manufacturing floor. They say “I opened it in Excel to check it, and everything looked fine.” Based on what you learned in this chapter about Excel’s limitations, list three specific things that could have gone wrong during that Excel inspection that wouldn’t happen if they’d loaded the file directly into a database. For each, explain the mechanism of failure.</p></li>
 </ol>
 </section>
-<section id="summary" class="level2" data-number="6.9">
-<h2 data-number="6.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">6.9</span> Summary</h2>
-<p>Databases exist because structured data at scale requires more discipline than spreadsheets can provide: enforced rules, concurrent access, crash recovery, and a powerful query language. Spreadsheets excel at quick, interactive, small-scale analysis, but documented failures in finance, public health, and science demonstrate the risks of relying on them for large or critical data. The database world divides into two main architectures. OLTP databases (like PostgreSQL and MySQL) use row-oriented storage optimized for transactions, the small, fast operations that keep businesses running. OLAP databases (like DuckDB and ClickHouse) use column-oriented storage optimized for analytics, the broad aggregations and summaries that inform decisions. Server databases follow a client-server architecture (like a restaurant’s kitchen and dining room) where separate processes communicate over a network, supporting many simultaneous users but requiring installation and configuration. Embedded databases like SQLite and DuckDB run locally with zero configuration, trading multi-user access for simplicity. DuckDB is our tool for this module because it combines analytical power, through columnar storage, vectorized execution, and automatic parallelism, with installation simplicity, and it teaches standard SQL that transfers to any relational database. SQL itself is a decades-old standard with core features (SELECT, joins, CTEs, window functions) that work across every major database, and we’ll distinguish clearly between standard SQL and DuckDB-specific extensions throughout this book. The Northwind dataset gives us a realistic supply chain context, with suppliers, products, orders, and customers, to work with throughout the remaining chapters.</p>
+<section id="summary" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="summary"><span class="header-section-number">6.10</span> Summary</h2>
+<p>Databases exist because structured data at scale requires more discipline than spreadsheets can provide: enforced rules, concurrent access, crash recovery, and a powerful query language. Spreadsheets excel at quick, interactive, small-scale analysis, but documented failures in finance, public health, and science demonstrate the risks of relying on them for large or critical data. The database world divides into two main architectures. OLTP databases (like PostgreSQL and MySQL) use row-oriented storage optimized for transactions, the small, fast operations that keep businesses running. OLAP databases (like DuckDB and ClickHouse) use column-oriented storage optimized for analytics, the broad aggregations and summaries that inform decisions. Server databases follow a client-server architecture (like ordering through DoorDash, where your app is the client and the kitchen is the server) where separate processes communicate over a network, supporting many simultaneous users but requiring installation and configuration. Embedded databases like SQLite and DuckDB run locally with zero configuration, trading multi-user access for simplicity. DuckDB is our tool for this module because it combines analytical power, through columnar storage, vectorized execution, and automatic parallelism, with installation simplicity, and it teaches standard SQL that transfers to any relational database. SQL itself is a decades-old standard with core features (SELECT, joins, CTEs, window functions) that work across every major database, and we’ll distinguish clearly between standard SQL and DuckDB-specific extensions throughout this book. The Northwind dataset gives us a realistic supply chain context, with suppliers, products, orders, and customers, to work with throughout the remaining chapters.</p>
 </section>
-<section id="glossary" class="level2" data-number="6.10">
-<h2 data-number="6.10" class="anchored" data-anchor-id="glossary"><span class="header-section-number">6.10</span> Glossary</h2>
+<section id="glossary" class="level2" data-number="6.11">
+<h2 data-number="6.11" class="anchored" data-anchor-id="glossary"><span class="header-section-number">6.11</span> Glossary</h2>
 <dl>
-<dt><strong>ADBC (Arrow Database Connectivity)</strong></dt>
-<dd>
-A database connectivity standard built on Apache Arrow, enabling high-performance, zero-copy data transfer between databases and applications.
-</dd>
 <dt><strong>ANSI SQL</strong></dt>
 <dd>
 The standardized version of SQL maintained by the American National Standards Institute and the International Organization for Standardization (ISO). Core features like SELECT, JOIN, CTEs, and window functions are defined in the standard and work across all major databases.
@@ -792,17 +839,25 @@ A database storage format that keeps all values from the same column together on
 <dd>
 A formatted string specifying the information needed to connect to a database server, typically including the host, port, credentials, and database name.
 </dd>
+<dt><strong>Data Dictionary</strong></dt>
+<dd>
+A table or document that describes the structure and contents of a database, including what each table and column represents, expected values, and relationships between tables.
+</dd>
 <dt><strong>DBMS (Database Management System)</strong></dt>
 <dd>
 Software that manages the storage, retrieval, and manipulation of data in a database, enforcing rules for data integrity, security, and concurrent access.
 </dd>
 <dt><strong>DuckDB</strong></dt>
 <dd>
-An open-source, embedded, column-oriented analytical database designed for OLAP workloads. It runs in-process with no server, reads files directly, and integrates with Python.
+An open-source, embedded, column-oriented analytical database designed for OLAP workloads. It runs in-process with no server and integrates with Python.
 </dd>
 <dt><strong>Embedded Database</strong></dt>
 <dd>
 A database that runs within the application process rather than as a separate server, requiring no network configuration or administration. SQLite and DuckDB are embedded databases.
+</dd>
+<dt><strong>Localhost</strong></dt>
+<dd>
+A hostname that refers to the current computer. When a program starts a local web server (like <code>duckdb -ui</code>), <code>localhost</code> in the URL means the browser is connecting to a process on your own machine, not to a remote server on the internet.
 </dd>
 <dt><strong>OLAP (Online Analytical Processing)</strong></dt>
 <dd>
@@ -811,6 +866,10 @@ A database workload pattern focused on complex queries that scan and aggregate l
 <dt><strong>OLTP (Online Transaction Processing)</strong></dt>
 <dd>
 A database workload pattern focused on processing many small, fast transactions like inserts, updates, and point lookups that keep day-to-day business operations running.
+</dd>
+<dt><strong>Port</strong></dt>
+<dd>
+A number that identifies a specific process or service on a computer. When multiple programs run on the same machine, each listens on a different port (e.g., <code>:4213</code> for DuckDB, <code>:5432</code> for PostgreSQL) so they don’t interfere with each other.
 </dd>
 <dt><strong>Row-Oriented Storage</strong></dt>
 <dd>
@@ -830,7 +889,7 @@ A data organization principle where each row represents one observation, each co
 </dd>
 <dt><strong>Vectorized Execution</strong></dt>
 <dd>
-A query processing technique that operates on batches of values (vectors) rather than one row at a time, enabling modern CPUs to process data more efficiently through SIMD operations.
+A query processing technique that operates on batches of values (vectors) rather than one row at a time, enabling modern CPUs to process data more efficiently through hardware-level optimizations.
 </dd>
 </dl>
 

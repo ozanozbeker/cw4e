@@ -333,7 +333,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">7.12</span> Summary</a></li>
   <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">7.13</span> Glossary</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/databases/querying.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="data/data_dictionary.csv"><i class="bi bi-filetype-csv"></i>data_dictionary.csv</a></li><li><a href="data/categories.csv"><i class="bi bi-filetype-csv"></i>categories.csv</a></li><li><a href="data/customers.csv"><i class="bi bi-filetype-csv"></i>customers.csv</a></li><li><a href="data/employees.csv"><i class="bi bi-filetype-csv"></i>employees.csv</a></li><li><a href="data/orders.csv"><i class="bi bi-filetype-csv"></i>orders.csv</a></li><li><a href="data/order_details.csv"><i class="bi bi-filetype-csv"></i>order_details.csv</a></li><li><a href="data/products.csv"><i class="bi bi-filetype-csv"></i>products.csv</a></li><li><a href="data/regions.csv"><i class="bi bi-filetype-csv"></i>regions.csv</a></li><li><a href="data/shippers.csv"><i class="bi bi-filetype-csv"></i>shippers.csv</a></li><li><a href="data/suppliers.csv"><i class="bi bi-filetype-csv"></i>suppliers.csv</a></li><li><a href="data/orders_flat.parquet"><i class="bi bi-table"></i>orders_flat.parquet</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/databases/querying.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="../data/northwind.duckdb"><i class="bi bi-database"></i>northwind.duckdb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -365,9 +365,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The most common SQL statement is <code>SELECT</code>, which retrieves data from one or more tables. A basic query has this structure:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">columns</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">columns</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">table</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> conditions</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="kw">columns</span></span>
@@ -375,8 +375,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Each of these clauses plays a specific role, and you’ll learn them one at a time. But here’s something crucial to understand from the start: <strong>the order you write SQL is not the order the database executes it</strong>.</p>
 <p>You write <code>SELECT</code> first, but the database processes <code>FROM</code> first (to know which table to look at), then <code>WHERE</code> (to filter rows), then <code>SELECT</code> (to choose columns), then <code>ORDER BY</code> (to sort), then <code>LIMIT</code> (to cap the output). This execution order explains many otherwise-confusing SQL behaviors, and we’ll return to it throughout this chapter.</p>
-<pre><code>Written Order:     SELECT → FROM → WHERE → ORDER BY → LIMIT
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>execution-order</strong></pre>
+</div>
+<pre class="text" data-filename="execution-order"><code>Written Order:     SELECT → FROM → WHERE → ORDER BY → LIMIT
 Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
+</div>
 <p>Keep this mental model handy. When a query doesn’t behave the way you expect, the execution order is often the explanation.</p>
 </section>
 <section id="select-and-from-choosing-what-to-see" class="level2" data-number="7.2">
@@ -384,9 +389,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>The simplest useful query asks for specific columns from a table:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    unitPrice,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    unitsInStock</span>
@@ -396,9 +401,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>To see everything, you can use <code>SELECT *</code>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>*</code> means “all columns.” This is useful for exploration, but in production queries and scripts, you should always name your columns explicitly. When someone reads your SQL six months from now (including future you), <code>SELECT *</code> doesn’t communicate what data actually matters to the analysis.</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
@@ -414,9 +419,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>DuckDB allows you to write <code>FROM</code> without <code>SELECT</code>, which is convenient during exploration:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [DUCKDB EXTENSION] FROM-first syntax</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [DUCKDB EXTENSION] FROM-first syntax</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This is equivalent to <code>SELECT * FROM products</code>. It’s useful when you’re poking around a new table and want to see what’s there. Throughout this book, we’ll use the full <code>SELECT ... FROM</code> syntax for clarity in teaching, and the shorthand when we’re just exploring. This is a DuckDB convenience, not standard SQL, so it won’t work in PostgreSQL or MySQL.</p>
@@ -427,9 +432,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>Sometimes column names are cryptic or you want to label computed results. The <code>AS</code> keyword creates an <strong>alias</strong>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    productName <span class="kw">AS</span> product,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    unitPrice <span class="kw">AS</span> price_usd,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    unitsInStock <span class="kw">AS</span> inventory</span>
@@ -442,9 +447,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>SQL lets you create new columns from expressions:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    unitPrice,</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    unitsInStock,</span>
@@ -458,9 +463,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>When you want to see the unique values in a column, <code>DISTINCT</code> eliminates duplicate rows:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> country</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> country</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> suppliers;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This returns each country exactly once, regardless of how many suppliers are in each country. <code>DISTINCT</code> applies to the entire row, so <code>SELECT DISTINCT country, city FROM suppliers</code> returns unique country-city combinations.</p>
@@ -481,9 +486,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <li><p>Predict the output of this query without running it. Then run it to check.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> categoryID</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> categoryID</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> categoryID;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
@@ -497,9 +502,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p><code>SELECT</code> chooses columns. <code>WHERE</code> chooses rows. It evaluates a condition for every row and only keeps the rows where the condition is true.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    unitPrice</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
@@ -524,9 +529,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>Use <code>AND</code> and <code>OR</code> to combine multiple conditions:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Products under $20 with low stock</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Products under $20 with low stock</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    unitPrice,</span>
@@ -537,9 +542,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Products from supplier 1 or supplier 2</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Products from supplier 1 or supplier 2</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    supplierID</span>
@@ -550,9 +555,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>When mixing <code>AND</code> and <code>OR</code>, use parentheses to be explicit about grouping. SQL evaluates <code>AND</code> before <code>OR</code> (like multiplication before addition in math), which can produce unexpected results:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Without parentheses: AND binds tighter, which may surprise you</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Without parentheses: AND binds tighter, which may surprise you</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> productName, unitPrice, supplierID</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> supplierID <span class="op">=</span> <span class="dv">1</span> <span class="kw">OR</span> supplierID <span class="op">=</span> <span class="dv">2</span> <span class="kw">AND</span> unitPrice <span class="op">&lt;</span> <span class="dv">20</span>;</span>
@@ -569,9 +574,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p><strong>IN</strong> checks membership in a list, replacing multiple <code>OR</code> conditions:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Instead of: WHERE country = 'USA' OR country = 'UK' OR country = 'Germany'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Instead of: WHERE country = 'USA' OR country = 'UK' OR country = 'Germany'</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> companyName, country</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> suppliers</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> country <span class="kw">IN</span> (<span class="st">'USA'</span>, <span class="st">'UK'</span>, <span class="st">'Germany'</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -579,18 +584,18 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p><strong>BETWEEN</strong> checks a range (inclusive on both ends):</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> productName, unitPrice</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> productName, unitPrice</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> unitPrice <span class="kw">BETWEEN</span> <span class="dv">10</span> <span class="kw">AND</span> <span class="dv">30</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>LIKE</strong> matches text patterns, where <code>%</code> represents any sequence of characters and <code>_</code> represents a single character:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Products whose names start with "Ch"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Products whose names start with "Ch"</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> productName</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> productName <span class="kw">LIKE</span> <span class="st">'Ch%'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -605,9 +610,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>The critical rule is: <strong>NULL is not equal to anything, including itself</strong>. This means ordinary comparisons don’t work:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- This does NOT find customers with missing regions</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- This does NOT find customers with missing regions</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> companyName, region</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> region <span class="op">=</span> <span class="kw">NULL</span>;  <span class="co">-- Returns nothing! NULL = NULL is not TRUE, it's NULL</span></span>
@@ -634,9 +639,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>The <code>COALESCE</code> function provides a fallback value when data might be <code>NULL</code>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COALESCE</span>(unitsOnOrder, <span class="dv">0</span>) <span class="kw">AS</span> units_on_order</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -658,9 +663,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <li><p>This query has a bug. What’s wrong, and what does it actually return?</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> companyName, region</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> companyName, region</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> region <span class="op">!=</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
@@ -675,9 +680,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>Results from a SQL query have no guaranteed order unless you specify one. The <code>ORDER BY</code> clause sorts the output:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    unitPrice</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
@@ -686,9 +691,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>By default, <code>ORDER BY</code> sorts in ascending order (smallest to largest, A to Z). Add <code>DESC</code> for descending order:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Most expensive products first</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Most expensive products first</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    unitPrice</span>
@@ -698,9 +703,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>You can sort by multiple columns. The first column is the primary sort, the second breaks ties:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Sort by category, then by price within each category</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Sort by category, then by price within each category</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    categoryID,</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    productName,</span>
@@ -715,9 +720,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p><code>LIMIT</code> restricts how many rows are returned. This is essential for exploration (you rarely want to scroll through 100,000 rows) and for answering “top N” questions:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- The 10 most expensive products</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- The 10 most expensive products</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    unitPrice</span>
@@ -733,9 +738,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>The five fundamental aggregates are:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> total_products,</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">AVG</span>(unitPrice) <span class="kw">AS</span> avg_price,</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(unitsInStock) <span class="kw">AS</span> total_inventory,</span>
@@ -747,9 +752,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p><code>COUNT</code> has a subtle distinction worth knowing:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- COUNT(*) counts all rows, regardless of NULLs</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- COUNT(*) counts all rows, regardless of NULLs</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">FROM</span> customers;</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- COUNT(column) counts only non-NULL values in that column</span></span>
@@ -764,9 +769,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>The <code>CASE</code> expression brings if-then logic into SQL. It evaluates conditions in order and returns the value for the first matching condition:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    unitPrice,</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
@@ -781,9 +786,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>You can use <code>CASE</code> inside aggregate functions to count or sum conditionally:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> total_products,</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> discontinued <span class="op">=</span> <span class="dv">1</span> <span class="cf">THEN</span> <span class="dv">1</span> <span class="cf">END</span>) <span class="kw">AS</span> discontinued_count,</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> unitsInStock <span class="op">=</span> <span class="dv">0</span> <span class="cf">THEN</span> <span class="dv">1</span> <span class="cf">END</span>) <span class="kw">AS</span> out_of_stock_count</span>
@@ -806,9 +811,9 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <li><p>What is wrong with this query? Predict what error you’ll get, then run it to confirm.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">AVG</span>(unitPrice)</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -820,51 +825,66 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 </section>
 <section id="set-operations-combining-query-results" class="level2" data-number="7.9">
 <h2 data-number="7.9" class="anchored" data-anchor-id="set-operations-combining-query-results"><span class="header-section-number">7.9</span> Set Operations: Combining Query Results</h2>
-<p>Sometimes you need to combine the results of two separate queries into one result set. SQL provides <strong>set operations</strong> for this, and if you’ve taken a statistics course, the concepts will feel familiar: they map directly to the set theory operations of union, intersection, and difference.</p>
+<p>Sometimes you need to combine the results of two separate queries into one result set. SQL provides <strong>set operations</strong> for this, and if you’ve encountered set theory in a math course, the concepts will feel familiar: they map directly to union, intersection, and difference.</p>
 <p>Unlike joins, which combine columns from different tables side by side, set operations stack rows from multiple queries on top of each other. The key requirement is that both queries must return the same number of columns with compatible data types.</p>
 <section id="union-and-union-all" class="level3" data-number="7.9.1">
 <h3 data-number="7.9.1" class="anchored" data-anchor-id="union-and-union-all"><span class="header-section-number">7.9.1</span> UNION and UNION ALL</h3>
 <p><code>UNION</code> combines the results of two queries and removes duplicate rows. <code>UNION ALL</code> does the same but keeps all rows, including duplicates.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] All unique cities where we have either a supplier or a customer</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country, <span class="st">'Supplier'</span> <span class="kw">AS</span> entity_type</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Unique cities where we have either a supplier or a customer</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> suppliers</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country, <span class="st">'Customer'</span> <span class="kw">AS</span> entity_type</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers</span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> country, city;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This query answers: “In which cities do we have a business presence, either through a supplier or a customer?” The <code>UNION</code> removes any city that appears in both tables, giving you the unique set. If a city like London appears as both a supplier location and a customer location, you’d see it once (with whichever <code>entity_type</code> the database kept).</p>
-<p>If you want to preserve both rows, use <code>UNION ALL</code>:</p>
+<p>This query answers: “In which cities do we have a business presence, either through a supplier or a customer?” The <code>UNION</code> removes any city-country pair that appears in both tables, giving you the unique set. If London, UK appears as both a supplier location and a customer location, you’d see it once.</p>
+<p>Compare that with <code>UNION ALL</code>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] All cities, keeping supplier and customer entries separate</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country, <span class="st">'Supplier'</span> <span class="kw">AS</span> entity_type</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] All cities, keeping duplicates from both tables</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> suppliers</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country, <span class="st">'Customer'</span> <span class="kw">AS</span> entity_type</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers</span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> country, city;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Run both and compare the row counts. The difference tells you how many city-country pairs appear in both tables.</p>
 <p><code>UNION ALL</code> is significantly faster than <code>UNION</code> (often 3 to 4x) because it skips the duplicate detection and removal step. Use <code>UNION ALL</code> when duplicates are acceptable or when you know they don’t exist. In practice, <code>UNION ALL</code> is far more common in analytical work because you usually want to preserve all records.</p>
+<p>In most analytical queries, you also want to know <em>which</em> table each row came from. Adding a label column makes the rows from each query distinct, so <code>UNION ALL</code> is the natural choice:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>DuckDB</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Labeled directory: every supplier and customer location</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country, <span class="st">'Supplier'</span> <span class="kw">AS</span> entity_type</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> suppliers</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country, <span class="st">'Customer'</span> <span class="kw">AS</span> entity_type</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> country, city;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that using <code>UNION</code> instead of <code>UNION ALL</code> here would make no difference: since the <code>entity_type</code> column is always different between the two queries, no two rows can be identical, so there are no duplicates for <code>UNION</code> to remove. When your queries produce structurally distinct rows like this, <code>UNION ALL</code> is always the right choice.</p>
 </section>
 <section id="intersect" class="level3" data-number="7.9.2">
 <h3 data-number="7.9.2" class="anchored" data-anchor-id="intersect"><span class="header-section-number">7.9.2</span> INTERSECT</h3>
 <p><code>INTERSECT</code> returns only the rows that appear in both queries:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Countries where we have BOTH a supplier and a customer</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> suppliers</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INTERSECT</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> customers</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> country;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Countries where we have BOTH a supplier and a customer</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> suppliers</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INTERSECT</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> customers</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> country;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This answers: “Which countries represent both sides of our supply chain?” These are countries where Northwind both sources products and sells to customers, potentially interesting for logistics optimization.</p>
 </section>
@@ -873,25 +893,25 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p><code>EXCEPT</code> returns rows from the first query that don’t appear in the second:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Countries where we have customers but no suppliers</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> customers</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="kw">EXCEPT</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> suppliers</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> country;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Countries where we have customers but no suppliers</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> customers</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">EXCEPT</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> country <span class="kw">FROM</span> suppliers</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> country;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This identifies countries where Northwind has customers but no local supplier. The order matters: <code>A EXCEPT B</code> gives you rows in A that aren’t in B, which is different from <code>B EXCEPT A</code>.</p>
 <p>A particularly useful application of <code>EXCEPT</code> is data validation, verifying that two queries produce identical results:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Check if two queries return the same results</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- An empty result means the queries match</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> productID, productName <span class="kw">FROM</span> products <span class="kw">WHERE</span> unitPrice <span class="op">&gt;</span> <span class="dv">20</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">EXCEPT</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> productID, productName <span class="kw">FROM</span> products <span class="kw">WHERE</span> <span class="kw">NOT</span> unitPrice <span class="op">&lt;=</span> <span class="dv">20</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] Check if two queries return the same results</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- An empty result means the queries match</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> productID, productName <span class="kw">FROM</span> products <span class="kw">WHERE</span> unitPrice <span class="op">&gt;</span> <span class="dv">20</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">EXCEPT</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> productID, productName <span class="kw">FROM</span> products <span class="kw">WHERE</span> <span class="kw">NOT</span> unitPrice <span class="op">&lt;=</span> <span class="dv">20</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="set-operations-and-venn-diagrams" class="level3" data-number="7.9.4">
@@ -917,11 +937,11 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <li><p>A colleague writes this query and gets an error. What’s wrong?</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> companyName, city <span class="kw">FROM</span> suppliers</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country <span class="kw">FROM</span> customers;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> companyName, city <span class="kw">FROM</span> suppliers</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> city, country <span class="kw">FROM</span> customers;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Write a query using <code>UNION ALL</code> that creates a combined directory of all supplier and customer contacts, with columns for <code>companyName</code>, <code>contactName</code>, <code>phone</code>, and a label column (<code>'Supplier'</code> or <code>'Customer'</code>). Why is <code>UNION ALL</code> more appropriate than <code>UNION</code> here?</p></li>
 </ol>
@@ -934,26 +954,25 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <p>Let’s return to the manager’s original question: “What do we sell, what does it cost, and what’s running low?” Now you have the vocabulary to answer precisely:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    productName <span class="kw">AS</span> product,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    unitPrice <span class="kw">AS</span> price,</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    unitsInStock <span class="kw">AS</span> stock,</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    reorderLevel <span class="kw">AS</span> reorder_point,</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    unitsInStock <span class="op">-</span> reorderLevel <span class="kw">AS</span> stock_above_reorder,</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> discontinued <span class="op">=</span> <span class="dv">1</span> <span class="cf">THEN</span> <span class="st">'Discontinued'</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">=</span> <span class="dv">0</span> <span class="cf">THEN</span> <span class="st">'OUT OF STOCK'</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">&lt;=</span> reorderLevel <span class="cf">THEN</span> <span class="st">'Reorder Now'</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">&lt;=</span> reorderLevel <span class="op">*</span> <span class="fl">1.5</span> <span class="cf">THEN</span> <span class="st">'Running Low'</span></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">'Adequate'</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> stock_status</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> discontinued <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> stock_above_reorder;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    productName <span class="kw">AS</span> product,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    unitPrice <span class="kw">AS</span> price,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    unitsInStock <span class="kw">AS</span> stock,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    reorderLevel <span class="kw">AS</span> reorder_point,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    unitsInStock <span class="op">-</span> reorderLevel <span class="kw">AS</span> stock_above_reorder,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> discontinued <span class="op">=</span> <span class="dv">1</span> <span class="cf">THEN</span> <span class="st">'Discontinued'</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">=</span> <span class="dv">0</span> <span class="cf">THEN</span> <span class="st">'OUT OF STOCK'</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">&lt;=</span> reorderLevel <span class="cf">THEN</span> <span class="st">'Reorder Now'</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">&lt;=</span> reorderLevel <span class="op">*</span> <span class="fl">1.5</span> <span class="cf">THEN</span> <span class="st">'Running Low'</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">'Adequate'</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> stock_status</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> stock_above_reorder;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This single query retrieves product information, computes how far above (or below) the reorder point each product is, categorizes the stock status, excludes discontinued products, and sorts so the most urgent items appear first. That’s a complete analytical deliverable in 15 lines of SQL.</p>
+<p>This single query retrieves product information, computes how far above (or below) the reorder point each product is, categorizes the stock status (including flagging discontinued items), and sorts so the most urgent items appear first. That’s a complete analytical deliverable in 14 lines of SQL.</p>
 <p>To build your intuition, pick a specific product from the result set and trace through the <code>CASE</code> expression by hand. What are the values of <code>discontinued</code>, <code>unitsInStock</code>, and <code>reorderLevel</code> for that product? Which <code>WHEN</code> branch does it match? What would happen if you reordered the <code>WHEN</code> clauses? Since <code>CASE</code> evaluates top-to-bottom and stops at the first match, clause order matters, and tracing through specific rows is the best way to verify that your logic handles every scenario correctly.</p>
 <p>Read this query carefully, because it demonstrates something important about the whole game: the value isn’t in knowing that <code>WHERE</code> filters rows or <code>ORDER BY</code> sorts results. The value is in translating a business question into a precise, readable query that someone else can understand, verify, and build on. That translation, from human question to structured query, is the skill that matters.</p>
 </section>
@@ -966,13 +985,13 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <li><p><strong>Execution order detective.</strong> Explain why this query produces an error, referencing the SQL execution order:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    unitPrice <span class="op">*</span> unitsInStock <span class="kw">AS</span> inventory_value</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> inventory_value <span class="op">&gt;</span> <span class="dv">1000</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    unitPrice <span class="op">*</span> unitsInStock <span class="kw">AS</span> inventory_value</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> inventory_value <span class="op">&gt;</span> <span class="dv">1000</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then rewrite it so it works correctly.</p></li>
 <li><p><strong>NULL audit.</strong> Write a query that counts, for each column in the <code>customers</code> table that might contain NULLs (<code>region</code>, <code>fax</code>), how many rows have <code>NULL</code> values and what percentage of the total that represents. This is a common data quality check. (Hint: you can compute everything in a single query using <code>COUNT(*)</code> and <code>COUNT(column)</code> together.)</p></li>
@@ -980,36 +999,36 @@ Execution Order:   FROM → WHERE → SELECT → ORDER BY → LIMIT</code></pre>
 <li><p><strong>NULL propagation challenge.</strong> Predict the result of each expression <em>before</em> running it, then verify. For any that surprise you, explain why SQL produces that result.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="op">=</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_1,</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="op">!=</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_2,</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="kw">AND</span> <span class="kw">TRUE</span> <span class="kw">AS</span> test_3,</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="kw">OR</span> <span class="kw">TRUE</span> <span class="kw">AS</span> test_4,</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="kw">OR</span> <span class="kw">FALSE</span> <span class="kw">AS</span> test_5,</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COALESCE</span>(<span class="kw">NULL</span>, <span class="kw">NULL</span>, <span class="st">'fallback'</span>) <span class="kw">AS</span> test_6,</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span> <span class="op">+</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_7,</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span> <span class="op">&gt;</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_8;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="op">=</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_1,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="op">!=</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_2,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="kw">AND</span> <span class="kw">TRUE</span> <span class="kw">AS</span> test_3,</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="kw">OR</span> <span class="kw">TRUE</span> <span class="kw">AS</span> test_4,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="kw">OR</span> <span class="kw">FALSE</span> <span class="kw">AS</span> test_5,</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COALESCE</span>(<span class="kw">NULL</span>, <span class="kw">NULL</span>, <span class="st">'fallback'</span>) <span class="kw">AS</span> test_6,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span> <span class="op">+</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_7,</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="dv">5</span> <span class="op">&gt;</span> <span class="kw">NULL</span> <span class="kw">AS</span> test_8;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then explain in your own words why <code>WHERE region != 'WA'</code> does <em>not</em> return customers whose region is <code>NULL</code>.</p></li>
 <li><p><strong>Debug this report.</strong> A colleague wrote the following query to produce an inventory summary, but the results don’t look right. There are at least three problems. Find them all and write a corrected version.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>duckdb</strong></pre>
+<pre><strong>DuckDB</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    unitPrice <span class="kw">AS</span> price,</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    unitsInStock <span class="op">+</span> unitsOnOrder <span class="kw">AS</span> total_units,</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> total_units <span class="op">=</span> <span class="dv">0</span> <span class="cf">THEN</span> <span class="st">'Out of Stock'</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">&lt;=</span> reorderLevel <span class="cf">THEN</span> <span class="st">'Reorder'</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">'OK'</span></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> status</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> discontinued <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> total_units;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39" data-filename="DuckDB"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    productName,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    unitPrice <span class="kw">AS</span> price,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    unitsInStock <span class="op">+</span> unitsOnOrder <span class="kw">AS</span> total_units,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> total_units <span class="op">=</span> <span class="dv">0</span> <span class="cf">THEN</span> <span class="st">'Out of Stock'</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> unitsInStock <span class="op">&lt;=</span> reorderLevel <span class="cf">THEN</span> <span class="st">'Reorder'</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">'OK'</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> status</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> discontinued <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> total_units;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>(Hints: think about NULLs, execution order, and the CASE logic for a product with 0 in stock but 50 on order.)</p></li>
 </ol>
@@ -1055,7 +1074,7 @@ A set operation that returns rows from the first query that do not appear in the
 </dd>
 <dt><strong>Execution Order</strong></dt>
 <dd>
-The sequence in which the database processes the clauses of a SQL statement, which differs from the order in which they are written. The logical execution order is <code>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</code>.
+The sequence in which the database processes the clauses of a SQL statement, which differs from the order in which they are written. For the clauses covered in this chapter, the logical execution order is <code>FROM → WHERE → SELECT → ORDER BY → LIMIT</code>. The full order, including <code>GROUP BY</code> and <code>HAVING</code> (covered in <span class="quarto-unresolved-ref">?sec-analytical-sql</span>), is <code>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</code>.
 </dd>
 <dt><strong>INTERSECT</strong></dt>
 <dd>

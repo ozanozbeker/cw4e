@@ -1,0 +1,251 @@
+productID,productName,quantityPerUnit,unitPrice,discontinued,categoryID,supplierID,unitsInStock,reorderLevel,weight_kg
+1,Chai,10 boxes x 20 bags,18.0,0,1,47,29,48,22.13
+2,Chang,24 - 12 oz bottles,19.0,0,1,49,68,46,8.57
+3,Aniseed Syrup,12 - 550 ml bottles,10.0,0,2,19,111,15,11.4
+4,Chef Anton's Cajun Seasoning,48 - 6 oz jars,22.0,0,2,47,184,21,24.3
+5,Chef Anton's Gumbo Mix,36 boxes,21.35,1,2,49,45,37,22.82
+6,Grandma's Boysenberry Spread,12 - 8 oz jars,25.0,0,2,56,160,24,21.06
+7,Uncle Bob's Organic Dried Pears,12 - 1 lb pkgs.,30.0,0,7,33,155,17,3.91
+8,Northwoods Cranberry Sauce,12 - 12 oz jars,40.0,0,2,49,41,39,23.84
+9,Mishi Kobe Niku,18 - 500 g pkgs.,97.0,1,6,60,135,5,15.01
+10,Ikura,12 - 200 ml jars,31.0,0,8,32,4,12,23.23
+11,Queso Cabrales,1 kg pkg.,21.0,0,4,57,78,20,1.54
+12,Queso Manchego La Pastora,10 - 500 g pkgs.,38.0,0,4,57,145,10,2.23
+13,Konbu,2 kg box,6.0,0,8,32,17,39,19.17
+14,Tofu,40 - 100 g pkgs.,23.25,0,7,9,168,35,23.68
+15,Genen Shouyu,24 - 250 ml bottles,15.5,0,2,11,67,38,21.82
+16,Pavlova,32 - 500 g boxes,17.45,0,3,28,54,39,18.91
+17,Alice Mutton,20 - 1 kg tins,39.0,1,6,45,51,50,7.86
+18,Carnarvon Tigers,16 kg pkg.,62.5,0,8,43,166,28,11.01
+19,Teatime Chocolate Biscuits,10 boxes x 12 pieces,9.2,0,3,34,115,12,6.27
+20,Sir Rodney's Marmalade,30 gift boxes,81.0,0,3,5,86,6,14.75
+21,Sir Rodney's Scones,24 pkgs. x 4 pieces,10.0,0,3,15,150,19,0.28
+22,Gustaf's Knackebröd,24 - 500 g pkgs.,21.0,0,5,46,161,8,5.8
+23,Tunnbröd,12 - 250 g pkgs.,9.0,0,5,58,8,26,1.86
+24,Guarana Fantastica,12 - 355 ml cans,4.5,1,1,16,71,47,12.19
+25,NuNuCa Nuß-Nougat-Creme,20 - 450 g glasses,14.0,0,3,35,33,41,14.45
+26,Gumbär Gummibärchen,100 - 250 g bags,31.23,0,3,16,200,35,20.21
+27,Schoggi Schokolade,100 - 100 g pieces,43.9,0,3,13,24,11,16.51
+28,Rössle Sauerkraut,25 - 825 g cans,45.6,1,7,23,108,31,11.73
+29,Thüringer Rostbratwurst,50 bags x 30 sausgs.,123.79,1,6,47,13,48,16.37
+30,Nord-Ost Matjeshering,10 - 200 g glasses,25.89,0,8,42,25,8,10.13
+31,Gorgonzola Telino,12 - 100 g pkgs,12.5,0,4,22,27,20,4.87
+32,Mascarpone Fabioli,24 - 200 g pkgs.,32.0,0,4,35,114,13,10.6
+33,Geitost,500 g,2.5,0,4,18,118,20,21.87
+34,Sasquatch Ale,24 - 12 oz bottles,14.0,0,1,5,113,40,2.54
+35,Steeleye Stout,24 - 12 oz bottles,18.0,0,1,42,138,5,24.23
+36,Inlagd Sill,24 - 250 g  jars,19.0,0,8,60,192,20,4.24
+37,Gravad lax,12 - 500 g pkgs.,26.0,0,8,32,123,18,21.63
+38,Côte de Blaye,12 - 75 cl bottles,263.5,0,1,58,15,15,9.54
+39,Chartreuse verte,750 cc per bottle,18.0,0,1,25,67,34,7.2
+40,Boston Crab Meat,24 - 4 oz tins,18.4,0,8,45,187,40,16.58
+41,Jack's New England Clam Chowder,12 - 12 oz cans,9.65,0,8,32,39,17,7.49
+42,Singaporean Hokkien Fried Mee,32 - 1 kg pkgs.,14.0,1,5,4,148,39,1.62
+43,Ipoh Coffee,16 - 500 g tins,46.0,0,1,21,14,8,14.65
+44,Gula Malacca,20 - 2 kg bags,19.45,0,2,33,135,15,1.52
+45,Rogede sild,1k pkg.,9.5,0,8,33,20,16,1.81
+46,Spegesild,4 - 450 g glasses,12.0,0,8,5,172,20,10.15
+47,Zaanse koeken,10 - 4 oz boxes,9.5,0,3,57,145,20,14.52
+48,Chocolade,10 pkgs.,12.75,0,3,3,158,10,10.54
+49,Maxilaku,24 - 50 g pkgs.,20.0,0,3,38,144,38,7.98
+50,Valkoinen suklaa,12 - 100 g bars,16.25,0,3,17,52,47,17.93
+51,Manjimup Dried Apples,50 - 300 g pkgs.,53.0,0,7,16,67,30,3.36
+52,Filo Mix,16 - 2 kg boxes,7.0,0,5,42,76,34,7.97
+53,Perth Pasties,48 pieces,32.8,1,6,49,18,5,11.51
+54,Tourtière,16 pies,7.45,0,6,37,25,9,13.49
+55,Pâté chinois,24 boxes x 2 pies,24.0,0,6,33,67,13,23.34
+56,Gnocchi di nonna Alice,24 - 250 g pkgs.,38.0,0,5,57,17,20,9.3
+57,Ravioli Angelo,24 - 250 g pkgs.,19.5,0,5,11,112,39,17.62
+58,Escargots de Bourgogne,24 pieces,13.25,0,8,40,167,38,0.29
+59,Raclette Courdavault,5 kg pkg.,55.0,0,4,53,141,24,23.3
+60,Camembert Pierrot,15 - 300 g rounds,34.0,0,4,7,34,21,2.97
+61,Sirop d'érable,24 - 500 ml bottles,28.5,0,2,7,190,40,3.97
+62,Tarte au sucre,48 pies,49.3,0,3,19,154,18,17.97
+63,Vegie-spread,15 - 625 g jars,43.9,0,2,14,175,45,21.34
+64,Wimmers gute Semmelknödel,20 bags x 4 pieces,33.25,0,5,33,125,21,22.64
+65,Louisiana Fiery Hot Pepper Sauce,32 - 8 oz bottles,21.05,0,2,55,13,10,15.89
+66,Louisiana Hot Spiced Okra,24 - 8 oz jars,17.0,0,2,54,70,7,0.19
+67,Laughing Lumberjack Lager,24 - 12 oz bottles,14.0,0,1,50,33,45,24.5
+68,Scottish Longbreads,10 boxes x 8 pieces,12.5,0,3,11,189,33,13.84
+69,Gudbrandsdalsost,10 kg pkg.,36.0,0,4,28,143,5,2.89
+70,Outback Lager,24 - 355 ml bottles,15.0,0,1,57,176,14,13.69
+71,Flotemysost,10 - 500 g pkgs.,21.5,0,4,54,94,42,13.86
+72,Mozzarella di Giovanni,24 - 200 g pkgs.,34.8,0,4,28,32,7,7.78
+73,Röd Kaviar,24 - 150 g jars,15.0,0,8,58,10,27,5.33
+74,Longlife Tofu,5 kg pkg.,10.0,0,7,16,170,11,8.91
+75,Rhönbräu Klosterbier,24 - 0.5 l bottles,7.75,0,1,36,104,44,18.76
+76,Lakkaliköri,500 ml,18.0,0,1,60,60,15,24.41
+77,Original Frankfurter Grüne Soße,12 boxes,13.0,0,2,52,45,31,0.72
+78,Traditional Black Beans,16 - 250ml bottles,111.91,0,12,48,127,39,4.86
+79,Lakeside Canned Tomatoes,5 kg box,105.04,0,12,13,235,49,9.23
+80,Free-Range Garden Eggs,48 units,5.77,0,13,18,35,40,10.6
+81,Premier Veggie Burgers,20 - 1kg bags,117.79,0,9,2,59,38,5.44
+82,Artisan Country Sourdough,12 - 200g jars,72.8,0,5,21,223,70,3.56
+83,Farm Collagen Peptides,100 - 50g bars,32.8,0,15,34,275,30,10.99
+84,Rustic Mayo,12 - 200g jars,41.63,0,2,8,153,69,9.35
+85,Lakeside Sweet Potatoes,20 - 1kg bags,84.57,0,7,27,194,27,18.5
+86,Royal Oatmeal,10 boxes x 20 bags,100.55,0,5,28,296,46,14.0
+87,Prairie Crab Cakes,12 - 355ml cans,58.36,0,8,48,86,15,8.59
+88,Valley Cocoa Powder,5 kg box,42.22,0,11,16,158,33,24.22
+89,Belgian Artisan Chocolate,36 - 150g packages,31.65,0,3,50,37,63,12.49
+90,Farm Yeast,24 - 12 oz cans,87.05,0,11,16,75,5,26.79
+91,Sunset Naan Bread,24 - 12 oz cans,15.47,0,14,52,265,64,1.6
+92,Nordic Gouda,36 - 150g packages,18.6,0,4,36,162,61,18.42
+93,Mountain Soup,20 - 1kg bags,100.18,0,12,11,243,62,7.85
+94,Signature Brie,36 - 150g packages,93.99,0,4,18,225,14,21.43
+95,Heritage Brie,20 - 1kg bags,40.41,0,4,10,118,54,20.85
+96,Classic Chickpeas,12 - 200g jars,51.54,0,12,27,31,31,25.0
+97,Fresh Sunrise Avocados,6 - 1L cartons,106.04,0,7,1,180,43,22.63
+98,Mountain Naan Bread,100 - 50g bars,65.97,0,14,39,112,67,6.66
+99,Alpine Broccoli,8 - 500g tubs,48.5,0,7,26,84,64,27.59
+100,Alpine Cashews,6 - 1L cartons,109.11,0,10,2,42,59,4.16
+101,Artisan Tuna Steak,12 - 200g jars,33.44,0,8,21,172,53,8.42
+102,Golden Gochujang,36 - 150g packages,100.68,1,14,35,26,49,6.8
+103,Artisan Mayo,48 units,91.25,0,2,2,78,35,3.87
+104,Silver All-Purpose Flour,36 - 150g packages,113.89,0,11,50,188,26,18.22
+105,Country Tuna,6 - 500ml bottles,94.0,0,12,7,296,8,27.87
+106,Rustic Peanut Butter Cups,24 - 12 oz cans,115.11,0,10,13,38,36,3.15
+107,Organic Sunrise Olive Oil,16 - 250ml bottles,83.06,0,13,37,21,49,16.03
+108,Classic Vanilla Extract,12 - 200g jars,62.2,1,11,27,250,18,13.06
+109,Select Ham,6 - 500ml bottles,20.9,0,6,42,138,73,23.26
+110,Wild Mussels,10 boxes x 20 bags,88.53,0,8,16,44,40,26.46
+111,Silver Cottage Cheese,24 - 12 oz cans,74.41,0,4,32,166,28,14.68
+112,Heritage Lamb Cutlets,6 - 1L cartons,35.72,0,6,18,284,6,15.55
+113,Garden Gouda,36 - 150g packages,87.25,0,4,16,243,67,13.5
+114,Harvest Coffee Blend,100 - 50g bars,28.93,0,1,43,297,52,14.25
+115,Mountain Frozen Burritos,20 - 1kg bags,119.61,0,9,45,232,39,9.27
+116,Reserve Gouda,24 - 250g pkgs,25.53,0,4,49,94,29,6.57
+117,Reserve Lobster Tail,16 - 250ml bottles,71.98,0,8,19,51,29,8.96
+118,Harvest Turkey Sausage,20 - 1kg bags,4.66,0,6,3,27,75,8.83
+119,Country Macarons,6 - 1L cartons,105.11,0,3,31,225,48,5.61
+120,Sunrise Green Tea,5 kg box,58.89,1,1,32,37,11,4.64
+121,Organic Harvest Chia Seeds,48 units,12.97,0,13,49,213,33,23.29
+122,Rustic Broccoli,5 kg box,54.8,0,7,28,156,12,18.33
+123,Signature Canned Tomatoes,48 units,27.31,0,12,6,80,35,5.3
+124,Alpine Vinaigrette,100 - 50g bars,50.8,0,2,19,16,34,8.71
+125,Classic Rye Bread,12 - 355ml cans,83.42,0,5,51,101,59,3.53
+126,Organic Rustic Yogurt,6 - 500ml bottles,34.08,1,4,11,157,41,13.23
+127,Select Lobster Tail,10 boxes x 20 bags,50.09,0,8,32,224,15,17.98
+128,Reserve Probiotic,10 boxes x 20 bags,40.71,1,15,15,294,7,29.99
+129,Silver Vanilla Extract,16 - 250ml bottles,7.71,0,11,34,226,40,5.53
+130,Coastal Popcorn,24 - 250g pkgs,98.27,0,10,27,170,46,20.14
+131,Heritage Miso Paste,36 - 150g packages,51.16,0,14,26,281,9,13.7
+132,Sunrise Chutney,12 - 100g bags,63.21,0,2,35,236,57,1.72
+133,Valley Frozen Burritos,8 - 500g tubs,91.5,0,9,4,104,39,16.52
+134,Nordic Fish Oil,36 - 150g packages,106.06,0,15,41,122,25,9.39
+135,Mountain Cold Brew,5 kg box,13.91,0,1,30,60,24,15.0
+136,Prairie Black Beans,24 - 12 oz cans,85.53,0,12,31,124,63,16.58
+137,Rustic Spinach,100 - 50g bars,73.13,0,7,56,35,40,23.2
+138,Heritage Gochujang,20 - 1kg bags,112.31,0,14,1,144,43,25.14
+139,Pacific Peanut Butter Cups,36 - 150g packages,104.24,0,10,23,170,75,22.91
+140,Select Pork Chops,24 - 12 oz cans,30.94,0,6,50,210,10,9.61
+141,Lakeside Mussels,16 - 250ml bottles,118.64,0,8,10,253,9,3.87
+142,Sunrise Pretzels,5 kg box,14.74,0,10,34,233,6,21.7
+143,Classic Bell Peppers,10 boxes x 20 bags,57.93,0,7,45,203,15,25.57
+144,Sunrise Kimchi,12 - 200g jars,65.43,0,14,57,249,74,1.17
+145,Coastal Soy Sauce,10 boxes x 20 bags,83.07,0,2,48,46,60,29.35
+146,Organic Select Hemp Hearts,36 - 150g packages,105.09,0,13,20,14,10,9.8
+147,Island Green Tea,6 - 500ml bottles,46.86,0,1,27,289,28,5.18
+148,Sunrise Relish,8 - 500g tubs,47.76,0,2,59,298,23,7.04
+149,Nordic Vanilla Extract,12 - 100g bags,32.87,0,11,30,147,74,4.82
+150,Silver Cod Fillet,24 - 12 oz cans,38.0,0,8,30,154,30,29.98
+151,Country Gochujang,6 - 1L cartons,30.75,0,14,19,151,7,29.34
+152,Golden Cake Mix,5 kg box,3.95,0,11,48,25,68,25.0
+153,Signature Fish Oil,6 - 1L cartons,96.47,0,15,15,97,37,20.37
+154,Premier Coconut Milk,6 - 500ml bottles,82.66,0,12,58,20,44,23.68
+155,Island Mineral Water,24 - 250g pkgs,88.69,0,1,21,212,27,6.1
+156,Organic Sunset Chia Seeds,20 - 1kg bags,116.66,0,13,18,84,37,27.43
+157,Traditional Harissa,24 - 250g pkgs,16.47,0,14,15,203,51,2.8
+158,Fresh Golden Avocados,36 - 150g packages,65.78,0,7,48,134,53,24.69
+159,Premier Ground Beef,12 - 100g bags,30.36,0,6,36,167,33,19.46
+160,Rustic Cake Mix,8 - 500g tubs,85.03,0,11,9,23,9,9.2
+161,Country Shrimp,20 - 1kg bags,30.47,0,8,30,189,74,12.63
+162,Deluxe Tuna,8 - 500g tubs,106.59,0,12,32,208,40,1.08
+163,Nordic Pork Chops,48 units,55.03,0,6,7,188,74,27.06
+164,Artisan Vanilla Extract,48 units,49.58,0,11,55,232,16,19.92
+165,Premium Traditional Tea,6 - 500ml bottles,42.02,0,1,14,35,75,6.29
+166,Heritage Butter,16 - 250ml bottles,93.6,0,4,1,141,23,29.63
+167,Traditional Frozen Burritos,8 - 500g tubs,23.42,0,9,9,7,50,23.72
+168,Alpine Cream Cheese,12 - 100g bags,23.39,0,4,27,269,19,22.4
+169,Signature Calamari,6 - 1L cartons,45.36,0,8,33,113,10,21.84
+170,Prairie Turmeric Capsules,8 - 500g tubs,38.29,0,15,4,245,56,12.85
+171,Select BBQ Sauce,24 - 250g pkgs,109.43,0,2,21,75,13,3.87
+172,Silver Peanut Butter Cups,12 - 200g jars,67.16,0,10,39,271,42,13.67
+173,Country Popcorn,24 - 250g pkgs,95.79,0,10,42,282,32,12.96
+174,Mountain Multivitamins,36 - 150g packages,42.65,0,15,47,48,45,12.86
+175,Island Vanilla Extract,8 - 500g tubs,114.57,0,11,5,46,15,2.89
+176,Traditional Pesto,12 - 100g bags,18.22,0,2,36,287,47,20.13
+177,Sunrise Sweet Potatoes,16 - 250ml bottles,80.84,0,7,59,26,41,18.05
+178,Silver Ground Beef,6 - 500ml bottles,62.37,0,6,15,55,49,25.38
+179,Signature Ground Beef,48 units,35.59,0,6,55,287,8,18.31
+180,Golden Cocoa Powder,10 boxes x 20 bags,6.39,0,11,20,173,49,0.28
+181,Silver Miso Paste,24 - 250g pkgs,79.91,0,14,41,15,16,22.41
+182,Mountain Mozzarella,6 - 500ml bottles,56.08,0,4,47,166,15,26.51
+183,Signature Marshmallows,8 - 500g tubs,75.29,0,3,29,217,67,18.25
+184,Farm Mushrooms,24 - 250g pkgs,91.33,0,7,8,145,67,15.86
+185,Artisan Garden Sourdough,6 - 1L cartons,49.25,1,5,14,154,32,23.04
+186,Organic Harvest Olive Oil,12 - 100g bags,41.39,0,13,28,89,21,11.47
+187,Prairie Chickpeas,8 - 500g tubs,68.37,0,12,5,203,10,13.14
+188,Sunrise Shrimp,24 - 12 oz cans,39.63,0,8,46,213,42,3.54
+189,Estate Energy Drink,6 - 1L cartons,96.75,0,1,45,185,16,13.16
+190,Mountain Soy Sauce,20 - 1kg bags,71.9,1,2,56,158,48,6.73
+191,Free-Range Classic Eggs,24 - 250g pkgs,62.73,0,13,13,178,49,21.85
+192,Wild Kimchi,24 - 250g pkgs,20.28,0,14,13,88,24,22.83
+193,Estate All-Purpose Flour,8 - 500g tubs,114.3,0,11,49,288,62,20.47
+194,Coastal Collagen Peptides,6 - 1L cartons,77.33,0,15,41,161,24,13.25
+195,Coastal Calamari,10 boxes x 20 bags,38.43,0,8,23,259,14,9.38
+196,Artisan Salmon Fillet,10 boxes x 20 bags,46.14,1,8,56,46,69,11.6
+197,Traditional Cashews,12 - 100g bags,89.45,0,10,52,292,29,9.71
+198,Traditional Shrimp,12 - 200g jars,108.2,0,8,6,258,27,1.27
+199,Nordic Corn,6 - 1L cartons,64.32,0,12,24,144,54,12.32
+200,Traditional Chicken Breast,12 - 200g jars,76.81,1,6,7,285,54,8.6
+201,Sunrise Collagen Peptides,24 - 250g pkgs,20.59,0,15,10,179,44,29.03
+202,Lakeside Tuna,100 - 50g bars,18.09,0,12,20,286,53,19.34
+203,Premier Turkey Sausage,100 - 50g bars,85.23,0,6,59,269,16,19.42
+204,Alpine Sweet Potatoes,6 - 500ml bottles,45.42,0,7,22,248,29,6.87
+205,Classic Marshmallows,16 - 250ml bottles,37.61,0,3,50,276,72,1.23
+206,Valley Turkey Sausage,6 - 500ml bottles,47.08,0,6,45,84,61,1.41
+207,Signature Pretzels,36 - 150g packages,90.58,0,10,16,158,65,27.13
+208,Premier Cream Cheese,36 - 150g packages,113.81,0,4,19,195,69,15.87
+209,Traditional Gummy Bears,5 kg box,73.75,0,3,42,246,52,16.68
+210,Sunrise Sriracha,24 - 250g pkgs,17.59,0,2,18,230,70,4.51
+211,Rustic Tomatoes,36 - 150g packages,28.98,0,7,60,13,58,1.69
+212,Garden Frozen Burritos,24 - 250g pkgs,48.18,0,9,2,163,17,25.19
+213,Traditional Vanilla Extract,12 - 100g bags,20.09,0,11,54,241,22,22.79
+214,Valley Calamari,24 - 250g pkgs,3.61,1,8,14,76,75,28.21
+215,Mountain Cashews,10 boxes x 20 bags,16.01,0,10,8,24,35,12.65
+216,Organic Nordic Chia Seeds,5 kg box,10.35,0,13,39,274,7,19.0
+217,Select Trail Mix,24 - 12 oz cans,19.8,1,10,23,123,58,5.7
+218,Prairie All-Purpose Flour,24 - 250g pkgs,117.03,0,11,35,259,69,16.67
+219,Artisan Broccoli,12 - 200g jars,77.37,0,7,2,182,13,10.41
+220,Coastal Tuna,6 - 1L cartons,15.13,0,12,22,68,10,10.63
+221,Wild Turkey Sausage,36 - 150g packages,94.16,0,6,31,93,22,1.99
+222,Organic Artisan Almond Butter,12 - 100g bags,37.33,0,13,57,21,45,28.01
+223,Wild Veggie Burgers,10 boxes x 20 bags,66.53,1,9,42,97,41,10.77
+224,Organic Sunrise Honey,10 boxes x 20 bags,79.72,0,13,24,223,56,22.32
+225,Heritage Probiotic,36 - 150g packages,116.93,0,15,24,265,39,24.05
+226,Classic Corn,5 kg box,53.38,0,12,19,164,18,2.49
+227,Harvest Vanilla Extract,100 - 50g bars,55.17,0,11,45,227,49,13.47
+228,Rustic Coconut Milk,24 - 12 oz cans,44.25,0,12,51,29,14,20.17
+229,Prairie Sweet Potatoes,8 - 500g tubs,96.73,0,7,2,73,61,1.14
+230,Signature Soy Sauce,12 - 200g jars,78.48,0,2,37,16,24,20.4
+231,Nordic Bacon Strips,6 - 1L cartons,92.28,0,6,24,203,45,19.52
+232,Alpine Gouda,36 - 150g packages,89.07,0,4,59,287,20,7.93
+233,Farm Rye Bread,10 boxes x 20 bags,119.57,0,5,32,102,20,4.16
+234,Estate BBQ Sauce,36 - 150g packages,108.15,0,2,52,163,49,21.32
+235,Harvest Frozen Dumplings,5 kg box,107.29,0,9,46,89,51,15.31
+236,Traditional Soy Sauce,16 - 250ml bottles,19.25,0,2,24,283,52,14.08
+237,Valley Ice Cream,24 - 250g pkgs,106.46,0,9,46,245,72,12.38
+238,Deluxe Tomatoes,8 - 500g tubs,116.77,1,7,30,264,49,3.94
+239,Royal Naan Bread,6 - 500ml bottles,77.86,0,14,9,221,69,27.33
+240,Prairie Coffee Blend,6 - 500ml bottles,20.9,0,1,60,115,49,28.43
+241,Sunrise Frozen Burritos,48 units,12.23,0,9,36,140,21,18.79
+242,Classic Cashews,6 - 500ml bottles,61.8,0,10,38,78,26,19.8
+243,Heritage Soup,6 - 1L cartons,101.58,1,12,56,14,15,1.46
+244,Golden Yeast,16 - 250ml bottles,79.18,0,11,40,15,68,26.68
+245,Coastal Frozen Burritos,36 - 150g packages,114.93,0,9,52,207,43,13.66
+246,Estate Canned Tomatoes,36 - 150g packages,54.43,0,12,22,73,45,25.86
+247,Lakeside Bacon Strips,12 - 200g jars,18.3,0,6,7,163,35,14.05
+248,Garden Rye Bread,12 - 100g bags,19.48,0,5,25,214,36,28.88
+249,Wild Multivitamins,6 - 1L cartons,41.31,0,15,13,81,68,29.88
+250,Sunset Calamari,12 - 100g bags,39.1,0,8,26,258,63,29.0
