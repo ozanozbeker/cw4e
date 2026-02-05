@@ -12,3 +12,6 @@ Thumbs.db
 
 # DuckDB
 *.wal
+
+# Python
+.venv/
