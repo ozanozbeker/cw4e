@@ -307,19 +307,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#keys-the-links-between-tables" id="toc-keys-the-links-between-tables" class="nav-link" data-scroll-target="#keys-the-links-between-tables"><span class="header-section-number">8.2</span> Keys: The Links Between Tables</a>
   <ul class="collapse">
   <li><a href="#relationship-types" id="toc-relationship-types" class="nav-link" data-scroll-target="#relationship-types"><span class="header-section-number">8.2.1</span> Relationship Types</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">8.2.2</span> Exercises</a></li>
   </ul></li>
   <li><a href="#inner-join-matching-rows" id="toc-inner-join-matching-rows" class="nav-link" data-scroll-target="#inner-join-matching-rows"><span class="header-section-number">8.3</span> INNER JOIN: Matching Rows</a>
   <ul class="collapse">
   <li><a href="#how-inner-join-works" id="toc-how-inner-join-works" class="nav-link" data-scroll-target="#how-inner-join-works"><span class="header-section-number">8.3.1</span> How INNER JOIN Works</a></li>
+  <li><a href="#exercises-1" id="toc-exercises-1" class="nav-link" data-scroll-target="#exercises-1"><span class="header-section-number">8.3.2</span> Exercises</a></li>
   </ul></li>
   <li><a href="#left-join-keeping-everything-from-one-side" id="toc-left-join-keeping-everything-from-one-side" class="nav-link" data-scroll-target="#left-join-keeping-everything-from-one-side"><span class="header-section-number">8.4</span> LEFT JOIN: Keeping Everything from One Side</a>
   <ul class="collapse">
   <li><a href="#finding-unmatched-rows" id="toc-finding-unmatched-rows" class="nav-link" data-scroll-target="#finding-unmatched-rows"><span class="header-section-number">8.4.1</span> Finding Unmatched Rows</a></li>
   </ul></li>
-  <li><a href="#other-join-types" id="toc-other-join-types" class="nav-link" data-scroll-target="#other-join-types"><span class="header-section-number">8.5</span> Other Join Types</a></li>
+  <li><a href="#other-join-types" id="toc-other-join-types" class="nav-link" data-scroll-target="#other-join-types"><span class="header-section-number">8.5</span> Other Join Types</a>
+  <ul class="collapse">
+  <li><a href="#exercises-2" id="toc-exercises-2" class="nav-link" data-scroll-target="#exercises-2"><span class="header-section-number">8.5.1</span> Exercises</a></li>
+  </ul></li>
   <li><a href="#multi-table-queries" id="toc-multi-table-queries" class="nav-link" data-scroll-target="#multi-table-queries"><span class="header-section-number">8.6</span> Multi-Table Queries</a></li>
   <li><a href="#row-multiplication-a-common-trap" id="toc-row-multiplication-a-common-trap" class="nav-link" data-scroll-target="#row-multiplication-a-common-trap"><span class="header-section-number">8.7</span> Row Multiplication: A Common Trap</a></li>
-  <li><a href="#self-joins" id="toc-self-joins" class="nav-link" data-scroll-target="#self-joins"><span class="header-section-number">8.8</span> Self-Joins</a></li>
+  <li><a href="#self-joins" id="toc-self-joins" class="nav-link" data-scroll-target="#self-joins"><span class="header-section-number">8.8</span> Self-Joins</a>
+  <ul class="collapse">
+  <li><a href="#exercises-3" id="toc-exercises-3" class="nav-link" data-scroll-target="#exercises-3"><span class="header-section-number">8.8.1</span> Exercises</a></li>
+  </ul></li>
   <li><a href="#chapter-exercises" id="toc-chapter-exercises" class="nav-link" data-scroll-target="#chapter-exercises"><span class="header-section-number">8.9</span> Chapter Exercises</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">8.10</span> Summary</a></li>
   <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">8.11</span> Glossary</a></li>
@@ -431,21 +439,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 products ┘                   │
                              └── Each row: one product in one order</code></pre>
 <p>Understanding these patterns helps you predict how many rows a join will produce, which, as you’ll see later in this chapter, is one of the most important things to get right.</p>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="exercises" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="exercises"><span class="header-section-number">8.2.2</span> Exercises</h3>
 <ol type="1">
 <li><p>Look at the Northwind tables: <code>categories</code>, <code>products</code>, <code>suppliers</code>, <code>orders</code>, <code>order_details</code>, <code>customers</code>. For each pair listed below, identify which is the “one” side and which is the “many” side, and name the foreign key column that connects them. (a) <code>categories</code> and <code>products</code>. (b) <code>customers</code> and <code>orders</code>. (c) <code>orders</code> and <code>order_details</code>.</p></li>
 <li><p>Why can’t the relationship between <code>orders</code> and <code>products</code> be represented with a single foreign key on either table? What would go wrong if you added a <code>productID</code> column to the <code>orders</code> table?</p></li>
 <li><p>Imagine Northwind adds an <code>employee_territories</code> table where each row links an employee to a territory they cover. An employee can cover many territories, and a territory can be covered by many employees. What kind of relationship is this, and what would the junction table’s columns look like?</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> (a) categories=one, products=many, FK: categoryID in products. (b) customers=one, orders=many, FK: customerID in orders. (c) orders=one, order_details=many, FK: orderID in order_details.</p>
+<p><strong>2.</strong> Many-to-many: one order has many products, one product appears in many orders. Adding productID to orders would limit each order to one product. The junction table order_details resolves this.</p>
+<p><strong>3.</strong> Many-to-many relationship. Junction table employee_territories would have: employeeID (FK to employees), territoryID (FK to territories), and optionally a composite primary key of both.</p>
+</div>
 </div>
 </div>
 </section>
@@ -481,21 +498,39 @@ supplierID: 1  ───────► supplierID: 1  ✓ Match! Combined in re
 supplierID: 2  ───────► supplierID: 2  ✓ Match! Combined in result
 supplierID: 99 ───────► (no match)     ✗ Product excluded
                         supplierID: 5  ✗ Supplier excluded (no products)</code></pre>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
+</section>
+<section id="exercises-1" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="exercises-1"><span class="header-section-number">8.3.2</span> Exercises</h3>
+<ol type="1">
+<li><p>Write a query that joins <code>products</code> to <code>categories</code> and returns the product name, unit price, and category name. Sort by category name, then by price descending within each category.</p></li>
+<li><p>The <code>products</code> table has 250 rows. If you <code>INNER JOIN</code> products to suppliers, would you expect the result to have exactly 250 rows, fewer than 250, or more than 250? Explain your reasoning, then run the query and check. (Hint: think about whether every product has a valid supplier and whether any supplier maps to multiple products.)</p></li>
+<li><p>Write a query that answers: “Which products does each supplier provide, and how much are they worth in total inventory?” Join <code>products</code> to <code>suppliers</code>, compute <code>unitPrice * unitsInStock</code> as <code>inventory_value</code>, and sort by supplier name.</p></li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
+<span class="screen-reader-only">Tip</span>Solutions
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<ol type="1">
-<li><p>Write a query that joins <code>products</code> to <code>categories</code> and returns the product name, unit price, and category name. Sort by category name, then by price descending within each category.</p></li>
-<li><p>The <code>products</code> table has 77 rows. If you <code>INNER JOIN</code> products to suppliers, would you expect the result to have exactly 77 rows, fewer than 77, or more than 77? Explain your reasoning, then run the query and check. (Hint: think about whether every product has a valid supplier and whether any supplier maps to multiple products.)</p></li>
-<li><p>Write a query that answers: “Which products does each supplier provide, and how much are they worth in total inventory?” Join <code>products</code> to <code>suppliers</code>, compute <code>unitPrice * unitsInStock</code> as <code>inventory_value</code>, and sort by supplier name.</p></li>
-</ol>
+<p><strong>1.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.productName, p.unitPrice, c.categoryName</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p.categoryID <span class="op">=</span> c.categoryID</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.categoryName, p.unitPrice <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2.</strong> Exactly 250 rows — every product has a valid supplierID, so all match. Each product matches exactly one supplier (many-to-one), so no row multiplication.</p>
+<p><strong>3.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s.companyName <span class="kw">AS</span> supplier, p.productName, p.unitPrice, p.unitsInStock,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    p.unitPrice <span class="op">*</span> p.unitsInStock <span class="kw">AS</span> inventory_value</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> s.companyName, p.productName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </div>
 </div>
 </section>
@@ -508,18 +543,31 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    c.country,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    o.orderID,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    o.orderDate</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> o.orderDate;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    c.country,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    o.orderID,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    o.orderDate</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> o.orderDate;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Customers with orders appear with their order information populated. Customers without orders still appear in the results, but <code>orderID</code> and <code>orderDate</code> are <code>NULL</code> for those rows.</p>
 <p>This distinction between <code>INNER JOIN</code> and <code>LEFT JOIN</code> matters more than it might initially seem. Using <code>INNER JOIN</code> when you should have used <code>LEFT JOIN</code> silently drops rows from your results. If you’re counting total customers and some have no orders, an <code>INNER JOIN</code> through the <code>orders</code> table will give you the wrong count. Building the habit of asking “do I want to keep unmatched rows?” before choosing your join type will prevent subtle data loss bugs.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>When the Data Doesn’t Show the Difference
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the Northwind dataset, every customer has placed at least one order, so <code>INNER JOIN</code> and <code>LEFT JOIN</code> between <code>customers</code> and <code>orders</code> return the same rows. Run both and compare the counts to verify this for yourself. This is actually common in well-maintained production databases, but it doesn’t mean <code>LEFT JOIN</code> is unnecessary. Real-world data is messier: new customers exist before their first order, data migrations leave gaps, and upstream systems don’t always enforce referential integrity. Always choose your join type based on what <em>should</em> happen logically, not on what the current data happens to contain. The exercises below ask you to use the <code>LEFT JOIN</code> plus <code>IS NULL</code> pattern anyway, because the pattern matters even when the current result is empty.</p>
+</div>
+</div>
 <section id="finding-unmatched-rows" class="level3" data-number="8.4.1">
 <h3 data-number="8.4.1" class="anchored" data-anchor-id="finding-unmatched-rows"><span class="header-section-number">8.4.1</span> Finding Unmatched Rows</h3>
 <p>A practical pattern combines <code>LEFT JOIN</code> with a <code>NULL</code> check to find rows that <em>don’t</em> have a match:</p>
@@ -527,14 +575,14 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Customers who have never placed an order</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    c.country</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderID <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Customers who have never placed an order</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    c.country</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderID <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This works because unmatched rows have <code>NULL</code> in all columns from the right table. Filtering for <code>NULL</code> in the right table’s primary key gives you exactly the “orphaned” rows from the left table.</p>
 </section>
@@ -544,18 +592,18 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <p>While <code>INNER JOIN</code> and <code>LEFT JOIN</code> cover the vast majority of analytical work, three other join types exist and are worth understanding.</p>
 <p><strong>RIGHT JOIN</strong> is the mirror of <code>LEFT JOIN</code>: it keeps all rows from the right table and matches from the left. In practice, you can always rewrite a <code>RIGHT JOIN</code> as a <code>LEFT JOIN</code> by swapping the table order, and most analysts prefer <code>LEFT JOIN</code> for consistency.</p>
 <p><strong>FULL OUTER JOIN</strong> keeps all rows from both tables, filling <code>NULL</code> where there’s no match on either side. This is useful for reconciliation queries (“show me everything from both systems, highlighting what’s only in one”), but it’s rare in everyday analytical work.</p>
-<p><strong>CROSS JOIN</strong> produces every possible combination of rows from both tables. If one table has 10 rows and the other has 100, the result has 1,000 rows. This is occasionally useful (generating all possible product-store combinations, for example) but dangerous if done accidentally on large tables.</p>
+<p><strong>CROSS JOIN</strong> produces every possible combination of rows from both tables. If one table has 10 rows and the other has 50, the result has 500 rows. This is occasionally useful (generating all possible product-store combinations, for example) but dangerous if done accidentally on large tables.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- CROSS JOIN example: every category paired with every shipper</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Useful for building a "coverage matrix"</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    c.categoryName,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    s.companyName <span class="kw">AS</span> shipper</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> categories <span class="kw">AS</span> c</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CROSS</span> <span class="kw">JOIN</span> shippers <span class="kw">AS</span> s;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- CROSS JOIN example: every category paired with every shipper</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Useful for building a "coverage matrix"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    c.categoryName,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    s.companyName <span class="kw">AS</span> shipper</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> categories <span class="kw">AS</span> c</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CROSS</span> <span class="kw">JOIN</span> shippers <span class="kw">AS</span> s;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-simple callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -571,16 +619,8 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <p>If you want to think in terms of Venn diagrams, save that mental model for actual set operations (<code>UNION</code>, <code>INTERSECT</code>, <code>EXCEPT</code>) from the previous chapter, where both sides represent complete rows of the same structure and the operations truly combine, intersect, or subtract those rows. For joins, think “row matching” instead.</p>
 </div>
 </div>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<section id="exercises-2" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="exercises-2"><span class="header-section-number">8.5.1</span> Exercises</h3>
 <ol type="1">
 <li><p>Write a query that finds all customers who have never placed an order. Return the company name and country. How many are there?</p></li>
 <li><p>This query is supposed to count how many orders each customer has placed, including customers with zero orders. Find the bug:</p>
@@ -588,21 +628,44 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> order_count</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.companyName</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> order_count;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> order_count</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.companyName</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> order_count;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>(Hint: what does <code>COUNT(*)</code> count for customers with no orders? What should you count instead?)</p></li>
-<li><p>What would a <code>CROSS JOIN</code> between <code>categories</code> (8 rows) and <code>shippers</code> (3 rows) produce? How many result rows? When would this “every combination” behavior be useful in a business context?</p></li>
+<li><p>What would a <code>CROSS JOIN</code> between <code>categories</code> (15 rows) and <code>shippers</code> (8 rows) produce? How many result rows? When would this “every combination” behavior be useful in a business context?</p></li>
 <li><p>Explain in your own words why <code>INNER JOIN</code> and <code>LEFT JOIN</code> are not set operations, even though online tutorials often draw them as Venn diagrams. Use the one-to-many relationship between customers and orders as your example.</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.companyName, c.country</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderID <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Returns 0 rows in Northwind (all customers have orders), but the pattern is correct.</p>
+<p><strong>2.</strong> Bug: <code>COUNT(*)</code> counts all rows including the LEFT JOIN row with NULLs. A customer with 0 orders would show count=1. Fix: use <code>COUNT(o.orderID)</code> which skips NULLs.</p>
+<p><strong>3.</strong> CROSS JOIN produces 15 × 8 = 120 rows. Useful for building coverage matrices (e.g., which category-shipper combinations have been used).</p>
+<p><strong>4.</strong> Joins are row-matching operations that CREATE new combined rows. If customer “ABC” has 15 orders, INNER JOIN produces 15 result rows — a Venn diagram can’t show this multiplication. Set operations combine complete rows without multiplication.</p>
 </div>
 </div>
+</div>
+</section>
 </section>
 <section id="multi-table-queries" class="level2" data-number="8.6">
 <h2 data-number="8.6" class="anchored" data-anchor-id="multi-table-queries"><span class="header-section-number">8.6</span> Multi-Table Queries</h2>
@@ -612,22 +675,22 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    c.companyName <span class="kw">AS</span> customer,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    p.productName <span class="kw">AS</span> product,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    s.companyName <span class="kw">AS</span> supplier,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    od.quantity,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    od.unitPrice <span class="op">*</span> od.quantity <span class="kw">AS</span> line_total</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> products <span class="kw">AS</span> p</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> od.productID <span class="op">=</span> p.productID</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.companyName, p.productName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    c.companyName <span class="kw">AS</span> customer,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    p.productName <span class="kw">AS</span> product,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    s.companyName <span class="kw">AS</span> supplier,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    od.quantity,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    od.unitPrice <span class="op">*</span> od.quantity <span class="kw">AS</span> line_total</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> products <span class="kw">AS</span> p</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> od.productID <span class="op">=</span> p.productID</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.companyName, p.productName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This query chains four joins to connect five tables. Read it from the <code>FROM</code> clause down: start with customers, join to their orders, join to the line items in those orders, join to the product details, join to the supplier. Each join adds one more piece of context to the result.</p>
 <p>Notice that <code>order_details</code> is the junction table connecting orders to products. Without it, there would be no way to know which products are in which orders. The join path <code>orders → order_details → products</code> traverses a many-to-many relationship by going through the junction table one step at a time.</p>
@@ -662,20 +725,33 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- WRONG: customer info is repeated per order, inflating the count</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    c.country,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> order_count</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.companyName, c.country;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- WRONG: customer info is repeated per order, inflating the count</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    c.country,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> order_count</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.companyName, c.country;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This counts <em>order detail lines</em>, not orders, because each order can have many line items. If you wanted to count orders, you’d need <code>COUNT(DISTINCT o.orderID)</code> instead of <code>COUNT(*)</code>.</p>
 <p>The lesson: whenever you join tables, think about the <em>grain</em> of your result set. Each join can change the level of detail each row represents. A join from orders to order details changes your grain from one-row-per-order to one-row-per-line-item.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Check Your Row Count After Every Join
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In professional work, the habit of checking your row count before and after every join will save you more debugging time than any other practice. If you started with 200,000 orders and after joining to order_details you have 631,000 rows, that’s expected — you’ve moved from order grain to line-item grain. But if you expected 200,000 and got 200,000, make sure you didn’t accidentally drop rows with an INNER JOIN where a LEFT JOIN was needed. Running <code>SELECT COUNT(*)</code> at each stage of a multi-table query takes seconds and prevents hours of debugging downstream.</p>
+</div>
+</div>
 </section>
 <section id="self-joins" class="level2" data-number="8.8">
 <h2 data-number="8.8" class="anchored" data-anchor-id="self-joins"><span class="header-section-number">8.8</span> Self-Joins</h2>
@@ -684,56 +760,71 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Who reports to whom?</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    e.firstName <span class="op">||</span> <span class="st">' '</span> <span class="op">||</span> e.lastName <span class="kw">AS</span> employee,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    e.title <span class="kw">AS</span> employee_title,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    m.firstName <span class="op">||</span> <span class="st">' '</span> <span class="op">||</span> m.lastName <span class="kw">AS</span> manager,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    m.title <span class="kw">AS</span> manager_title</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employees <span class="kw">AS</span> e</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> employees <span class="kw">AS</span> m</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> e.reportsTo <span class="op">=</span> m.employeeID;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Who reports to whom?</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    e.employeeName <span class="kw">AS</span> employee,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    e.title <span class="kw">AS</span> employee_title,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    m.employeeName <span class="kw">AS</span> manager,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    m.title <span class="kw">AS</span> manager_title</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employees <span class="kw">AS</span> e</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> employees <span class="kw">AS</span> m</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> e.reportsTo <span class="op">=</span> m.employeeID;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The trick is giving the same table two different aliases (<code>e</code> for employees, <code>m</code> for managers) so the database can distinguish between the two roles. The <code>LEFT JOIN</code> ensures the top-level manager (who reports to nobody) still appears, with <code>NULL</code> in the manager columns.</p>
-<p>The <code>||</code> operator concatenates strings in SQL. It’s how you combine text values, like building a full name from first and last name columns.</p>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<section id="exercises-3" class="level3" data-number="8.8.1">
+<h3 data-number="8.8.1" class="anchored" data-anchor-id="exercises-3"><span class="header-section-number">8.8.1</span> Exercises</h3>
 <ol type="1">
 <li><p>Using the self-join on <code>employees</code>, find the top-level manager (the person whose <code>reportsTo</code> is <code>NULL</code>). Then write a query that counts how many direct reports each manager has.</p></li>
 <li><p>Why does the self-join example use <code>LEFT JOIN</code> instead of <code>INNER JOIN</code>? What would change in the results if you switched to <code>INNER JOIN</code>?</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Top-level manager</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> e.employeeName, e.title <span class="kw">FROM</span> employees <span class="kw">AS</span> e <span class="kw">WHERE</span> e.reportsTo <span class="kw">IS</span> <span class="kw">NULL</span>;</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Direct reports per manager</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> m.employeeName <span class="kw">AS</span> manager, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> direct_reports</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employees <span class="kw">AS</span> e</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> employees <span class="kw">AS</span> m <span class="kw">ON</span> e.reportsTo <span class="op">=</span> m.employeeID</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> m.employeeName</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> direct_reports <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2.</strong> LEFT JOIN ensures the top-level manager (reportsTo IS NULL) appears in results with NULL in manager columns. INNER JOIN would exclude them because there’s no matching manager row.</p>
 </div>
 </div>
+</div>
+</section>
 </section>
 <section id="chapter-exercises" class="level2" data-number="8.9">
 <h2 data-number="8.9" class="anchored" data-anchor-id="chapter-exercises"><span class="header-section-number">8.9</span> Chapter Exercises</h2>
 <p>These exercises require you to combine join concepts to answer business questions that span the Northwind data model. Build each query incrementally, verifying row counts at each step.</p>
 <ol type="1">
 <li><p><strong>Supplier performance.</strong> Write a query that shows each supplier’s company name, country, the number of distinct products they supply, and the average unit price of those products. Sort by product count descending. Which supplier offers the most products?</p></li>
-<li><p><strong>The full supply chain.</strong> Write a query that traces the complete path from supplier to customer for orders placed in July 1997. Include the supplier name, product name, customer name, order date, quantity, and line total (<code>unitPrice * quantity</code> from <code>order_details</code>). This requires joining five tables. Build it one join at a time.</p></li>
-<li><p><strong>Row count prediction.</strong> Before running each query, predict how many rows the result will have, then verify. (a) <code>INNER JOIN</code> between <code>customers</code> (91 rows) and <code>orders</code> (830 rows). (b) <code>LEFT JOIN</code> between <code>customers</code> (91 rows) and <code>orders</code> (830 rows). (c) <code>CROSS JOIN</code> between <code>categories</code> (8 rows) and <code>suppliers</code> (29 rows). Explain any differences between (a) and (b).</p></li>
+<li><p><strong>The full supply chain.</strong> Write a query that traces the complete path from supplier to customer for orders placed in July 2024. Include the supplier name, product name, customer name, order date, quantity, and line total (<code>unitPrice * quantity</code> from <code>order_details</code>). This requires joining five tables. Build it one join at a time.</p></li>
+<li><p><strong>Row count prediction.</strong> Before running each query, predict how many rows the result will have, then verify. (a) <code>INNER JOIN</code> between <code>customers</code> (5,000 rows) and <code>orders</code> (200,000 rows). (b) <code>LEFT JOIN</code> between <code>customers</code> (5,000 rows) and <code>orders</code> (200,000 rows). (c) <code>CROSS JOIN</code> between <code>categories</code> (15 rows) and <code>suppliers</code> (60 rows). Explain any differences between (a) and (b).</p></li>
 <li><p><strong>Finding orphans.</strong> Write a query that identifies any products whose <code>supplierID</code> doesn’t match any row in the <code>suppliers</code> table. Then write a second query that finds any suppliers who don’t have any products listed. What do these “orphan” checks tell you about data quality?</p></li>
 <li><p><strong>Grain awareness.</strong> A colleague writes this query to compute total revenue per customer:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(od.unitPrice <span class="op">*</span> od.quantity) <span class="kw">AS</span> total_revenue</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.companyName</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> total_revenue <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    c.companyName,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(od.unitPrice <span class="op">*</span> od.quantity) <span class="kw">AS</span> total_revenue</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.companyName</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> total_revenue <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Is this query correct? Explain why or why not by tracing the grain at each join step. Then modify it to also show the number of distinct orders each customer placed (not the number of line items).</p></li>
 <li><p><strong>Category revenue report.</strong> Write a query that answers: “What is the total revenue for each product category?” You’ll need to join <code>categories</code>, <code>products</code>, and <code>order_details</code>. Then extend it to show the percentage of total company revenue that each category represents. (Hint: you can compute the overall total using a subquery or a window function if you’ve read ahead.)</p></li>
@@ -742,10 +833,10 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.companyName</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderID <span class="op">!=</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.companyName</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderID <span class="op">!=</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>After fixing it, explain <em>two</em> different things that were wrong with the original query.</p></li>
 <li><p><strong>Join type prediction.</strong> Without running them, predict the row count for each query below. Then run them and explain any discrepancies between your prediction and the actual result.</p>
@@ -753,25 +844,78 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Query A</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders <span class="kw">AS</span> o</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> employees <span class="kw">AS</span> e <span class="kw">ON</span> o.employeeID <span class="op">=</span> e.employeeID;</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- Query B</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employees <span class="kw">AS</span> e</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> e.employeeID <span class="op">=</span> o.employeeID;</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- Query C</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employees <span class="kw">AS</span> e</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> e.employeeID <span class="op">=</span> o.employeeID</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderID <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Query A</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders <span class="kw">AS</span> o</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> employees <span class="kw">AS</span> e <span class="kw">ON</span> o.employeeID <span class="op">=</span> e.employeeID;</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- Query B</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employees <span class="kw">AS</span> e</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> e.employeeID <span class="op">=</span> o.employeeID;</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- Query C</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> employees <span class="kw">AS</span> e</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> e.employeeID <span class="op">=</span> o.employeeID</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderID <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Explain what business question Query C answers and why it’s a useful pattern.</p></li>
 <li><p><strong>Reconciliation with FULL OUTER JOIN.</strong> You receive two CSV files: one listing product IDs that were shipped last month and one listing product IDs that were ordered last month. Write a query using <code>FULL OUTER JOIN</code> that categorizes each product as “Shipped Only” (shipped but not ordered, possibly a delayed shipment), “Ordered Only” (ordered but not shipped, possibly a fulfillment gap), or “Both” (ordered and shipped). Use the <code>orders</code>, <code>order_details</code>, and <code>shippers</code> tables to simulate this scenario for a date range you choose, joining on <code>productID</code>. Explain why <code>INNER JOIN</code> wouldn’t work for this analysis.</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s.companyName, s.country, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> p.productID) <span class="kw">AS</span> product_count,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">AVG</span>(p.unitPrice), <span class="dv">2</span>) <span class="kw">AS</span> avg_price</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> suppliers <span class="kw">AS</span> s</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> products <span class="kw">AS</span> p <span class="kw">ON</span> s.supplierID <span class="op">=</span> p.supplierID</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> s.companyName, s.country</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_count <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s.companyName <span class="kw">AS</span> supplier, p.productName, c.companyName <span class="kw">AS</span> customer,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    o.orderDate, od.quantity, od.unitPrice <span class="op">*</span> od.quantity <span class="kw">AS</span> line_total</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers <span class="kw">AS</span> c</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o <span class="kw">ON</span> c.customerID <span class="op">=</span> o.customerID</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> products <span class="kw">AS</span> p <span class="kw">ON</span> od.productID <span class="op">=</span> p.productID</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.orderDate <span class="op">&gt;=</span> <span class="st">'2024-07-01'</span> <span class="kw">AND</span> o.orderDate <span class="op">&lt;</span> <span class="st">'2024-08-01'</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.companyName, p.productName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>3.</strong> (a) ~200,000 (all orders match a customer). (b) ~200,000 (same — all customers have orders, so LEFT JOIN adds no extra rows). (c) 900 (15 × 60). (a) and (b) are identical because there are no orphaned customers.</p>
+<p><strong>4.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Products without valid supplier</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.productName, p.supplierID <span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID <span class="kw">WHERE</span> s.supplierID <span class="kw">IS</span> <span class="kw">NULL</span>;</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- Suppliers without products</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s.companyName <span class="kw">FROM</span> suppliers <span class="kw">AS</span> s</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> products <span class="kw">AS</span> p <span class="kw">ON</span> s.supplierID <span class="op">=</span> p.supplierID <span class="kw">WHERE</span> p.productID <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both return 0 rows in Northwind — data is clean.</p>
+<p><strong>5.</strong> The query is correct. Grain trace: customers (1 row/customer) → orders (1 row/order) → order_details (1 row/line item). SUM aggregates line item totals correctly. To add distinct order count: <code>COUNT(DISTINCT o.orderID) AS order_count</code>.</p>
+<p><strong>6.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> cat.categoryName, <span class="fu">ROUND</span>(<span class="fu">SUM</span>(od.unitPrice <span class="op">*</span> od.quantity), <span class="dv">2</span>) <span class="kw">AS</span> total_revenue,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fl">100.0</span> <span class="op">*</span> <span class="fu">SUM</span>(od.unitPrice <span class="op">*</span> od.quantity) <span class="op">/</span> <span class="fu">SUM</span>(<span class="fu">SUM</span>(od.unitPrice <span class="op">*</span> od.quantity)) <span class="kw">OVER</span> (), <span class="dv">1</span>) <span class="kw">AS</span> pct_of_total</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> categories <span class="kw">AS</span> cat</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> products <span class="kw">AS</span> p <span class="kw">ON</span> cat.categoryID <span class="op">=</span> p.categoryID</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od <span class="kw">ON</span> p.productID <span class="op">=</span> od.productID</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> cat.categoryName</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> total_revenue <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>7.</strong> Two bugs: (a) <code>!= NULL</code> is invalid — NULL comparisons must use IS NULL/IS NOT NULL. (b) Even if fixed to <code>= NULL</code>, the logic is inverted — <code>IS NULL</code> finds customers WITHOUT orders, <code>IS NOT NULL</code> finds those WITH. Correct: <code>WHERE o.orderID IS NULL</code>.</p>
+<p><strong>8.</strong> Query A: ~200,000 (all orders have valid employeeIDs). Query B: ~200,000 (same, plus any orderless employees get 1 row each). Query C: employees with zero orders. This pattern (“LEFT JOIN + IS NULL”) finds unmatched rows on the left side.</p>
+<p><strong>9.</strong> Use FULL OUTER JOIN between ordered products (subquery on orderDate range) and shipped products (subquery on shippedDate range), joined on productID. Classify with CASE: both non-null = “Both”, left null = “Shipped Only”, right null = “Ordered Only”. INNER JOIN can’t work because it drops “Only” categories.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="summary" class="level2" data-number="8.10">
 <h2 data-number="8.10" class="anchored" data-anchor-id="summary"><span class="header-section-number">8.10</span> Summary</h2>

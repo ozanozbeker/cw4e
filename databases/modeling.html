@@ -307,11 +307,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#drawing-er-diagrams-with-dbdiagram.io" id="toc-drawing-er-diagrams-with-dbdiagram.io" class="nav-link" data-scroll-target="#drawing-er-diagrams-with-dbdiagram.io"><span class="header-section-number">10.1.1</span> Drawing ER Diagrams with dbdiagram.io</a></li>
   <li><a href="#crows-foot-notation" id="toc-crows-foot-notation" class="nav-link" data-scroll-target="#crows-foot-notation"><span class="header-section-number">10.1.2</span> Crow’s Foot Notation</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">10.1.3</span> Exercises</a></li>
   </ul></li>
   <li><a href="#create-table-turning-design-into-structure" id="toc-create-table-turning-design-into-structure" class="nav-link" data-scroll-target="#create-table-turning-design-into-structure"><span class="header-section-number">10.2</span> CREATE TABLE: Turning Design into Structure</a>
   <ul class="collapse">
   <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types"><span class="header-section-number">10.2.1</span> Data Types</a></li>
   <li><a href="#constraints-rules-the-database-enforces" id="toc-constraints-rules-the-database-enforces" class="nav-link" data-scroll-target="#constraints-rules-the-database-enforces"><span class="header-section-number">10.2.2</span> Constraints: Rules the Database Enforces</a></li>
+  <li><a href="#exercises-1" id="toc-exercises-1" class="nav-link" data-scroll-target="#exercises-1"><span class="header-section-number">10.2.3</span> Exercises</a></li>
   </ul></li>
   <li><a href="#why-tables-are-split-normalization" id="toc-why-tables-are-split-normalization" class="nav-link" data-scroll-target="#why-tables-are-split-normalization"><span class="header-section-number">10.3</span> Why Tables Are Split: Normalization</a>
   <ul class="collapse">
@@ -322,6 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#fact-tables-the-measurements" id="toc-fact-tables-the-measurements" class="nav-link" data-scroll-target="#fact-tables-the-measurements"><span class="header-section-number">10.4.1</span> Fact Tables: The Measurements</a></li>
   <li><a href="#dimension-tables-the-context" id="toc-dimension-tables-the-context" class="nav-link" data-scroll-target="#dimension-tables-the-context"><span class="header-section-number">10.4.2</span> Dimension Tables: The Context</a></li>
   <li><a href="#star-schema" id="toc-star-schema" class="nav-link" data-scroll-target="#star-schema"><span class="header-section-number">10.4.3</span> Star Schema</a></li>
+  <li><a href="#exercises-2" id="toc-exercises-2" class="nav-link" data-scroll-target="#exercises-2"><span class="header-section-number">10.4.4</span> Exercises</a></li>
   </ul></li>
   <li><a href="#views-saved-queries" id="toc-views-saved-queries" class="nav-link" data-scroll-target="#views-saved-queries"><span class="header-section-number">10.5</span> Views: Saved Queries</a></li>
   <li><a href="#documenting-your-data-the-catalog-mindset" id="toc-documenting-your-data-the-catalog-mindset" class="nav-link" data-scroll-target="#documenting-your-data-the-catalog-mindset"><span class="header-section-number">10.6</span> Documenting Your Data: The Catalog Mindset</a></li>
@@ -331,6 +334,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#insert-from-a-query" id="toc-insert-from-a-query" class="nav-link" data-scroll-target="#insert-from-a-query"><span class="header-section-number">10.7.2</span> INSERT from a Query</a></li>
   <li><a href="#update-modifying-existing-rows" id="toc-update-modifying-existing-rows" class="nav-link" data-scroll-target="#update-modifying-existing-rows"><span class="header-section-number">10.7.3</span> UPDATE: Modifying Existing Rows</a></li>
   <li><a href="#delete-removing-rows" id="toc-delete-removing-rows" class="nav-link" data-scroll-target="#delete-removing-rows"><span class="header-section-number">10.7.4</span> DELETE: Removing Rows</a></li>
+  <li><a href="#exercises-3" id="toc-exercises-3" class="nav-link" data-scroll-target="#exercises-3"><span class="header-section-number">10.7.5</span> Exercises</a></li>
   </ul></li>
   <li><a href="#working-with-real-world-data" id="toc-working-with-real-world-data" class="nav-link" data-scroll-target="#working-with-real-world-data"><span class="header-section-number">10.8</span> Working with Real-World Data</a></li>
   <li><a href="#chapter-exercises" id="toc-chapter-exercises" class="nav-link" data-scroll-target="#chapter-exercises"><span class="header-section-number">10.9</span> Chapter Exercises</a></li>
@@ -344,7 +348,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../databases/index.html">Databases</a></li><li class="breadcrumb-item"><a href="../databases/modeling.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Modeling</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Modeling</span></h1>
+<h1 class="title"><span id="sec-modeling" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></h1>
 </div>
 
 
@@ -420,6 +424,19 @@ Table defects {
 </div>
 <p>The <code>ref: &gt;</code> syntax defines a foreign key relationship (many-to-one, where the arrow points toward the “one” side). Column settings like <code>pk</code>, <code>not null</code>, <code>unique</code>, and <code>ref</code> map directly to the SQL constraints you’ll learn in this chapter. The free tier gives you unlimited personal diagrams and can export to PNG, PDF, or SQL for PostgreSQL, MySQL, SQL Server, and Oracle.</p>
 <p>The code-based approach has an important advantage for engineers: your schema definition is text, which means it can be tracked in Git alongside the rest of your project. The diagram becomes a living document that evolves with your database.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Naming Conventions Matter More Than You Think
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pick a naming convention and enforce it ruthlessly: <code>snake_case</code> or <code>camelCase</code> for columns, singular or plural table names, whether IDs are <code>id</code>, <code>product_id</code>, or <code>productID</code>. It seems trivial until you inherit a database where every table uses a different convention and you can’t remember whether the column is <code>customerId</code>, <code>customer_id</code>, or <code>cust_id</code>. The Northwind database uses <code>camelCase</code> (e.g., <code>unitPrice</code>, <code>companyName</code>), which is common in Microsoft ecosystems. Most modern data teams prefer <code>snake_case</code> (<code>unit_price</code>, <code>company_name</code>) because it’s easier to read. Whatever you choose, consistency is more important than the choice itself.</p>
+</div>
+</div>
 </section>
 <section id="crows-foot-notation" class="level3" data-number="10.1.2">
 <h3 data-number="10.1.2" class="anchored" data-anchor-id="crows-foot-notation"><span class="header-section-number">10.1.2</span> Crow’s Foot Notation</h3>
@@ -429,21 +446,30 @@ Table defects {
 <p><code>||──||</code> means one and only one on both sides (one-to-one, both mandatory). <code>||──○&lt;</code> means one on the left (mandatory), zero or many on the right (the crow’s foot with a circle). This is the classic one-to-many relationship: one production line has zero or many inspections, but each inspection belongs to exactly one production line.</p>
 <p>When you see a crow’s foot on both ends (<code>○&lt;──&gt;○</code>), that signals a many-to-many relationship, which requires a junction table to implement (as you learned with <code>order_details</code> in the joins chapter).</p>
 <p>You don’t need to memorize every combination. The key insight is learning to read these diagrams so you can navigate unfamiliar schemas, because in professional work, you’ll encounter ER diagrams long before you encounter the actual data.</p>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="exercises" class="level3" data-number="10.1.3">
+<h3 data-number="10.1.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">10.1.3</span> Exercises</h3>
 <ol type="1">
 <li><p>A university needs to track students, courses, and enrollments. Each student can enroll in many courses, and each course has many students. Sketch the entities, relationships, and key columns (on paper or in text). What type of relationship exists between students and courses, and what table do you need to resolve it?</p></li>
 <li><p>For the Northwind database, identify the relationship type (one-to-one, one-to-many, or many-to-many) between: (a) <code>suppliers</code> and <code>products</code>, (b) <code>orders</code> and <code>order_details</code>, (c) <code>orders</code> and <code>products</code>. For each many-to-many relationship, name the junction table.</p></li>
 <li><p>Open dbdiagram.io and enter the quality control DBML example from this chapter. Examine the generated diagram. Then add a new table called <code>corrective_actions</code> that tracks fixes applied after defects are found. Each corrective action references a specific defect. What does the DBML look like?</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Many-to-many between students and courses. Junction table <strong>enrollments</strong>: enrollmentID (PK), studentID (FK), courseID (FK), grade, enrollmentDate.</p>
+<p><strong>2.</strong> (a) suppliers→products: one-to-many. (b) orders→order_details: one-to-many. (c) orders→products: many-to-many, junction table = order_details.</p>
+<p><strong>3.</strong> DBML for corrective_actions: <code>Table corrective_actions { action_id integer [pk]  defect_id integer [not null, ref: &gt; defects.defect_id]  action_description varchar [not null]  completion_date date  cost decimal }</code></p>
+</div>
 </div>
 </div>
 </section>
@@ -519,7 +545,7 @@ Table defects {
 </tbody>
 </table>
 <p>A few type choices deserve special attention.</p>
-<p>Use <code>DECIMAL</code> for money, never <code>DOUBLE</code>. Floating-point arithmetic introduces rounding errors that accumulate in financial calculations. <code>DECIMAL(10, 2)</code> stores values like <code>1234567.89</code> exactly as specified.</p>
+<p>Use <code>DECIMAL</code> for money, never <code>DOUBLE</code>. Floating-point arithmetic introduces rounding errors that accumulate in financial calculations. <code>DECIMAL(10, 2)</code> stores values like <code>1234567.89</code> exactly as specified. You may have noticed that the Northwind database stores <code>unitPrice</code> as <code>DOUBLE</code>. This is a common shortcut in sample datasets, but in a production system handling real financial data, you’d define it as <code>DECIMAL(10, 2)</code> to guarantee exact arithmetic.</p>
 <p>Use <code>VARCHAR</code> without a length limit in DuckDB. Unlike older databases that required you to declare <code>VARCHAR(255)</code>, DuckDB handles variable-length strings efficiently without an arbitrary cap.</p>
 <p>Use <code>DATE</code> for dates and <code>TIMESTAMP</code> for dates with times. Storing dates as strings (<code>"03/15/2024"</code>) prevents you from using date functions, makes sorting unreliable, and opens the door to format inconsistencies.</p>
 </section>
@@ -592,16 +618,9 @@ Table defects {
 <p>DuckDB supports <code>PRIMARY KEY</code>, <code>NOT NULL</code>, <code>UNIQUE</code>, and <code>CHECK</code> constraints and enforces them. DuckDB also accepts <code>FOREIGN KEY</code> syntax, but as of current versions, foreign key constraints are parsed but not fully enforced at the data level. This means DuckDB won’t reject an insert with an invalid foreign key reference. The syntax is still valuable for documenting relationships and for writing portable SQL that works in PostgreSQL or other databases where foreign keys are enforced.</p>
 </div>
 </div>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="exercises-1" class="level3" data-number="10.2.3">
+<h3 data-number="10.2.3" class="anchored" data-anchor-id="exercises-1"><span class="header-section-number">10.2.3</span> Exercises</h3>
 <ol type="1">
 <li><p>Write a <code>CREATE TABLE</code> statement for a <code>machines</code> table in a manufacturing context. It should have a machine ID (primary key), machine name (unique, required), installation date (required), and a maintenance cost per hour that must be positive. Choose appropriate data types for each column.</p></li>
 <li><p>What constraint would you add to prevent someone from inserting an inspection with a <code>batch_size</code> of zero or negative? Write the column definition.</p></li>
@@ -624,6 +643,29 @@ Table defects {
 </div></li>
 <li><p>Why does the text recommend using <code>DECIMAL(10, 2)</code> instead of <code>DOUBLE</code> for monetary values? What kind of error could <code>DOUBLE</code> introduce in a financial report?</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> machines (</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    machine_id <span class="dt">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    machine_name <span class="dt">VARCHAR</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">UNIQUE</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    installation_date <span class="dt">DATE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    maintenance_cost_per_hour <span class="dt">DECIMAL</span>(<span class="dv">10</span>, <span class="dv">2</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">CHECK</span> (maintenance_cost_per_hour <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2.</strong> <code>batch_size INTEGER NOT NULL CHECK (batch_size &gt; 0)</code></p>
+<p><strong>3.</strong> Statement A: FAILS — NOT NULL constraint on <code>name</code> rejects NULL. Statement B: In DuckDB, accepted (FK not enforced); in PostgreSQL, would fail because inspection_id 999 doesn’t exist. Statement C: FAILS — CHECK constraint rejects severity = 7 (must be BETWEEN 1 AND 5).</p>
+<p><strong>4.</strong> DOUBLE uses floating-point arithmetic with inherent rounding errors. <code>0.1 + 0.2 = 0.30000000000000004</code> in floating-point. Over thousands of financial transactions, these errors accumulate and create unexplained discrepancies. DECIMAL stores values exactly.</p>
+</div>
 </div>
 </div>
 </section>
@@ -700,16 +742,9 @@ order_details: order_id, product_id, quantity</code></pre>
 <p>Think of the fact table as a control panel showing measurements, and each dimension as a selector switch that filters what you see. Want to see sales by region? Join the region dimension. By product category? Join the product dimension. The star schema makes this kind of slicing and dicing natural.</p>
 <p>A variation called the <strong>snowflake schema</strong> normalizes the dimension tables further, breaking hierarchies like <code>product → category → department</code> into separate tables. Kimball generally advises against snowflaking unless dimension tables are extremely large, because the added joins increase query complexity without significant benefit for most analytical workloads.</p>
 <p>You don’t need to design star schemas while working through this book, but recognizing the pattern helps you navigate the analytical databases you’ll encounter in professional work. When you see a database with a large, narrow table full of numbers surrounded by wider tables full of descriptions, you’re looking at a dimensional model.</p>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="exercises-2" class="level3" data-number="10.4.4">
+<h3 data-number="10.4.4" class="anchored" data-anchor-id="exercises-2"><span class="header-section-number">10.4.4</span> Exercises</h3>
 <ol type="1">
 <li><p>Look at the <code>orders_flat</code> example from the normalization section. Identify a specific scenario where an update anomaly would occur (a change to one fact that requires modifying multiple rows). Then show how the normalized design prevents this problem.</p></li>
 <li><p>In the Northwind database, identify which tables are fact tables and which are dimension tables. What is the grain of the <code>order_details</code> fact table? What is the grain of the <code>orders</code> table?</p></li>
@@ -717,6 +752,24 @@ order_details: order_id, product_id, quantity</code></pre>
 <li><p>A data warehouse for a hospital stores patient visits as the fact table. Name four dimension tables that would provide useful context for analyzing patient visits, and list 2-3 example columns for each.</p></li>
 <li><p>Draw (on paper or as text) a star schema for a university course registration system. The fact table records enrollments. What dimensions would surround it?</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Update anomaly: changing Acme Corp’s address requires updating 3 rows. Miss one and the database disagrees with itself. Normalized: one UPDATE to the customers table fixes it everywhere.</p>
+<p><strong>2.</strong> Fact tables: order_details (grain: one line item per order), orders (grain: one order). Dimension tables: products, customers, categories, employees, suppliers, shippers.</p>
+<p><strong>3.</strong> Average unit price is non-additive — you can’t sum averages meaningfully. Store the additive components (total price, quantity) and compute the ratio at query time.</p>
+<p><strong>4.</strong> Hospital dimensions: dim_patient (patientID, name, DOB, gender), dim_provider (providerID, name, specialty, department), dim_facility (facilityID, name, building, ward), dim_date (dateID, calendarDate, dayOfWeek, month).</p>
+<p><strong>5.</strong> Fact table: enrollments (enrollmentID, studentID FK, courseID FK, semesterID FK, grade). Dimensions: students (studentID, name, major), courses (courseID, name, department, credits), semesters (semesterID, name, year, startDate).</p>
+</div>
 </div>
 </div>
 </section>
@@ -728,34 +781,34 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Create a view that joins products with their categories and suppliers</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> product_catalog <span class="kw">AS</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    p.productID,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    p.productName,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    c.categoryName,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    s.companyName <span class="kw">AS</span> supplier,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    s.country <span class="kw">AS</span> supplier_country,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    p.unitPrice,</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    p.unitsInStock,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    p.discontinued</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p.categoryID <span class="op">=</span> c.categoryID</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Create a view that joins products with their categories and suppliers</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> product_catalog <span class="kw">AS</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    p.productID,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    p.productName,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    c.categoryName,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    s.companyName <span class="kw">AS</span> supplier,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    s.country <span class="kw">AS</span> supplier_country,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    p.unitPrice,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    p.unitsInStock,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    p.discontinued</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p.categoryID <span class="op">=</span> c.categoryID</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now anyone can write:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- This simple query hides the complexity of two joins</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    productName,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    supplier,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    unitPrice</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product_catalog</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> supplier_country <span class="op">=</span> <span class="st">'Japan'</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> unitPrice <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- This simple query hides the complexity of two joins</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    productName,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    supplier,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    unitPrice</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product_catalog</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> supplier_country <span class="op">=</span> <span class="st">'Japan'</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> unitPrice <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Views serve two purposes. For you, they save you from rewriting common joins and transformations. For others, they provide a simplified, curated interface to the data. A view named <code>monthly_sales_summary</code> is immediately understandable; the seven-join CTE that powers it is not.</p>
 <p>To update or remove views:</p>
@@ -763,12 +816,12 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Replace a view with a new definition</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> product_catalog <span class="kw">AS</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">..</span>.;  <span class="co">-- new query definition</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Remove a view entirely</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">VIEW</span> product_catalog;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Replace a view with a new definition</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> product_catalog <span class="kw">AS</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">..</span>.;  <span class="co">-- new query definition</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Remove a view entirely</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">VIEW</span> product_catalog;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="documenting-your-data-the-catalog-mindset" class="level2" data-number="10.6">
@@ -781,15 +834,15 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] What tables exist in the database?</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> table_name</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">tables</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_schema <span class="op">=</span> <span class="st">'main'</span>;</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] What columns does the products table have?</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> column_name, data_type, is_nullable</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">columns</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_name <span class="op">=</span> <span class="st">'products'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] What tables exist in the database?</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> table_name</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">tables</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_schema <span class="op">=</span> <span class="st">'main'</span>;</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- [STANDARD SQL] What columns does the products table have?</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> column_name, data_type, is_nullable</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">columns</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_name <span class="op">=</span> <span class="st">'products'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>At the simplest level, a README file in your project repository that describes each table, its columns, and what the data represents is a “data catalog.” The practice of documenting your schema, including what each table contains, where the data comes from, how frequently it updates, and who owns it, is the same whether you’re working with a personal DuckDB file or a petabyte-scale data warehouse. Start the habit now.</p>
 <p>Four types of metadata are worth tracking. <strong>Technical metadata</strong> covers the structural aspects: data types, column names, table sizes, constraints. <strong>Business metadata</strong> covers meaning: what does “revenue” mean in this context, who defines the KPI, what business rules apply. <strong>Operational metadata</strong> covers provenance: when was this table last updated, where did the data come from, what transformations were applied. <strong>Social metadata</strong> covers usage: which tables are queried most, who are the primary users, what questions does this data typically answer. You won’t track all four for a personal database, but being aware of these categories prepares you for professional data environments.</p>
@@ -803,16 +856,16 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Insert a single row</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> production_lines (line_id, line_name, building, capacity)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="dv">1</span>, <span class="st">'Assembly Line A'</span>, <span class="st">'Building 1'</span>, <span class="dv">500</span>);</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Insert multiple rows at once</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> production_lines (line_id, line_name, building, capacity)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">2</span>, <span class="st">'Assembly Line B'</span>, <span class="st">'Building 1'</span>, <span class="dv">450</span>),</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">3</span>, <span class="st">'Packaging Line 1'</span>, <span class="st">'Building 2'</span>, <span class="dv">800</span>),</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">4</span>, <span class="st">'Packaging Line 2'</span>, <span class="st">'Building 2'</span>, <span class="dv">750</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Insert a single row</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> production_lines (line_id, line_name, building, capacity)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="dv">1</span>, <span class="st">'Assembly Line A'</span>, <span class="st">'Building 1'</span>, <span class="dv">500</span>);</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Insert multiple rows at once</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> production_lines (line_id, line_name, building, capacity)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">2</span>, <span class="st">'Assembly Line B'</span>, <span class="st">'Building 1'</span>, <span class="dv">450</span>),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">3</span>, <span class="st">'Packaging Line 1'</span>, <span class="st">'Building 2'</span>, <span class="dv">800</span>),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">4</span>, <span class="st">'Packaging Line 2'</span>, <span class="st">'Building 2'</span>, <span class="dv">750</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The column list after the table name is technically optional if you provide values for every column in order, but always include it. It documents your intent and protects you from column-order surprises if someone modifies the table later.</p>
 </section>
@@ -823,16 +876,16 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Populate a summary table from raw data</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> category_summary <span class="kw">AS</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    c.categoryName,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> product_count,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">AVG</span>(p.unitPrice), <span class="dv">2</span>) <span class="kw">AS</span> avg_price,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(p.unitsInStock) <span class="kw">AS</span> total_stock</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p.categoryID <span class="op">=</span> c.categoryID</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.categoryName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Populate a summary table from raw data</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> category_summary <span class="kw">AS</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    c.categoryName,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> product_count,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">AVG</span>(p.unitPrice), <span class="dv">2</span>) <span class="kw">AS</span> avg_price,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(p.unitsInStock) <span class="kw">AS</span> total_stock</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p.categoryID <span class="op">=</span> c.categoryID</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.categoryName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>CREATE TABLE ... AS SELECT</code> creates a new table and fills it with the query results in one step. This is how you materialize analytical results into persistent tables, a pattern you’ll use extensively when building data pipelines.</p>
 </section>
@@ -842,10 +895,10 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Increase capacity of a specific line</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> production_lines</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> capacity <span class="op">=</span> <span class="dv">600</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> line_id <span class="op">=</span> <span class="dv">1</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Increase capacity of a specific line</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> production_lines</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> capacity <span class="op">=</span> <span class="dv">600</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> line_id <span class="op">=</span> <span class="dv">1</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Always include a <code>WHERE</code> clause with <code>UPDATE</code>. An <code>UPDATE</code> without <code>WHERE</code> modifies every row in the table, which is almost never what you intend.</p>
 </section>
@@ -855,9 +908,9 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Remove a decommissioned line</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> production_lines</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> line_id <span class="op">=</span> <span class="dv">4</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Remove a decommissioned line</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> production_lines</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> line_id <span class="op">=</span> <span class="dv">4</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Like <code>UPDATE</code>, always use <code>WHERE</code> with <code>DELETE</code>. A bare <code>DELETE FROM production_lines</code> empties the entire table.</p>
 <div class="callout callout-style-simple callout-warning callout-titled">
@@ -873,16 +926,9 @@ order_details: order_id, product_id, quantity</code></pre>
 <p>As an analyst, you’ll use <code>INSERT</code> and <code>CREATE TABLE ... AS SELECT</code> frequently. You’ll use <code>UPDATE</code> and <code>DELETE</code> rarely. Analytical databases are designed for reading, not for frequent row-level modifications. When you need to “update” analytical data, the standard pattern is to rebuild the table from source data (using <code>CREATE OR REPLACE TABLE ... AS SELECT</code>) rather than modifying individual rows. This approach is simpler, auditable, and avoids the complications of tracking which rows changed and when.</p>
 </div>
 </div>
-<div class="callout callout-style-simple callout-note callout-titled" title="Exercises">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercises
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+<section id="exercises-3" class="level3" data-number="10.7.5">
+<h3 data-number="10.7.5" class="anchored" data-anchor-id="exercises-3"><span class="header-section-number">10.7.5</span> Exercises</h3>
 <ol type="1">
 <li><p>Create a view called <code>low_stock_alerts</code> that joins <code>products</code>, <code>categories</code>, and <code>suppliers</code> and shows only active (not discontinued) products where <code>unitsInStock</code> is at or below <code>reorderLevel</code>. Include the product name, category name, supplier name, current stock, and reorder level. Then query your view with a simple <code>SELECT</code> to verify it works.</p></li>
 <li><p>Write SQL to insert three rows into the <code>production_lines</code> table, then update the capacity of one line, then delete another. Verify the state of the table after each operation with a <code>SELECT</code>.</p></li>
@@ -891,14 +937,38 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> column_name, data_type, is_nullable</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">columns</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_name <span class="op">=</span> <span class="st">'products'</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> ordinal_position;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> column_name, data_type, is_nullable</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">columns</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_name <span class="op">=</span> <span class="st">'products'</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> ordinal_position;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>What information does <code>information_schema</code> provide that <code>DESCRIBE products</code> doesn’t? Why is the programmatic approach (<code>information_schema</code>) more useful than the interactive approach (<code>DESCRIBE</code>) for data catalog automation?</p></li>
 <li><p>Write a short README (3-5 sentences per table) documenting the manufacturing quality control schema from this chapter. For each table, state what it represents, its primary key, its key relationships, and any important constraints. This is the kind of documentation a teammate would need to start querying your data.</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> low_stock_alerts <span class="kw">AS</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.productName, c.categoryName, s.companyName <span class="kw">AS</span> supplier,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    p.unitsInStock <span class="kw">AS</span> current_stock, p.reorderLevel</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p.categoryID <span class="op">=</span> c.categoryID</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s <span class="kw">ON</span> p.supplierID <span class="op">=</span> s.supplierID</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> p.discontinued <span class="op">=</span> <span class="dv">0</span> <span class="kw">AND</span> p.unitsInStock <span class="op">&lt;=</span> p.reorderLevel;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2.</strong> INSERT three rows, UPDATE one capacity, DELETE one row, verify with SELECT after each step. (Straightforward DML practice — see the chapter examples for exact syntax.)</p>
+<p><strong>3.</strong> information_schema is programmatic and queryable — you can filter columns by type, join with constraint metadata, and automate schema documentation. DESCRIBE is interactive only.</p>
+<p><strong>4.</strong> (Documentation exercise — write 3-5 sentences per table describing purpose, PK, relationships, and constraints for production_lines, operators, inspections, and defects.)</p>
+</div>
 </div>
 </div>
 </section>
@@ -908,6 +978,19 @@ order_details: order_id, product_id, quantity</code></pre>
 <p>Everything in this chapter comes together when you move beyond Northwind’s clean, well-structured tables and encounter real data. The transition from classroom dataset to messy data is where database design skills prove their worth.</p>
 <p>Real-world data has characteristics that the Northwind data doesn’t: inconsistent formatting, missing values, non-English text, duplicate records with subtle variations, and the kind of quality issues that no one warned you about. When you face this kind of data, the workflow is the same set of skills you’ve been building. You use <code>CREATE TABLE</code> to define a clean target schema, <code>INSERT ... SELECT</code> to load and transform data, joins to connect related entities, CTEs and window functions to build analytical queries, and views to present clean results. The challenge isn’t new syntax. It’s applying what you already know to a messier, more realistic context, where the right schema isn’t given to you. It’s your job to figure it out.</p>
 <p>The SQL skills transfer directly. In Perkins’ language, you’ve been playing a junior version of the game with clean data and well-structured tables. Working with real data moves you closer to the full professional game. If you want practice with this transition, try downloading a public dataset from a source like Kaggle, the UCI Machine Learning Repository, or a government open data portal, and design a DuckDB database for it from scratch. You’ll discover that modeling decisions, like which columns deserve their own dimension table and which constraints to enforce, are where the real thinking happens.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>You’ll Spend More Time Reading Schemas Than Writing Them
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter teaches you to design databases, but in your career you’ll spend ten times more effort understanding databases other people designed. The <code>SHOW TABLES</code> → <code>DESCRIBE</code> → data dictionary workflow you learned in the first chapter is the most frequently used skill in professional data work. Every new project, every new client, every new job starts with “what data exists, what does it mean, and where does it come from?” The design skills in this chapter make you better at reading schemas too, because you’ll recognize the patterns (star schemas, junction tables, normalization levels) and understand the trade-offs the designer was making.</p>
+</div>
+</div>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -923,16 +1006,16 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"northwind.duckdb"</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> con.sql(<span class="st">"""</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT productName, unitPrice</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM products</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE unitPrice &gt; 20</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY unitPrice DESC</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>result.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"northwind.duckdb"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> con.sql(<span class="st">"""</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT productName, unitPrice</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM products</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE unitPrice &gt; 20</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY unitPrice DESC</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>result.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The SQL is identical to what you’ve been writing in the DuckDB UI. The difference is that Python can take the results and do things with them: generate reports, feed them into visualizations, trigger alerts, or load them into other systems. Designing a clean, well-structured database now makes that automation dramatically simpler later.</p>
 </div>
@@ -958,21 +1041,59 @@ order_details: order_id, product_id, quantity</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> maintenance_log (</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    log_id <span class="dt">INTEGER</span>,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    machine_name <span class="dt">VARCHAR</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    machine_building <span class="dt">VARCHAR</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    technician_name <span class="dt">VARCHAR</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    technician_phone <span class="dt">VARCHAR</span>,</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    repair_date <span class="dt">DATE</span>,</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    repair_type <span class="dt">VARCHAR</span>,</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    parts_used <span class="dt">VARCHAR</span>,</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">cost</span> <span class="dt">DECIMAL</span>(<span class="dv">10</span>, <span class="dv">2</span>)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="duckdb"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> maintenance_log (</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    log_id <span class="dt">INTEGER</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    machine_name <span class="dt">VARCHAR</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    machine_building <span class="dt">VARCHAR</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    technician_name <span class="dt">VARCHAR</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    technician_phone <span class="dt">VARCHAR</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    repair_date <span class="dt">DATE</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    repair_type <span class="dt">VARCHAR</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    parts_used <span class="dt">VARCHAR</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">cost</span> <span class="dt">DECIMAL</span>(<span class="dv">10</span>, <span class="dv">2</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>(Hints: think about redundancy, constraints, normalization, and what happens when a technician changes their phone number.)</p></li>
 <li><p><strong>View layering.</strong> Create a view called <code>product_summary</code> that joins <code>products</code>, <code>categories</code>, and <code>suppliers</code> to show each product with its category name, supplier name, unit price, and stock status (using a <code>CASE</code> expression). Then create a <em>second</em> view called <code>reorder_alert</code> that queries <code>product_summary</code> and filters to only products that need reordering. Write a query against <code>reorder_alert</code> and explain how layering views like this creates reusable building blocks for different audiences.</p></li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Tables: clients (client_id PK), projects (project_id PK, client_id FK), employees (employee_id PK), project_assignments (project_id FK, employee_id FK — junction table), time_entries (entry_id PK, project_id FK, employee_id FK, entry_date, hours).</p>
+<p><strong>2.</strong> Normalize into: machines (machine_id, name, building), technicians (tech_id, name, phone), repairs (repair_id, machine_id FK, tech_id FK, repair_date, repair_type, parts_used, cost). Prevents update anomaly (phone stored once), delete anomaly (machines exist independently), and redundancy.</p>
+<p><strong>3.</strong> (a) Fact table — 50M discrete events with measurements. (b) Dimension — 200 rows of descriptive warehouse attributes. (c) Dimension — 5,000 rows of product descriptions.</p>
+<p><strong>4.</strong> Views:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> order_summary <span class="kw">AS</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> o.orderID, c.companyName, o.orderDate, <span class="fu">COUNT</span>(od.productID) <span class="kw">AS</span> line_items,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">SUM</span>(od.unitPrice <span class="op">*</span> od.quantity), <span class="dv">2</span>) <span class="kw">AS</span> total_value</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders <span class="kw">AS</span> o</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> customers <span class="kw">AS</span> c <span class="kw">ON</span> o.customerID <span class="op">=</span> c.customerID</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> order_details <span class="kw">AS</span> od <span class="kw">ON</span> o.orderID <span class="op">=</span> od.orderID</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> o.orderID, c.companyName, o.orderDate;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> supplier_catalog <span class="kw">AS</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s.companyName, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> p.productID) <span class="kw">AS</span> product_count,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">AVG</span>(p.unitPrice), <span class="dv">2</span>) <span class="kw">AS</span> avg_price,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    STRING_AGG(<span class="kw">DISTINCT</span> c.categoryName, <span class="st">', '</span>) <span class="kw">AS</span> categories</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> suppliers <span class="kw">AS</span> s</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> products <span class="kw">AS</span> p <span class="kw">ON</span> s.supplierID <span class="op">=</span> p.supplierID</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p.categoryID <span class="op">=</span> c.categoryID</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> s.supplierID, s.companyName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>5.</strong> Star schema: fact table = sales (sale_id, truck_id FK, location_id FK, date_id FK, item_id FK, payment_id FK, quantity, amount). Dimensions: trucks, locations, menu_items, payment_methods, dates. Write CREATE TABLE for each, insert sample data, then query total revenue by truck by day of week.</p>
+<p><strong>6.</strong> DuckDB ACCEPTS the invalid foreign key (parses but doesn’t enforce). PostgreSQL would REJECT it, preventing orphaned records. Other protections: application-level validation, data quality audits, staging table checks.</p>
+<p><strong>7.</strong> Issues: (a) no PRIMARY KEY on log_id, (b) redundancy — machine and technician info repeated across rows, (c) no NOT NULL or CHECK constraints on critical columns, (d) parts_used as comma-separated string loses structure. Fix: normalize into machines, technicians, and repairs tables with proper constraints.</p>
+<p><strong>8.</strong> Create product_summary view (joins products+categories+suppliers, adds CASE for stock_status). Then create reorder_alert view that queries product_summary filtering for low/reorder stock. Layering lets you update join logic once and all dependent views benefit.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="summary" class="level2" data-number="10.10">
 <h2 data-number="10.10" class="anchored" data-anchor-id="summary"><span class="header-section-number">10.10</span> Summary</h2>
