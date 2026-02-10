@@ -89,7 +89,8 @@ FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT
 
 This means `WHERE` can't reference aggregate results (they don't exist yet), and `HAVING` can't reference column aliases from `SELECT` in standard SQL. When something doesn't work, trace through this execution order to find out why.
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 1. Write a query that counts how many products are in each category and computes the average unit price per category. Join to `categories` to show the category name rather than the ID. Which category has the most products? Which has the highest average price?
 
 2. Write a query that finds all countries with more than 5 customers. Show the country and customer count, sorted by count descending.
@@ -106,6 +107,30 @@ This means `WHERE` can't reference aggregate results (they don't exist yet), and
     ```
 
 4. Explain the difference between `WHERE` and `HAVING` using the execution order diagram. Why can't `WHERE` filter on aggregate results?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT c.categoryName, COUNT(*) AS product_count, ROUND(AVG(p.unitPrice), 2) AS avg_price
+FROM products AS p
+INNER JOIN categories AS c ON p.categoryID = c.categoryID
+GROUP BY c.categoryName
+ORDER BY product_count DESC;
+```
+
+**2.**
+```sql
+SELECT country, COUNT(*) AS customer_count FROM customers GROUP BY country HAVING COUNT(*) > 5 ORDER BY customer_count DESC;
+```
+
+**3.** Bug: WHERE executes before GROUP BY, so aggregate functions don't exist yet. Fix: move the condition to HAVING:
+```sql
+SELECT categoryID, AVG(unitPrice) AS avg_price FROM products GROUP BY categoryID HAVING AVG(unitPrice) > 25;
+```
+
+**4.** Execution order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. WHERE filters individual rows before any grouping happens, so aggregates haven't been computed yet. HAVING runs after GROUP BY, when aggregates are available.
+
 :::
 
 ## Subqueries: Queries Inside Queries
@@ -265,7 +290,8 @@ The `top_customers` CTE introduces `PERCENTILE_CONT(0.80) WITHIN GROUP (ORDER BY
 Use **subqueries** when the nested logic is simple and fits naturally in one place (like a scalar comparison in `WHERE`). Use **CTEs** when the logic has multiple stages, when you need to reference the same intermediate result more than once, or when readability matters, which is almost always. In professional work, CTEs are strongly preferred because they make query intent visible and make debugging easier (you can run each CTE independently to check its output).
 :::
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 1. Write a query using a scalar subquery that finds all products priced more than twice the average product price. Return the product name, price, and how much above the average it is.
 
 2. Rewrite the following nested subquery as a CTE. Which version is easier to read?
@@ -287,11 +313,54 @@ Use **subqueries** when the nested logic is simple and fits naturally in one pla
 3. Write a CTE-based query with two stages: (a) compute total revenue per product (`SUM(unitPrice * quantity)` from `order_details`), then (b) find the top 10 products by revenue. Show the product name and total revenue.
 
 4. A colleague argues, "CTEs are just subqueries with extra syntax, so why bother?" Write a brief response explaining when CTEs provide real value over subqueries. Give a concrete example.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT productName, unitPrice,
+    ROUND(unitPrice - (SELECT AVG(unitPrice) FROM products), 2) AS above_avg
+FROM products
+WHERE unitPrice > 2 * (SELECT AVG(unitPrice) FROM products)
+ORDER BY unitPrice DESC;
+```
+
+**2.** CTE version:
+```sql
+WITH supplier_summary AS (
+    SELECT s.companyName, COUNT(*) AS product_count
+    FROM suppliers AS s
+    INNER JOIN products AS p ON s.supplierID = p.supplierID
+    GROUP BY s.companyName
+)
+SELECT companyName, product_count FROM supplier_summary
+WHERE product_count >= 5 ORDER BY product_count DESC;
+```
+The CTE separates aggregation from filtering, making the logic clearer.
+
+**3.**
+```sql
+WITH product_revenue AS (
+    SELECT p.productName, ROUND(SUM(od.unitPrice * od.quantity), 2) AS total_revenue
+    FROM order_details AS od
+    INNER JOIN products AS p ON od.productID = p.productID
+    GROUP BY p.productID, p.productName
+)
+SELECT productName, total_revenue FROM product_revenue ORDER BY total_revenue DESC LIMIT 10;
+```
+
+**4.** CTEs add value when: (a) logic has multiple stages (each CTE is a named step), (b) you reference the same intermediate result more than once (write it once, use it twice), (c) debugging is needed (run each CTE independently). Example: computing customer spend, filtering top customers, then analyzing their purchases — three named CTEs vs. three levels of nesting.
+
 :::
 
 ## Window Functions: Analysis Without Collapse
 
 Window functions are not an advanced topic you can skip. They are a core analytical tool that you'll use constantly in professional work. Ranking, running totals, period-over-period comparisons, and moving averages are all standard analytical requirements, and window functions are how SQL handles them. They were added to the SQL standard in 2003, and every major database supports them.
+
+::: {.callout-tip}
+## Your Manager Will Never Say "Use a Window Function"
+In real work, nobody frames requests in SQL terms. Your manager will say "show me each rep's numbers next to the team average" or "rank our products by margin within each category" or "compare this month to last month." The skill isn't knowing window function syntax — it's recognizing that the phrase "each row alongside a group summary" is a window function problem, and "compare to the previous period" is a LAG problem. As you work through these exercises, practice translating business questions into SQL patterns, because that translation step is where the real expertise lives.
+:::
 
 The fundamental tension they solve: `GROUP BY` gives you summaries but destroys individual row detail. Window functions give you summaries *alongside* detail, keeping every row intact while adding computed context.
 
@@ -431,7 +500,8 @@ ORDER BY order_month;
 
 The `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW` clause defines the **window frame**: the subset of rows within the partition that the aggregate considers. For a running total, the frame implicitly stretches from the start of the partition to the current row. For the moving average, we explicitly set a 3-month window (current row plus the two preceding rows).
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 1. Write a query that ranks all products by unit price (highest first) using `ROW_NUMBER`, `RANK`, and `DENSE_RANK`. Find a price where at least two products are tied and explain how the three functions differ for those rows.
 
 2. Write a query that shows each product alongside its category's average price and the difference between the product's price and its category average. Use a window function, not a correlated subquery. Which products are priced furthest above their category average?
@@ -441,6 +511,46 @@ The `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW` clause defines the **window frame
 4. Write a query that computes a running total of order count by month (using `DATE_TRUNC` to group orders by month, then a window function for the cumulative count). At what month did Northwind surpass 400 total orders?
 
 5. Predict what happens if you use `PARTITION BY categoryID` inside a `ROW_NUMBER` window function but forget the `ORDER BY` inside `OVER()`. Is the result deterministic? Why or why not?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT productName, unitPrice,
+    ROW_NUMBER() OVER (ORDER BY unitPrice DESC) AS row_num,
+    RANK() OVER (ORDER BY unitPrice DESC) AS rank_val,
+    DENSE_RANK() OVER (ORDER BY unitPrice DESC) AS dense_rank_val
+FROM products ORDER BY unitPrice DESC;
+```
+For tied prices: ROW_NUMBER gives different numbers (1,2), RANK gives same number with gaps (1,1,3), DENSE_RANK gives same number without gaps (1,1,2).
+
+**2.**
+```sql
+SELECT productName, categoryID, unitPrice,
+    ROUND(AVG(unitPrice) OVER (PARTITION BY categoryID), 2) AS category_avg,
+    ROUND(unitPrice - AVG(unitPrice) OVER (PARTITION BY categoryID), 2) AS diff_from_avg
+FROM products ORDER BY diff_from_avg DESC;
+```
+
+**3.**
+```sql
+SELECT orderID, orderDate,
+    LAG(orderDate) OVER (ORDER BY orderDate) AS prev_order_date,
+    orderDate - LAG(orderDate) OVER (ORDER BY orderDate) AS days_gap
+FROM orders WHERE customerID = 'ALFKI' ORDER BY orderDate;
+```
+
+**4.**
+```sql
+WITH monthly AS (
+    SELECT DATE_TRUNC('month', orderDate) AS month, COUNT(*) AS cnt
+    FROM orders GROUP BY DATE_TRUNC('month', orderDate)
+)
+SELECT month, cnt, SUM(cnt) OVER (ORDER BY month) AS cumulative FROM monthly ORDER BY month;
+```
+
+**5.** Without ORDER BY in OVER(), ROW_NUMBER assigns numbers arbitrarily within each partition. The result is nondeterministic — different runs may produce different numbering.
+
 :::
 
 ## Date Functions
@@ -597,6 +707,141 @@ These exercises require combining GROUP BY, CTEs, window functions, and joins to
 
     What would change if you replaced `ROW_NUMBER()` with `RANK()`? Under what condition would `RANK()` and `ROW_NUMBER()` produce different results here?
 
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+WITH quarterly AS (
+    SELECT DATE_TRUNC('quarter', o.orderDate) AS qtr,
+        ROUND(SUM(od.unitPrice * od.quantity), 2) AS revenue
+    FROM orders AS o
+    INNER JOIN order_details AS od ON o.orderID = od.orderID
+    GROUP BY DATE_TRUNC('quarter', o.orderDate)
+)
+SELECT qtr, revenue, LAG(revenue) OVER (ORDER BY qtr) AS prev_qtr,
+    ROUND(revenue - LAG(revenue) OVER (ORDER BY qtr), 2) AS qoq_change
+FROM quarterly ORDER BY qtr;
+```
+
+**2.**
+```sql
+WITH cs AS (
+    SELECT c.companyName, ROUND(SUM(od.unitPrice * od.quantity), 2) AS total_spend,
+        COUNT(DISTINCT o.orderID) AS order_count
+    FROM customers AS c
+    INNER JOIN orders AS o ON c.customerID = o.customerID
+    INNER JOIN order_details AS od ON o.orderID = od.orderID
+    GROUP BY c.customerID, c.companyName
+)
+SELECT DENSE_RANK() OVER (ORDER BY total_spend DESC) AS rank, companyName,
+    total_spend, order_count, ROUND(total_spend / order_count, 2) AS avg_order_value
+FROM cs ORDER BY rank LIMIT 10;
+```
+
+**3.**
+```sql
+WITH cr AS (
+    SELECT c.categoryName, ROUND(SUM(od.unitPrice * od.quantity), 2) AS revenue
+    FROM order_details AS od
+    INNER JOIN products AS p ON od.productID = p.productID
+    INNER JOIN categories AS c ON p.categoryID = c.categoryID
+    GROUP BY c.categoryName
+)
+SELECT categoryName, revenue,
+    ROUND(100.0 * revenue / SUM(revenue) OVER (), 1) AS pct_share
+FROM cr ORDER BY revenue DESC;
+```
+
+**4.**
+```sql
+WITH ep AS (
+    SELECT e.employeeID, e.employeeName, e.reportsTo,
+        COUNT(DISTINCT o.orderID) AS order_count,
+        ROUND(SUM(od.unitPrice * od.quantity), 2) AS revenue
+    FROM employees AS e
+    INNER JOIN orders AS o ON e.employeeID = o.employeeID
+    INNER JOIN order_details AS od ON o.orderID = od.orderID
+    GROUP BY e.employeeID, e.employeeName, e.reportsTo
+)
+SELECT ep.employeeName, ep.order_count, ep.revenue,
+    RANK() OVER (ORDER BY ep.revenue DESC) AS revenue_rank,
+    m.employeeName AS manager
+FROM ep LEFT JOIN employees AS m ON ep.reportsTo = m.employeeID
+ORDER BY revenue_rank;
+```
+
+**5.** Correct order:
+```sql
+SELECT categoryID, ROUND(AVG(unitPrice), 2) AS avg_price, COUNT(*) AS cnt
+FROM products
+GROUP BY categoryID
+HAVING COUNT(*) >= 3
+ORDER BY avg_price DESC
+LIMIT 5;
+```
+This finds the top 5 categories (by average price) that have at least 3 products.
+
+**6.**
+```sql
+WITH mf AS (
+    SELECT DATE_TRUNC('month', orderDate) AS month, ROUND(SUM(freight), 2) AS freight
+    FROM orders GROUP BY DATE_TRUNC('month', orderDate)
+)
+SELECT month, freight,
+    ROUND(AVG(freight) OVER (ORDER BY month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 2) AS moving_avg,
+    CASE WHEN freight > 1.2 * AVG(freight) OVER (ORDER BY month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) THEN 'OVER' ELSE 'Normal' END AS flag
+FROM mf ORDER BY month;
+```
+
+**7.** Standard SQL version:
+```sql
+SELECT categoryName, productName, unitPrice
+FROM (
+    SELECT c.categoryName, p.productName, p.unitPrice,
+        ROW_NUMBER() OVER (PARTITION BY c.categoryName ORDER BY p.unitPrice DESC) AS rn
+    FROM products AS p
+    INNER JOIN categories AS c ON p.categoryID = c.categoryID
+) ranked WHERE rn = 1 ORDER BY categoryName;
+```
+The DuckDB version is more concise; the standard version is needed for PostgreSQL.
+
+**8.**
+```sql
+WITH coc AS (
+    SELECT c.customerID, c.country, COUNT(DISTINCT o.orderID) AS orders
+    FROM customers AS c
+    INNER JOIN orders AS o ON c.customerID = o.customerID
+    GROUP BY c.customerID, c.country
+)
+SELECT country, COUNT(*) AS customer_count, ROUND(AVG(orders), 1) AS avg_orders_per_customer
+FROM coc GROUP BY country HAVING COUNT(*) > 5 ORDER BY customer_count DESC;
+```
+
+**9.**
+```sql
+WITH overlap AS (
+    SELECT country FROM suppliers INTERSECT SELECT country FROM customers
+)
+SELECT ov.country,
+    (SELECT COUNT(*) FROM suppliers WHERE country = ov.country) AS supplier_count,
+    (SELECT COUNT(*) FROM customers WHERE country = ov.country) AS customer_count
+FROM overlap AS ov ORDER BY supplier_count DESC;
+```
+
+**10.** Bug: GROUP BY includes productName, so each group has one product — MAX(unitPrice) just returns that product's price. Fix with window function:
+```sql
+SELECT categoryName, productName, unitPrice FROM (
+    SELECT c.categoryName, p.productName, p.unitPrice,
+        ROW_NUMBER() OVER (PARTITION BY c.categoryID ORDER BY p.unitPrice DESC) AS rn
+    FROM products AS p
+    INNER JOIN categories AS c ON p.categoryID = c.categoryID
+) ranked WHERE rn = 1 ORDER BY categoryName;
+```
+
+**11.** running_total is a cumulative sum of freight ordered by date. row_num is a sequential counter. RANK() would differ from ROW_NUMBER() only if two orders share the same orderDate — ties get the same rank with a gap.
+
+:::
 ## Summary
 
 `GROUP BY` partitions data into categories and computes aggregate summaries within each group, with the strict requirement that all non-aggregate columns in `SELECT` must appear in the `GROUP BY` clause. `HAVING` filters groups after aggregation, operating on aggregate values rather than individual rows. Subqueries embed one query inside another for scalar comparisons or as virtual tables in `FROM`, while CTEs (Common Table Expressions) with `WITH` provide a more readable alternative by naming intermediate results as logical steps. CTEs are part of the SQL standard since SQL:1999 and are supported everywhere. Window functions are a core analytical tool, not an advanced topic, and they compute aggregates alongside individual rows using `OVER`, with `PARTITION BY` defining groups and `ORDER BY` defining sequence. Ranking functions (`ROW_NUMBER`, `RANK`, `DENSE_RANK`) number rows within partitions, `LAG` and `LEAD` access adjacent rows for period-over-period comparisons, and frame specifications (`ROWS BETWEEN`) enable running totals and moving averages. DuckDB extends standard SQL with `GROUP BY ALL` for automatic grouping and the `QUALIFY` clause for filtering window function results directly; the portable alternatives are explicit column listing and subquery wrapping, respectively. These tools combine to enable professional analytical techniques like ABC inventory classification, where CTEs, joins, aggregates, window functions, and CASE expressions work together to produce business-ready deliverables.

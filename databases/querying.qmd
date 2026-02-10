@@ -1,4 +1,4 @@
-# Querying Data
+# Querying Data {#sec-querying}
 
 Your manager at Northwind Traders has a simple request: "Tell me about our product catalog. What do we sell, what does it cost, and what's running low in the warehouse?" This is the kind of question that drives real analytical work, and answering it requires you to be precise about what data you want, how to filter it, and how to organize the results.
 
@@ -104,11 +104,12 @@ FROM suppliers;
 
 This returns each country exactly once, regardless of how many suppliers are in each country. `DISTINCT` applies to the entire row, so `SELECT DISTINCT country, city FROM suppliers` returns unique country-city combinations.
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 
 1. Write a query that returns the `companyName`, `contactName`, and `country` columns from the `customers` table.
 
-2. Write a query that computes an `inventory_value` for each product (price times units in stock) and also a `potential_revenue` column that adds in units currently on order. Use appropriate aliases. What happens to `potential_revenue` for products where `unitsOnOrder` is `NULL`?
+2. Write a query that computes an `inventory_value` for each product (unit price times units in stock) and also an `inventory_weight` column (weight per unit times units in stock). Use appropriate aliases for all computed columns.
 
 3. How many distinct countries do Northwind's customers come from? Write the query, then adjust it to find how many distinct *city-country* combinations there are. Why is the second number larger?
 
@@ -119,6 +120,27 @@ This returns each country exactly once, regardless of how many suppliers are in 
     FROM products
     ORDER BY categoryID;
     ```
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT companyName, contactName, country FROM customers;
+```
+Returns 5,000 rows.
+
+**2.**
+```sql
+SELECT productName, unitPrice, unitsInStock, weight_kg, unitPrice * unitsInStock AS inventory_value, weight_kg * unitsInStock AS inventory_weight FROM products;
+```
+
+**3.**
+```sql
+SELECT COUNT(DISTINCT country) FROM customers;
+```
+Returns ~21 countries. A separate query for `SELECT COUNT(*) FROM (SELECT DISTINCT city, country FROM customers);` returns more rows because multiple cities exist per country.
+
+**4.** Prediction: the 15 distinct categoryID values (1 through 15) in ascending order, one per row.
 
 :::
 
@@ -217,27 +239,27 @@ WHERE productName LIKE 'Ch%';
 
 `NULL` is one of SQL's most important and most misunderstood concepts. A `NULL` value means "unknown" or "missing", not zero, not empty string, not false. It means the data simply doesn't exist.
 
-In the Northwind database, the `region` column in the `customers` table contains `NULL` for customers where the region wasn't recorded. This isn't the same as the region being blank. It means we don't know the region.
+In the Northwind database, the `shippedDate` column in the `orders` table contains `NULL` for orders that haven't been shipped yet. This isn't the same as the shipped date being blank or zero. It means the shipment hasn't happened, so no date exists to record.
 
 The critical rule is: **NULL is not equal to anything, including itself**. This means ordinary comparisons don't work:
 
 ```{.sql filename="DuckDB"}
--- This does NOT find customers with missing regions
-SELECT companyName, region
-FROM customers
-WHERE region = NULL;  -- Returns nothing! NULL = NULL is not TRUE, it's NULL
+-- This does NOT find orders with missing shipped dates
+SELECT orderID, orderDate, shippedDate
+FROM orders
+WHERE shippedDate = NULL;  -- Returns nothing! NULL = NULL is not TRUE, it's NULL
 
 -- This is correct
-SELECT companyName, region
-FROM customers
-WHERE region IS NULL;
+SELECT orderID, orderDate, shippedDate
+FROM orders
+WHERE shippedDate IS NULL;
 ```
 
-Any arithmetic or comparison involving `NULL` produces `NULL`. If `unitsOnOrder` is `NULL` for some product, then `unitsInStock + unitsOnOrder` is also `NULL` for that product, not just `unitsInStock`. This propagation of unknowns is logically sound (you can't add a number to an unknown and get a known result), but it catches people off guard constantly.
+Any arithmetic or comparison involving `NULL` produces `NULL`. If `shippedDate` is `NULL` for some order, then `shippedDate - orderDate` (the number of days to ship) is also `NULL` for that order, not zero. This propagation of unknowns is logically sound (you can't subtract a date from an unknown and get a known result), but it catches people off guard constantly.
 
 ::: {.callout-important}
 ## The Three-Value Logic of SQL
-Most programming languages have two-value boolean logic: `TRUE` and `FALSE`. SQL has three: `TRUE`, `FALSE`, and `NULL` (unknown). The `WHERE` clause only keeps rows where the condition evaluates to `TRUE`, meaning rows where the condition is `NULL` are filtered out just like rows where it's `FALSE`. This is why `WHERE region = NULL` returns nothing: the comparison yields `NULL`, not `TRUE`.
+Most programming languages have two-value boolean logic: `TRUE` and `FALSE`. SQL has three: `TRUE`, `FALSE`, and `NULL` (unknown). The `WHERE` clause only keeps rows where the condition evaluates to `TRUE`, meaning rows where the condition is `NULL` are filtered out just like rows where it's `FALSE`. This is why `WHERE shippedDate = NULL` returns nothing: the comparison yields `NULL`, not `TRUE`.
 
 :::
 
@@ -245,14 +267,20 @@ The `COALESCE` function provides a fallback value when data might be `NULL`:
 
 ```{.sql filename="DuckDB"}
 SELECT
-    productName,
-    COALESCE(unitsOnOrder, 0) AS units_on_order
-FROM products;
+    orderID,
+    orderDate,
+    COALESCE(shippedDate, DATE '2999-12-31') AS effective_ship_date
+FROM orders;
 ```
 
-`COALESCE` takes any number of arguments and returns the first non-`NULL` value. It's your primary tool for handling missing data in queries.
+`COALESCE` takes any number of arguments and returns the first non-`NULL` value. Here, orders that haven't shipped yet get the date `2999-12-31` as a stand-in. That date is a **sentinel value**: a deliberately impossible value that stands in for "this hasn't happened yet." It's your primary tool for handling missing data in queries.
 
-::: {.callout-note title="Exercises"}
+Why use a far-future date instead of `NULL`? Because some systems and calculations can't handle `NULL` gracefully. If you're sorting orders by ship date to prioritize the oldest unshipped ones, `NULL` values sort unpredictably across databases, but `2999-12-31` reliably sorts to the bottom. If you're computing date differences, `NULL` propagates into more `NULL`s, but a sentinel gives you a number you can filter on later.
+
+You'll encounter sentinel values constantly in real-world databases. Common examples include `9999-12-31` or `2999-12-31` for "no end date" in employee records or contracts, `-1` for "unknown" in integer ID columns, and `0000-00-00` in older MySQL systems. They predate widespread `NULL` support and persist because many legacy systems and ETL pipelines were built around them. The trade-off is that sentinels make `NULL`-safe operations easier but require everyone to know the convention, and they'll silently corrupt your aggregates if you forget to exclude them (imagine what `AVG(shipping_days)` looks like when some orders have a ship date of `2999-12-31`). Modern practice generally prefers `NULL` with explicit handling over sentinel values, but you need to recognize both approaches.
+
+### Exercises
+
 
 1. Write a query that finds all products with a unit price between $15 and $25 that are not discontinued. Return the product name, unit price, and units in stock.
 
@@ -261,14 +289,39 @@ FROM products;
 3. This query has a bug. What's wrong, and what does it actually return?
 
     ```{.sql filename="DuckDB"}
-    SELECT companyName, region
-    FROM customers
-    WHERE region != NULL;
+    SELECT orderID, orderDate, shippedDate
+    FROM orders
+    WHERE shippedDate != NULL;
     ```
 
-4. Write a query that returns all products, replacing any `NULL` values in `unitsOnOrder` with `0`, and then computes a `total_units` column that adds `unitsInStock` and the cleaned `unitsOnOrder`. Why would the results be different without `COALESCE`?
+4. Write a query that returns all orders with a `ship_status` column that shows the `shippedDate` if it exists or `'Not yet shipped'` if it's `NULL` (hint: `CASE` is a better fit here than `COALESCE`, because the result mixes a date and a string — try `COALESCE(shippedDate, 'Not yet shipped')` first and see what happens). Also compute a `shipping_days` column as `shippedDate - orderDate`. What happens to `shipping_days` for orders that haven't shipped? How would you use `COALESCE` to provide a fallback for that column?
 
-5. Explain, in one sentence each, the difference between these three expressions: `WHERE region = 'WA'`, `WHERE region IS NULL`, and `WHERE region != 'WA'`. Which customers does the third expression exclude that might surprise you?
+5. Explain, in one sentence each, the difference between these three expressions: `WHERE shippedDate = '2024-01-15'`, `WHERE shippedDate IS NULL`, and `WHERE shippedDate != '2024-01-15'`. Which orders does the third expression exclude that might surprise you?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT productName, unitPrice, unitsInStock FROM products WHERE unitPrice BETWEEN 15 AND 25 AND discontinued = 0;
+```
+
+**2.**
+```sql
+SELECT companyName, contactName, contactTitle, country FROM customers WHERE country IN ('Germany', 'France', 'Brazil') AND contactTitle LIKE '%Manager%';
+```
+
+**3.** Bug: `!= NULL` evaluates to NULL for every row. WHERE only keeps TRUE rows, so this returns 0 rows. Fix: use `WHERE shippedDate IS NOT NULL`.
+
+**4.** COALESCE(shippedDate, 'Not yet shipped') errors because DATE and VARCHAR can't mix. Use CASE instead:
+```sql
+SELECT orderID, orderDate, shippedDate,
+    CASE WHEN shippedDate IS NOT NULL THEN CAST(shippedDate AS VARCHAR) ELSE 'Not yet shipped' END AS ship_status,
+    shippedDate - orderDate AS shipping_days
+FROM orders;
+```
+shipping_days is NULL for unshipped orders. Use `COALESCE(shippedDate - orderDate, INTERVAL '0 days')` or a sentinel like `COALESCE(shippedDate - orderDate, -1)` for a numeric fallback.
+
+**5.** First: orders shipped on exactly that date. Second: unshipped orders only. Third: orders shipped on any OTHER date — but it EXCLUDES unshipped orders because `NULL != '2024-01-15'` evaluates to NULL, not TRUE.
 
 :::
 
@@ -347,10 +400,10 @@ FROM products;
 
 ```{.sql filename="DuckDB"}
 -- COUNT(*) counts all rows, regardless of NULLs
-SELECT COUNT(*) FROM customers;
+SELECT COUNT(*) FROM orders;
 
 -- COUNT(column) counts only non-NULL values in that column
-SELECT COUNT(region) FROM customers;
+SELECT COUNT(shippedDate) FROM orders;
 
 -- COUNT(DISTINCT column) counts unique non-NULL values
 SELECT COUNT(DISTINCT country) FROM customers;
@@ -385,7 +438,8 @@ SELECT
 FROM products;
 ```
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 
 1. Write a query that returns the 5 cheapest products that are not discontinued. Include the product name and price.
 
@@ -403,6 +457,40 @@ FROM products;
     ```
 
 5. Using aggregate functions and `CASE` together, write a single query that computes: the total number of products, the number of discontinued products, the number of products currently out of stock (not discontinued but `unitsInStock = 0`), and the average price of active (not discontinued) products. (Hint: use `CASE` expressions inside `COUNT` and `AVG` to compute conditional aggregates without grouping.)
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT productName, unitPrice FROM products WHERE discontinued = 0 ORDER BY unitPrice ASC LIMIT 5;
+```
+
+**2.**
+```sql
+SELECT COUNT(*) AS total_products, ROUND(AVG(unitPrice), 2) AS avg_price, ROUND(SUM(unitPrice * unitsInStock), 2) AS total_inventory_value FROM products;
+```
+
+**3.**
+```sql
+SELECT productName, unitsInStock, reorderLevel,
+    CASE
+        WHEN unitsInStock = 0 THEN 'Out of Stock'
+        WHEN unitsInStock <= reorderLevel THEN 'Critical'
+        ELSE 'Adequate'
+    END AS stock_status
+FROM products
+ORDER BY CASE WHEN unitsInStock = 0 THEN 1 WHEN unitsInStock <= reorderLevel THEN 2 ELSE 3 END;
+```
+
+**4.** Error: `productName` is not aggregated and not in GROUP BY. You can't mix individual columns with aggregate functions without GROUP BY.
+
+**5.**
+```sql
+SELECT COUNT(*) AS total, COUNT(CASE WHEN discontinued = 1 THEN 1 END) AS discontinued_count,
+    COUNT(CASE WHEN discontinued = 0 AND unitsInStock = 0 THEN 1 END) AS out_of_stock_active,
+    ROUND(AVG(CASE WHEN discontinued = 0 THEN unitPrice END), 2) AS avg_active_price
+FROM products;
+```
 
 :::
 
@@ -504,7 +592,8 @@ You'll often see joins explained with Venn diagrams online, but as we'll discuss
 
 All set operations require the same number of columns in both queries, compatible data types in corresponding positions (you can't union an integer column with a text column), and column names come from the first query only. `ORDER BY` applies to the entire combined result and appears once at the end, not within individual queries.
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 
 1. Write a query using `INTERSECT` to find cities that appear in both the `suppliers` and `customers` tables. How many shared cities are there?
 
@@ -518,7 +607,31 @@ All set operations require the same number of columns in both queries, compatibl
     SELECT city, country FROM customers;
     ```
 
-4. Write a query using `UNION ALL` that creates a combined directory of all supplier and customer contacts, with columns for `companyName`, `contactName`, `phone`, and a label column (`'Supplier'` or `'Customer'`). Why is `UNION ALL` more appropriate than `UNION` here?
+4. Write a query using `UNION ALL` that creates a combined directory of all supplier and customer contacts, with columns for `companyName`, `contactName`, `country`, and a label column (`'Supplier'` or `'Customer'`). Why is `UNION ALL` more appropriate than `UNION` here?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT city FROM suppliers INTERSECT SELECT city FROM customers ORDER BY city;
+```
+
+**2.**
+```sql
+SELECT country FROM suppliers EXCEPT SELECT country FROM customers;
+```
+Shows countries where Northwind sources products but has no customers.
+
+**3.** Error: column types/semantics don't align. `companyName` (from suppliers) paired with `city` (from customers) makes no logical sense even if types match. Set operations require matching column meaning, not just types.
+
+**4.**
+```sql
+SELECT companyName, contactName, country, 'Supplier' AS entity_type FROM suppliers
+UNION ALL
+SELECT companyName, contactName, country, 'Customer' FROM customers
+ORDER BY companyName;
+```
+UNION ALL is better because the entity_type label makes every row unique, so UNION's deduplication adds cost with no benefit.
 
 :::
 
@@ -554,7 +667,7 @@ Read this query carefully, because it demonstrates something important about the
 
 These exercises require combining multiple concepts from the chapter. Approach each one by identifying the business question first, then building the SQL step by step.
 
-1. **Inventory risk report.** Write a single query that identifies all active (not discontinued) products where the current stock is below the reorder level AND there are no units on order (treating `NULL` as zero using `COALESCE`). Return the product name, current stock, reorder level, units on order (with `NULL` replaced by 0), and the deficit (reorder level minus stock). Sort by the deficit so the most urgent items appear first. This is a query a warehouse manager would actually run.
+1. **Inventory risk report.** Write a single query that identifies all active (not discontinued) products where the current stock is below the reorder level. Return the product name, current stock, reorder level, and the deficit (reorder level minus stock). Sort by the deficit so the most urgent items appear first. This is a query a warehouse manager would actually run.
 
 2. **Price tier classification.** Your manager asks: "Show me our product catalog organized by price tier." Write a query that uses `CASE` to classify each product into price tiers: "Budget" (under $10), "Standard" ($10 to $25), "Premium" ($25 to $50), and "Luxury" (over $50). Return the product name, unit price, and price tier. Sort by unit price descending. Then write a *second* query that uses conditional aggregation (CASE inside COUNT and AVG) to compute, in a single row, how many products fall into each tier and the overall average price of active products. This second query should not use `GROUP BY`.
 
@@ -570,7 +683,7 @@ These exercises require combining multiple concepts from the chapter. Approach e
 
     Then rewrite it so it works correctly.
 
-4. **NULL audit.** Write a query that counts, for each column in the `customers` table that might contain NULLs (`region`, `fax`), how many rows have `NULL` values and what percentage of the total that represents. This is a common data quality check. (Hint: you can compute everything in a single query using `COUNT(*)` and `COUNT(column)` together.)
+4. **NULL audit.** Write a query against the `orders` table that counts, for each column that contains NULLs (`shippedDate`, `shipperID`), how many rows have `NULL` values and what percentage of the total that represents. This is a common data quality check. (Hint: you can compute everything in a single query using `COUNT(*)` and `COUNT(column)` together.)
 
 5. **Complete business directory.** The Northwind CEO wants a single report listing every company Northwind does business with, including suppliers, customers, and shippers. For each company, show the company name, the type of relationship (`'Supplier'`, `'Customer'`, or `'Shipper'`), and the country (shippers don't have a country in the data, so use `'N/A'`). Sort alphabetically by company name. Which set operation is the right choice here, and why?
 
@@ -588,27 +701,61 @@ These exercises require combining multiple concepts from the chapter. Approach e
         5 > NULL AS test_8;
     ```
 
-    Then explain in your own words why `WHERE region != 'WA'` does *not* return customers whose region is `NULL`.
+    Then explain in your own words why `WHERE shippedDate != '2024-01-15'` does *not* return orders whose `shippedDate` is `NULL`.
 
-7. **Debug this report.** A colleague wrote the following query to produce an inventory summary, but the results don't look right. There are at least three problems. Find them all and write a corrected version.
+7. **Debug this report.** A colleague wrote the following query to produce an inventory summary, but the results don't look right. There are at least two problems. Find them all and write a corrected version.
 
     ```{.sql filename="DuckDB"}
     SELECT
         productName,
         unitPrice AS price,
-        unitsInStock + unitsOnOrder AS total_units,
+        unitPrice * unitsInStock AS inventory_value,
         CASE
-            WHEN total_units = 0 THEN 'Out of Stock'
+            WHEN inventory_value = 0 THEN 'Out of Stock'
             WHEN unitsInStock <= reorderLevel THEN 'Reorder'
             ELSE 'OK'
         END AS status
     FROM products
     WHERE discontinued = 0
-    ORDER BY total_units;
+    ORDER BY inventory_value;
     ```
 
-    (Hints: think about NULLs, execution order, and the CASE logic for a product with 0 in stock but 50 on order.)
+    (Hints: think about execution order, and consider what `inventory_value = 0` actually tests. Is a product with a $0 unit price but 100 units in stock really "Out of Stock"?)
 
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT productName, unitsInStock, reorderLevel, reorderLevel - unitsInStock AS deficit FROM products WHERE discontinued = 0 AND unitsInStock < reorderLevel ORDER BY deficit DESC;
+```
+
+**2.** First query classifies into Budget/Standard/Premium/Luxury with CASE on unitPrice thresholds. Second query uses conditional aggregation: `COUNT(CASE WHEN unitPrice < 10 THEN 1 END) AS budget_count` etc., with `AVG(CASE WHEN discontinued = 0 THEN unitPrice END)`.
+
+**3.** Error: WHERE executes before SELECT, so `inventory_value` alias doesn't exist yet. Fix: replace WHERE filter with `WHERE unitPrice * unitsInStock > 1000`.
+
+**4.**
+```sql
+SELECT COUNT(*) AS total_orders,
+    COUNT(*) - COUNT(shippedDate) AS null_shipped, ROUND(100.0 * (COUNT(*) - COUNT(shippedDate)) / COUNT(*), 2) AS pct_shipped_null,
+    COUNT(*) - COUNT(shipperID) AS null_shipper, ROUND(100.0 * (COUNT(*) - COUNT(shipperID)) / COUNT(*), 2) AS pct_shipper_null
+FROM orders;
+```
+
+**5.**
+```sql
+SELECT companyName, 'Supplier' AS type, country FROM suppliers
+UNION ALL SELECT companyName, 'Customer', country FROM customers
+UNION ALL SELECT companyName, 'Shipper', 'N/A' FROM shippers
+ORDER BY companyName;
+```
+UNION ALL is correct — entity_type makes rows unique, so dedup adds cost with no benefit.
+
+**6.** test_1=NULL, test_2=NULL, test_3=NULL, test_4=TRUE, test_5=NULL, test_6='fallback', test_7=NULL, test_8=NULL. Key insight: NULL poisons most operations except OR TRUE and COALESCE.
+
+**7.** Two bugs: (a) CASE uses `inventory_value` alias which may not be available in CASE context, and (b) `inventory_value = 0` is wrong — it catches $0 products with stock, not just out-of-stock items. Fix: use `unitsInStock = 0` instead.
+
+:::
 ## Summary
 
 SQL queries follow a `SELECT ... FROM ... WHERE ... ORDER BY ... LIMIT` structure, but the database executes them in a different order: `FROM` first (find the table), then `WHERE` (filter rows), then `SELECT` (choose columns), then `ORDER BY` (sort), then `LIMIT` (cap output). Understanding this execution order prevents common errors. `SELECT` retrieves specific columns, and the `AS` keyword creates aliases for readability. `WHERE` filters rows using comparison operators, `AND`/`OR` logic, `IN` for lists, `BETWEEN` for ranges, and `LIKE` for text patterns. `NULL` represents missing data and behaves differently from any concrete value: it is not equal to anything, propagates through operations, and requires `IS NULL` / `IS NOT NULL` for testing. SQL uses three-value logic (`TRUE`, `FALSE`, `NULL`), and `WHERE` only keeps rows where the condition is `TRUE`. `ORDER BY` sorts results (defaulting to ascending), and `LIMIT` caps the number of rows returned. Aggregate functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`) collapse many rows into summary statistics. `CASE` expressions add conditional logic, enabling categorization and conditional aggregation within a single query. Set operations (`UNION`, `UNION ALL`, `INTERSECT`, `EXCEPT`) combine results from multiple queries vertically, stacking rows rather than joining columns, with `UNION ALL` being the most common in analytical work because it preserves all rows and runs faster than `UNION`.
@@ -650,6 +797,9 @@ SQL queries follow a `SELECT ... FROM ... WHERE ... ORDER BY ... LIMIT` structur
 
 **Predicate**
 :   A condition in a `WHERE` clause that evaluates to `TRUE`, `FALSE`, or `NULL` for each row, determining which rows are included in the result.
+
+**Sentinel Value**
+:   A deliberately impossible or out-of-range value used as a stand-in for missing data, such as `9999-12-31` for "no end date" or `-1` for "unknown ID." Sentinel values predate widespread `NULL` support and are common in legacy systems, but they can silently corrupt aggregations if not filtered out.
 
 **Set Operation**
 :   A SQL operation that combines the results of two queries vertically (stacking rows). `UNION`, `UNION ALL`, `INTERSECT`, and `EXCEPT` are the four set operations, and they require compatible column structures in both queries.

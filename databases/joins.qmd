@@ -58,12 +58,22 @@ products ┘                   │
 
 Understanding these patterns helps you predict how many rows a join will produce, which, as you'll see later in this chapter, is one of the most important things to get right.
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 1. Look at the Northwind tables: `categories`, `products`, `suppliers`, `orders`, `order_details`, `customers`. For each pair listed below, identify which is the "one" side and which is the "many" side, and name the foreign key column that connects them. (a) `categories` and `products`. (b) `customers` and `orders`. (c) `orders` and `order_details`.
 
 2. Why can't the relationship between `orders` and `products` be represented with a single foreign key on either table? What would go wrong if you added a `productID` column to the `orders` table?
 
 3. Imagine Northwind adds an `employee_territories` table where each row links an employee to a territory they cover. An employee can cover many territories, and a territory can be covered by many employees. What kind of relationship is this, and what would the junction table's columns look like?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** (a) categories=one, products=many, FK: categoryID in products. (b) customers=one, orders=many, FK: customerID in orders. (c) orders=one, order_details=many, FK: orderID in order_details.
+
+**2.** Many-to-many: one order has many products, one product appears in many orders. Adding productID to orders would limit each order to one product. The junction table order_details resolves this.
+
+**3.** Many-to-many relationship. Junction table employee_territories would have: employeeID (FK to employees), territoryID (FK to territories), and optionally a composite primary key of both.
+
 :::
 
 ## INNER JOIN: Matching Rows
@@ -106,12 +116,35 @@ supplierID: 99 ───────► (no match)     ✗ Product excluded
                         supplierID: 5  ✗ Supplier excluded (no products)
 ```
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 1. Write a query that joins `products` to `categories` and returns the product name, unit price, and category name. Sort by category name, then by price descending within each category.
 
-2. The `products` table has 77 rows. If you `INNER JOIN` products to suppliers, would you expect the result to have exactly 77 rows, fewer than 77, or more than 77? Explain your reasoning, then run the query and check. (Hint: think about whether every product has a valid supplier and whether any supplier maps to multiple products.)
+2. The `products` table has 250 rows. If you `INNER JOIN` products to suppliers, would you expect the result to have exactly 250 rows, fewer than 250, or more than 250? Explain your reasoning, then run the query and check. (Hint: think about whether every product has a valid supplier and whether any supplier maps to multiple products.)
 
 3. Write a query that answers: "Which products does each supplier provide, and how much are they worth in total inventory?" Join `products` to `suppliers`, compute `unitPrice * unitsInStock` as `inventory_value`, and sort by supplier name.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT p.productName, p.unitPrice, c.categoryName
+FROM products AS p
+INNER JOIN categories AS c ON p.categoryID = c.categoryID
+ORDER BY c.categoryName, p.unitPrice DESC;
+```
+
+**2.** Exactly 250 rows — every product has a valid supplierID, so all match. Each product matches exactly one supplier (many-to-one), so no row multiplication.
+
+**3.**
+```sql
+SELECT s.companyName AS supplier, p.productName, p.unitPrice, p.unitsInStock,
+    p.unitPrice * p.unitsInStock AS inventory_value
+FROM products AS p
+INNER JOIN suppliers AS s ON p.supplierID = s.supplierID
+ORDER BY s.companyName, p.productName;
+```
+
 :::
 
 ## LEFT JOIN: Keeping Everything from One Side
@@ -135,6 +168,11 @@ ORDER BY o.orderDate;
 Customers with orders appear with their order information populated. Customers without orders still appear in the results, but `orderID` and `orderDate` are `NULL` for those rows.
 
 This distinction between `INNER JOIN` and `LEFT JOIN` matters more than it might initially seem. Using `INNER JOIN` when you should have used `LEFT JOIN` silently drops rows from your results. If you're counting total customers and some have no orders, an `INNER JOIN` through the `orders` table will give you the wrong count. Building the habit of asking "do I want to keep unmatched rows?" before choosing your join type will prevent subtle data loss bugs.
+
+::: {.callout-tip}
+## When the Data Doesn't Show the Difference
+In the Northwind dataset, every customer has placed at least one order, so `INNER JOIN` and `LEFT JOIN` between `customers` and `orders` return the same rows. Run both and compare the counts to verify this for yourself. This is actually common in well-maintained production databases, but it doesn't mean `LEFT JOIN` is unnecessary. Real-world data is messier: new customers exist before their first order, data migrations leave gaps, and upstream systems don't always enforce referential integrity. Always choose your join type based on what *should* happen logically, not on what the current data happens to contain. The exercises below ask you to use the `LEFT JOIN` plus `IS NULL` pattern anyway, because the pattern matters even when the current result is empty.
+:::
 
 ### Finding Unmatched Rows
 
@@ -161,7 +199,7 @@ While `INNER JOIN` and `LEFT JOIN` cover the vast majority of analytical work, t
 
 **FULL OUTER JOIN** keeps all rows from both tables, filling `NULL` where there's no match on either side. This is useful for reconciliation queries ("show me everything from both systems, highlighting what's only in one"), but it's rare in everyday analytical work.
 
-**CROSS JOIN** produces every possible combination of rows from both tables. If one table has 10 rows and the other has 100, the result has 1,000 rows. This is occasionally useful (generating all possible product-store combinations, for example) but dangerous if done accidentally on large tables.
+**CROSS JOIN** produces every possible combination of rows from both tables. If one table has 10 rows and the other has 50, the result has 500 rows. This is occasionally useful (generating all possible product-store combinations, for example) but dangerous if done accidentally on large tables.
 
 ```{.sql filename="duckdb"}
 -- CROSS JOIN example: every category paired with every shipper
@@ -180,7 +218,8 @@ You'll see joins explained with Venn diagrams everywhere online. While they prov
 If you want to think in terms of Venn diagrams, save that mental model for actual set operations (`UNION`, `INTERSECT`, `EXCEPT`) from the previous chapter, where both sides represent complete rows of the same structure and the operations truly combine, intersect, or subtract those rows. For joins, think "row matching" instead.
 :::
 
-::: {.callout-note title="Exercises"}
+### Exercises
+
 1. Write a query that finds all customers who have never placed an order. Return the company name and country. How many are there?
 
 2. This query is supposed to count how many orders each customer has placed, including customers with zero orders. Find the bug:
@@ -198,9 +237,27 @@ If you want to think in terms of Venn diagrams, save that mental model for actua
 
     (Hint: what does `COUNT(*)` count for customers with no orders? What should you count instead?)
 
-3. What would a `CROSS JOIN` between `categories` (8 rows) and `shippers` (3 rows) produce? How many result rows? When would this "every combination" behavior be useful in a business context?
+3. What would a `CROSS JOIN` between `categories` (15 rows) and `shippers` (8 rows) produce? How many result rows? When would this "every combination" behavior be useful in a business context?
 
 4. Explain in your own words why `INNER JOIN` and `LEFT JOIN` are not set operations, even though online tutorials often draw them as Venn diagrams. Use the one-to-many relationship between customers and orders as your example.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT c.companyName, c.country
+FROM customers AS c
+LEFT JOIN orders AS o ON c.customerID = o.customerID
+WHERE o.orderID IS NULL;
+```
+Returns 0 rows in Northwind (all customers have orders), but the pattern is correct.
+
+**2.** Bug: `COUNT(*)` counts all rows including the LEFT JOIN row with NULLs. A customer with 0 orders would show count=1. Fix: use `COUNT(o.orderID)` which skips NULLs.
+
+**3.** CROSS JOIN produces 15 × 8 = 120 rows. Useful for building coverage matrices (e.g., which category-shipper combinations have been used).
+
+**4.** Joins are row-matching operations that CREATE new combined rows. If customer "ABC" has 15 orders, INNER JOIN produces 15 result rows — a Venn diagram can't show this multiplication. Set operations combine complete rows without multiplication.
+
 :::
 
 ## Multi-Table Queries
@@ -272,6 +329,11 @@ This counts *order detail lines*, not orders, because each order can have many l
 
 The lesson: whenever you join tables, think about the *grain* of your result set. Each join can change the level of detail each row represents. A join from orders to order details changes your grain from one-row-per-order to one-row-per-line-item.
 
+::: {.callout-tip}
+## Check Your Row Count After Every Join
+In professional work, the habit of checking your row count before and after every join will save you more debugging time than any other practice. If you started with 200,000 orders and after joining to order_details you have 631,000 rows, that's expected — you've moved from order grain to line-item grain. But if you expected 200,000 and got 200,000, make sure you didn't accidentally drop rows with an INNER JOIN where a LEFT JOIN was needed. Running `SELECT COUNT(*)` at each stage of a multi-table query takes seconds and prevents hours of debugging downstream.
+:::
+
 ## Self-Joins
 
 A table can be joined to itself. This sounds odd, but it's useful when rows within the same table have relationships to each other. The `employees` table in Northwind includes a `reportsTo` column that references another employee's ID, representing the management hierarchy.
@@ -279,9 +341,9 @@ A table can be joined to itself. This sounds odd, but it's useful when rows with
 ```{.sql filename="duckdb"}
 -- Who reports to whom?
 SELECT
-    e.firstName || ' ' || e.lastName AS employee,
+    e.employeeName AS employee,
     e.title AS employee_title,
-    m.firstName || ' ' || m.lastName AS manager,
+    m.employeeName AS manager,
     m.title AS manager_title
 FROM employees AS e
 LEFT JOIN employees AS m
@@ -290,12 +352,28 @@ LEFT JOIN employees AS m
 
 The trick is giving the same table two different aliases (`e` for employees, `m` for managers) so the database can distinguish between the two roles. The `LEFT JOIN` ensures the top-level manager (who reports to nobody) still appears, with `NULL` in the manager columns.
 
-The `||` operator concatenates strings in SQL. It's how you combine text values, like building a full name from first and last name columns.
+### Exercises
 
-::: {.callout-note title="Exercises"}
 1. Using the self-join on `employees`, find the top-level manager (the person whose `reportsTo` is `NULL`). Then write a query that counts how many direct reports each manager has.
 
 2. Why does the self-join example use `LEFT JOIN` instead of `INNER JOIN`? What would change in the results if you switched to `INNER JOIN`?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+-- Top-level manager
+SELECT e.employeeName, e.title FROM employees AS e WHERE e.reportsTo IS NULL;
+-- Direct reports per manager
+SELECT m.employeeName AS manager, COUNT(*) AS direct_reports
+FROM employees AS e
+INNER JOIN employees AS m ON e.reportsTo = m.employeeID
+GROUP BY m.employeeName
+ORDER BY direct_reports DESC;
+```
+
+**2.** LEFT JOIN ensures the top-level manager (reportsTo IS NULL) appears in results with NULL in manager columns. INNER JOIN would exclude them because there's no matching manager row.
+
 :::
 
 ## Chapter Exercises
@@ -304,9 +382,9 @@ These exercises require you to combine join concepts to answer business question
 
 1. **Supplier performance.** Write a query that shows each supplier's company name, country, the number of distinct products they supply, and the average unit price of those products. Sort by product count descending. Which supplier offers the most products?
 
-2. **The full supply chain.** Write a query that traces the complete path from supplier to customer for orders placed in July 1997. Include the supplier name, product name, customer name, order date, quantity, and line total (`unitPrice * quantity` from `order_details`). This requires joining five tables. Build it one join at a time.
+2. **The full supply chain.** Write a query that traces the complete path from supplier to customer for orders placed in July 2024. Include the supplier name, product name, customer name, order date, quantity, and line total (`unitPrice * quantity` from `order_details`). This requires joining five tables. Build it one join at a time.
 
-3. **Row count prediction.** Before running each query, predict how many rows the result will have, then verify. (a) `INNER JOIN` between `customers` (91 rows) and `orders` (830 rows). (b) `LEFT JOIN` between `customers` (91 rows) and `orders` (830 rows). (c) `CROSS JOIN` between `categories` (8 rows) and `suppliers` (29 rows). Explain any differences between (a) and (b).
+3. **Row count prediction.** Before running each query, predict how many rows the result will have, then verify. (a) `INNER JOIN` between `customers` (5,000 rows) and `orders` (200,000 rows). (b) `LEFT JOIN` between `customers` (5,000 rows) and `orders` (200,000 rows). (c) `CROSS JOIN` between `categories` (15 rows) and `suppliers` (60 rows). Explain any differences between (a) and (b).
 
 4. **Finding orphans.** Write a query that identifies any products whose `supplierID` doesn't match any row in the `suppliers` table. Then write a second query that finds any suppliers who don't have any products listed. What do these "orphan" checks tell you about data quality?
 
@@ -362,6 +440,65 @@ These exercises require you to combine join concepts to answer business question
 
 9. **Reconciliation with FULL OUTER JOIN.** You receive two CSV files: one listing product IDs that were shipped last month and one listing product IDs that were ordered last month. Write a query using `FULL OUTER JOIN` that categorizes each product as "Shipped Only" (shipped but not ordered, possibly a delayed shipment), "Ordered Only" (ordered but not shipped, possibly a fulfillment gap), or "Both" (ordered and shipped). Use the `orders`, `order_details`, and `shippers` tables to simulate this scenario for a date range you choose, joining on `productID`. Explain why `INNER JOIN` wouldn't work for this analysis.
 
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```sql
+SELECT s.companyName, s.country, COUNT(DISTINCT p.productID) AS product_count,
+    ROUND(AVG(p.unitPrice), 2) AS avg_price
+FROM suppliers AS s
+INNER JOIN products AS p ON s.supplierID = p.supplierID
+GROUP BY s.companyName, s.country
+ORDER BY product_count DESC;
+```
+
+**2.**
+```sql
+SELECT s.companyName AS supplier, p.productName, c.companyName AS customer,
+    o.orderDate, od.quantity, od.unitPrice * od.quantity AS line_total
+FROM customers AS c
+INNER JOIN orders AS o ON c.customerID = o.customerID
+INNER JOIN order_details AS od ON o.orderID = od.orderID
+INNER JOIN products AS p ON od.productID = p.productID
+INNER JOIN suppliers AS s ON p.supplierID = s.supplierID
+WHERE o.orderDate >= '2024-07-01' AND o.orderDate < '2024-08-01'
+ORDER BY c.companyName, p.productName;
+```
+
+**3.** (a) ~200,000 (all orders match a customer). (b) ~200,000 (same — all customers have orders, so LEFT JOIN adds no extra rows). (c) 900 (15 × 60). (a) and (b) are identical because there are no orphaned customers.
+
+**4.**
+```sql
+-- Products without valid supplier
+SELECT p.productName, p.supplierID FROM products AS p
+LEFT JOIN suppliers AS s ON p.supplierID = s.supplierID WHERE s.supplierID IS NULL;
+-- Suppliers without products
+SELECT s.companyName FROM suppliers AS s
+LEFT JOIN products AS p ON s.supplierID = p.supplierID WHERE p.productID IS NULL;
+```
+Both return 0 rows in Northwind — data is clean.
+
+**5.** The query is correct. Grain trace: customers (1 row/customer) → orders (1 row/order) → order_details (1 row/line item). SUM aggregates line item totals correctly. To add distinct order count: `COUNT(DISTINCT o.orderID) AS order_count`.
+
+**6.**
+```sql
+SELECT cat.categoryName, ROUND(SUM(od.unitPrice * od.quantity), 2) AS total_revenue,
+    ROUND(100.0 * SUM(od.unitPrice * od.quantity) / SUM(SUM(od.unitPrice * od.quantity)) OVER (), 1) AS pct_of_total
+FROM categories AS cat
+INNER JOIN products AS p ON cat.categoryID = p.categoryID
+INNER JOIN order_details AS od ON p.productID = od.productID
+GROUP BY cat.categoryName
+ORDER BY total_revenue DESC;
+```
+
+**7.** Two bugs: (a) `!= NULL` is invalid — NULL comparisons must use IS NULL/IS NOT NULL. (b) Even if fixed to `= NULL`, the logic is inverted — `IS NULL` finds customers WITHOUT orders, `IS NOT NULL` finds those WITH. Correct: `WHERE o.orderID IS NULL`.
+
+**8.** Query A: ~200,000 (all orders have valid employeeIDs). Query B: ~200,000 (same, plus any orderless employees get 1 row each). Query C: employees with zero orders. This pattern ("LEFT JOIN + IS NULL") finds unmatched rows on the left side.
+
+**9.** Use FULL OUTER JOIN between ordered products (subquery on orderDate range) and shipped products (subquery on shippedDate range), joined on productID. Classify with CASE: both non-null = "Both", left null = "Shipped Only", right null = "Ordered Only". INNER JOIN can't work because it drops "Only" categories.
+
+:::
 ## Summary
 
 Data is split across tables to eliminate redundancy and ensure consistency: each entity (customers, products, suppliers) lives in exactly one table, connected to related entities through key references. Primary keys uniquely identify rows within a table, and foreign keys reference primary keys in other tables, creating the links that joins traverse. Relationships between tables follow patterns: one-to-many (one supplier, many products), one-to-one, and many-to-many (orders to products, connected through the `order_details` junction table). `INNER JOIN` combines rows where the join condition matches, excluding unmatched rows from both sides. `LEFT JOIN` keeps all rows from the left table and fills `NULL` for unmatched right-side columns, which is critical for preserving complete counts and detecting missing relationships. Multi-table queries chain joins to traverse relationships across the data model, and building these queries incrementally, one join at a time with row-count verification, prevents subtle errors. Joins are row-matching operations, not set operations, and Venn diagrams are misleading for understanding them. Row multiplication occurs naturally when joining one-to-many relationships, and understanding the resulting grain of your data is essential for correct aggregations.
