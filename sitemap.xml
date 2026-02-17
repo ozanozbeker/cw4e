@@ -2,67 +2,147 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ozanozbeker.com/cw4e/index.html</loc>
-    <lastmod>2026-01-29T09:00:41.515Z</lastmod>
+    <lastmod>2026-02-17T15:24:30.878Z</lastmod>
   </url>
   <url>
     <loc>https://ozanozbeker.com/cw4e/introduction.html</loc>
-    <lastmod>2026-01-29T09:00:41.515Z</lastmod>
+    <lastmod>2026-02-17T15:26:17.415Z</lastmod>
   </url>
   <url>
     <loc>https://ozanozbeker.com/cw4e/prerequisites.html</loc>
-    <lastmod>2026-01-29T09:13:24.986Z</lastmod>
+    <lastmod>2026-02-17T15:26:21.841Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/foundations/index.html</loc>
-    <lastmod>2026-01-29T09:12:31.380Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/foundations.html</loc>
+    <lastmod>2026-02-16T19:27:21.037Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/foundations/computers.html</loc>
-    <lastmod>2026-01-29T09:00:41.504Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/01-computers.html</loc>
+    <lastmod>2026-02-17T17:09:22.920Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/foundations/files.html</loc>
-    <lastmod>2026-01-29T09:00:41.505Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/02-filesystem.html</loc>
+    <lastmod>2026-02-17T06:34:46.495Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/foundations/cli.html</loc>
-    <lastmod>2026-01-29T09:00:41.504Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/03-cli.html</loc>
+    <lastmod>2026-02-17T06:35:01.521Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/foundations/git.html</loc>
-    <lastmod>2026-01-29T09:00:41.505Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/04-git.html</loc>
+    <lastmod>2026-02-17T06:35:19.950Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/foundations/github.html</loc>
-    <lastmod>2026-01-29T09:00:41.505Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/05-github.html</loc>
+    <lastmod>2026-02-17T06:35:35.209Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/databases/index.html</loc>
-    <lastmod>2026-02-04T15:09:59.805Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/databases.html</loc>
+    <lastmod>2026-02-17T15:24:36.870Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/databases/databases.html</loc>
-    <lastmod>2026-02-10T17:17:12.522Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/06-databases.html</loc>
+    <lastmod>2026-02-17T17:08:13.426Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/databases/querying.html</loc>
-    <lastmod>2026-02-10T17:17:14.156Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/07-querying.html</loc>
+    <lastmod>2026-02-17T06:34:03.208Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/databases/joins.html</loc>
-    <lastmod>2026-02-10T17:17:15.937Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/08-joins.html</loc>
+    <lastmod>2026-02-17T06:34:09.589Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/databases/analytics.html</loc>
-    <lastmod>2026-02-10T17:17:16.850Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/09-analytics.html</loc>
+    <lastmod>2026-02-17T06:34:16.790Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/databases/modeling.html</loc>
-    <lastmod>2026-02-10T17:17:18.719Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/chapters/10-modeling.html</loc>
+    <lastmod>2026-02-17T17:33:15.441Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/programming.html</loc>
+    <lastmod>2026-02-17T15:26:30.846Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/11-python-fundamentals.html</loc>
+    <lastmod>2026-02-17T17:08:35.747Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/12-collections.html</loc>
+    <lastmod>2026-02-16T19:27:25.048Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/13-functions.html</loc>
+    <lastmod>2026-02-17T02:53:11.672Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/14-file-io.html</loc>
+    <lastmod>2026-02-17T06:03:13.888Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/15-objects.html</loc>
+    <lastmod>2026-02-17T06:31:39.600Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/integration.html</loc>
+    <lastmod>2026-02-17T15:26:10.470Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/16-python-sql.html</loc>
+    <lastmod>2026-02-17T04:39:06.640Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/17-marimo.html</loc>
+    <lastmod>2026-02-17T17:33:16.454Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/18-polars.html</loc>
+    <lastmod>2026-02-17T06:36:29.752Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/19-altair.html</loc>
+    <lastmod>2026-02-17T04:39:55.554Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/20-excel.html</loc>
+    <lastmod>2026-02-17T18:47:50.383Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/production.html</loc>
+    <lastmod>2026-02-17T15:26:26.491Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/21-python-projects.html</loc>
+    <lastmod>2026-02-17T06:34:18.511Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/22-quarto.html</loc>
+    <lastmod>2026-02-17T17:33:14.428Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/23-code-quality.html</loc>
+    <lastmod>2026-02-17T06:35:03.502Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/24-arrow.html</loc>
+    <lastmod>2026-02-17T18:50:50.888Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/chapters/25-typer.html</loc>
+    <lastmod>2026-02-17T06:35:52.699Z</lastmod>
   </url>
   <url>
     <loc>https://ozanozbeker.com/cw4e/appendices/brew.html</loc>
-    <lastmod>2026-01-29T09:00:41.513Z</lastmod>
+    <lastmod>2026-02-16T19:45:23.467Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/appendices/winget.html</loc>
+    <lastmod>2026-02-16T19:45:40.451Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/appendices/zed.html</loc>
+    <lastmod>2026-02-17T06:34:08.696Z</lastmod>
   </url>
   <url>
     <loc>https://ozanozbeker.com/cw4e/appendices/git.html</loc>
@@ -73,11 +153,27 @@
     <lastmod>2026-01-29T09:00:41.514Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/appendices/winget.html</loc>
-    <lastmod>2026-01-29T09:00:41.514Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/appendices/northwind.html</loc>
+    <lastmod>2026-02-17T18:53:40.898Z</lastmod>
   </url>
   <url>
-    <loc>https://ozanozbeker.com/cw4e/appendices/zed.html</loc>
-    <lastmod>2026-02-04T15:12:04.037Z</lastmod>
+    <loc>https://ozanozbeker.com/cw4e/appendices/duckdb.html</loc>
+    <lastmod>2026-02-17T06:34:13.044Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/appendices/uv.html</loc>
+    <lastmod>2026-02-17T06:34:17.516Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/appendices/marimo.html</loc>
+    <lastmod>2026-02-17T06:34:21.760Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/appendices/ruff.html</loc>
+    <lastmod>2026-02-16T20:17:27.428Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ozanozbeker.com/cw4e/appendices/basedpyright.html</loc>
+    <lastmod>2026-02-16T20:20:19.665Z</lastmod>
   </url>
 </urlset>

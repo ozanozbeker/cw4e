@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>14&nbsp; Python Fundamentals – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/12-collections.html" rel="next">
+<link href="../programming.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../programming.html">Programming</a></li><li class="breadcrumb-item"><a href="../chapters/11-python-fundamentals.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Prerequisites</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Databases</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-python-fundamentals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Collections &amp; Control Flow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-file-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Working with Files</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Integration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Notebooks with Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../production.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Production</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Documents &amp; Presentations with Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-typer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">CLI Tools with Typer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Zed</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/northwind.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Northwind Dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/duckdb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">DuckDB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/ruff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Ruff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/basedpyright.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">K</span>&nbsp; <span class="chapter-title">basedpyright</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#why-python" id="toc-why-python" class="nav-link active" data-scroll-target="#why-python"><span class="header-section-number">14.1</span> Why Python?</a></li>
+  <li><a href="#setting-up-your-first-project" id="toc-setting-up-your-first-project" class="nav-link" data-scroll-target="#setting-up-your-first-project"><span class="header-section-number">14.2</span> Setting Up Your First Project</a>
+  <ul class="collapse">
+  <li><a href="#creating-a-project" id="toc-creating-a-project" class="nav-link" data-scroll-target="#creating-a-project"><span class="header-section-number">14.2.1</span> Creating a Project</a></li>
+  <li><a href="#running-your-first-script" id="toc-running-your-first-script" class="nav-link" data-scroll-target="#running-your-first-script"><span class="header-section-number">14.2.2</span> Running Your First Script</a></li>
+  </ul></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="header-section-number">14.3</span> Comments</a>
+  <ul class="collapse">
+  <li><a href="#block-comments-and-inline-comments" id="toc-block-comments-and-inline-comments" class="nav-link" data-scroll-target="#block-comments-and-inline-comments"><span class="header-section-number">14.3.1</span> Block Comments and Inline Comments</a></li>
+  <li><a href="#todo-and-fixme" id="toc-todo-and-fixme" class="nav-link" data-scroll-target="#todo-and-fixme"><span class="header-section-number">14.3.2</span> TODO and FIXME</a></li>
+  <li><a href="#when-code-is-self-documenting" id="toc-when-code-is-self-documenting" class="nav-link" data-scroll-target="#when-code-is-self-documenting"><span class="header-section-number">14.3.3</span> When Code Is Self-Documenting</a></li>
+  </ul></li>
+  <li><a href="#the-repl" id="toc-the-repl" class="nav-link" data-scroll-target="#the-repl"><span class="header-section-number">14.4</span> The REPL</a></li>
+  <li><a href="#variables-and-types" id="toc-variables-and-types" class="nav-link" data-scroll-target="#variables-and-types"><span class="header-section-number">14.5</span> Variables and Types</a>
+  <ul class="collapse">
+  <li><a href="#core-types" id="toc-core-types" class="nav-link" data-scroll-target="#core-types"><span class="header-section-number">14.5.1</span> Core Types</a></li>
+  <li><a href="#integers-and-floats" id="toc-integers-and-floats" class="nav-link" data-scroll-target="#integers-and-floats"><span class="header-section-number">14.5.2</span> Integers and Floats</a></li>
+  <li><a href="#strings" id="toc-strings" class="nav-link" data-scroll-target="#strings"><span class="header-section-number">14.5.3</span> Strings</a></li>
+  <li><a href="#none" id="toc-none" class="nav-link" data-scroll-target="#none"><span class="header-section-number">14.5.4</span> None</a></li>
+  <li><a href="#variable-naming-conventions" id="toc-variable-naming-conventions" class="nav-link" data-scroll-target="#variable-naming-conventions"><span class="header-section-number">14.5.5</span> Variable Naming Conventions</a></li>
+  <li><a href="#multiple-assignment" id="toc-multiple-assignment" class="nav-link" data-scroll-target="#multiple-assignment"><span class="header-section-number">14.5.6</span> Multiple Assignment</a></li>
+  </ul></li>
+  <li><a href="#operators-and-expressions" id="toc-operators-and-expressions" class="nav-link" data-scroll-target="#operators-and-expressions"><span class="header-section-number">14.6</span> Operators and Expressions</a>
+  <ul class="collapse">
+  <li><a href="#string-operations" id="toc-string-operations" class="nav-link" data-scroll-target="#string-operations"><span class="header-section-number">14.6.1</span> String Operations</a></li>
+  <li><a href="#comparison-operators" id="toc-comparison-operators" class="nav-link" data-scroll-target="#comparison-operators"><span class="header-section-number">14.6.2</span> Comparison Operators</a></li>
+  <li><a href="#the-in-operator" id="toc-the-in-operator" class="nav-link" data-scroll-target="#the-in-operator"><span class="header-section-number">14.6.3</span> The <code>in</code> Operator</a></li>
+  </ul></li>
+  <li><a href="#sec-truthiness" id="toc-sec-truthiness" class="nav-link" data-scroll-target="#sec-truthiness"><span class="header-section-number">14.7</span> Python’s Boolean System</a>
+  <ul class="collapse">
+  <li><a href="#truthy-and-falsy-values" id="toc-truthy-and-falsy-values" class="nav-link" data-scroll-target="#truthy-and-falsy-values"><span class="header-section-number">14.7.1</span> Truthy and Falsy Values</a></li>
+  <li><a href="#short-circuit-evaluation" id="toc-short-circuit-evaluation" class="nav-link" data-scroll-target="#short-circuit-evaluation"><span class="header-section-number">14.7.2</span> Short-Circuit Evaluation</a></li>
+  <li><a href="#the-not-operator" id="toc-the-not-operator" class="nav-link" data-scroll-target="#the-not-operator"><span class="header-section-number">14.7.3</span> The <code>not</code> Operator</a></li>
+  </ul></li>
+  <li><a href="#putting-it-together-a-northwind-product-summary" id="toc-putting-it-together-a-northwind-product-summary" class="nav-link" data-scroll-target="#putting-it-together-a-northwind-product-summary"><span class="header-section-number">14.8</span> Putting It Together: A Northwind Product Summary</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a>
+  <ul class="collapse">
+  <li><a href="#predict-the-output" id="toc-predict-the-output" class="nav-link" data-scroll-target="#predict-the-output">Predict the Output</a></li>
+  <li><a href="#unit-conversion-script" id="toc-unit-conversion-script" class="nav-link" data-scroll-target="#unit-conversion-script">Unit Conversion Script</a></li>
+  <li><a href="#repl-exploration" id="toc-repl-exploration" class="nav-link" data-scroll-target="#repl-exploration">REPL Exploration</a></li>
+  <li><a href="#northwind-product-card" id="toc-northwind-product-card" class="nav-link" data-scroll-target="#northwind-product-card">Northwind Product Card</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/11-python-fundamentals.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../programming.html">Programming</a></li><li class="breadcrumb-item"><a href="../chapters/11-python-fundamentals.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-python-fundamentals" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In the Foundations module, you learned to work with your computer through the command line. In Databases, you learned to query and transform data with SQL. Now you’ll learn Python, the language that ties everything together.</p>
+<p>This chapter sets up your Python environment, introduces the core building blocks of the language, and highlights the places where Python’s design differs from what you might expect. If you’ve written code in Matlab or another language before, some of this will feel familiar. Pay close attention to the sections on truthiness and short-circuit evaluation. They’re the parts that trip up experienced programmers coming from other languages, and Python leans on these behaviors heavily.</p>
+<section id="why-python" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="why-python"><span class="header-section-number">14.1</span> Why Python?</h2>
+<p>Every tool you’ve learned so far has a specific job. SQL retrieves and transforms data inside a database. Git tracks changes to files over time. The command line navigates your file system and runs programs. Each tool is powerful within its domain, but none of them can do everything.</p>
+<p>Python is different. It’s a <em>general-purpose</em> programming language, which means it wasn’t designed for any single task. Instead, it’s designed to be flexible enough to handle almost anything: reading files, connecting to databases, building web applications, training machine learning models, automating reports, and more. Python isn’t the best tool for any one of these tasks, but it’s good enough at all of them, and it excels at connecting specialized tools together into complete workflows.</p>
+<p>Consider a realistic engineering task: every Monday morning, you need to pull last week’s production data from a database, compute quality metrics, flag any lines that fell below threshold, generate a summary report, and email it to your team. SQL can pull the data. Excel can compute the metrics. Outlook can send the email. But who connects those steps? That’s Python’s job. It orchestrates the workflow from start to finish, handling the logic, file management, and automation that no single specialized tool can do alone.</p>
+<p>This orchestration role explains why Python has become the common language across data science, data engineering, web development, and scientific computing. It’s not because Python is the fastest language (it isn’t) or the most mathematically elegant (Matlab and R have stronger claims there). It’s because Python is the language that connects everything else.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Where do other languages fit?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Matlab</strong> excels at numerical computation, matrix operations, and simulation. If your work is primarily solving systems of equations or running Simulink models, Matlab is the right tool. <strong>R</strong> excels at statistical analysis and publication-quality data visualization. If you’re doing formal hypothesis testing or building statistical models, R has deeper support. <strong>SQL</strong> excels at querying and transforming data inside databases. You learned this in the previous module, and you’ll continue using it alongside Python.</p>
+<p>Python doesn’t replace any of these. It fills the gaps between them and handles the tasks none of them were designed for: file processing, automation, API integration, and workflow orchestration.</p>
+</div>
+</div>
+</section>
+<section id="setting-up-your-first-project" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="setting-up-your-first-project"><span class="header-section-number">14.2</span> Setting Up Your First Project</h2>
+<p>In the Foundations module, you used <code>uv</code> to manage tools. Now you’ll use it to manage Python itself. Install <code>uv</code> and Python 3.13 following the instructions in <a href="../appendices/uv.html" class="quarto-xref"><span>Appendix H</span></a>. Verify the installation:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> python list <span class="at">--only-installed</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You should see Python 3.13 in the output.</p>
+<section id="creating-a-project" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="creating-a-project"><span class="header-section-number">14.2.1</span> Creating a Project</h3>
+<p>Every Python project starts with <code>uv init</code>. Navigate to where you want to create your project and run:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init my-project</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This creates a directory with the following structure:</p>
+<pre><code>my-project/
+├── pyproject.toml    # project metadata and dependencies
+├── .python-version   # pins the Python version
+├── README.md         # project documentation
+├── .gitignore        # files Git should ignore
+└── hello.py          # starter script</code></pre>
+<p>Each of these files serves a specific purpose. The <code>.python-version</code> file pins the exact Python version so that anyone who clones your project gets the same one. The <code>.gitignore</code> file tells Git to skip files that shouldn’t be tracked, like the virtual environment directory. The <code>README.md</code> is the front door of your project, a topic we’ll revisit in the Production module.</p>
+<p>The most important file is <code>pyproject.toml</code>. Open it in Zed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>pyproject.toml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="pyproject.toml"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[project]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name</span> <span class="op">=</span> <span class="st">"my-project"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.1.0"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">description</span> <span class="op">=</span> <span class="st">"Add your description here"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">readme</span> <span class="op">=</span> <span class="st">"README.md"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dt">requires-python</span> <span class="op">=</span> <span class="st">"&gt;=3.13"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dt">dependencies</span> <span class="op">=</span> <span class="op">[]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This file describes your project: its name, version, which Python version it needs, and what external packages it depends on. For now, it’s mostly empty. In the Production module (<a href="21-python-projects.html" class="quarto-xref"><span>Chapter 24</span></a>), you’ll learn to use <code>pyproject.toml</code> extensively. For now, just know that it exists and that <code>uv</code> reads it to manage your project.</p>
+</section>
+<section id="running-your-first-script" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="running-your-first-script"><span class="header-section-number">14.2.2</span> Running Your First Script</h3>
+<p>Open <code>hello.py</code> in Zed. You’ll see:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>hello.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="hello.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Hello from my-project!"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>main()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Run it from the terminal:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run hello.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>Hello from my-project!</code></pre>
+<p>The <code>uv run</code> command does several things behind the scenes: it creates a virtual environment if one doesn’t exist, installs any dependencies listed in <code>pyproject.toml</code>, and then executes your script using the correct Python version. You don’t need to activate environments manually or worry about which Python is being used. <code>uv run</code> handles all of it.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why <code>uv run</code> instead of <code>python</code>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Running <code>python hello.py</code> directly uses whatever Python happens to be on your system <code>PATH</code>, which might be the wrong version or might not have your project’s dependencies installed. <code>uv run hello.py</code> always uses the right Python with the right packages. Make it a habit: always use <code>uv run</code> for this course.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="comments" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="comments"><span class="header-section-number">14.3</span> Comments</h2>
+<p>Comments are lines in your code that Python ignores. They exist for humans, not for computers. In Python, comments start with the <code>#</code> character:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>comments.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="comments.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is a comment. Python skips this line entirely.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">42</span>  <span class="co"># Comments can also appear after code on the same line.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The purpose of comments is to explain <em>why</em> your code does something, not <em>what</em> it does. The code itself tells you what happens. The comment should tell you the reasoning behind it.</p>
+<p>Here’s a bad comment:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bad_comment.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="bad_comment.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x <span class="op">+</span> <span class="dv">1</span>  <span class="co"># increment x by 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This comment restates the code. Anyone who can read Python already knows that <code>x + 1</code> increments <code>x</code>. The comment adds nothing.</p>
+<p>Here’s a good comment:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>good_comment.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="good_comment.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert PSI to kPa using the ISO 80000-4 conversion factor</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pressure_kpa <span class="op">=</span> pressure_psi <span class="op">*</span> <span class="fl">6.894757</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This comment explains the <em>why</em>: where the magic number <code>6.894757</code> comes from and what standard it references. Six months from now, you (or a colleague) will understand this line immediately instead of wondering whether the constant is correct.</p>
+<section id="block-comments-and-inline-comments" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="block-comments-and-inline-comments"><span class="header-section-number">14.3.1</span> Block Comments and Inline Comments</h3>
+<p>Block comments appear on their own line, above the code they describe. Inline comments appear on the same line as code, separated by at least two spaces:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>comment_styles.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="comment_styles.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the weighted average cycle time across all stations.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Stations with zero throughput are excluded to avoid division errors.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>avg_cycle_time <span class="op">=</span> total_weighted_time <span class="op">/</span> active_stations  <span class="co"># in seconds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Block comments are better for explaining <em>why</em> a section of code exists. Inline comments are better for brief clarifications, like units or edge cases.</p>
+</section>
+<section id="todo-and-fixme" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="todo-and-fixme"><span class="header-section-number">14.3.2</span> TODO and FIXME</h3>
+<p>Two conventional comment markers help you track work in progress:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>markers.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="markers.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Add support for multiple product categories</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">FIXME</span><span class="co">: This breaks when the order quantity is zero</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>TODO</code> marks something you plan to implement later. <code>FIXME</code> marks a known bug or problem. Most code editors, including Zed, highlight these markers so they’re easy to find. They’re a lightweight alternative to formal issue tracking for small projects.</p>
+</section>
+<section id="when-code-is-self-documenting" class="level3" data-number="14.3.3">
+<h3 data-number="14.3.3" class="anchored" data-anchor-id="when-code-is-self-documenting"><span class="header-section-number">14.3.3</span> When Code Is Self-Documenting</h3>
+<p>Well-chosen variable names often eliminate the need for comments entirely. Compare:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>unclear.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="unclear.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total cost including tax</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> p <span class="op">*</span> q <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> r)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>clear.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="clear.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>total_cost <span class="op">=</span> unit_price <span class="op">*</span> quantity <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> tax_rate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The second version needs no comment. The variable names tell the full story. When you find yourself writing a comment that restates the code, consider whether better naming would make the comment unnecessary.</p>
+</section>
+</section>
+<section id="the-repl" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="the-repl"><span class="header-section-number">14.4</span> The REPL</h2>
+<p>The REPL (Read-Eval-Print Loop) is Python’s interactive prompt. It reads an expression you type, evaluates it, prints the result, and loops back for more input. Start it from your project directory:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You’ll see something like:</p>
+<pre><code>Python 3.13.2 (main, Feb  4 2025, 14:51:09) [Clang 19.1.6] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt;</code></pre>
+<p>The <code>&gt;&gt;&gt;</code> prompt is where you type Python expressions. Try it:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>repl</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="repl"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">"hello"</span> <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> <span class="st">"world"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">'hello world'</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">7</span> <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fl">3.5</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">7</span> <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The REPL is a scratchpad. Use it when you want to test an expression, check how a function behaves, or explore an unfamiliar library. It’s faster than writing a script, running it, reading the output, and editing the script again.</p>
+<p>That said, the REPL isn’t a substitute for scripts. Anything you type in the REPL vanishes when you close it. If your work needs to be saved, versioned with Git, or run again later, write a script. The REPL is for exploration; scripts are for production.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Exiting the REPL
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Type <code>exit()</code> or press <code>Ctrl+D</code> to leave the REPL and return to your terminal.</p>
+</div>
+</div>
+</section>
+<section id="variables-and-types" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="variables-and-types"><span class="header-section-number">14.5</span> Variables and Types</h2>
+<p>A variable is a name attached to a value. In Python, you create a variable by assigning to it with <code>=</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>variables.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="variables.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>product_name <span class="op">=</span> <span class="st">"Widget A"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>unit_price <span class="op">=</span> <span class="fl">14.99</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>quantity <span class="op">=</span> <span class="dv">250</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>in_stock <span class="op">=</span> <span class="va">True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Python is <em>dynamically typed</em>, which means you don’t declare a variable’s type before using it. Python figures out the type from the value you assign. This is different from languages like C or Java, where you must declare types explicitly, and subtly different from Matlab, where everything is a matrix by default.</p>
+<section id="core-types" class="level3" data-number="14.5.1">
+<h3 data-number="14.5.1" class="anchored" data-anchor-id="core-types"><span class="header-section-number">14.5.1</span> Core Types</h3>
+<p>Python has a small set of built-in types that cover most everyday needs:</p>
+<div id="tbl-core-types" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-core-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.1: Python’s core scalar types
+</figcaption>
+<div aria-describedby="tbl-core-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>int</code></td>
+<td>Whole numbers</td>
+<td><code>42</code>, <code>-7</code>, <code>0</code>, <code>1_000_000</code></td>
+</tr>
+<tr class="even">
+<td><code>float</code></td>
+<td>Decimal numbers</td>
+<td><code>3.14</code>, <code>-0.001</code>, <code>1e6</code></td>
+</tr>
+<tr class="odd">
+<td><code>str</code></td>
+<td>Text (strings)</td>
+<td><code>"hello"</code>, <code>'world'</code>, <code>""</code></td>
+</tr>
+<tr class="even">
+<td><code>bool</code></td>
+<td>Boolean</td>
+<td><code>True</code>, <code>False</code></td>
+</tr>
+<tr class="odd">
+<td><code>None</code></td>
+<td>The absence of a value</td>
+<td><code>None</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>You can check the type of any value using the <code>type()</code> function:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>type_checking.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="type_checking.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(<span class="dv">42</span>)          <span class="co"># &lt;class 'int'&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(<span class="fl">3.14</span>)        <span class="co"># &lt;class 'float'&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(<span class="st">"hello"</span>)     <span class="co"># &lt;class 'str'&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(<span class="va">True</span>)        <span class="co"># &lt;class 'bool'&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(<span class="va">None</span>)        <span class="co"># &lt;class 'NoneType'&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Underscores in numbers
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Python lets you use underscores as visual separators in large numbers: <code>1_000_000</code> is the same as <code>1000000</code>. This is purely for readability and has no effect on the value.</p>
+</div>
+</div>
+</section>
+<section id="integers-and-floats" class="level3" data-number="14.5.2">
+<h3 data-number="14.5.2" class="anchored" data-anchor-id="integers-and-floats"><span class="header-section-number">14.5.2</span> Integers and Floats</h3>
+<p>Python’s <code>int</code> type has no size limit. You can represent arbitrarily large whole numbers without worrying about overflow:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>big_int.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="big_int.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>big_number <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> <span class="dv">100</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(big_number)  <span class="co"># 1267650600228229401496703205376</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Floats, on the other hand, follow the IEEE 754 standard for double-precision floating point. This means they have limited precision, and you’ll occasionally see rounding artifacts:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>float_precision.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="float_precision.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span>  <span class="co"># 0.30000000000000004</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This isn’t a Python bug. It’s a fundamental property of how computers represent decimal numbers in binary. For most engineering calculations, the precision is more than sufficient. When exact decimal arithmetic matters (financial calculations, for example), Python provides the <code>decimal</code> module.</p>
+</section>
+<section id="strings" class="level3" data-number="14.5.3">
+<h3 data-number="14.5.3" class="anchored" data-anchor-id="strings"><span class="header-section-number">14.5.3</span> Strings</h3>
+<p>Strings are sequences of characters, enclosed in either single quotes or double quotes:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>strings.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="strings.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Northwind Traders"</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>greeting <span class="op">=</span> <span class="st">'Hello, world!'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Both forms are identical in behavior. Pick one convention and stick with it. Throughout this book, we’ll use double quotes for strings, matching the convention enforced by the Ruff formatter you’ll meet in the Production module.</p>
+<p>Strings in Python are <em>immutable</em>: once created, they can’t be changed in place. Operations that appear to modify a string actually create a new one:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>string_immutability.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="string_immutability.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"widget"</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>upper_name <span class="op">=</span> name.upper()  <span class="co"># Creates a new string "WIDGET"</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(name)                <span class="co"># Still "widget", unchanged</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="none" class="level3" data-number="14.5.4">
+<h3 data-number="14.5.4" class="anchored" data-anchor-id="none"><span class="header-section-number">14.5.4</span> None</h3>
+<p><code>None</code> is Python’s way of representing “nothing” or “no value.” If you’ve used SQL, think of <code>None</code> as Python’s equivalent of <code>NULL</code>. It’s not zero, not an empty string, and not <code>False</code>. It’s the explicit absence of a value:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>none.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="none.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="va">None</span>  <span class="co"># We haven't computed the result yet</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You’ll use <code>None</code> frequently as a default value, a return value for functions that don’t produce a result, and a signal that something hasn’t been initialized. We’ll revisit <code>None</code> handling extensively in later chapters.</p>
+</section>
+<section id="variable-naming-conventions" class="level3" data-number="14.5.5">
+<h3 data-number="14.5.5" class="anchored" data-anchor-id="variable-naming-conventions"><span class="header-section-number">14.5.5</span> Variable Naming Conventions</h3>
+<p>Python has a strong convention for naming variables: use <code>snake_case</code>. All letters are lowercase, with words separated by underscores:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>naming.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="naming.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Good: snake_case</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>unit_price <span class="op">=</span> <span class="fl">14.99</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>order_count <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>is_discontinued <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Bad: other conventions</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>unitPrice <span class="op">=</span> <span class="fl">14.99</span>      <span class="co"># camelCase (Java/JavaScript convention)</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>OrderCount <span class="op">=</span> <span class="dv">42</span>        <span class="co"># PascalCase (reserved for class names in Python)</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>UNIT_PRICE <span class="op">=</span> <span class="fl">14.99</span>     <span class="co"># SCREAMING_SNAKE_CASE (reserved for constants)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This isn’t just style. It’s a signal. When you see <code>snake_case</code>, you know it’s a variable or function. When you see <code>PascalCase</code>, you know it’s a class. When you see <code>SCREAMING_SNAKE_CASE</code>, you know it’s a constant. These conventions make Python code readable across teams and projects.</p>
+</section>
+<section id="multiple-assignment" class="level3" data-number="14.5.6">
+<h3 data-number="14.5.6" class="anchored" data-anchor-id="multiple-assignment"><span class="header-section-number">14.5.6</span> Multiple Assignment</h3>
+<p>Python lets you assign multiple variables in a single statement:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>multi_assign.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="multi_assign.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>x, y, z <span class="op">=</span> <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This also gives you a clean idiom for swapping values:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>swap.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="swap.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>a, b <span class="op">=</span> b, a  <span class="co"># a is now 20, b is now 10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In most languages, swapping requires a temporary variable. Python handles it natively because the right side of the assignment is fully evaluated before any assignments happen.</p>
+</section>
+</section>
+<section id="operators-and-expressions" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="operators-and-expressions"><span class="header-section-number">14.6</span> Operators and Expressions</h2>
+<p>Python’s arithmetic operators work the way you’d expect, with a few additions that are worth knowing:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>arithmetic.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="arithmetic.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">+</span> <span class="dv">3</span>    <span class="co"># 13    Addition</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">-</span> <span class="dv">3</span>    <span class="co"># 7     Subtraction</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">*</span> <span class="dv">3</span>    <span class="co"># 30    Multiplication</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">/</span> <span class="dv">3</span>    <span class="co"># 3.333... Division (always returns float)</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">//</span> <span class="dv">3</span>   <span class="co"># 3     Floor division (rounds down to int)</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">%</span> <span class="dv">3</span>    <span class="co"># 1     Modulo (remainder)</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">**</span> <span class="dv">3</span>   <span class="co"># 1000  Exponentiation</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Two operators deserve special attention. Floor division (<code>//</code>) divides and rounds down to the nearest integer. Modulo (<code>%</code>) returns the remainder after division. Together, they’re useful for tasks like converting units or cycling through indices:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>divmod.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="divmod.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>total_minutes <span class="op">=</span> <span class="dv">137</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>hours <span class="op">=</span> total_minutes <span class="op">//</span> <span class="dv">60</span>    <span class="co"># 2</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>minutes <span class="op">=</span> total_minutes <span class="op">%</span> <span class="dv">60</span>   <span class="co"># 17</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>hours<span class="sc">}</span><span class="ss">h </span><span class="sc">{</span>minutes<span class="sc">}</span><span class="ss">m"</span>)  <span class="co"># 2h 17m</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Division always returns a float
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In Python, <code>/</code> always produces a float, even when dividing two integers that divide evenly: <code>10 / 2</code> returns <code>5.0</code>, not <code>5</code>. If you need an integer result, use <code>//</code>.</p>
+</div>
+</div>
+<section id="string-operations" class="level3" data-number="14.6.1">
+<h3 data-number="14.6.1" class="anchored" data-anchor-id="string-operations"><span class="header-section-number">14.6.1</span> String Operations</h3>
+<p>Strings support concatenation with <code>+</code> and repetition with <code>*</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>string_ops.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="string_ops.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>first <span class="op">=</span> <span class="st">"North"</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>last <span class="op">=</span> <span class="st">"wind"</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>full <span class="op">=</span> first <span class="op">+</span> last       <span class="co"># "Northwind"</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>separator <span class="op">=</span> <span class="st">"-"</span> <span class="op">*</span> <span class="dv">40</span>      <span class="co"># "----------------------------------------"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>But the most useful string feature in Python is the <em>f-string</em> (formatted string literal). Prefix a string with <code>f</code> and put expressions inside curly braces:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>fstrings.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="fstrings.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> <span class="st">"Widget A"</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>price <span class="op">=</span> <span class="fl">14.99</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>quantity <span class="op">=</span> <span class="dv">250</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>quantity<span class="sc">}</span><span class="ss"> units at $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss"> each"</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary)  <span class="co"># Widget A: 250 units at $14.99 each</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>:.2f</code> inside the braces is a format specification: it formats the number as a float with exactly two decimal places. F-strings can contain any valid Python expression:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>fstring_expressions.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="fstring_expressions.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> <span class="ss">f"Total: $</span><span class="sc">{</span>price <span class="op">*</span> quantity<span class="sc">:,.2f}</span><span class="ss">"</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(total)  <span class="co"># Total: $3,747.50</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>:,.2f</code> format adds comma separators and two decimal places, perfect for currency.</p>
+</section>
+<section id="comparison-operators" class="level3" data-number="14.6.2">
+<h3 data-number="14.6.2" class="anchored" data-anchor-id="comparison-operators"><span class="header-section-number">14.6.2</span> Comparison Operators</h3>
+<p>Comparison operators return <code>True</code> or <code>False</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>comparisons.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="comparisons.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">&gt;</span> <span class="dv">5</span>     <span class="co"># True</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">&lt;</span> <span class="dv">5</span>     <span class="co"># False</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">&gt;=</span> <span class="dv">10</span>   <span class="co"># True</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">&lt;=</span> <span class="dv">9</span>    <span class="co"># False</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">==</span> <span class="dv">10</span>   <span class="co"># True   (equality check, not assignment)</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">!=</span> <span class="dv">5</span>    <span class="co"># True   (not equal)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><code>==</code> vs.&nbsp;<code>=</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A single <code>=</code> is assignment: <code>x = 5</code> stores the value 5 in <code>x</code>. A double <code>==</code> is comparison: <code>x == 5</code> checks whether <code>x</code> equals 5. Mixing these up is a common source of bugs.</p>
+</div>
+</div>
+<p>Python also supports <em>chained comparisons</em>, a feature that reads like natural language:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>chained.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="chained.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">7</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="op">&lt;</span> x <span class="op">&lt;</span> <span class="dv">10</span>        <span class="co"># True (x is between 1 and 10)</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="op">&lt;</span> x <span class="op">&lt;</span> <span class="dv">5</span>         <span class="co"># False</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="op">&lt;=</span> x <span class="op">&lt;=</span> <span class="dv">100</span>     <span class="co"># True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is equivalent to <code>1 &lt; x and x &lt; 10</code>, but the chained form is more readable.</p>
+</section>
+<section id="the-in-operator" class="level3" data-number="14.6.3">
+<h3 data-number="14.6.3" class="anchored" data-anchor-id="the-in-operator"><span class="header-section-number">14.6.3</span> The <code>in</code> Operator</h3>
+<p>The <code>in</code> operator tests whether a value exists inside a collection:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>in_operator.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="in_operator.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">"a"</span> <span class="kw">in</span> <span class="st">"apple"</span>          <span class="co"># True</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co">"z"</span> <span class="kw">in</span> <span class="st">"apple"</span>          <span class="co"># False</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]   <span class="co"># True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You’ll use <code>in</code> constantly in Python, especially with collections (<a href="12-collections.html" class="quarto-xref"><span>Chapter 15</span></a>) and loops.</p>
+</section>
+</section>
+<section id="sec-truthiness" class="level2" data-number="14.7">
+<h2 data-number="14.7" class="anchored" data-anchor-id="sec-truthiness"><span class="header-section-number">14.7</span> Python’s Boolean System</h2>
+<p>This section covers one of the most important and most commonly misunderstood aspects of Python. Every value in Python, not just <code>True</code> and <code>False</code>, has a <em>truthiness</em>: it evaluates to either <code>True</code> or <code>False</code> when used in a boolean context like an <code>if</code> statement.</p>
+<section id="truthy-and-falsy-values" class="level3" data-number="14.7.1">
+<h3 data-number="14.7.1" class="anchored" data-anchor-id="truthy-and-falsy-values"><span class="header-section-number">14.7.1</span> Truthy and Falsy Values</h3>
+<p>The following values are <em>falsy</em>, meaning they evaluate to <code>False</code>:</p>
+<div id="tbl-falsy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-falsy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;14.2: Falsy values in Python
+</figcaption>
+<div aria-describedby="tbl-falsy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Type</th>
+<th>Why it’s falsy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>False</code></td>
+<td><code>bool</code></td>
+<td>Obviously</td>
+</tr>
+<tr class="even">
+<td><code>0</code></td>
+<td><code>int</code></td>
+<td>Zero is false</td>
+</tr>
+<tr class="odd">
+<td><code>0.0</code></td>
+<td><code>float</code></td>
+<td>Zero is false</td>
+</tr>
+<tr class="even">
+<td><code>""</code></td>
+<td><code>str</code></td>
+<td>Empty string</td>
+</tr>
+<tr class="odd">
+<td><code>[]</code></td>
+<td><code>list</code></td>
+<td>Empty list</td>
+</tr>
+<tr class="even">
+<td><code>{}</code></td>
+<td><code>dict</code></td>
+<td>Empty dictionary</td>
+</tr>
+<tr class="odd">
+<td><code>()</code></td>
+<td><code>tuple</code></td>
+<td>Empty tuple</td>
+</tr>
+<tr class="even">
+<td><code>set()</code></td>
+<td><code>set</code></td>
+<td>Empty set</td>
+</tr>
+<tr class="odd">
+<td><code>None</code></td>
+<td><code>NoneType</code></td>
+<td>No value</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Everything else is <em>truthy</em>: it evaluates to <code>True</code>. Non-zero numbers, non-empty strings, non-empty collections, and most objects are all truthy.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>truthiness.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="truthiness.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># All of these are truthy</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>(<span class="dv">1</span>)            <span class="co"># True</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>(<span class="op">-</span><span class="dv">1</span>)           <span class="co"># True (any non-zero number)</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>(<span class="fl">0.001</span>)        <span class="co"># True</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>(<span class="st">"hello"</span>)      <span class="co"># True (any non-empty string)</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>(<span class="st">" "</span>)          <span class="co"># True (a space is not empty!)</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>([<span class="dv">0</span>])          <span class="co"># True (a list with one element, even if that element is 0)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>That last example is important: a list containing <code>0</code> is truthy because the <em>list</em> is non-empty. The truthiness of a collection depends on whether the collection itself is empty, not on the values it contains.</p>
+</section>
+<section id="short-circuit-evaluation" class="level3" data-number="14.7.2">
+<h3 data-number="14.7.2" class="anchored" data-anchor-id="short-circuit-evaluation"><span class="header-section-number">14.7.2</span> Short-Circuit Evaluation</h3>
+<p>Python’s <code>and</code> and <code>or</code> operators don’t just return <code>True</code> or <code>False</code>. They return one of their actual operands, and they use <em>short-circuit evaluation</em>, meaning they stop as soon as the result is determined.</p>
+<p><strong><code>and</code></strong> returns the first falsy value it encounters, or the last value if all are truthy:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>and_operator.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="and_operator.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">"hello"</span> <span class="kw">and</span> <span class="st">"world"</span>    <span class="co"># "world"  (both truthy, returns the last one)</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co">"hello"</span> <span class="kw">and</span> <span class="dv">0</span>          <span class="co"># 0        (0 is falsy, returns it)</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">""</span> <span class="kw">and</span> <span class="st">"world"</span>         <span class="co"># ""       (empty string is falsy, returns it)</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="kw">and</span> <span class="st">""</span>               <span class="co"># 0        (0 is falsy, stops immediately)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong><code>or</code></strong> returns the first truthy value it encounters, or the last value if all are falsy:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>or_operator.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-filename="or_operator.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">"hello"</span> <span class="kw">or</span> <span class="st">"world"</span>     <span class="co"># "hello"  (first is truthy, returns it immediately)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">""</span> <span class="kw">or</span> <span class="st">"world"</span>          <span class="co"># "world"  (first is falsy, tries second)</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="kw">or</span> <span class="st">""</span>                <span class="co"># ""       (both falsy, returns the last one)</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="kw">or</span> <span class="va">None</span>              <span class="co"># None     (both falsy, returns the last one)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This behavior enables a common Python pattern for default values:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>default_value.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39" data-filename="default_value.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>user_input <span class="op">=</span> <span class="st">""</span>  <span class="co"># Imagine the user left a field blank</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> user_input <span class="kw">or</span> <span class="st">"Anonymous"</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(name)  <span class="co"># "Anonymous"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Since the empty string is falsy, <code>or</code> moves on to the second operand and returns <code>"Anonymous"</code>. If <code>user_input</code> had been <code>"Alice"</code>, <code>or</code> would have returned <code>"Alice"</code> immediately without ever looking at the second operand.</p>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>The <code>or</code> default pattern and zero
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Be careful with <code>value or default</code> when <code>value</code> might legitimately be <code>0</code> or <code>0.0</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>or_gotcha.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40" data-filename="or_gotcha.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>quantity <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> quantity <span class="kw">or</span> <span class="dv">10</span>  <span class="co"># 10, not 0!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Since <code>0</code> is falsy, <code>or</code> treats it the same as “missing” and returns <code>10</code>. If <code>0</code> is a valid value, you need an explicit check instead:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>explicit_check.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41" data-filename="explicit_check.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> quantity <span class="cf">if</span> quantity <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="dv">10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-not-operator" class="level3" data-number="14.7.3">
+<h3 data-number="14.7.3" class="anchored" data-anchor-id="the-not-operator"><span class="header-section-number">14.7.3</span> The <code>not</code> Operator</h3>
+<p><code>not</code> inverts truthiness:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>not_operator.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42" data-filename="not_operator.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">not</span> <span class="va">True</span>      <span class="co"># False</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="kw">not</span> <span class="va">False</span>     <span class="co"># True</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="kw">not</span> <span class="dv">0</span>         <span class="co"># True  (0 is falsy, so not 0 is True)</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="kw">not</span> <span class="st">"hello"</span>   <span class="co"># False ("hello" is truthy, so not "hello" is False)</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="kw">not</span> <span class="va">None</span>      <span class="co"># True  (None is falsy)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You’ll see <code>not</code> most often in conditions: <code>if not results:</code> is a concise way to check whether a list is empty.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Connecting to SQL
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you’re thinking that truthiness feels like SQL’s <code>NULL</code> handling, you’re right. SQL’s <code>NULL</code> propagates through expressions in surprising ways, and Python’s <code>None</code> has its own quirks. The pattern of “checking for nothingness” is a recurring theme across programming languages, and once you learn to watch for it, you’ll recognize it everywhere.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="putting-it-together-a-northwind-product-summary" class="level2" data-number="14.8">
+<h2 data-number="14.8" class="anchored" data-anchor-id="putting-it-together-a-northwind-product-summary"><span class="header-section-number">14.8</span> Putting It Together: A Northwind Product Summary</h2>
+<p>Let’s combine everything from this chapter into a single script. Imagine you’re building a quick summary for a product in the Northwind database:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>product_summary.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43" data-filename="product_summary.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Product data (in later chapters, we'll read this from files and databases)</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>product_name <span class="op">=</span> <span class="st">"Chai"</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>category <span class="op">=</span> <span class="st">"Beverages"</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>unit_price <span class="op">=</span> <span class="fl">18.00</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>units_in_stock <span class="op">=</span> <span class="dv">29</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>units_on_order <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>discontinued <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>reorder_level <span class="op">=</span> <span class="dv">48</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute derived values</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>needs_reorder <span class="op">=</span> units_in_stock <span class="op">&lt;=</span> reorder_level <span class="kw">and</span> <span class="kw">not</span> discontinued</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>total_value <span class="op">=</span> unit_price <span class="op">*</span> units_in_stock</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the summary</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"DISCONTINUED"</span> <span class="cf">if</span> discontinued <span class="cf">else</span> <span class="st">"Active"</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>reorder_flag <span class="op">=</span> <span class="st">" [REORDER NEEDED]"</span> <span class="cf">if</span> needs_reorder <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'='</span> <span class="op">*</span> <span class="dv">40</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Product: </span><span class="sc">{</span>product_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Category: </span><span class="sc">{</span>category<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Status: </span><span class="sc">{</span>status<span class="sc">}{</span>reorder_flag<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unit Price: $</span><span class="sc">{</span>unit_price<span class="sc">:,.2f}</span><span class="ss">"</span>)</span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"In Stock: </span><span class="sc">{</span>units_in_stock<span class="sc">}</span><span class="ss"> units"</span>)</span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"On Order: </span><span class="sc">{</span>units_on_order<span class="sc">}</span><span class="ss"> units"</span>)</span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Stock Value: $</span><span class="sc">{</span>total_value<span class="sc">:,.2f}</span><span class="ss">"</span>)</span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'='</span> <span class="op">*</span> <span class="dv">40</span><span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre><code>========================================
+Product: Chai
+Category: Beverages
+Status: Active [REORDER NEEDED]
+Unit Price: $18.00
+In Stock: 29 units
+On Order: 0 units
+Stock Value: $522.00
+========================================</code></pre>
+<p>This script uses variables, types, arithmetic operators, f-strings, comparison operators, boolean logic with <code>and</code> and <code>not</code>, and a conditional expression. It’s a small program, but it’s a complete one that produces useful output.</p>
+</section>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="predict-the-output" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="predict-the-output">Predict the Output</h3>
+<p>For each expression, predict what Python will return <em>before</em> testing it in the REPL. Then verify your prediction. Understanding why each result occurs matters more than getting the right answer.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>predict.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45" data-filename="predict.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>([])</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="bu">bool</span>([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>])</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co">""</span> <span class="kw">or</span> <span class="st">"default"</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="co">"hello"</span> <span class="kw">or</span> <span class="st">"default"</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 5</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="kw">and</span> <span class="st">"hello"</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 6</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="kw">and</span> <span class="st">"hello"</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 7</span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="va">None</span> <span class="kw">or</span> <span class="dv">0</span> <span class="kw">or</span> <span class="st">""</span> <span class="kw">or</span> <span class="st">"finally"</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 8</span></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a><span class="kw">not</span> <span class="kw">not</span> <span class="st">"hello"</span></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 9</span></span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a><span class="va">True</span> <span class="op">+</span> <span class="va">True</span> <span class="op">+</span> <span class="va">True</span></span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 10</span></span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a><span class="co">"hello"</span> <span class="kw">and</span> <span class="st">""</span> <span class="kw">and</span> <span class="st">"world"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="unit-conversion-script" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="unit-conversion-script">Unit Conversion Script</h3>
+<p>Write a script called <code>conversions.py</code> that performs the following engineering unit conversions. Use well-named variables and include a comment citing the source or standard for each conversion factor.</p>
+<ol type="1">
+<li>Convert 1500 PSI to kPa and MPa.</li>
+<li>Convert 72°F to Celsius and Kelvin.</li>
+<li>Convert 5.5 miles to kilometers and meters.</li>
+<li>Convert 2000 pounds-force to Newtons and kilonewtons.</li>
+</ol>
+<p>Print each result using f-strings with appropriate precision (2 decimal places).</p>
+</section>
+<section id="repl-exploration" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="repl-exploration">REPL Exploration</h3>
+<p>Open the REPL with <code>uv run python</code> and explore the following questions. Record your findings in a script called <code>exploration.py</code> as comments.</p>
+<ol type="1">
+<li>What happens when you add a string and an integer? (<code>"hello" + 5</code>)</li>
+<li>What does <code>type(True + 1)</code> return? What does <code>True + 1</code> evaluate to?</li>
+<li>What is <code>"hello" * 0</code>? What about <code>"hello" * -1</code>?</li>
+<li>Can you chain more than two comparisons? Try <code>1 &lt; 2 &lt; 3 &lt; 4</code>.</li>
+<li>What does <code>type(None)</code> return?</li>
+</ol>
+</section>
+<section id="northwind-product-card" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="northwind-product-card">Northwind Product Card</h3>
+<p>Extend the product summary script to include three products from the Northwind catalog. For each product, define variables for <code>product_name</code>, <code>unit_price</code>, <code>units_in_stock</code>, <code>discontinued</code>, and <code>reorder_level</code>. Print a formatted summary card for each one. Include a “REORDER NEEDED” flag for products whose stock is at or below the reorder level (but only if the product isn’t discontinued).</p>
+<p>Use these products (values from the actual Northwind database):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Product</th>
+<th>Price</th>
+<th>In Stock</th>
+<th>Reorder Level</th>
+<th>Discontinued</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Chai</td>
+<td>18.00</td>
+<td>29</td>
+<td>48</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>Chang</td>
+<td>19.00</td>
+<td>68</td>
+<td>46</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td>Chef Anton’s Gumbo Mix</td>
+<td>21.35</td>
+<td>45</td>
+<td>37</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="summary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
+<p>This chapter established your Python environment and introduced the core building blocks of the language. You set up a project with <code>uv init</code>, learned to run scripts with <code>uv run</code>, and explored the REPL as a tool for quick experimentation. Python’s core types, <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>, and <code>None</code>, map closely to the column types you’ve seen in SQL, and you’ll work with them constantly.</p>
+<p>The most important takeaway from this chapter is how Python handles boolean logic. Every value has a truthiness, and <code>and</code>/<code>or</code> return actual operands rather than just <code>True</code> or <code>False</code>. This behavior powers common patterns like <code>value or default</code> that you’ll see throughout Python code. Understanding truthiness now will save you hours of debugging later.</p>
+<p>In the next chapter, you’ll move from individual values to <em>collections</em>: lists, tuples, dictionaries, and sets. These are the data structures that let you work with groups of values, and they’ll connect directly to the rows and columns you know from SQL.</p>
+</section>
+<section id="glossary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="glossary">Glossary</h2>
+<dl>
+<dt>assignment</dt>
+<dd>
+Storing a value in a variable using <code>=</code>. Example: <code>x = 42</code>.
+</dd>
+<dt>boolean</dt>
+<dd>
+A type with only two values: <code>True</code> and <code>False</code>. Used for logic and conditions.
+</dd>
+<dt>comment</dt>
+<dd>
+Text in source code that Python ignores, marked with <code>#</code>. Used to explain the reasoning behind code.
+</dd>
+<dt>dynamic typing</dt>
+<dd>
+A language feature where variables don’t have fixed types. The type is determined by the value currently assigned.
+</dd>
+<dt>expression</dt>
+<dd>
+A combination of values, variables, and operators that Python evaluates to produce a result. Example: <code>2 + 3</code>.
+</dd>
+<dt>f-string</dt>
+<dd>
+A formatted string literal, prefixed with <code>f</code>, that can contain expressions inside curly braces. Example: <code>f"Total: {x + y}"</code>.
+</dd>
+<dt>falsy</dt>
+<dd>
+A value that evaluates to <code>False</code> in a boolean context. In Python: <code>0</code>, <code>0.0</code>, <code>""</code>, <code>[]</code>, <code>{}</code>, <code>()</code>, <code>set()</code>, <code>None</code>, and <code>False</code>.
+</dd>
+<dt>float</dt>
+<dd>
+A number with a decimal point, stored using IEEE 754 double-precision format.
+</dd>
+<dt>floor division</dt>
+<dd>
+Division that rounds the result down to the nearest integer, using the <code>//</code> operator.
+</dd>
+<dt>integer</dt>
+<dd>
+A whole number with no decimal point. Python integers have no size limit.
+</dd>
+<dt>modulo</dt>
+<dd>
+The remainder after division, computed with the <code>%</code> operator.
+</dd>
+<dt><code>None</code></dt>
+<dd>
+Python’s representation of “no value,” analogous to SQL’s <code>NULL</code>.
+</dd>
+<dt>operator</dt>
+<dd>
+A symbol that performs an operation on values. Arithmetic (<code>+</code>, <code>-</code>), comparison (<code>==</code>, <code>&lt;</code>), and logical (<code>and</code>, <code>or</code>, <code>not</code>) are the main categories.
+</dd>
+<dt>REPL</dt>
+<dd>
+Read-Eval-Print Loop. An interactive Python prompt for testing expressions.
+</dd>
+<dt>short-circuit evaluation</dt>
+<dd>
+The behavior where <code>and</code> and <code>or</code> stop evaluating as soon as the result is determined. <code>and</code> stops at the first falsy value; <code>or</code> stops at the first truthy value.
+</dd>
+<dt>snake_case</dt>
+<dd>
+Python’s naming convention for variables and functions: lowercase words separated by underscores.
+</dd>
+<dt>string</dt>
+<dd>
+A sequence of characters, enclosed in single or double quotes. Strings are immutable.
+</dd>
+<dt>truthy</dt>
+<dd>
+A value that evaluates to <code>True</code> in a boolean context. Most non-zero, non-empty values are truthy.
+</dd>
+<dt>variable</dt>
+<dd>
+A name that refers to a value stored in memory.
+</dd>
+</dl>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ozanozbeker\.com\/cw4e\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../programming.html" class="pagination-link" aria-label="Programming">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Programming</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/12-collections.html" class="pagination-link" aria-label="Collections &amp; Control Flow">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Collections &amp; Control Flow</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/11-python-fundamentals.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

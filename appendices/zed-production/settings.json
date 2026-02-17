@@ -1,0 +1,161 @@
+// Zed settings - Ozan Ozbeker
+
+{
+  //===================//
+  //      General
+  //===================//
+  "when_closing_with_no_tabs": "keep_window_open",
+  "on_last_window_closed": "quit_app",
+  "session": {
+    "trust_all_worktrees": true,
+    "restore_unsaved_buffers": false,
+  },
+  "restore_on_startup": "launchpad",
+
+  //===================//
+  //     Appearance
+  //===================//
+  "theme": "Kanso Zen",
+  "icon_theme": "Catppuccin Mocha",
+  "buffer_line_height": {
+    "custom": 1.45,
+  },
+  "buffer_font_size": 16,
+  "ui_font_size": 16,
+  "current_line_highlight": "gutter",
+  "terminal": { "cursor_shape": "bar" },
+
+  //===================//
+  //      Editor
+  //===================//
+  "auto_signature_help": true,
+  "show_signature_help_after_edits": true,
+  "hover_popover_delay": 100,
+  "inlay_hints": {
+    "enabled": true,
+    "show_parameter_hints": false,
+    "show_background": true,
+  },
+  "extend_comment_on_newline": false,
+  "vertical_scroll_margin": 10,
+
+  //===================//
+  // Languages & Tools
+  //===================//
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+      "update_debounce_ms": 0,
+    },
+  },
+
+  "languages": {
+    "Markdown": {
+      "remove_trailing_whitespace_on_save": true,
+      "show_wrap_guides": false,
+    },
+    "Python": {
+      "preferred_line_length": 88,
+      "wrap_guides": [88],
+    },
+    "R": {
+      "language_servers": ["air", "r_language_server", "..."],
+      "use_on_type_format": false,
+    },
+    "SQL": {
+      "formatter": {
+        "external": {
+          "command": "sqlfluff", // uv tool install sqlfluff
+          "arguments": ["format", "--dialect", "ansi", "-"],
+        },
+      },
+    },
+    "TOML": {
+      "language_servers": ["tombi", "toml", "..."],
+      "formatter": { "language_server": { "name": "tombi" } },
+    },
+  },
+
+  "lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "configurationPreference": "filesystemFirst",
+        },
+      },
+    },
+  },
+
+  //===================//
+  //   Search & Files
+  //===================//
+  "search": {
+    "center_on_match": true,
+  },
+  "restore_on_file_reopen": false,
+  "close_on_file_delete": true,
+
+  //===================//
+  //  Window & Layout
+  //===================//
+  "title_bar": {
+    "show_branch_icon": true,
+    "show_menus": false,
+  },
+
+  //===================//
+  //       Panels
+  //===================//
+  "git_panel": {
+    "tree_view": true,
+  },
+
+  //===================//
+  //  Version Control
+  //===================//
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true,
+    },
+  },
+
+  //===================//
+  //        AI
+  //===================//
+  "edit_predictions": {
+    "mode": "subtle",
+  },
+
+  //===================//
+  //     Extensions
+  //===================//
+  "auto_install_extensions": {
+    // Web
+    "html": true,
+    "scss": true,
+
+    // Editor
+    "catppuccin-icons": true,
+    "kanso": true,
+    "comment": true,
+    "log": true,
+    "codebook": true,
+    "env": true,
+
+    // Version Control
+    "git-firefly": true,
+
+    // TOML
+    "toml": true,
+    "tombi": true,
+
+    // R
+    "r": true,
+    "air": true,
+
+    // Other
+    "sql": true,
+    "quarto": true,
+    "rainbow-csv": true,
+  },
+}

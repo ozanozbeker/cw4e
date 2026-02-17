@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>4&nbsp; Computer Fundamentals – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/02-filesystem.html" rel="next">
+<link href="../foundations.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../foundations.html">Foundations</a></li><li class="breadcrumb-item"><a href="../chapters/01-computers.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Prerequisites</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-computers.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Databases</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-python-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Collections &amp; Control Flow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-file-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Working with Files</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Integration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Notebooks with Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../production.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Production</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Documents &amp; Presentations with Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-typer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">CLI Tools with Typer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Zed</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/northwind.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Northwind Dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/duckdb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">DuckDB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/ruff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Ruff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/basedpyright.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">K</span>&nbsp; <span class="chapter-title">basedpyright</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#programs-and-applications" id="toc-programs-and-applications" class="nav-link active" data-scroll-target="#programs-and-applications"><span class="header-section-number">4.1</span> Programs and Applications</a></li>
+  <li><a href="#memory-and-storage" id="toc-memory-and-storage" class="nav-link" data-scroll-target="#memory-and-storage"><span class="header-section-number">4.2</span> Memory and Storage</a>
+  <ul class="collapse">
+  <li><a href="#when-memory-fills-up" id="toc-when-memory-fills-up" class="nav-link" data-scroll-target="#when-memory-fills-up"><span class="header-section-number">4.2.1</span> When Memory Fills Up</a></li>
+  <li><a href="#observing-whats-running" id="toc-observing-whats-running" class="nav-link" data-scroll-target="#observing-whats-running"><span class="header-section-number">4.2.2</span> Observing What’s Running</a></li>
+  </ul></li>
+  <li><a href="#files-on-disk-and-in-memory" id="toc-files-on-disk-and-in-memory" class="nav-link" data-scroll-target="#files-on-disk-and-in-memory"><span class="header-section-number">4.3</span> Files: On Disk and In Memory</a>
+  <ul class="collapse">
+  <li><a href="#the-two-lives-of-a-file" id="toc-the-two-lives-of-a-file" class="nav-link" data-scroll-target="#the-two-lives-of-a-file"><span class="header-section-number">4.3.1</span> The Two Lives of a File</a></li>
+  <li><a href="#why-this-matters-the-save-operation" id="toc-why-this-matters-the-save-operation" class="nav-link" data-scroll-target="#why-this-matters-the-save-operation"><span class="header-section-number">4.3.2</span> Why This Matters: The Save Operation</a></li>
+  <li><a href="#the-autosave-generation" id="toc-the-autosave-generation" class="nav-link" data-scroll-target="#the-autosave-generation"><span class="header-section-number">4.3.3</span> The Autosave Generation</a></li>
+  <li><a href="#the-in-memory-editing-model" id="toc-the-in-memory-editing-model" class="nav-link" data-scroll-target="#the-in-memory-editing-model"><span class="header-section-number">4.3.4</span> The In-Memory Editing Model</a></li>
+  </ul></li>
+  <li><a href="#text-editors" id="toc-text-editors" class="nav-link" data-scroll-target="#text-editors"><span class="header-section-number">4.4</span> Text Editors</a>
+  <ul class="collapse">
+  <li><a href="#using-zed" id="toc-using-zed" class="nav-link" data-scroll-target="#using-zed"><span class="header-section-number">4.4.1</span> Using Zed</a></li>
+  </ul></li>
+  <li><a href="#package-managers" id="toc-package-managers" class="nav-link" data-scroll-target="#package-managers"><span class="header-section-number">4.5</span> Package Managers</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">4.6</span> Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">4.7</span> Glossary</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">4.8</span> Exercises</a>
+  <ul class="collapse">
+  <li><a href="#question-1.1" id="toc-question-1.1" class="nav-link" data-scroll-target="#question-1.1"><span class="header-section-number">4.8.1</span> Question 1.1</a></li>
+  <li><a href="#question-1.2" id="toc-question-1.2" class="nav-link" data-scroll-target="#question-1.2"><span class="header-section-number">4.8.2</span> Question 1.2</a></li>
+  <li><a href="#question-1.3" id="toc-question-1.3" class="nav-link" data-scroll-target="#question-1.3"><span class="header-section-number">4.8.3</span> Question 1.3</a></li>
+  <li><a href="#question-1.4" id="toc-question-1.4" class="nav-link" data-scroll-target="#question-1.4"><span class="header-section-number">4.8.4</span> Question 1.4</a></li>
+  <li><a href="#question-1.5" id="toc-question-1.5" class="nav-link" data-scroll-target="#question-1.5"><span class="header-section-number">4.8.5</span> Question 1.5</a></li>
+  <li><a href="#question-1.6" id="toc-question-1.6" class="nav-link" data-scroll-target="#question-1.6"><span class="header-section-number">4.8.6</span> Question 1.6</a></li>
+  <li><a href="#question-1.7" id="toc-question-1.7" class="nav-link" data-scroll-target="#question-1.7"><span class="header-section-number">4.8.7</span> Question 1.7</a></li>
+  <li><a href="#question-1.8" id="toc-question-1.8" class="nav-link" data-scroll-target="#question-1.8"><span class="header-section-number">4.8.8</span> Question 1.8</a></li>
+  <li><a href="#question-1.9" id="toc-question-1.9" class="nav-link" data-scroll-target="#question-1.9"><span class="header-section-number">4.8.9</span> Question 1.9</a></li>
+  <li><a href="#question-1.10" id="toc-question-1.10" class="nav-link" data-scroll-target="#question-1.10"><span class="header-section-number">4.8.10</span> Question 1.10</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/01-computers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../foundations.html">Foundations</a></li><li class="breadcrumb-item"><a href="../chapters/01-computers.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-fundamentals" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Before you write your first line of code or type your first command, you need a mental model of what’s actually happening inside your computer. This isn’t about memorizing specifications or understanding circuit design. It’s about developing intuition for <em>why</em> computers behave the way they do, so that when something goes wrong, you can reason about the problem instead of flailing randomly.</p>
+<p>Most people interact with computers as passengers. They click buttons, wait for responses, and hope for the best. When something breaks, they restart and pray. This works fine for casual use, but it’s insufficient for building data products. You need to become a driver, someone who understands the machine well enough to diagnose problems and make informed decisions about how to structure your work.</p>
+<section id="programs-and-applications" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="programs-and-applications"><span class="header-section-number">4.1</span> Programs and Applications</h2>
+<p>The words “program” and “application” get tossed around interchangeably in casual conversation. For working professionals who build software, the distinction matters.</p>
+<p>A <strong>program</strong> is the most fundamental unit of executable software: a set of instructions written for a computer to execute. That’s the entire definition. Notice what it doesn’t promise. There’s no guarantee of usability, no requirement for visual interfaces, no assumption that a human will ever interact with it directly. A Python script that renames files is a program. A scheduled job that runs at midnight to clean up old logs is a program. A command-line tool you invoke, watch complete, and forget is a program. If it runs on a computer, it’s probably a program.</p>
+<p>An <strong>application</strong> is a specific kind of program with a higher purpose: a program designed to be used directly by an end user to accomplish a meaningful task. Applications are built for humans, not just machines. They have a user interface of some kind. They handle errors gracefully instead of crashing with cryptic messages. They persist settings between sessions. A desktop photo editor is an application. Gmail is an application. Polished command-line tools like <code>git</code> and <code>quarto</code> are applications too, because of the care taken in their design: comprehensive help systems, consistent command structures, meaningful error messages.</p>
+<p>An application makes a promise: you can hand this to someone who didn’t write it, and they won’t immediately regret the experience.</p>
+<p>In this book, you will write programs. Lots of them. Scripts that process data, automate workflows, and transform information. These programs will assume you know what you’re doing because you wrote them for yourself. But by the end of the book, some of your programs will start becoming applications. Your final project will need documentation and graceful error handling. It will need to work for someone who isn’t you.</p>
+<p>For the rest of this book, when I say <strong>program</strong>, I mean executable code that accomplishes a computational task. When I say <strong>application</strong>, I mean software deliberately designed for end-user interaction. When I say <strong>script</strong>, I mean a program written in an interpreted language (like Python) that typically runs from the command line.</p>
+</section>
+<section id="memory-and-storage" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="memory-and-storage"><span class="header-section-number">4.2</span> Memory and Storage</h2>
+<p>Here’s a truth that will save you hours of confusion: computers are not slow. Accessing data is slow.</p>
+<p>When your code takes forever to run or loading a file makes you wonder if your machine froze, the problem is almost never that your CPU can’t do math fast enough. Modern processors execute billions of operations per second. The bottleneck is almost always about where the data lives.</p>
+<p>Your computer stores data in two fundamentally different places: <strong>memory</strong> (RAM) and <strong>storage</strong> (your disk, whether SSD or hard drive). Understanding the difference between them is essential.</p>
+<p><strong>RAM (Random Access Memory)</strong> is fast, temporary workspace. When programs run, they exist in RAM. When you open a file, its contents get copied into RAM so you can work with them. RAM is quick to access, but it has two important limitations: it’s relatively small (typically 8-16 GB on a laptop), and it’s volatile, meaning everything in RAM disappears when the power goes off.</p>
+<p><strong>Storage (disk)</strong> is slower, permanent space. Your files live on disk. Your programs are stored on disk. When you save something, you’re writing it to disk. Storage is much larger than RAM (hundreds of gigabytes to terabytes) and persists when the power is removed, but accessing it takes dramatically longer, roughly a thousand times slower than accessing RAM.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-memory-storage" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-memory-storage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-memory-storage">flowchart LR
+    subgraph Fast["Fast (temporary)"]
+        RAM[RAM / Memory]
+    end
+    subgraph Slow["Slow (permanent)"]
+        Disk[Disk / Storage]
+    end
+    RAM &lt;--&gt;|"~1000x slower"| Disk
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-memory-storage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: RAM is fast but temporary; disk is slow but permanent
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This explains several patterns you’ll encounter. Loading a large file feels slow because that data must travel from disk into RAM before any work can happen. “Just load the whole file” stops working at scale because datasets can exceed available RAM. The same analysis runs fast on a small sample but crawls on the full dataset because the small sample fits comfortably in memory while the full dataset requires constant disk access.</p>
+<p>Every performance problem you encounter can be reframed as a question about where the data lives. Once you internalize this, debugging becomes more systematic.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: RAM vs. Disk Performance">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: RAM vs.&nbsp;Disk Performance
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You’re analyzing sales data. When you load a 50 MB CSV file into memory, the operation takes about 2 seconds. When you load a 5 GB file, it takes over 3 minutes. The file is 100 times larger but the loading time is 90 times longer. Why isn’t the time proportional to the file size? What’s causing the additional slowdown?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Once the file size exceeds available RAM, the operating system starts using disk space as overflow memory (swapping). The first 50 MB fits in RAM, but the 5 GB file requires constant disk access to move data in and out of memory. Since disk is approximately 1000x slower than RAM, operations that trigger swapping become dramatically slower. The time is no longer proportional to file size, it depends on how much swapping occurs.</p>
+</div>
+</div>
+</div>
+<section id="when-memory-fills-up" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="when-memory-fills-up"><span class="header-section-number">4.2.1</span> When Memory Fills Up</h3>
+<p>RAM is a finite workspace. Fill it up and your computer has no room to operate. When this happens, your operating system might start using disk space as overflow memory, a technique called “swapping.” This keeps things running but at a severe performance cost. Your program might also crash outright with an “out of memory” error, which is the computer protecting itself by refusing to continue.</p>
+<p>A few things students routinely misunderstand: closing a program frees memory (when you quit an application, the operating system reclaims whatever RAM it was using). Restarting fixes “mysterious” issues (many strange behaviors result from accumulated state in memory; restarting clears the slate). Large files don’t shrink when loaded (a 1GB file on disk becomes roughly 1GB of data in memory, often more).</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Predicting Memory Behavior">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: Predicting Memory Behavior
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Your computer has 16 GB of RAM. You’re running five applications: a web browser using 4 GB, an Excel spreadsheet using 2 GB, a Python script processing data using 3 GB, Slack using 1 GB, and Zed using 500 MB. You try to open another large data file that requires 8 GB to load. What will happen, and why? What options do you have to complete your task?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The total in-use memory (4 + 2 + 3 + 1 + 0.5 = 10.5 GB) leaves only 5.5 GB free, but the file needs 8 GB. The operating system will start swapping, moving some data from RAM to disk. This will drastically slow down all running applications because they’ll constantly wait for swaps. You could: 1) close some applications to free RAM, 2) restart the computer to clear accumulated state and free memory, 3) process the file in chunks instead of loading it all at once, or 4) use a tool designed for large data (like DuckDB) that doesn’t load everything into RAM.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="observing-whats-running" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="observing-whats-running"><span class="header-section-number">4.2.2</span> Observing What’s Running</h3>
+<p>Every operating system provides tools to see what processes are running and how much memory they’re consuming. On Windows, Task Manager (Ctrl+Shift+Esc) shows this information. On macOS, Activity Monitor (in Applications → Utilities) provides similar details.</p>
+<p>Learning to use these tools helps you understand what your computer is actually doing. When something runs slowly, check whether a process is consuming all available CPU or memory. When your computer feels sluggish, see what’s running in the background. A dozen browser tabs can consume gigabytes of RAM. The process view reveals activity that graphical interfaces often hide.</p>
+</section>
+</section>
+<section id="files-on-disk-and-in-memory" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="files-on-disk-and-in-memory"><span class="header-section-number">4.3</span> Files: On Disk and In Memory</h2>
+<p>You’ve been working with files your entire life, but the way files behave when you’re programming differs from what you’re used to with apps like Google Docs or Microsoft Word. Understanding this difference now will prevent significant confusion later.</p>
+<section id="the-two-lives-of-a-file" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="the-two-lives-of-a-file"><span class="header-section-number">4.3.1</span> The Two Lives of a File</h3>
+<p>Every file you work with has two potential representations: its permanent form on disk and its temporary form in memory when a program opens it.</p>
+<p>When a file sits on your disk unopened, it’s just a sequence of bytes stored magnetically or electronically. It exists independently of any program. You can copy it, move it, delete it, or leave it alone for years. The file persists whether your computer is on or off.</p>
+<p>When you open that file in a program, something important happens: the program reads the bytes from disk and creates a <em>copy</em> in memory. This in-memory copy is what you actually see and edit. The original file on disk remains unchanged until you explicitly save.</p>
+<p>Think of it like a library book. The book on the shelf (disk) is the permanent copy. When you check it out and start taking notes in a notebook (memory), you’re working with your own copy. The library book doesn’t change until you somehow transfer your notes back to it.</p>
+</section>
+<section id="why-this-matters-the-save-operation" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="why-this-matters-the-save-operation"><span class="header-section-number">4.3.2</span> Why This Matters: The Save Operation</h3>
+<p>When you click “Save” or press Ctrl+S (Cmd+S on Mac), you’re telling the program to write the in-memory version back to disk, replacing the old version. Until you save, your changes exist only in RAM. This has consequences:</p>
+<p>If your computer loses power before you save, your changes vanish. They existed only in volatile memory, which clears when power disappears.</p>
+<p>If you close the program without saving, your changes vanish. The program discards the in-memory copy.</p>
+<p>If you open the same file in two different programs simultaneously, each program has its own in-memory copy. They can diverge, and whoever saves last “wins.”</p>
+</section>
+<section id="the-autosave-generation" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="the-autosave-generation"><span class="header-section-number">4.3.3</span> The Autosave Generation</h3>
+<p>If you’ve grown up with Google Docs, iCloud, or OneDrive, this might feel alien. Modern productivity apps continuously sync your work to the cloud. There’s no “save” button because saving happens automatically in the background. You’ve never experienced losing work to an unsaved document because that failure mode has been designed away.</p>
+<p>This is genuinely good design for documents. A half-finished paragraph is still a readable paragraph. Constant automatic saving protects users from data loss with essentially no downside.</p>
+<p>But code is different. A half-finished function is a syntax error. A partially modified data pipeline produces wrong results or crashes. Code exists in one of two states: working or broken. There’s no meaningful in-between.</p>
+<p>This is why code editors traditionally require manual saves. The act of saving is a commitment: “This version is complete enough to keep.” You might save frequently while working, but each save is a deliberate choice rather than an automatic background process. You’re not just preserving text; you’re check-pointing a system that must maintain internal consistency.</p>
+</section>
+<section id="the-in-memory-editing-model" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="the-in-memory-editing-model"><span class="header-section-number">4.3.4</span> The In-Memory Editing Model</h3>
+<p>Let’s trace exactly what happens when you edit a file in a text editor like Zed.</p>
+<p>You open <code>script.py</code>. Zed reads the file from disk into memory. Your screen now shows the in-memory representation.</p>
+<p>You type some code. Each keystroke modifies the in-memory copy. The file on disk hasn’t changed at all. If someone else opened the same file right now, they’d see the old version.</p>
+<p>You notice Zed shows a dot or indicator next to the filename. This signals unsaved changes, that the in-memory version differs from the disk version.</p>
+<p>You press Cmd+S (or Ctrl+S). Zed writes the in-memory contents to disk, replacing the old file. The unsaved indicator disappears. The disk and memory versions now match.</p>
+<p>You close Zed. The in-memory copy is discarded. But that’s fine because you saved, so the disk version contains all your work.</p>
+<p>This model, where explicit saves checkpoint your work, feeds directly into version control. Git doesn’t track every keystroke; it tracks deliberate commits that you choose to make. Understanding that “save” is an intentional act prepares you for understanding that “commit” is an even more intentional act. We’ll explore this connection in detail in <a href="04-git.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: The Two Lives of a File">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: The Two Lives of a File
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You’re editing a Python script in Zed. You make several changes, but before saving, your power cuts out unexpectedly and your computer shuts down. When you restart and reopen Zed, the script is back to its original version. Explain why those changes are lost using the concepts of disk and memory.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The edits only existed in Zed’s memory (RAM), which is volatile. They never made it to disk because you hadn’t saved yet. When power was lost, RAM was cleared completely, along with your unsaved work. The disk version remained unchanged throughout. This is why manual save is crucial for code: you’re explicitly checkpointing a version to the permanent storage, protecting against power loss and accidental closures.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="text-editors" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="text-editors"><span class="header-section-number">4.4</span> Text Editors</h2>
+<p>To write code, you need a text editor. This is different from a word processor like Microsoft Word or Google Docs.</p>
+<p>A <strong>word processor</strong> works with rich text: text with formatting attached like bold, italics, fonts, and colors. When you see styled text on screen, you’re looking at rich text. Word processors embed formatting codes in your document, codes that are invisible to you but present in the file.</p>
+<p>A <strong>text editor</strong> works with plain text: just characters with no formatting information. What you see is exactly what’s in the file. No hidden codes, no embedded styles.</p>
+<p>Code must be plain text. When Python reads your script, it expects exactly the characters you wrote. Hidden formatting codes would cause syntax errors. This is why you can’t write code in Word, even if you turn off all visible formatting, the file format itself embeds information that confuses programming languages.</p>
+<section id="using-zed" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="using-zed"><span class="header-section-number">4.4.1</span> Using Zed</h3>
+<p>For this book, we’ll use <strong>Zed</strong>, a modern text editor designed for professional programming work (see <a href="../appendices/zed.html" class="quarto-xref"><span>Appendix C</span></a> for installation and features). Zed provides syntax highlighting, auto-completion, an integrated terminal, and unsaved change indicators. When I refer to “the command line” in later chapters, you can use Zed’s integrated terminal instead of a separate terminal window.</p>
+</section>
+</section>
+<section id="package-managers" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="package-managers"><span class="header-section-number">4.5</span> Package Managers</h2>
+<p>When you install an app on your phone, you open the App Store or Google Play, tap a button, and the app appears ready to use. You never think about where the files go or what other software the app might need.</p>
+<p>A <strong>package manager</strong> brings this convenience to developer tools on your computer. It handles installing, upgrading, and uninstalling software packages. Rather than visiting websites and clicking through setup wizards, you tell the package manager what you want and it takes care of the rest.</p>
+<p>Package managers also handle <strong>dependencies</strong>: other tools and libraries that a piece of software needs to function. If you install a tool that requires three other components, the package manager automatically installs those prerequisites in the correct order.</p>
+<p>For <strong>Windows</strong>, use <strong>WinGet</strong> (see <a href="../appendices/winget.html" class="quarto-xref"><span>Appendix B</span></a>). For <strong>macOS</strong>, use <strong>Homebrew</strong> (see <a href="../appendices/brew.html" class="quarto-xref"><span>Appendix A</span></a>). Throughout this book, when we introduce new tools, I’ll provide package manager commands as the recommended installation method. Getting comfortable with your package manager early makes everything else smoother.</p>
+</section>
+<section id="summary" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="summary"><span class="header-section-number">4.6</span> Summary</h2>
+<p>This chapter established the mental models you need to reason about computational systems.</p>
+<p>Programs are executable instructions; applications are programs designed for end users with thoughtful interfaces and error handling. Most of your bookwork will produce programs; your final project should aspire toward being an application.</p>
+<p>Memory (RAM) is fast, temporary workspace where programs run and files are edited. Storage (disk) is slower, permanent space where files live. The distinction between RAM and disk explains why loading large files takes time and why unsaved work can be lost. Every performance problem is ultimately a question about where the data lives.</p>
+<p>Files exist in two forms: permanently on disk and temporarily in memory when opened by a program. Editing happens to the in-memory copy; saving writes that copy back to disk. Unlike autosaving productivity apps, code editors require manual saves because code must maintain consistency, a half-finished function is a syntax error. This deliberate checkpoint model prepares you for version control.</p>
+<p>Text editors work with plain text; word processors embed hidden formatting. Code must be plain text, which is why you need a proper text editor like Zed. Package managers (WinGet on Windows, Homebrew on macOS) simplify installing and managing the developer tools you’ll use throughout this book.</p>
+</section>
+<section id="glossary" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="glossary"><span class="header-section-number">4.7</span> Glossary</h2>
+<dl>
+<dt><strong>Application</strong></dt>
+<dd>
+A program designed for direct end-user interaction, with a thoughtful interface, error handling, and documentation.
+</dd>
+<dt><strong>Dependency</strong></dt>
+<dd>
+Software that another piece of software requires to function. Package managers automatically install dependencies.
+</dd>
+<dt><strong>Disk (Storage)</strong></dt>
+<dd>
+Permanent data storage that persists when power is removed. Slower than RAM but much larger and non-volatile.
+</dd>
+<dt><strong>Memory (RAM)</strong></dt>
+<dd>
+Random Access Memory; fast, temporary workspace where programs run and data is actively processed. Contents are lost when power is removed.
+</dd>
+<dt><strong>Package manager</strong></dt>
+<dd>
+A tool that automates installing, updating, and removing software packages, handling dependencies automatically.
+</dd>
+<dt><strong>Plain text</strong></dt>
+<dd>
+Text without any formatting codes or styling information. What you see is exactly what’s in the file. Code must be plain text.
+</dd>
+<dt><strong>Process</strong></dt>
+<dd>
+A running instance of a program, with its own memory allocation and state.
+</dd>
+<dt><strong>Program</strong></dt>
+<dd>
+A set of instructions written for a computer to execute. The fundamental unit of executable software.
+</dd>
+<dt><strong>Rich text</strong></dt>
+<dd>
+Text with formatting information attached (bold, fonts, styles). Word processors work with rich text.
+</dd>
+<dt><strong>Save</strong></dt>
+<dd>
+The operation of writing the in-memory version of a file back to disk, replacing the previous disk version.
+</dd>
+<dt><strong>Script</strong></dt>
+<dd>
+A program written in an interpreted language (like Python) that runs through an interpreter rather than being compiled to machine code.
+</dd>
+<dt><strong>Syntax highlighting</strong></dt>
+<dd>
+A text editor feature that displays different parts of code in different colors based on their grammatical role.
+</dd>
+<dt><strong>Text editor</strong></dt>
+<dd>
+A program for creating and modifying plain text files. Essential for writing code.
+</dd>
+<dt><strong>Volatile</strong></dt>
+<dd>
+Memory that loses its contents when power is removed. RAM is volatile; disk storage is not.
+</dd>
+<dt><strong>Word processor</strong></dt>
+<dd>
+A program for creating documents with rich text formatting, like Microsoft Word. Not suitable for writing code.
+</dd>
+</dl>
+</section>
+<section id="exercises" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="exercises"><span class="header-section-number">4.8</span> Exercises</h2>
+<section id="question-1.1" class="level3" data-number="4.8.1">
+<h3 data-number="4.8.1" class="anchored" data-anchor-id="question-1.1"><span class="header-section-number">4.8.1</span> Question 1.1</h3>
+<p>What is the primary difference between a <strong>program</strong> and an <strong>application</strong>?</p>
+<ol type="A">
+<li>Programs run faster than applications<br>
+</li>
+<li>Applications are designed for end-user interaction with thoughtful interfaces<br>
+</li>
+<li>Programs can only run on servers<br>
+</li>
+<li>Applications cannot be run from the command line</li>
+</ol>
+</section>
+<section id="question-1.2" class="level3" data-number="4.8.2">
+<h3 data-number="4.8.2" class="anchored" data-anchor-id="question-1.2"><span class="header-section-number">4.8.2</span> Question 1.2</h3>
+<p>Which of the following is TRUE about RAM (memory)?</p>
+<ol type="A">
+<li>RAM retains data when the computer is powered off<br>
+</li>
+<li>RAM is slower to access than disk storage<br>
+</li>
+<li>RAM is where programs run and files are actively edited<br>
+</li>
+<li>RAM typically has more capacity than disk storage</li>
+</ol>
+</section>
+<section id="question-1.3" class="level3" data-number="4.8.3">
+<h3 data-number="4.8.3" class="anchored" data-anchor-id="question-1.3"><span class="header-section-number">4.8.3</span> Question 1.3</h3>
+<p>Why does loading a large file feel slow?</p>
+<ol type="A">
+<li>The CPU cannot process the file fast enough<br>
+</li>
+<li>The file must be copied from disk into RAM before work can begin<br>
+</li>
+<li>Large files are always compressed and need decompression<br>
+</li>
+<li>The operating system limits file access speed</li>
+</ol>
+</section>
+<section id="question-1.4" class="level3" data-number="4.8.4">
+<h3 data-number="4.8.4" class="anchored" data-anchor-id="question-1.4"><span class="header-section-number">4.8.4</span> Question 1.4</h3>
+<p>What happens to unsaved changes in a text editor if your computer loses power?</p>
+<ol type="A">
+<li>They are automatically recovered from the cloud<br>
+</li>
+<li>They are saved to a temporary backup file<br>
+</li>
+<li>They are lost because they only existed in volatile RAM<br>
+</li>
+<li>They are stored in the CPU cache</li>
+</ol>
+</section>
+<section id="question-1.5" class="level3" data-number="4.8.5">
+<h3 data-number="4.8.5" class="anchored" data-anchor-id="question-1.5"><span class="header-section-number">4.8.5</span> Question 1.5</h3>
+<p>Why can’t you write code in Microsoft Word?</p>
+<ol type="A">
+<li>Word doesn’t support typing special characters<br>
+</li>
+<li>Word embeds hidden formatting codes that confuse programming languages<br>
+</li>
+<li>Word files are too large for code<br>
+</li>
+<li>Word cannot save files with .py extensions</li>
+</ol>
+</section>
+<section id="question-1.6" class="level3" data-number="4.8.6">
+<h3 data-number="4.8.6" class="anchored" data-anchor-id="question-1.6"><span class="header-section-number">4.8.6</span> Question 1.6</h3>
+<p>What does “volatile” mean when describing computer memory?</p>
+<ol type="A">
+<li>The memory is dangerous and may cause fires<br>
+</li>
+<li>The memory contents are lost when power is removed<br>
+</li>
+<li>The memory cannot store large files<br>
+</li>
+<li>The memory changes unpredictably during use</li>
+</ol>
+</section>
+<section id="question-1.7" class="level3" data-number="4.8.7">
+<h3 data-number="4.8.7" class="anchored" data-anchor-id="question-1.7"><span class="header-section-number">4.8.7</span> Question 1.7</h3>
+<p>Which statement about package managers is TRUE?</p>
+<ol type="A">
+<li>Package managers only work on Linux systems<br>
+</li>
+<li>Package managers automatically handle dependencies when installing software<br>
+</li>
+<li>Package managers require an internet connection for all operations<br>
+</li>
+<li>Package managers replace the need for text editors</li>
+</ol>
+</section>
+<section id="question-1.8" class="level3" data-number="4.8.8">
+<h3 data-number="4.8.8" class="anchored" data-anchor-id="question-1.8"><span class="header-section-number">4.8.8</span> Question 1.8</h3>
+<p>A <strong>script</strong> is best described as:</p>
+<ol type="A">
+<li>A compiled program that runs directly on hardware<br>
+</li>
+<li>A program written in an interpreted language like Python<br>
+</li>
+<li>A graphical application with a user interface<br>
+</li>
+<li>A document containing formatting instructions</li>
+</ol>
+</section>
+<section id="question-1.9" class="level3" data-number="4.8.9">
+<h3 data-number="4.8.9" class="anchored" data-anchor-id="question-1.9"><span class="header-section-number">4.8.9</span> Question 1.9</h3>
+<p>What does syntax highlighting in a text editor do?</p>
+<ol type="A">
+<li>Automatically corrects spelling errors in code<br>
+</li>
+<li>Colors different parts of code based on their grammatical role<br>
+</li>
+<li>Highlights lines that contain errors<br>
+</li>
+<li>Makes all text the same color for consistency</li>
+</ol>
+</section>
+<section id="question-1.10" class="level3" data-number="4.8.10">
+<h3 data-number="4.8.10" class="anchored" data-anchor-id="question-1.10"><span class="header-section-number">4.8.10</span> Question 1.10</h3>
+<p>True or False: Closing a program frees the RAM that program was using.</p>
+<ol type="A">
+<li>True<br>
+</li>
+<li>False</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ozanozbeker\.com\/cw4e\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../foundations.html" class="pagination-link" aria-label="Foundations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Foundations</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/02-filesystem.html" class="pagination-link" aria-label="Files and the File System">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Files and the File System</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/01-computers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
