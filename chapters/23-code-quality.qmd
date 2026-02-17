@@ -1,0 +1,527 @@
+# Code Quality: Ruff, basedpyright, & Language Servers {#sec-code-quality}
+
+This chapter has a confession to make. Every time you saved a Python file in Zed this semester, a tool called Ruff automatically reformatted your code: fixing indentation, adjusting whitespace, sorting imports, and standardizing quote styles. Every time Zed showed a red squiggle under a variable or displayed type information when you hovered over a function, a tool called basedpyright was analyzing your code in real time. And every time you got autocomplete suggestions or jumped to a function definition with a keyboard shortcut, both tools were communicating with Zed through a protocol called the Language Server Protocol.
+
+You've been using professional code quality tools all semester. Now you'll learn what they are, how they work, and how to configure them yourself.
+
+## The Triple Reveal
+
+Let's start with a concrete demonstration. Here's a Python script written without any quality tooling:
+
+```{.python filename="before.py"}
+import json
+import  os
+from pathlib import Path
+import duckdb
+import sys
+
+def getRevenue( conn,category ):
+    """get revenue for category"""
+    result=conn.sql( f"SELECT SUM(unit_price*quantity) as revenue FROM order_details WHERE product_id IN (SELECT product_id FROM products WHERE category_id=(SELECT category_id FROM categories WHERE category_name='{category}'))")
+    x = result.fetchone()
+    if x == None:
+        return 0
+    return x[0]
+
+conn = duckdb.connect('data/northwind.duckdb')
+rev=getRevenue(conn, "Beverages")
+print( f'Revenue: {rev}' )
+```
+
+Now here's the same script after Ruff formats it, Ruff lints it, and basedpyright checks the types:
+
+```{.python filename="after.py"}
+"""Revenue query script for the Northwind database."""
+
+import duckdb
+
+
+def get_revenue(conn: duckdb.DuckDBPyConnection, category: str) -> float:
+    """Get total revenue for a product category.
+
+    Args:
+        conn: DuckDB connection object.
+        category: The category name to filter by.
+
+    Returns:
+        Total revenue as a float.
+    """
+    result = conn.sql("""
+        SELECT SUM(od.unit_price * od.quantity) AS revenue
+        FROM order_details AS od
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+        WHERE c.category_name = $1
+    """, params=[category])
+
+    row = result.fetchone()
+    if row is None:
+        return 0.0
+    return row[0]
+
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+rev = get_revenue(conn, "Beverages")
+print(f"Revenue: {rev}")
+```
+
+The changes between these two versions include: unused imports removed (`json`, `os`, `sys`), consistent spacing around operators and after commas, function name changed from `camelCase` to `snake_case`, type hints added to the function signature, Google-style docstring completed, `== None` changed to `is None`, f-string SQL injection replaced with parameterized query, and a module-level docstring added. Some of these changes are mechanical (Ruff handles formatting and import cleanup automatically). Others are flagged as warnings that you fix by hand (the linter catches `== None`, unused imports, and missing docstrings). And the type hints and `is None` narrowing are exactly what basedpyright needs to verify the code's correctness.
+
+These three tools, Ruff the formatter, Ruff the linter, and basedpyright the type checker, form the quality infrastructure of professional Python development.
+
+## Language Servers: The Engine Behind Your Editor
+
+Before we dive into the individual tools, let's understand the mechanism that connects them to Zed.
+
+### The Language Server Protocol (LSP)
+
+The Language Server Protocol is a standard that defines how code editors communicate with language-specific analysis tools. The idea is elegant: instead of every editor implementing its own Python analysis, every editor speaks the same protocol to external tools that do the analysis.
+
+Here's how it works. When you open a Python file in Zed, Zed sends the file's contents to two language servers running in the background: basedpyright (for type analysis) and Ruff (for formatting and linting). These servers analyze the code and send back results: diagnostic messages (errors and warnings), hover information (type signatures and documentation), autocomplete suggestions, and navigation targets (go-to-definition, find-all-references).
+
+This architecture means the same intelligence works in any editor that supports LSP. If you switch from Zed to VS Code, Neovim, or any other LSP-compatible editor, you can use the same basedpyright and Ruff servers and get the same analysis. The tools are independent of the editor.
+
+### Two Servers, Two Jobs
+
+In Zed's Python configuration, basedpyright and Ruff divide the work:
+
+**basedpyright** handles *type analysis*: verifying that function arguments match their type hints, that return values are consistent, that variables are used correctly, and that attribute access is valid. It provides hover information (showing the type of any expression), go-to-definition, and autocomplete based on type information.
+
+**Ruff** handles *code style*: formatting on save (indentation, line length, quote style), linting diagnostics (unused imports, undefined names, style violations), and quick fixes (automatically removing unused imports, sorting import statements).
+
+Together, they cover the full spectrum of code quality: Ruff ensures your code *looks* right, and basedpyright ensures your code *behaves* right.
+
+## Ruff: Formatting and Linting {#sec-ruff}
+
+Ruff is a Python linter and formatter written in Rust. It replaces a constellation of older tools (Black, isort, flake8, pycodestyle, pyflakes, and many others) with a single, fast tool that does everything.
+
+### The Case for Consistent Code
+
+Code is read far more often than it is written. Every time you revisit a script, every time a classmate reviews your notebook, every time you debug a colleague's function, you're *reading* code. Consistent formatting makes reading easier because your brain doesn't have to parse style variations. It can focus on logic.
+
+Formatting debates (tabs vs. spaces, single quotes vs. double quotes, trailing commas or not) are a waste of time because they don't affect how the code runs. An autoformatter ends these debates permanently: the tool decides, everyone uses it, and the discussion is over. PEP 8, Python's official style guide, provides the baseline principles, and Ruff implements them.
+
+### Ruff as a Formatter
+
+The formatter is the simpler of Ruff's two roles. It takes your code and rewrites it with consistent style:
+
+```{.bash filename="terminal"}
+# Format all Python files in the current directory
+uv run ruff format
+
+# Format a specific file
+uv run ruff format src/northwind_analysis/revenue.py
+
+# Check formatting without making changes (useful in CI)
+uv run ruff format --check
+```
+
+What the formatter changes: indentation (4 spaces), line length (wraps long lines at 88 characters by default), quote style (double quotes), trailing commas in multi-line collections, whitespace around operators and after commas, and blank lines between functions and classes.
+
+What the formatter does *not* change: variable names, logic, structure, comments, or docstrings. Formatting is purely cosmetic. Your code's behavior is identical before and after formatting.
+
+In Zed, Ruff formats your file every time you save. You've been benefiting from this all semester without thinking about it.
+
+### Ruff as a Linter
+
+The linter is more powerful. It performs *static analysis*, reading your code without running it to find bugs, style issues, and violations of best practices:
+
+```{.bash filename="terminal"}
+# Check for linting issues
+uv run ruff check
+
+# Check and automatically fix what can be fixed
+uv run ruff check --fix
+```
+
+Ruff's output looks like this:
+
+```{.text filename="output"}
+src/revenue.py:3:8: F401 [*] `json` imported but unused
+src/revenue.py:15:12: E711 Comparison to `None` should be `if x is None:`
+src/revenue.py:22:1: D103 Missing docstring in public function
+```
+
+Each line tells you the file, line number, column number, rule code, and a description. The `[*]` marker means the issue is auto-fixable with `--fix`. Let's understand the key rule categories.
+
+### Rule Categories
+
+Ruff implements hundreds of rules from various Python linting traditions. The most important categories:
+
+| Code | Source | What It Catches |
+|------|--------|-----------------|
+| `E` / `W` | pycodestyle | Style errors and warnings (whitespace, line length) |
+| `F` | pyflakes | Bugs: unused imports, undefined names, redefined variables |
+| `I` | isort | Import ordering (standard library, then third-party, then local) |
+| `UP` | pyupgrade | Outdated syntax that can be modernized for Python 3.13 |
+| `D` | pydocstyle | Missing or malformed docstrings |
+| `N` | pep8-naming | Naming conventions (snake_case for functions, PascalCase for classes) |
+
+: Key Ruff rule categories {#tbl-ruff-rules}
+
+The `F` rules (pyflakes) are the most immediately useful. They catch unused imports, which clutter your code, and undefined names, which would crash at runtime. The `I` rules (isort) automatically sort your import statements into a consistent order. The `D` rules connect directly to the docstring practices from @sec-functions: they enforce that every public function has a Google-style docstring.
+
+::: {.callout-note collapse="true" title="Exercise: Categorize Ruff Diagnostics"}
+Running `uv run ruff check` on a Northwind analysis script produces these diagnostics:
+
+```
+revenue.py:1:1: D100 Missing docstring in public module
+revenue.py:3:8: F401 `json` imported but unused
+revenue.py:7:1: D103 Missing docstring in public function
+revenue.py:15:12: E711 Comparison to `None` should be `if x is None:`
+revenue.py:22:1: I001 Import block is un-sorted or un-formatted
+```
+
+For each diagnostic, identify: (1) the rule category (`D`, `F`, etc.), (2) whether it's auto-fixable with `ruff check --fix`, and (3) what the issue is.
+
+::: {.callout-tip collapse="true" title="Solution"}
+1. `D100`: **D** (docstring), **not auto-fixable** (you must write the docstring), issue: module lacks a docstring
+2. `F401`: **F** (pyflakes), **auto-fixable**, issue: `json` import is unused and can be removed
+3. `D103`: **D** (docstring), **not auto-fixable**, issue: function `get_revenue()` needs a docstring
+4. `E711`: **E** (pycodestyle), **auto-fixable**, issue: use `is None` instead of `== None`
+5. `I001`: **I** (isort), **auto-fixable**, issue: imports are out of order and need sorting
+
+Running `uv run ruff check --fix` would auto-remove the unused import, fix the `== None` comparison, and sort the imports. You'd then manually add the two missing docstrings (module-level and function-level).
+:::
+:::
+
+### Configuring Ruff
+
+Ruff is configured with a `ruff.toml` file in your project root (alternatively, you can use a `[tool.ruff]` section in `pyproject.toml`):
+
+```{.toml filename="ruff.toml"}
+# Target Python version
+target-version = "py313"
+
+# Maximum line length
+line-length = 88
+
+[lint]
+# Enable these rule sets
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "D",    # docstrings
+    "N",    # pep8-naming
+]
+
+# Ignore specific rules
+ignore = [
+    "D100",  # Missing docstring in public module (relaxed for scripts)
+    "D104",  # Missing docstring in public package
+]
+
+[lint.pydocstyle]
+# Use Google-style docstrings (matches @sec-functions)
+convention = "google"
+
+[lint.per-file-ignores]
+# Notebooks don't need module docstrings
+"notebooks/*.py" = ["D100", "E402"]
+```
+
+The `select` field enables entire rule categories. The `ignore` field turns off specific rules within those categories. The `per-file-ignores` section lets you relax rules for specific paths, which is useful because notebooks and scripts have different conventions.
+
+::: {.callout-tip}
+## Start strict, relax as needed
+
+It's easier to start with many rules enabled and ignore the ones that don't fit your project than to start with few rules and gradually add them. The configuration above is a good starting point for this course.
+:::
+
+## basedpyright: Type Checking {#sec-basedpyright}
+
+In @sec-objects, you learned to write type hints: annotations on function parameters and return values that document expected types. Python itself ignores these hints at runtime. basedpyright is the tool that *enforces* them.
+
+### From Hints to Enforcement
+
+Consider this function:
+
+```{.python filename="type_error.py"}
+def calculate_total(price: float, quantity: int) -> float:
+    """Calculate the total price."""
+    return price * quantity
+
+# This call is wrong: "ten" is not an int
+result = calculate_total(19.99, "ten")
+```
+
+Python will happily try to run this code and crash at runtime with a `TypeError`. basedpyright catches the error *before* you run the code. In Zed, you'd see a red squiggle under `"ten"` with the message: "Argument of type `str` is not assignable to parameter `quantity` of type `int`."
+
+This is the value of type checking: it catches a class of bugs that would otherwise only surface at runtime, potentially in production, potentially on data you care about.
+
+### Running basedpyright from the Command Line
+
+```{.bash filename="terminal"}
+# Type-check your entire project
+uv run basedpyright
+
+# Type-check a specific file
+uv run basedpyright src/northwind_analysis/revenue.py
+```
+
+First, add basedpyright as a development dependency:
+
+```{.bash filename="terminal"}
+uv add --dev basedpyright
+```
+
+The output shows each error with its file, line, error code, and description:
+
+```{.text filename="output"}
+src/revenue.py:18:34 - error: Argument of type "str" is not assignable
+  to parameter "quantity" of type "int" (reportArgumentType)
+src/revenue.py:25:5 - error: Return type "int | None" is not assignable
+  to declared return type "float" (reportReturnType)
+```
+
+Common error codes you'll encounter:
+
+| Error Code | Meaning |
+|-----------|---------|
+| `reportMissingImports` | An import can't be resolved |
+| `reportArgumentType` | A function argument has the wrong type |
+| `reportReturnType` | A function returns a value inconsistent with its declared type |
+| `reportAttributeAccessIssue` | Accessing an attribute that doesn't exist on the type |
+| `reportGeneralClassIssues` | Class-related type errors |
+| `reportOptionalMemberAccess` | Accessing an attribute on a value that might be `None` |
+
+: Common basedpyright errors {#tbl-pyright-errors}
+
+### Configuring basedpyright
+
+basedpyright is configured with a `pyrightconfig.json` file in your project root:
+
+```{.json filename="pyrightconfig.json"}
+{
+    "typeCheckingMode": "basic",
+    "pythonVersion": "3.13",
+    "include": ["src"],
+    "exclude": ["**/__pycache__"]
+}
+```
+
+The `typeCheckingMode` controls how strict the checking is:
+
+| Mode | Strictness | Good For |
+|------|-----------|----------|
+| `off` | No checking | Disabling type checking entirely |
+| `basic` | Catches obvious errors | Starting out, learning type hints |
+| `standard` | Catches most issues | Regular development |
+| `strict` | Catches everything | Libraries and production code |
+| `all` | Maximum strictness | When you want zero ambiguity |
+
+: basedpyright checking modes {#tbl-pyright-modes}
+
+Start with `basic` and increase as your comfort with type hints grows. The jump from `basic` to `standard` is the most impactful: it catches untyped function signatures and unhandled `None` values, which are the two most common sources of runtime errors.
+
+### Practical Patterns
+
+**Typing function signatures is the highest-value place to start.** You don't need to annotate every variable (basedpyright infers most of them). But annotating function parameters and return types documents your interface and catches misuse at every call site.
+
+**Handling `None` is the most common challenge.** When a function might return `None` (like `fetchone()` from DuckDB), you need to narrow the type before using the result:
+
+```{.python filename="none_handling.py"}
+def get_price(conn: duckdb.DuckDBPyConnection, product_id: int) -> float:
+    """Get the unit price for a product."""
+    result = conn.sql(
+        "SELECT unit_price FROM products WHERE product_id = $1",
+        params=[product_id],
+    )
+    row = result.fetchone()  # Type: tuple | None
+
+    # basedpyright requires you to handle the None case
+    if row is None:
+        raise ValueError(f"No product found with ID {product_id}")
+
+    return row[0]  # After the check, basedpyright knows row is a tuple
+```
+
+The `if row is None:` check is called *type narrowing*. After the check, basedpyright knows that `row` cannot be `None` on the next line, so accessing `row[0]` is safe. Without the check, basedpyright would flag `row[0]` as potentially operating on `None`.
+
+**When type checking feels like a burden vs. when it saves you.** Adding type hints to a simple script that you'll run once and throw away is probably not worth the effort. Adding type hints to a module that other code imports, that a CLI tool exposes, or that multiple people maintain is almost always worthwhile. The bugs that type checking catches (wrong argument types, unhandled `None`, attribute access on the wrong type) are exactly the bugs that are hardest to find in large codebases.
+
+::: {.callout-note collapse="true" title="Exercise: Type Narrowing"}
+You're writing a function that retrieves a product's price from the database. DuckDB's `fetchone()` returns either a tuple with the data or `None` if no row is found. Here's an untyped version:
+
+```python
+def get_product_price(product_id):
+    result = conn.sql("SELECT unit_price FROM products WHERE product_id = $1", params=[product_id])
+    row = result.fetchone()
+    return row[0]  # What happens if row is None?
+```
+
+Rewrite the function with:
+1. Complete type hints for the function signature
+2. A check that handles the `None` case (type narrowing)
+3. A Google-style docstring
+
+::: {.callout-tip collapse="true" title="Solution"}
+```python
+def get_product_price(conn: duckdb.DuckDBPyConnection, product_id: int) -> float:
+    """Get the unit price for a product.
+
+    Args:
+        conn: DuckDB connection object.
+        product_id: The ID of the product to look up.
+
+    Returns:
+        The unit price as a float.
+
+    Raises:
+        ValueError: If no product exists with the given ID.
+    """
+    result = conn.sql(
+        "SELECT unit_price FROM products WHERE product_id = $1",
+        params=[product_id]
+    )
+    row = result.fetchone()
+
+    # Type narrowing: check None before accessing row[0]
+    if row is None:
+        raise ValueError(f"No product found with ID {product_id}")
+
+    return row[0]
+```
+
+The `if row is None:` check is type narrowing. After this check, basedpyright knows that `row` cannot be `None` on the next line, so `row[0]` is safe to access.
+:::
+:::
+
+## The Quality Workflow {#sec-quality-workflow}
+
+With all three tools configured, the professional workflow before committing code is:
+
+```{.bash filename="terminal"}
+# 1. Format: make the code style consistent
+uv run ruff format
+
+# 2. Lint: check for bugs and style issues
+uv run ruff check
+
+# 3. Type check: verify type correctness
+uv run basedpyright
+```
+
+In practice, Zed runs all three continuously as you type, so you see issues in real time. The terminal commands are for *verification before committing*, confirming that everything is clean before your code enters the Git history. Think of it as a pre-flight checklist: the instruments have been showing green all along, but you still walk through the checklist before takeoff.
+
+These tools are declared as development dependencies in your `pyproject.toml` (@sec-pyproject) and configured in your project's `ruff.toml` and `pyrightconfig.json`. That means any collaborator who runs `uv sync` on your project gets the exact same tools at the exact same versions, and the configuration files ensure they enforce the same rules.
+
+::: {.callout-note collapse="true" title="Exercise: Workflow Before Commit"}
+You've made changes to a file and want to commit them to Git. You run the full quality workflow:
+
+```bash
+uv run ruff format
+uv run ruff check
+uv run basedpyright
+```
+
+The first two pass cleanly, but `basedpyright` reports a `reportOptionalMemberAccess` error: you're accessing an attribute on a variable that might be `None`. What does this error mean, and what's the fix?
+
+::: {.callout-tip collapse="true" title="Solution"}
+The error means you're trying to access an attribute on a value that could be `None`. For example:
+
+```python
+result = fetch_data()  # Returns Data | None
+print(result.name)     # Error: result might be None
+```
+
+The fix is type narrowing, the same pattern from the previous exercise:
+
+```python
+result = fetch_data()
+if result is None:
+    raise ValueError("No data found")
+print(result.name)  # Now safe; basedpyright knows result is not None
+```
+
+Or more idiomatically:
+
+```python
+result = fetch_data()
+if result is not None:
+    print(result.name)
+```
+
+This is the core insight of type checking: before you use a value, prove to the type checker that the value is actually the type you think it is. For optional values, use a guard clause (`if x is None:` or `if x is not None:`) to narrow the type.
+:::
+:::
+
+## Exercises {.unnumbered}
+
+### Clean Up a Messy Script {.unnumbered}
+
+Here is an intentionally messy, untyped script. Save it as `messy.py` and apply all three tools sequentially: format with `uv run ruff format messy.py`, lint with `uv run ruff check messy.py --fix`, and type-check with `uv run basedpyright messy.py`. After each step, note what changed. Then add type hints to the function signatures and rerun basedpyright until it reports zero errors.
+
+```{.python filename="messy.py"}
+import os, sys
+import json
+from pathlib import  Path
+import duckdb
+
+def processOrders(conn,  category_name,min_price  ):
+    result  =  conn.sql(f"SELECT product_name,unit_price FROM products WHERE category_id IN (SELECT category_id FROM categories WHERE category_name='{category_name}') AND unit_price>{min_price}")
+    data=result.fetchall( )
+    total= 0
+    for row in data:
+        total = total+row[1]
+    if total == None:
+        return 0
+    return total
+
+c = duckdb.connect('data/northwind.duckdb')
+t = processOrders(c,"Beverages",  10)
+print(f'Total:  {t}')
+```
+
+### Configure Your Project {.unnumbered}
+
+Create `ruff.toml` and `pyrightconfig.json` for your Northwind project using the starter configurations from this chapter. Add `ruff` and `basedpyright` as dev dependencies with `uv add --dev`. Run both tools across your entire project and categorize the issues they find.
+
+### Docstring Enforcement {.unnumbered}
+
+Enable Ruff's `D` rules in your configuration and run `uv run ruff check` on the `northwind_utils.py` module from @sec-functions. Add missing docstrings following the Google convention until Ruff reports no `D`-category warnings.
+
+### Type Hint Your Module {.unnumbered}
+
+Run `uv run basedpyright` on your Northwind project. Categorize the errors: how many are missing type annotations? How many are unhandled `None` values? How many are actual type mismatches? Add type hints and `None` handling until basedpyright passes cleanly.
+
+### Runtime Confirmation {.unnumbered}
+
+Intentionally introduce a type error into one of your functions (for example, pass a string where an integer is expected). Observe basedpyright catching it in Zed with a red squiggle. Then run the script and confirm that it also fails at runtime with a `TypeError`. This demonstrates that type checking catches *real* bugs, not just stylistic preferences.
+
+## Summary {.unnumbered}
+
+Three tools form the invisible quality infrastructure of professional Python development. Ruff formats your code for consistency and lints it for bugs, style issues, and best practices. basedpyright checks your type hints and catches errors that would otherwise surface only at runtime. The Language Server Protocol connects both tools to Zed, providing the real-time diagnostics, hover information, and autocomplete you've been using all semester.
+
+These tools are configured in project-level files (`ruff.toml` and `pyrightconfig.json`) and declared as development dependencies in `pyproject.toml`, making them part of the reproducible project environment. The quality workflow, format, lint, type-check, commit, ensures that every piece of code entering your Git history meets a consistent standard.
+
+The key insight is that these tools aren't extra work. They're work that catches bugs *earlier*, when they're cheap to fix, rather than *later*, when they've already caused incorrect results or confusing errors. Code quality tooling is an investment in your future self and in everyone who will read your code.
+
+## Glossary {.unnumbered}
+
+autoformatter
+: A tool that rewrites code to conform to a consistent style. Ruff's formatter handles indentation, whitespace, quotes, and line length automatically.
+
+basedpyright
+: A Python type checker that analyzes code statically (without running it) to verify type correctness. Also serves as Zed's language server for Python type analysis.
+
+Language Server Protocol (LSP)
+: A standard protocol for communication between code editors and language analysis tools. Enables features like diagnostics, hover information, autocomplete, and go-to-definition.
+
+linter
+: A static analysis tool that checks code for bugs, style issues, and violations of best practices without running it. Ruff's linter replaces several older Python linters.
+
+PEP 8
+: Python Enhancement Proposal 8, the official style guide for Python code. Ruff implements PEP 8 rules and many extensions.
+
+Ruff
+: A fast Python linter and formatter written in Rust. Replaces Black, isort, flake8, and many other tools with a single unified tool.
+
+static analysis
+: Analyzing code without executing it. Linters and type checkers perform static analysis to find issues before runtime.
+
+type narrowing
+: Refining a variable's type through conditional checks. For example, `if x is not None:` narrows the type from `T | None` to `T`, allowing safe attribute access.

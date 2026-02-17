@@ -1,0 +1,483 @@
+---
+title: "Version Control with Git"
+subtitle: "Chapter 4 · Computational Workflows for Engineers"
+format:
+  revealjs:
+    theme: default
+    highlight-style: nord
+    code-line-numbers: false
+    slide-number: true
+    progress: true
+    hash-type: number
+    footer: "IENG 331 · Computational Workflows for Engineers"
+    transition: fade
+    transition-speed: fast
+    embed-resources: true
+    title-slide-attributes:
+      data-background-color: "#2E3440"
+---
+
+## Where We Are {.smaller}
+
+You can navigate your file system and run commands.
+
+. . .
+
+Today: **Git**, a version control system that tracks every change to your projects.
+
+. . .
+
+This is where engineering becomes professional. Git is used everywhere.
+
+::: {.notes}
+Frame the problem: "You're working on a Python script. You make changes. Now nothing works. You wish you could go back to yesterday's version." Git solves this, but it's also so much more: it's your safety net, your history, your backup, and your collaboration tool.
+:::
+
+---
+
+## Why Not Just Google Docs? {.smaller}
+
+Google Docs is great for prose: continuous autosave, effortless collaboration.
+
+. . .
+
+But code is different. Code is **brittle**: one wrong character breaks everything.
+
+. . .
+
+You need:
+- **Intentional checkpoints** ("this version works")
+- **Branching** (experiment without risking stability)
+- **Meaningful history** (not every keystroke)
+
+::: {.notes}
+Make the distinction crystal clear. "A half-finished paragraph in Docs is still readable. A half-finished function in Python is a syntax error." This is the fundamental reason code needs different tooling than prose.
+:::
+
+---
+
+## Google Docs vs. Git {.smaller}
+
+| | Google Docs | Git |
+|---|---|---|
+| **Saving** | Automatic, continuous | Manual, intentional |
+| **History** | Every keystroke | Meaningful snapshots |
+| **Branching** | Not supported | Core feature |
+| **Offline** | Limited | Full functionality |
+| **Merge conflicts** | Seamless | Requires resolution |
+| **Best for** | Prose, collaboration | Code, experimentation |
+
+::: {.notes}
+Don't spend too much time on this table, students see the point. The key insight: Git's design reflects the needs of code, not prose. Automatic saving would capture broken code. Branching is essential for feature development. Manual saves mean intentional checkpoints.
+:::
+
+---
+
+## The Three States {.smaller}
+
+Every file in Git exists in one of three places:
+
+:::: {.columns}
+
+::: {.column width="33%"}
+
+### 📝 Working Directory
+
+Your actual folder on disk. This is where you edit files.
+
+Git sees changes here but hasn't recorded them yet.
+
+:::
+
+::: {.column width="33%"}
+
+### 📋 Staging Area
+
+A preparation zone. You explicitly choose which changes to stage.
+
+Think of it as a draft of your next commit.
+
+:::
+
+::: {.column width="33%"}
+
+### 💾 Repository
+
+Git's database (the `.git` folder). Contains the complete history.
+
+This is your permanent record.
+
+:::
+
+::::
+
+::: {.notes}
+This is the mental model that makes Git intuitive. Students often ask "Is my work saved?" Answer: "Saved to disk, yes. Committed in Git? No." These states explain that distinction perfectly.
+:::
+
+---
+
+## The Workflow {.smaller}
+
+1. **Edit** files in your working directory
+2. **Stage** the changes you want to record (`git add`)
+3. **Commit** staged changes (`git commit`) — permanently recorded
+
+. . .
+
+```
+[Edit] → [Stage] → [Commit]
+  🖊️        📋        💾
+```
+
+You control when changes move between states.
+
+::: {.notes}
+LIVE DEMO: Show the cycle in real time. Create a file, edit it, stage it, commit it. Use `git status` at each step to show the state changes. This is the single most important workflow; make sure it sticks.
+:::
+
+---
+
+## Getting Started: `git init` {.smaller}
+
+Create a new project and initialize Git:
+
+```{.bash filename="terminal"}
+$ mkdir my-project
+$ cd my-project
+$ git init
+```
+
+Git responds:
+
+```
+Initialized empty Git repository in /Users/ozan/my-project/.git/
+```
+
+A hidden `.git` folder is created. This folder is Git's database.
+
+::: {.notes}
+LIVE DEMO: Do this on screen. Show the directory before and after. Mention: "You can delete the entire project later, but never delete the `.git` folder unless you want to lose your history."
+:::
+
+---
+
+## Checking Status: `git status` {.smaller}
+
+At any time, run `git status` to see what Git sees:
+
+```{.bash filename="terminal"}
+$ git status
+```
+
+Output shows:
+- Current branch
+- Tracked vs. untracked files
+- Staged vs. unstaged changes
+- What you need to do next
+
+Run this constantly. It's your window into Git's perspective.
+
+::: {.notes}
+LIVE DEMO: Run it when the repo is empty, after creating files, after staging, after committing. Show how the output changes. Students get anxious about Git; `git status` becomes their safety check. "Is my code saved?"
+:::
+
+---
+
+## Staging Changes: `git add` {.smaller}
+
+Add specific files to the staging area:
+
+```{.bash filename="terminal"}
+$ git add script.py          # Stage one file
+$ git add data/raw/*.csv     # Stage all CSVs in a directory
+$ git add .                  # Stage all changes
+```
+
+After staging, `git status` shows these changes are "ready to be committed."
+
+::: {.notes}
+The staging area is Git's superpower. You can modify 10 files but commit only 5 if you want. This gives fine-grained control over what gets recorded. In practice, you'll stage logically related changes together (keep commits focused).
+:::
+
+---
+
+## Making a Commit: `git commit` {.smaller}
+
+Commit staged changes with a message:
+
+```{.bash filename="terminal"}
+$ git commit -m "Add sales data analysis script"
+```
+
+Every commit needs a message. The `-m` flag provides it inline.
+
+Messages should be clear and concise: describe *what* changed and *why*, not how.
+
+Good: "Add sales data analysis script"
+Bad: "Stuff"
+
+::: {.notes}
+LIVE DEMO: Make a commit. Show the output with commit hash and message. Explain: the hash is a unique ID for this snapshot. You can refer to it later to restore to this exact state. Emphasize message quality: future-you will read these messages to understand project evolution.
+:::
+
+---
+
+## Checking History: `git log` {.smaller}
+
+View your project's history:
+
+```{.bash filename="terminal"}
+$ git log --oneline
+```
+
+Output shows recent commits with short hashes and messages:
+
+```
+a1b2c3d Add sales data analysis script
+e4f5g6h Add README
+i7j8k9l Initial commit
+```
+
+Each line is a snapshot. The hash lets you jump to any point in history.
+
+::: {.notes}
+LIVE DEMO: Run `git log --oneline` after a few commits. Show the chain. Then run `git log` without the flag to see full details (author, timestamp, full message). Optionally show `git log --graph` for branching visualization (though that's next class).
+:::
+
+---
+
+## Comparing Changes: `git diff` {.smaller}
+
+See what changed between versions:
+
+```{.bash filename="terminal"}
+$ git diff                 # See unstaged changes
+$ git diff --staged        # See staged changes
+$ git diff HEAD~1          # Compare to the previous commit
+```
+
+Git shows additions (+) and deletions (-), line by line.
+
+::: {.notes}
+LIVE DEMO: Modify a file, run `git diff` to see the exact changes. This is how you verify "did I really change what I intended?" before committing. Stage the change, run `git diff --staged` to see what will be committed.
+:::
+
+---
+
+## Undoing Mistakes {.smaller}
+
+**Unstage a file** (remove from staging area):
+
+```{.bash filename="terminal"}
+$ git restore --staged script.py
+```
+
+**Discard edits** in working directory (restore file from last commit):
+
+```{.bash filename="terminal"}
+$ git restore script.py
+```
+
+::: {.callout-warning}
+`git restore` discards changes permanently. Only use it if you're sure you don't want those edits.
+:::
+
+**Amend the last commit** (add forgotten changes):
+
+```{.bash filename="terminal"}
+$ git add forgotten.py
+$ git commit --amend -m "Updated message"
+```
+
+::: {.notes}
+These are the safety valves. Show each one in action. Emphasize: `git restore` is permanent, but anything in a commit can be recovered. If you panic after committing something, Git has a way to undo it (revert, reset — more advanced, but possible).
+:::
+
+---
+
+## Branching: Parallel Development {.smaller}
+
+A **branch** is an independent line of development.
+
+Create a branch to experiment without affecting the main project:
+
+```{.bash filename="terminal"}
+$ git switch -c feature/add-anomaly-detection
+```
+
+Work on the branch (edit, stage, commit normally):
+
+```{.bash filename="terminal"}
+$ git add anomaly.py
+$ git commit -m "Implement statistical anomaly detection"
+```
+
+If successful, merge the branch back into `main`. If not, delete it. The main branch is untouched either way.
+
+::: {.notes}
+LIVE DEMO: Create a branch, show you're on it (`git status`), make a commit, switch back to main, show it's still clean. This is where Git's power becomes obvious: safe experimentation. Next chapter uses branches heavily for collaboration.
+:::
+
+---
+
+## Switching Branches {.smaller}
+
+List all branches:
+
+```{.bash filename="terminal"}
+$ git branch -a
+```
+
+Switch to a different branch:
+
+```{.bash filename="terminal"}
+$ git switch main
+$ git switch feature/add-anomaly-detection
+```
+
+Git updates your working directory to match the branch state.
+
+::: {.notes}
+Important: you can only switch branches if your working directory is clean (no uncommitted changes). This prevents Git from losing work. If you have changes, either commit or stash them first.
+:::
+
+---
+
+## Merging Branches {.smaller}
+
+Once a feature branch is complete, merge it back into main:
+
+```{.bash filename="terminal"}
+$ git switch main           # Switch to destination branch
+$ git merge feature/add-anomaly-detection
+```
+
+If changes don't conflict, Git merges automatically.
+
+If the same lines changed differently on both branches, you have a **merge conflict** that requires manual resolution.
+
+::: {.notes}
+LIVE DEMO: Merge a simple branch with no conflicts. Show how main now includes the feature branch commits. Later (Chapter 5), we'll handle conflicts. For now: awareness.
+:::
+
+---
+
+## Deleting Branches {.smaller}
+
+After merging, delete the feature branch to clean up:
+
+```{.bash filename="terminal"}
+$ git branch -d feature/add-anomaly-detection
+```
+
+The commits are still in history (merged into main), but the branch pointer is gone.
+
+::: {.notes}
+This keeps the repository clean. You're not losing work; you're just removing an unused branch pointer. Professional repositories often have simple naming conventions: feature/*, bugfix/*, hotfix/*.
+:::
+
+---
+
+## The `.gitignore` File {.smaller}
+
+Sometimes you have files you don't want Git to track: temporary files, secrets, large datasets.
+
+Create a `.gitignore` file in your project root:
+
+```{.text filename=".gitignore"}
+.DS_Store
+.venv/
+*.log
+*.csv
+.env
+```
+
+Git will never track these files, even if you accidentally `git add .`
+
+::: {.notes}
+LIVE DEMO: Create a `.gitignore` file with common patterns. Then create files that match those patterns and show `git status`—they don't appear. This is a safety mechanism against committing secrets or large files.
+:::
+
+---
+
+## Commit Best Practices {.smaller}
+
+- **Make focused commits**: One logical change per commit
+- **Write clear messages**: "Add feature X" not "stuff"
+- **Commit frequently**: Small commits are easier to understand and debug
+- **Never commit secrets**: Use `.gitignore` and `.env` files
+- **Test before committing**: Make sure the code works
+
+Good commits are:
+- Easy to review
+- Easy to understand months later
+- Easy to revert if needed
+
+::: {.notes}
+These habits matter for collaborative work (next chapter). Bad commits make code review painful and debugging harder. "Why did someone change this line?" A good commit message answers that.
+:::
+
+---
+
+## Prediction Exercise {background-color="#3B4252"}
+
+Scenario 1: You edit `script.py`, save it, run `git add script.py`, then your power goes out.
+
+Is the file safe on disk? Is it committed in Git?
+
+. . .
+
+Scenario 2: You have uncommitted changes in your working directory. You try `git switch develop`.
+
+What happens?
+
+::: {.notes}
+Scenario 1: Safe on disk (saved), not in Git (not committed). This is why the staging area exists—intermediate state. Scenario 2: Git refuses. You must commit or stash changes first. This prevents losing work during branch switches. Both scenarios test understanding of the three states.
+:::
+
+---
+
+## Where We're Headed {.smaller}
+
+You can now:
+- Initialize Git repositories
+- Stage and commit changes
+- View history
+- Create and merge branches
+- Ignore files you don't want to track
+
+Next: **GitHub** — share your repository, collaborate with teammates, use pull requests for code review.
+
+::: {.notes}
+Git is local. GitHub is cloud. Together, they're the professional standard. By end of Chapter 5, students will have a complete collaboration workflow.
+:::
+
+---
+
+## Recap: Essential Git Commands {.smaller}
+
+| Command | What it does |
+|---------|---|
+| `git init` | Initialize a repository |
+| `git status` | Check what Git sees |
+| `git add` | Stage changes |
+| `git commit -m "msg"` | Commit staged changes |
+| `git log --oneline` | View history |
+| `git diff` | See what changed |
+| `git switch -c branch-name` | Create and switch to branch |
+| `git merge branch-name` | Merge branch into current |
+
+::: {.notes}
+These are the core commands for solo work. They'll add push/pull in Chapter 5 for collaboration. Emphasize: `git status` is your safety check—run it constantly.
+:::
+
+---
+
+## Next Time {background-color="#3B4252"}
+
+::: {.r-fit-text}
+Chapter 5: Collaboration with GitHub
+:::
+
+Push your work to the cloud. Collaborate with teammates. Use pull requests for code review.

@@ -1,4 +1,4 @@
-# WinGet
+# WinGet {#sec-winget-config}
 
 ## What Problem Does WinGet Solve?
 
@@ -30,10 +30,16 @@ After installation, close any open terminal windows and open a fresh one. Type `
 
 ## A Note on Permissions
 
-Some software installations require administrator privileges. When you run a WinGet command that needs elevated permissions, Windows will display a User Account Control (UAC) prompt asking you to confirm. This is normal and expected—just click "Yes" to allow the installation to proceed.
+Some software installations require administrator privileges. When you run a WinGet command that needs elevated permissions, Windows will display a User Account Control (UAC) prompt asking you to confirm. This is normal and expected, just click "Yes" to allow the installation to proceed.
 
 ## What Happens Next
 
 Once WinGet is available, you'll have access to thousands of tools through simple commands. We'll introduce specific commands as we need them throughout this book. For now, just know that WinGet is the foundation that makes installing everything else straightforward.
 
 If you're curious, Microsoft's documentation at [learn.microsoft.com/en-us/windows/package-manager](https://learn.microsoft.com/en-us/windows/package-manager/) has more details and a searchable repository of available packages. But don't feel pressured to explore on your own yet, we'll guide you through each tool as it becomes relevant to your work.
+
+## Resources
+
+- [WinGet Documentation](https://learn.microsoft.com/en-us/windows/package-manager/) - Complete reference for commands and configuration
+- [WinGet Package Repository](https://winget.run/) - Searchable list of available packages
+- [WinGet GitHub Repository](https://github.com/microsoft/winget-cli) - Source code and release downloads

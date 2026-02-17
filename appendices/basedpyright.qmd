@@ -1,0 +1,77 @@
+# basedpyright {#sec-basedpyright-config}
+
+## What Problem Does basedpyright Solve?
+
+Python is a dynamically typed language, which means you can pass any value to any function and Python won't complain until it actually tries to use that value in a way that doesn't work. If you call a function expecting a number with a string, Python will attempt to proceed and crash at runtime, possibly deep inside your analysis pipeline, possibly on real data, possibly after ten minutes of processing.
+
+Type hints (introduced in @sec-objects) let you annotate what types your functions expect and return. But Python *ignores* these annotations at runtime. They're documentation, not enforcement. Without a separate tool to check them, type hints are suggestions that nobody verifies.
+
+**basedpyright is a static type checker that reads your type hints and verifies them before you run your code.** It catches type mismatches, missing return statements, incorrect attribute access, and unhandled `None` values, all while you're still editing. In Zed, this shows up as red squiggles under problems, hover information showing the type of any expression, and autocomplete suggestions based on what methods and attributes a type actually has.
+
+## Why basedpyright for This Course?
+
+basedpyright is a fork of Microsoft's Pyright, the type checker used inside VS Code's Python extension. The "based" variant adds stricter defaults and additional checks that catch more bugs out of the box. It's the most actively maintained and fastest Python type checker available, analyzing your entire project in seconds.
+
+The real value of type checking becomes clear when you start connecting Python to DuckDB. Database queries return rows that might be `None`. Functions transform data through multiple steps. Without type checking, a `None` value can silently propagate through your pipeline and cause a crash far from where the actual problem originated. basedpyright catches these issues at their source: "this function returns `float | None`, but you're treating the result as `float`."
+
+Like Ruff, basedpyright integrates with Zed as a **language server**. It runs in the background, analyzing your code as you type, and provides diagnostics, hover information, go-to-definition, and autocomplete. Ruff handles how your code *looks*; basedpyright handles whether your code is *correct*.
+
+## Three Ways to Use basedpyright
+
+Like Ruff, basedpyright can live in different places. The pattern is the same: Zed handles it automatically at first, and you add it as a project dependency later when you need command-line access.
+
+### Zed's Built-in Language Server (No Installation Needed)
+
+Zed ships with basedpyright as its default Python type checker. When you open a Python file, Zed starts analyzing types in the background and shows red squiggles under problems, hover information when you mouse over expressions, and autocomplete suggestions based on type information. This works out of the box with no installation.
+
+### Project Dependency: `uv add --dev basedpyright`
+
+Adding basedpyright as a development dependency installs the "based" fork into your project's virtual environment:
+
+```{.bash filename="terminal"}
+uv add --dev basedpyright
+```
+
+Now you can run type checking from the command line:
+
+```{.bash filename="terminal"}
+# Type-check your entire project
+uv run basedpyright
+
+# Type-check a specific file
+uv run basedpyright src/northwind_analysis/revenue.py
+```
+
+This is the version you'll add in the Production module (@sec-code-quality). Just like with Ruff, having basedpyright in the terminal is essential for AI-assisted workflows: a coding agent can run `uv run basedpyright`, read the error output, and fix type issues autonomously. It's also what you'd use in a CI pipeline.
+
+Because basedpyright is declared in your `pyproject.toml`, anyone who clones your project and runs `uv sync` gets the same version automatically. Zed will also detect and prefer the project-local version over its bundled one, so the entire team stays on the same type-checking configuration.
+
+### Standalone Tool: `uv tool install basedpyright`
+
+For completeness: `uv tool install basedpyright` installs it into its own isolated environment outside any project. As with Ruff, this course keeps everything inside the project's virtual environment for reproducibility.
+
+## Configuration
+
+basedpyright is configured with a `pyrightconfig.json` file in your project root:
+
+```{.json filename="pyrightconfig.json"}
+{
+    "typeCheckingMode": "basic",
+    "pythonVersion": "3.13",
+    "include": ["src"],
+    "exclude": ["**/__pycache__"]
+}
+```
+
+The `typeCheckingMode` controls strictness. Start with `basic` (catches obvious errors without being overwhelming) and increase to `standard` or `strict` as your comfort with type hints grows. The details of each mode and how to handle common type-checking patterns are covered in @sec-code-quality.
+
+## What Happens Next
+
+basedpyright runs silently in Zed from the moment you start writing Python. You'll see its effects as red squiggles, hover type information, and autocomplete suggestions throughout the programming and integration modules. The full explanation of what it's doing and how to configure it is in @sec-code-quality.
+
+## Resources
+
+- [basedpyright Documentation](https://docs.basedpyright.com/) - Complete reference for configuration and error codes
+- [Pyright Configuration](https://microsoft.github.io/pyright/#/configuration) - Configuration reference (basedpyright shares Pyright's configuration format)
+- [Python Type Hints Cheat Sheet](https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html) - Quick reference for common type hint patterns
+- [PEP 484](https://peps.python.org/pep-0484/) - The Python Enhancement Proposal that introduced type hints

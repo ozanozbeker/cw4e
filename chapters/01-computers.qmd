@@ -1,0 +1,300 @@
+# Computer Fundamentals {#sec-fundamentals}
+
+Before you write your first line of code or type your first command, you need a mental model of what's actually happening inside your computer. This isn't about memorizing specifications or understanding circuit design. It's about developing intuition for *why* computers behave the way they do, so that when something goes wrong, you can reason about the problem instead of flailing randomly.
+
+Most people interact with computers as passengers. They click buttons, wait for responses, and hope for the best. When something breaks, they restart and pray. This works fine for casual use, but it's insufficient for building data products. You need to become a driver, someone who understands the machine well enough to diagnose problems and make informed decisions about how to structure your work.
+
+## Programs and Applications
+
+The words "program" and "application" get tossed around interchangeably in casual conversation. For working professionals who build software, the distinction matters.
+
+A **program** is the most fundamental unit of executable software: a set of instructions written for a computer to execute. That's the entire definition. Notice what it doesn't promise. There's no guarantee of usability, no requirement for visual interfaces, no assumption that a human will ever interact with it directly. A Python script that renames files is a program. A scheduled job that runs at midnight to clean up old logs is a program. A command-line tool you invoke, watch complete, and forget is a program. If it runs on a computer, it's probably a program.
+
+An **application** is a specific kind of program with a higher purpose: a program designed to be used directly by an end user to accomplish a meaningful task. Applications are built for humans, not just machines. They have a user interface of some kind. They handle errors gracefully instead of crashing with cryptic messages. They persist settings between sessions. A desktop photo editor is an application. Gmail is an application. Polished command-line tools like `git` and `quarto` are applications too, because of the care taken in their design: comprehensive help systems, consistent command structures, meaningful error messages.
+
+An application makes a promise: you can hand this to someone who didn't write it, and they won't immediately regret the experience.
+
+In this book, you will write programs. Lots of them. Scripts that process data, automate workflows, and transform information. These programs will assume you know what you're doing because you wrote them for yourself. But by the end of the book, some of your programs will start becoming applications. Your final project will need documentation and graceful error handling. It will need to work for someone who isn't you.
+
+For the rest of this book, when I say **program**, I mean executable code that accomplishes a computational task. When I say **application**, I mean software deliberately designed for end-user interaction. When I say **script**, I mean a program written in an interpreted language (like Python) that typically runs from the command line.
+
+## Memory and Storage
+
+Here's a truth that will save you hours of confusion: computers are not slow. Accessing data is slow.
+
+When your code takes forever to run or loading a file makes you wonder if your machine froze, the problem is almost never that your CPU can't do math fast enough. Modern processors execute billions of operations per second. The bottleneck is almost always about where the data lives.
+
+Your computer stores data in two fundamentally different places: **memory** (RAM) and **storage** (your disk, whether SSD or hard drive). Understanding the difference between them is essential.
+
+**RAM (Random Access Memory)** is fast, temporary workspace. When programs run, they exist in RAM. When you open a file, its contents get copied into RAM so you can work with them. RAM is quick to access, but it has two important limitations: it's relatively small (typically 8-16 GB on a laptop), and it's volatile, meaning everything in RAM disappears when the power goes off.
+
+**Storage (disk)** is slower, permanent space. Your files live on disk. Your programs are stored on disk. When you save something, you're writing it to disk. Storage is much larger than RAM (hundreds of gigabytes to terabytes) and persists when the power is removed, but accessing it takes dramatically longer, roughly a thousand times slower than accessing RAM.
+
+```{mermaid}
+%%| label: fig-memory-storage
+%%| fig-cap: "RAM is fast but temporary; disk is slow but permanent"
+flowchart LR
+    subgraph Fast["Fast (temporary)"]
+        RAM[RAM / Memory]
+    end
+    subgraph Slow["Slow (permanent)"]
+        Disk[Disk / Storage]
+    end
+    RAM <-->|"~1000x slower"| Disk
+```
+
+This explains several patterns you'll encounter. Loading a large file feels slow because that data must travel from disk into RAM before any work can happen. "Just load the whole file" stops working at scale because datasets can exceed available RAM. The same analysis runs fast on a small sample but crawls on the full dataset because the small sample fits comfortably in memory while the full dataset requires constant disk access.
+
+Every performance problem you encounter can be reframed as a question about where the data lives. Once you internalize this, debugging becomes more systematic.
+
+::: {.callout-note collapse="true" title="Exercise: RAM vs. Disk Performance"}
+You're analyzing sales data. When you load a 50 MB CSV file into memory, the operation takes about 2 seconds. When you load a 5 GB file, it takes over 3 minutes. The file is 100 times larger but the loading time is 90 times longer. Why isn't the time proportional to the file size? What's causing the additional slowdown?
+:::
+
+::: {.callout-tip collapse="true" title="Solution"}
+Once the file size exceeds available RAM, the operating system starts using disk space as overflow memory (swapping). The first 50 MB fits in RAM, but the 5 GB file requires constant disk access to move data in and out of memory. Since disk is approximately 1000x slower than RAM, operations that trigger swapping become dramatically slower. The time is no longer proportional to file size, it depends on how much swapping occurs.
+:::
+
+
+### When Memory Fills Up
+
+RAM is a finite workspace. Fill it up and your computer has no room to operate. When this happens, your operating system might start using disk space as overflow memory, a technique called "swapping." This keeps things running but at a severe performance cost. Your program might also crash outright with an "out of memory" error, which is the computer protecting itself by refusing to continue.
+
+A few things students routinely misunderstand: closing a program frees memory (when you quit an application, the operating system reclaims whatever RAM it was using). Restarting fixes "mysterious" issues (many strange behaviors result from accumulated state in memory; restarting clears the slate). Large files don't shrink when loaded (a 1GB file on disk becomes roughly 1GB of data in memory, often more).
+
+::: {.callout-note collapse="true" title="Exercise: Predicting Memory Behavior"}
+Your computer has 16 GB of RAM. You're running five applications: a web browser using 4 GB, an Excel spreadsheet using 2 GB, a Python script processing data using 3 GB, Slack using 1 GB, and Zed using 500 MB. You try to open another large data file that requires 8 GB to load. What will happen, and why? What options do you have to complete your task?
+:::
+
+::: {.callout-tip collapse="true" title="Solution"}
+The total in-use memory (4 + 2 + 3 + 1 + 0.5 = 10.5 GB) leaves only 5.5 GB free, but the file needs 8 GB. The operating system will start swapping, moving some data from RAM to disk. This will drastically slow down all running applications because they'll constantly wait for swaps. You could: 1) close some applications to free RAM, 2) restart the computer to clear accumulated state and free memory, 3) process the file in chunks instead of loading it all at once, or 4) use a tool designed for large data (like DuckDB) that doesn't load everything into RAM.
+:::
+
+
+### Observing What's Running
+
+Every operating system provides tools to see what processes are running and how much memory they're consuming. On Windows, Task Manager (Ctrl+Shift+Esc) shows this information. On macOS, Activity Monitor (in Applications → Utilities) provides similar details.
+
+Learning to use these tools helps you understand what your computer is actually doing. When something runs slowly, check whether a process is consuming all available CPU or memory. When your computer feels sluggish, see what's running in the background. A dozen browser tabs can consume gigabytes of RAM. The process view reveals activity that graphical interfaces often hide.
+
+## Files: On Disk and In Memory
+
+You've been working with files your entire life, but the way files behave when you're programming differs from what you're used to with apps like Google Docs or Microsoft Word. Understanding this difference now will prevent significant confusion later.
+
+### The Two Lives of a File
+
+Every file you work with has two potential representations: its permanent form on disk and its temporary form in memory when a program opens it.
+
+When a file sits on your disk unopened, it's just a sequence of bytes stored magnetically or electronically. It exists independently of any program. You can copy it, move it, delete it, or leave it alone for years. The file persists whether your computer is on or off.
+
+When you open that file in a program, something important happens: the program reads the bytes from disk and creates a *copy* in memory. This in-memory copy is what you actually see and edit. The original file on disk remains unchanged until you explicitly save.
+
+Think of it like a library book. The book on the shelf (disk) is the permanent copy. When you check it out and start taking notes in a notebook (memory), you're working with your own copy. The library book doesn't change until you somehow transfer your notes back to it.
+
+### Why This Matters: The Save Operation
+
+When you click "Save" or press Ctrl+S (Cmd+S on Mac), you're telling the program to write the in-memory version back to disk, replacing the old version. Until you save, your changes exist only in RAM. This has consequences:
+
+If your computer loses power before you save, your changes vanish. They existed only in volatile memory, which clears when power disappears.
+
+If you close the program without saving, your changes vanish. The program discards the in-memory copy.
+
+If you open the same file in two different programs simultaneously, each program has its own in-memory copy. They can diverge, and whoever saves last "wins."
+
+### The Autosave Generation
+
+If you've grown up with Google Docs, iCloud, or OneDrive, this might feel alien. Modern productivity apps continuously sync your work to the cloud. There's no "save" button because saving happens automatically in the background. You've never experienced losing work to an unsaved document because that failure mode has been designed away.
+
+This is genuinely good design for documents. A half-finished paragraph is still a readable paragraph. Constant automatic saving protects users from data loss with essentially no downside.
+
+But code is different. A half-finished function is a syntax error. A partially modified data pipeline produces wrong results or crashes. Code exists in one of two states: working or broken. There's no meaningful in-between.
+
+This is why code editors traditionally require manual saves. The act of saving is a commitment: "This version is complete enough to keep." You might save frequently while working, but each save is a deliberate choice rather than an automatic background process. You're not just preserving text; you're check-pointing a system that must maintain internal consistency.
+
+### The In-Memory Editing Model
+
+Let's trace exactly what happens when you edit a file in a text editor like Zed.
+
+You open `script.py`. Zed reads the file from disk into memory. Your screen now shows the in-memory representation.
+
+You type some code. Each keystroke modifies the in-memory copy. The file on disk hasn't changed at all. If someone else opened the same file right now, they'd see the old version.
+
+You notice Zed shows a dot or indicator next to the filename. This signals unsaved changes, that the in-memory version differs from the disk version.
+
+You press Cmd+S (or Ctrl+S). Zed writes the in-memory contents to disk, replacing the old file. The unsaved indicator disappears. The disk and memory versions now match.
+
+You close Zed. The in-memory copy is discarded. But that's fine because you saved, so the disk version contains all your work.
+
+This model, where explicit saves checkpoint your work, feeds directly into version control. Git doesn't track every keystroke; it tracks deliberate commits that you choose to make. Understanding that "save" is an intentional act prepares you for understanding that "commit" is an even more intentional act. We'll explore this connection in detail in @sec-git.
+
+::: {.callout-note collapse="true" title="Exercise: The Two Lives of a File"}
+You're editing a Python script in Zed. You make several changes, but before saving, your power cuts out unexpectedly and your computer shuts down. When you restart and reopen Zed, the script is back to its original version. Explain why those changes are lost using the concepts of disk and memory.
+:::
+
+::: {.callout-tip collapse="true" title="Solution"}
+The edits only existed in Zed's memory (RAM), which is volatile. They never made it to disk because you hadn't saved yet. When power was lost, RAM was cleared completely, along with your unsaved work. The disk version remained unchanged throughout. This is why manual save is crucial for code: you're explicitly checkpointing a version to the permanent storage, protecting against power loss and accidental closures.
+:::
+
+
+## Text Editors
+
+To write code, you need a text editor. This is different from a word processor like Microsoft Word or Google Docs.
+
+A **word processor** works with rich text: text with formatting attached like bold, italics, fonts, and colors. When you see styled text on screen, you're looking at rich text. Word processors embed formatting codes in your document, codes that are invisible to you but present in the file.
+
+A **text editor** works with plain text: just characters with no formatting information. What you see is exactly what's in the file. No hidden codes, no embedded styles.
+
+Code must be plain text. When Python reads your script, it expects exactly the characters you wrote. Hidden formatting codes would cause syntax errors. This is why you can't write code in Word, even if you turn off all visible formatting, the file format itself embeds information that confuses programming languages.
+
+### Using Zed
+
+For this book, we'll use **Zed**, a modern text editor designed for professional programming work (see @sec-zed-config for installation and features). Zed provides syntax highlighting, auto-completion, an integrated terminal, and unsaved change indicators. When I refer to "the command line" in later chapters, you can use Zed's integrated terminal instead of a separate terminal window.
+
+## Package Managers
+
+When you install an app on your phone, you open the App Store or Google Play, tap a button, and the app appears ready to use. You never think about where the files go or what other software the app might need.
+
+A **package manager** brings this convenience to developer tools on your computer. It handles installing, upgrading, and uninstalling software packages. Rather than visiting websites and clicking through setup wizards, you tell the package manager what you want and it takes care of the rest.
+
+Package managers also handle **dependencies**: other tools and libraries that a piece of software needs to function. If you install a tool that requires three other components, the package manager automatically installs those prerequisites in the correct order.
+
+For **Windows**, use **WinGet** (see @sec-winget-config). For **macOS**, use **Homebrew** (see @sec-brew-config). Throughout this book, when we introduce new tools, I'll provide package manager commands as the recommended installation method. Getting comfortable with your package manager early makes everything else smoother.
+
+## Summary
+
+This chapter established the mental models you need to reason about computational systems.
+
+Programs are executable instructions; applications are programs designed for end users with thoughtful interfaces and error handling. Most of your bookwork will produce programs; your final project should aspire toward being an application.
+
+Memory (RAM) is fast, temporary workspace where programs run and files are edited. Storage (disk) is slower, permanent space where files live. The distinction between RAM and disk explains why loading large files takes time and why unsaved work can be lost. Every performance problem is ultimately a question about where the data lives.
+
+Files exist in two forms: permanently on disk and temporarily in memory when opened by a program. Editing happens to the in-memory copy; saving writes that copy back to disk. Unlike autosaving productivity apps, code editors require manual saves because code must maintain consistency, a half-finished function is a syntax error. This deliberate checkpoint model prepares you for version control.
+
+Text editors work with plain text; word processors embed hidden formatting. Code must be plain text, which is why you need a proper text editor like Zed. Package managers (WinGet on Windows, Homebrew on macOS) simplify installing and managing the developer tools you'll use throughout this book.
+
+## Glossary
+
+**Application**
+: A program designed for direct end-user interaction, with a thoughtful interface, error handling, and documentation.
+
+**Dependency**
+: Software that another piece of software requires to function. Package managers automatically install dependencies.
+
+**Disk (Storage)**
+: Permanent data storage that persists when power is removed. Slower than RAM but much larger and non-volatile.
+
+**Memory (RAM)**
+: Random Access Memory; fast, temporary workspace where programs run and data is actively processed. Contents are lost when power is removed.
+
+**Package manager**
+: A tool that automates installing, updating, and removing software packages, handling dependencies automatically.
+
+**Plain text**
+: Text without any formatting codes or styling information. What you see is exactly what's in the file. Code must be plain text.
+
+**Process**
+: A running instance of a program, with its own memory allocation and state.
+
+**Program**
+: A set of instructions written for a computer to execute. The fundamental unit of executable software.
+
+**Rich text**
+: Text with formatting information attached (bold, fonts, styles). Word processors work with rich text.
+
+**Save**
+: The operation of writing the in-memory version of a file back to disk, replacing the previous disk version.
+
+**Script**
+: A program written in an interpreted language (like Python) that runs through an interpreter rather than being compiled to machine code.
+
+**Syntax highlighting**
+: A text editor feature that displays different parts of code in different colors based on their grammatical role.
+
+**Text editor**
+: A program for creating and modifying plain text files. Essential for writing code.
+
+**Volatile**
+: Memory that loses its contents when power is removed. RAM is volatile; disk storage is not.
+
+**Word processor**
+: A program for creating documents with rich text formatting, like Microsoft Word. Not suitable for writing code.
+
+## Exercises
+
+### Question 1.1
+What is the primary difference between a **program** and an **application**?
+
+A) Programs run faster than applications  
+B) Applications are designed for end-user interaction with thoughtful interfaces   
+C) Programs can only run on servers  
+D) Applications cannot be run from the command line  
+
+### Question 1.2
+Which of the following is TRUE about RAM (memory)?
+
+A) RAM retains data when the computer is powered off  
+B) RAM is slower to access than disk storage  
+C) RAM is where programs run and files are actively edited   
+D) RAM typically has more capacity than disk storage  
+
+### Question 1.3
+Why does loading a large file feel slow?
+
+A) The CPU cannot process the file fast enough  
+B) The file must be copied from disk into RAM before work can begin   
+C) Large files are always compressed and need decompression  
+D) The operating system limits file access speed  
+
+### Question 1.4
+What happens to unsaved changes in a text editor if your computer loses power?
+
+A) They are automatically recovered from the cloud  
+B) They are saved to a temporary backup file  
+C) They are lost because they only existed in volatile RAM   
+D) They are stored in the CPU cache  
+
+### Question 1.5
+Why can't you write code in Microsoft Word?
+
+A) Word doesn't support typing special characters  
+B) Word embeds hidden formatting codes that confuse programming languages   
+C) Word files are too large for code  
+D) Word cannot save files with .py extensions  
+
+### Question 1.6
+What does "volatile" mean when describing computer memory?
+
+A) The memory is dangerous and may cause fires  
+B) The memory contents are lost when power is removed   
+C) The memory cannot store large files  
+D) The memory changes unpredictably during use  
+
+### Question 1.7
+Which statement about package managers is TRUE?
+
+A) Package managers only work on Linux systems  
+B) Package managers automatically handle dependencies when installing software   
+C) Package managers require an internet connection for all operations  
+D) Package managers replace the need for text editors  
+
+### Question 1.8
+A **script** is best described as:
+
+A) A compiled program that runs directly on hardware  
+B) A program written in an interpreted language like Python   
+C) A graphical application with a user interface  
+D) A document containing formatting instructions  
+
+### Question 1.9
+What does syntax highlighting in a text editor do?
+
+A) Automatically corrects spelling errors in code  
+B) Colors different parts of code based on their grammatical role   
+C) Highlights lines that contain errors  
+D) Makes all text the same color for consistency  
+
+### Question 1.10
+True or False: Closing a program frees the RAM that program was using.
+
+A) True   
+B) False  

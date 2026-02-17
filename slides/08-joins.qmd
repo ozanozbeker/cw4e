@@ -1,0 +1,488 @@
+---
+title: "Joining Tables"
+subtitle: "Chapter 8 · Computational Workflows for Engineers"
+format:
+  revealjs:
+    theme: default
+    highlight-style: nord
+    code-line-numbers: false
+    slide-number: true
+    progress: true
+    hash-type: number
+    footer: "IENG 331 · Computational Workflows for Engineers"
+    transition: fade
+    transition-speed: fast
+    embed-resources: true
+    title-slide-attributes:
+      data-background-color: "#2E3440"
+---
+
+## Where We Are
+
+Last class: you mastered single-table queries. SELECT, WHERE, ORDER BY, aggregates, NULL handling.
+
+Today: **multiple tables**. Most real business questions require data from across your database. We'll learn why, and how to ask for it.
+
+::: {.notes}
+Frame the progression: Chapter 7 was "how to query one table precisely." Chapter 8 is "how to combine tables to answer questions that require data from multiple sources." By the end, students should be able to write queries that traverse the Northwind supply chain: customers → orders → order details → products → suppliers.
+:::
+
+---
+
+## Why Data Isn't in One Table
+
+**Bad idea:** One giant table with everything
+
+| order_id | customer_name | customer_phone | customer_country | product_name | supplier_name | ... |
+|---|---|---|---|---|---|---|
+| 1 | ACME Corp | 555-1234 | USA | Widget A | Supplier X | |
+| 1 | ACME Corp | 555-1234 | USA | Widget B | Supplier X | |
+| 1 | ACME Corp | 555-1234 | USA | Gadget C | Supplier Y | |
+| 2 | ACME Corp | 555-1234 | USA | Widget A | Supplier X | |
+
+Customer info repeated in every row. If ACME moves, you update hundreds of rows. Error risk everywhere.
+
+::: {.notes}
+Show the problem visually. Point out: ACME's details are repeated, wasting storage. If the phone number changes, you must update it in all 4 rows. If you miss one, your database disagrees with itself. This is data redundancy, and it's the root problem that relational databases solve. Ask: "What if ACME has 1,000 orders? How many times is their info repeated?" (1,000 times.)
+:::
+
+---
+
+## The Solution: Normalization
+
+**Split into separate tables:**
+
+- `customers` — one row per customer (ACME Corp once)
+- `orders` — one row per order
+- `order_details` — one row per product in an order
+- `products` — one row per product
+- `suppliers` — one row per supplier
+
+Then **connect them** with foreign keys:
+
+- `orders.customer_id` → `customers.customer_id`
+- `order_details.product_id` → `products.product_id`
+- `products.supplier_id` → `suppliers.supplier_id`
+
+::: {.notes}
+This is the principle of normalization: organize data into separate tables and connect them with keys. No redundancy, easier to update, consistent across your database. Emphasize: this is why we have multiple tables. The trade-off is that answering multi-entity questions requires joining tables.
+:::
+
+---
+
+## Keys: The Links Between Tables
+
+**Primary Key** — Uniquely identifies each row in a table
+
+```{.text filename="example"}
+products.product_id = 1, 2, 3, ... (never duplicated)
+```
+
+**Foreign Key** — References a primary key in another table
+
+```{.text filename="example"}
+products.supplier_id references suppliers.supplier_id
+```
+
+This connection is how you say "Product 1 is supplied by Supplier 3."
+
+::: {.notes}
+LIVE DEMO: Run `DESCRIBE products;` and point out `product_id` (primary key, unique identifier) and `supplier_id` (foreign key, reference to suppliers table). Then run `DESCRIBE suppliers;` and show `supplier_id` as the primary key there. The idea: product_id is the "address" of that product; supplier_id is the "address" of its supplier.
+:::
+
+---
+
+## Relationship Types {.smaller}
+
+**One-to-Many** (most common)
+
+- One supplier has many products
+- One customer has many orders
+- The "one" side has the primary key; the "many" side has the foreign key
+
+**One-to-One** (rare)
+
+- Each employee has exactly one personnel file
+- Split for security or organizational reasons
+
+**Many-to-Many** (requires junction table)
+
+- One order has many products; one product appears in many orders
+- Can't represent with a single foreign key
+- Solution: `order_details` table with foreign keys to both `orders` and `products`
+
+```
+orders ───┬──> order_details <──┬─── products
+          └────────────────────┘
+```
+
+::: {.notes}
+Emphasize many-to-many. This is the conceptual leap. One product (e.g., Widget A) can appear in order #1, order #5, order #23. One order (#1) can contain Widget A, Widget B, Gadget C. You can't store both in a single foreign key. The junction table (`order_details`) is the solution: each row says "Product X was in Order Y" with a quantity. Ask: "If I want to know what products order #5 contained, which table do I query?" (order_details, then join to products)
+:::
+
+---
+
+## Primary Key Example
+
+The `products` table:
+
+| product_id | product_name | supplier_id | unit_price |
+|---|---|---|---|
+| 1 | Chai | 1 | 18.00 |
+| 2 | Chang | 1 | 19.00 |
+| 3 | Aniseed Syrup | 1 | 10.00 |
+
+`product_id` is the primary key. It's **unique** (no duplicates) and **immutable** (never changes).
+
+::: {.notes}
+LIVE DEMO: Run `SELECT COUNT(DISTINCT product_id), COUNT(*) FROM products;` and show they're the same (every row has a unique product_id). Then run `SELECT COUNT(DISTINCT supplier_id), COUNT(*) FROM products;` and show they're different (many products per supplier).
+:::
+
+---
+
+## Foreign Key Example
+
+Still in `products`:
+
+| product_id | product_name | supplier_id |
+|---|---|---|
+| 1 | Chai | 1 |
+| 2 | Chang | 1 |
+| 3 | Aniseed Syrup | 1 |
+
+The `supplier_id` column is a **foreign key**. It references `supplier_id` in the `suppliers` table.
+
+"Product 1 is supplied by Supplier 1" (Exotic Liquids).
+
+::: {.notes}
+The key insight: `supplier_id` is a pointer. It says "find the supplier with this ID in the suppliers table." This is why we don't repeat the supplier's name, address, country in every product row. We just store the ID, which is tiny, and look up the details when we need them.
+:::
+
+---
+
+## INNER JOIN: The Handshake
+
+```{.sql filename="query.sql"}
+SELECT
+    p.product_name,
+    p.unit_price,
+    s.company_name AS supplier
+FROM products AS p
+INNER JOIN suppliers AS s
+    ON p.supplier_id = s.supplier_id;
+```
+
+For each product, find the supplier where the IDs match. Combine them into one result row.
+
+::: {.notes}
+Introduce the syntax. Point out table aliases (`p` for products, `s` for suppliers) for readability. The ON clause is the join condition: "match on supplier_id." LIVE DEMO: Run this query and show the output. Products with their supplier names.
+:::
+
+---
+
+## How INNER JOIN Works {.smaller}
+
+Think of a **handshake**: every row in the left table extends its hand (the join column), and every row in the right table extends its hand. Only matching pairs combine into a result.
+
+```
+Products                Suppliers
+supplier_id=1  ────────►  supplier_id=1     ✓ Match! Combine
+supplier_id=1  ────────►  supplier_id=1     ✓ Match! Combine
+supplier_id=2  ────────►  supplier_id=2     ✓ Match! Combine
+supplier_id=99 ────────►  (no match)        ✗ Exclude product
+                         supplier_id=5      ✗ Exclude supplier
+```
+
+**Result:** Only rows that match on both sides.
+
+::: {.notes}
+Use the handshake analogy. It's intuitive. Emphasize: INNER JOIN is restrictive. If a product has an invalid supplier_id (99, which doesn't exist), it's *excluded* from the result. Similarly, if a supplier exists but no products reference it, that supplier is excluded. INNER JOIN gives you the intersection: the matching rows.
+:::
+
+---
+
+## INNER JOIN vs. LEFT JOIN
+
+**INNER JOIN** — Only matching rows (handshake)
+
+```{.sql filename="inner"}
+SELECT p.product_name, s.company_name
+FROM products AS p
+INNER JOIN suppliers AS s ON p.supplier_id = s.supplier_id;
+```
+
+Returns products that have valid suppliers.
+
+**LEFT JOIN** — All rows from left table, matches from right
+
+```{.sql filename="left"}
+SELECT p.product_name, s.company_name
+FROM products AS p
+LEFT JOIN suppliers AS s ON p.supplier_id = s.supplier_id;
+```
+
+Returns all products. If no matching supplier, supplier columns are NULL.
+
+::: {.notes}
+The key difference: INNER JOIN excludes non-matching rows; LEFT JOIN keeps them. LEFT JOIN is useful for finding "what didn't match?" If you run LEFT JOIN and see NULL in the supplier columns, that product has a broken reference (invalid supplier_id). LIVE DEMO: Run both queries and show the difference. If all products have valid suppliers, they'll return the same rows. But if there's a product with supplier_id=99 (which doesn't exist), INNER JOIN excludes it, LEFT JOIN includes it with NULL for supplier columns.
+:::
+
+---
+
+## Finding Unmatched Rows
+
+Use **LEFT JOIN + IS NULL** to find broken references:
+
+```{.sql filename="query.sql"}
+SELECT p.product_id, p.product_name
+FROM products AS p
+LEFT JOIN suppliers AS s ON p.supplier_id = s.supplier_id
+WHERE s.supplier_id IS NULL;
+```
+
+Returns products with no valid supplier.
+
+This is the **data quality audit pattern**: find what doesn't match.
+
+::: {.notes}
+This is a common and important pattern. You're looking for orphaned rows: products that reference non-existent suppliers. In a well-designed database, this should return nothing. If it returns rows, you have a referential integrity problem. LIVE DEMO: Run this query on Northwind (should return 0 rows, since Northwind is clean). Then ask: "What would you do if this returned rows?" (Investigate—either the supplier_id is wrong, or the supplier record is missing.)
+:::
+
+---
+
+## Other Join Types
+
+**RIGHT JOIN** — All rows from right table, matches from left
+
+```{.sql filename="right"}
+FROM products RIGHT JOIN suppliers
+```
+
+(Rarely used; just flip the table order instead.)
+
+**FULL OUTER JOIN** — All rows from both tables
+
+```{.sql filename="full"}
+FROM products FULL OUTER JOIN suppliers
+```
+
+(Not supported in all databases; DuckDB supports it.)
+
+**CROSS JOIN** — Cartesian product (every row from left × every row from right)
+
+```{.sql filename="cross"}
+FROM products CROSS JOIN suppliers
+```
+
+(Creates many rows; usually a mistake.)
+
+::: {.notes}
+Brief overview. Most of your work will be INNER and LEFT JOIN. RIGHT JOIN is rarely used because you can just reorder tables. FULL OUTER JOIN is useful when you need all rows from both sides (find non-matching from either direction). CROSS JOIN creates a massive result (products × suppliers). Ask: "If products has 250 rows and suppliers has 30, how many rows does CROSS JOIN return?" (7,500—usually wrong unless you explicitly need that.)
+:::
+
+---
+
+## Join Visualizations {.smaller}
+
+Venn diagrams are **misleading for joins** (they work for set operations, not joins).
+
+Joins operate on **rows and columns**, not abstract sets.
+
+Better mental model: **handshake at a specific column** (the join condition).
+
+:::: {.columns}
+
+::: {.column width="45%"}
+**INNER JOIN**
+
+Both hands match? ✓ Combine.
+
+Only matching pairs in result.
+
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+**LEFT JOIN**
+
+All from left table.
+
+Right side matches if possible.
+
+NULL if no match.
+
+:::
+
+::::
+
+::: {.notes}
+Students often come in with Venn diagram knowledge from other contexts. Warn them: Venn diagrams work for UNION/INTERSECT/EXCEPT (set operations), not for joins. Joins are fundamentally different—they're about combining rows based on a condition, not about set membership. The handshake analogy is much better.
+:::
+
+---
+
+## Prediction Exercise {background-color="#3B4252"}
+
+The `products` table has **250 rows**.
+
+You run:
+
+```{.sql filename="query"}
+SELECT * FROM products
+INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id;
+```
+
+**How many rows in the result?**
+
+A. Exactly 250 rows
+
+B. Fewer than 250 rows
+
+C. More than 250 rows
+
+D. Can't determine without knowing the data
+
+::: {.notes}
+Likely answer is A: exactly 250 rows. In the real Northwind data, every product has a valid supplier_id, so all 250 products match. Each product matches exactly one supplier (many-to-one relationship). Ask: "What if a product had an invalid supplier_id?" (That row would be excluded, result would be < 250.) "What if one supplier supplied multiple products?" (Still 250—you're not changing the number of products, just adding supplier details to each row.) This tests understanding of many-to-one relationships and row multiplication. Follow up: "Now imagine you join orders to order_details. Orders has 10 rows. Order_details has 30 rows. How many result rows?" (30—order_details has one row per product per order, so joining back to orders keeps those 30 rows and just adds order columns.)
+:::
+
+---
+
+## Multi-Table Queries: Building Incrementally
+
+**Question:** "What are the top 5 most expensive products, and which supplier provides each?"
+
+**Step 1:** Get the products
+
+```{.sql filename="step1"}
+SELECT product_id, product_name, unit_price, supplier_id
+FROM products
+ORDER BY unit_price DESC
+LIMIT 5;
+```
+
+::: {.notes}
+LIVE DEMO: Build queries incrementally. Start with the simplest version that answers part of the question. Check the result. Then add the next piece.
+:::
+
+---
+
+## Multi-Table Queries: Add the Join
+
+**Step 2:** Join to suppliers
+
+```{.sql filename="step2"}
+SELECT
+    p.product_id,
+    p.product_name,
+    p.unit_price,
+    s.company_name AS supplier
+FROM products AS p
+INNER JOIN suppliers AS s ON p.supplier_id = s.supplier_id
+ORDER BY p.unit_price DESC
+LIMIT 5;
+```
+
+Done. You've combined two tables to answer the question.
+
+::: {.notes}
+LIVE DEMO: Run this query. Point out: you're now querying across two tables. The result has columns from both products and suppliers. The join condition (ON p.supplier_id = s.supplier_id) is what brings them together.
+:::
+
+---
+
+## Row Multiplication: The Gotcha
+
+**Danger:** Multiple joins can multiply rows unexpectedly.
+
+Example: `orders` (100 rows) → `order_details` (300 rows, since orders have multiple line items).
+
+```{.sql filename="wrong"}
+SELECT * FROM orders
+INNER JOIN order_details ON orders.order_id = order_details.order_id;
+```
+
+Result: **300 rows**, not 100. Each order appears once per line item.
+
+**Check row counts at each step.** This is the most common mistake.
+
+::: {.notes}
+This is critical. Students often write a multi-table query and get 10x the rows they expected. The mistake: they didn't anticipate that joining to a "many" side multiplies rows. LIVE DEMO: Count the rows at each step. `SELECT COUNT(*) FROM orders;` (100). `SELECT COUNT(*) FROM order_details;` (300). Then join them and count (300). It's the one-to-many relationship. Always sanity-check row counts.
+:::
+
+---
+
+## Self-Joins: A Table Joining Itself
+
+Sometimes you need a table to reference itself.
+
+Example: "Which employees report to whom?"
+
+```{.sql filename="query.sql"}
+SELECT
+    e.employee_name,
+    m.employee_name AS manager
+FROM employees AS e
+LEFT JOIN employees AS m ON e.manager_id = m.employee_id;
+```
+
+The `employees` table is aliased as both `e` (employee) and `m` (manager).
+
+::: {.notes}
+This is a more advanced pattern, but it's worth showing. A table can join itself if it has a self-referential foreign key (like manager_id pointing back to employee_id). This might not apply directly to Northwind, but students will encounter it in real work. Emphasize: you use aliases to distinguish the two "versions" of the same table.
+:::
+
+---
+
+## Chaining Joins: Three or More Tables
+
+Build on the pattern you know:
+
+```{.sql filename="query.sql"}
+SELECT
+    o.order_id,
+    c.company_name AS customer,
+    p.product_name,
+    od.quantity
+FROM orders AS o
+INNER JOIN customers AS c ON o.customer_id = c.customer_id
+INNER JOIN order_details AS od ON o.order_id = od.order_id
+INNER JOIN products AS p ON od.product_id = p.product_id;
+```
+
+Start with `orders`. Join to `customers` (who placed the order). Join to `order_details` (what was in the order). Join to `products` (product names).
+
+::: {.notes}
+This is a realistic multi-table query. Walk through it step by step: Start with orders. Add customer details (which customer?). Add order details (which products?). Add product names (what are they called?). LIVE DEMO: Build it up gradually. Run after each join to verify row counts. Ask: "Why do we join order_details twice—once to get the line items, once to get product names?" (Because order_details has product_id, but not product_name. We need products table for that.)
+:::
+
+---
+
+## Chapter 8 Recap {.smaller}
+
+- Data is **split across tables** to eliminate redundancy and maintain consistency
+- **Primary keys** uniquely identify rows; **foreign keys** reference other tables
+- **One-to-many** relationships are most common (one supplier, many products)
+- **Many-to-many** needs a **junction table** (order_details connects orders to products)
+- **INNER JOIN** returns only matching rows (handshake)
+- **LEFT JOIN** returns all from left side, matches from right (or NULL)
+- **LEFT JOIN + IS NULL** finds unmatched rows (data quality audits)
+- **Check row counts at each step**—joins can multiply rows unexpectedly
+- Build multi-table queries **incrementally**: get one table working, then join the next
+- **Joins are not set operations** (Venn diagrams mislead; think handshakes instead)
+
+::: {.notes}
+Recap the core concepts. Ask: "What's the most important thing to remember about joins?" (Probably the row multiplication gotcha, or the LEFT JOIN + IS NULL pattern.) Foreshadow next class: "Now that you can join tables, you can answer complex business questions. Next class we'll add aggregation—GROUP BY, HAVING—so you can summarize across tables. That's where analytics really happens."
+:::
+
+---
+
+## Next Time {background-color="#3B4252"}
+
+::: {.r-fit-text}
+Chapter 9: Analytics & Aggregation
+:::
+
+GROUP BY, HAVING, window functions. Turning raw data into insights.

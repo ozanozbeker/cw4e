@@ -1,0 +1,528 @@
+---
+title: "Querying Data"
+subtitle: "Chapter 7 · Computational Workflows for Engineers"
+format:
+  revealjs:
+    theme: default
+    highlight-style: nord
+    code-line-numbers: false
+    slide-number: true
+    progress: true
+    hash-type: number
+    footer: "IENG 331 · Computational Workflows for Engineers"
+    transition: fade
+    transition-speed: fast
+    embed-resources: true
+    title-slide-attributes:
+      data-background-color: "#2E3440"
+---
+
+## Where We Are
+
+Last class: DuckDB is installed, Northwind is loaded, you've run `SHOW TABLES` and peeked at a few rows.
+
+Today: **precision**. How to write SQL that answers real questions: "Which products are under $20?" "What's our total inventory value?" "Which orders shipped late?"
+
+::: {.notes}
+Frame the progression: Chapter 6 was "here's the database." Chapter 7 is "how to ask it questions precisely." By the end of this class, students should be able to translate a business question into a SQL query. The core concepts: SELECT (choose columns), WHERE (filter rows), ORDER BY (sort), LIMIT (cap output), aggregates (COUNT, SUM, AVG), and NULL handling (the gotcha).
+:::
+
+---
+
+## SQL is Declarative, Not Imperative
+
+**Imperative** (Python):
+```{.python filename="loop.py"}
+for product in products:
+    if product.price < 20:
+        results.append(product)
+```
+You're telling the computer *step by step* how to do it.
+
+**Declarative** (SQL):
+```{.sql filename="query.sql"}
+SELECT * FROM products WHERE unit_price < 20;
+```
+You're saying *what* you want, and the database figures out *how*.
+
+::: {.notes}
+This is a fundamental shift in thinking. Students coming from Python are used to writing loops. SQL is different: you describe the end state, not the path to get there. The database optimizer might use an index, scan the table, or employ some other strategy. You don't specify—you just describe what you want. Ask: "If you want the first 10 products under $20, do you loop through and count? Or just describe the result?" (Describe it—the database handles it.)
+:::
+
+---
+
+## The SQL Query Structure
+
+Written order:
+```{.sql filename="structure"}
+SELECT columns
+FROM table
+WHERE conditions
+ORDER BY columns
+LIMIT count
+```
+
+. . .
+
+But the database reads it differently...
+
+::: {.notes}
+Introduce the concept. Don't explain the execution order yet; that's the next slide. Just show the structure and hint that the order matters.
+:::
+
+---
+
+## Written Order vs. Execution Order {.smaller}
+
+The order you write SQL is **not** the order the database executes it.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**You Write:**
+
+1. SELECT
+2. FROM
+3. WHERE
+4. ORDER BY
+5. LIMIT
+
+:::
+
+::: {.column width="50%"}
+**Database Executes:**
+
+1. FROM (load table)
+2. WHERE (filter rows)
+3. SELECT (choose columns)
+4. ORDER BY (sort)
+5. LIMIT (cap output)
+
+:::
+
+::::
+
+This explains most "weird" SQL behaviors. When a query doesn't work the way you expect, execution order is usually why.
+
+::: {.notes}
+This is the key insight of the chapter. Write it on a whiteboard or emphasize it strongly. Students will encounter queries that don't work, and the execution order is the explanation. Example: "Why can't I use a column alias in the WHERE clause?" Because WHERE runs before SELECT—the alias doesn't exist yet. This will save enormous debugging time later.
+:::
+
+---
+
+## Prediction Exercise {background-color="#3B4252"}
+
+You write:
+
+```{.sql filename="attempt"}
+SELECT product_name AS product
+FROM products
+WHERE product = 'Chai';
+```
+
+**What happens?**
+
+A. Returns the product named 'Chai'
+
+B. Error: "product" column doesn't exist
+
+C. Returns everything (WHERE ignored)
+
+D. Error: Syntax is invalid
+
+::: {.notes}
+Let them discuss. Answer is B. The WHERE clause runs before SELECT, so the alias `product` doesn't exist yet. The database is still looking for a column literally named `product`, which doesn't exist. This reinforces execution order. Ask the follow-up: "How would you fix this?" (Use `product_name` in the WHERE clause, not the alias.)
+:::
+
+---
+
+## SELECT and FROM: Choosing Columns
+
+```{.sql filename="query.sql"}
+SELECT product_name, unit_price, units_in_stock
+FROM products;
+```
+
+You're choosing *which* columns to return.
+
+```{.sql filename="shorthand"}
+SELECT * FROM products;
+```
+
+The `*` means "all columns." Useful for exploration, but in production code, always name columns explicitly.
+
+::: {.notes}
+LIVE DEMO: Open DuckDB and run `SELECT product_name, unit_price FROM products LIMIT 10;`. Then run `SELECT * FROM products LIMIT 3;` and point out how much more data is returned. Emphasize: `SELECT *` is fine for learning; in scripts, specify columns so readers understand what data matters.
+:::
+
+---
+
+## Column Aliases
+
+Rename columns for readability:
+
+```{.sql filename="query.sql"}
+SELECT
+    product_name AS product,
+    unit_price AS price_usd,
+    units_in_stock AS inventory
+FROM products;
+```
+
+The aliases appear in the output but don't change the underlying table.
+
+::: {.notes}
+LIVE DEMO: Run the query above and show how the output columns are renamed. Ask: "Why would you rename a cryptic column like `mfg_dtm` to `manufacture_date`?" (Clarity.) The key: aliases are cosmetic. They don't modify data; they just relabel it for display.
+:::
+
+---
+
+## Computing New Columns
+
+Create columns on the fly:
+
+```{.sql filename="query.sql"}
+SELECT
+    product_name,
+    unit_price,
+    units_in_stock,
+    unit_price * units_in_stock AS inventory_value
+FROM products;
+```
+
+`inventory_value` doesn't exist in the table. It's computed for each row.
+
+::: {.notes}
+LIVE DEMO: Run this query and show the new column. Point out: we didn't change the `products` table. The computation happens only in the output. This is SQL's strength: derive information without modifying source data. Ask: "How would you compute profit margin if you knew cost and sell price?" (sell_price - cost AS margin, or (sell_price - cost) / sell_price AS margin_pct)
+:::
+
+---
+
+## DISTINCT: Unique Values
+
+```{.sql filename="query.sql"}
+SELECT DISTINCT country
+FROM suppliers;
+```
+
+Returns each country once, even if many suppliers are there.
+
+```{.sql filename="multiple.sql"}
+SELECT DISTINCT category_id, country
+FROM products;
+```
+
+Returns unique category-country combinations.
+
+::: {.notes}
+LIVE DEMO: Run `SELECT DISTINCT country FROM suppliers;` and show the output (maybe 20-30 countries). Then run the same query *without* DISTINCT to show all suppliers, revealing duplicates. Then explain the second example: `DISTINCT` applies to the entire row, not individual columns.
+:::
+
+---
+
+## WHERE: Filtering Rows
+
+`SELECT` chooses columns. `WHERE` chooses rows.
+
+```{.sql filename="query.sql"}
+SELECT product_name, unit_price
+FROM products
+WHERE unit_price > 50;
+```
+
+Only products over $50 appear.
+
+Comparisons: `=`, `<>` (not equal), `>`, `<`, `>=`, `<=`
+
+::: {.notes}
+LIVE DEMO: Run a few WHERE examples. Start with `WHERE unit_price > 50`, then `WHERE units_in_stock = 0` (finding products out of stock). Show that the WHERE condition filters *before* SELECT runs (execution order reminder). Ask: "What would you filter to find all products supplied by supplier_id 5?" (WHERE supplier_id = 5)
+:::
+
+---
+
+## Multiple Conditions: AND / OR
+
+**AND** — both conditions must be true:
+
+```{.sql filename="query.sql"}
+SELECT product_name, unit_price
+FROM products
+WHERE unit_price > 10 AND unit_price < 50;
+```
+
+**OR** — either condition is true:
+
+```{.sql filename="query.sql"}
+SELECT product_name
+FROM products
+WHERE category_id = 1 OR category_id = 3;
+```
+
+::: {.notes}
+LIVE DEMO: Run the AND query (products between $10 and $50). Then run the OR query (products in categories 1 or 3). Show how filtering changes the row count. Ask: "What would you write to find products over $50 *and* low on stock (< 20 units)?" (WHERE unit_price > 50 AND units_in_stock < 20)
+:::
+
+---
+
+## IN and BETWEEN Shortcuts
+
+**IN** — match any value in a list:
+
+```{.sql filename="query.sql"}
+WHERE category_id IN (1, 3, 5)
+```
+
+Equivalent to `category_id = 1 OR category_id = 3 OR category_id = 5`
+
+**BETWEEN** — range (inclusive):
+
+```{.sql filename="query.sql"}
+WHERE unit_price BETWEEN 10 AND 50
+```
+
+Equivalent to `unit_price >= 10 AND unit_price <= 50`
+
+::: {.notes}
+LIVE DEMO: Show both forms. Emphasize: IN and BETWEEN are shortcuts for readability. `IN` is cleaner than a long list of ORs. BETWEEN is cleaner than two AND conditions. Show a real example: `WHERE units_in_stock BETWEEN 0 AND 20` (products running low).
+:::
+
+---
+
+## LIKE: Pattern Matching
+
+Match text patterns:
+
+```{.sql filename="query.sql"}
+WHERE product_name LIKE '%Syrup'
+```
+
+`%` = "any characters". Finds product names ending in "Syrup".
+
+```{.sql filename="examples"}
+LIKE 'Chai%'       — starts with "Chai"
+LIKE '%ange%'      — contains "ange"
+LIKE '%'           — everything
+```
+
+::: {.notes}
+LIVE DEMO: Run `SELECT DISTINCT product_name FROM products WHERE product_name LIKE '%drink%' LIMIT 10;` (or similar pattern). Show how LIKE searches text. Emphasize: wildcards (`%`) are powerful but can be slow on large datasets. Case sensitivity varies by database.
+:::
+
+---
+
+## NULL: The Three-Valued Logic Gotcha
+
+**NULL** is "unknown" or "missing," not zero or empty string.
+
+```{.sql filename="query.sql"}
+SELECT * FROM products
+WHERE discontinued_date = NULL;
+```
+
+**This returns nothing!** NULL doesn't equal NULL.
+
+Use **IS NULL**:
+
+```{.sql filename="correct"}
+SELECT * FROM products
+WHERE discontinued_date IS NULL;
+```
+
+::: {.notes}
+This is the gotcha moment. Many students will write `= NULL` and get confused. The rule: NULL comparisons always return UNKNOWN, not TRUE or FALSE. You must use `IS NULL` or `IS NOT NULL`. LIVE DEMO: Show both queries. First returns 0 rows (wrong). Second returns active products (correct). Emphasize: this isn't a quirk; it's mathematically sound. "What is NULL + 5?" (Unknown, so NULL). "Is NULL equal to NULL?" (Unknown, not TRUE).
+:::
+
+---
+
+## NULL Propagation {.smaller}
+
+NULL propagates through calculations:
+
+| Expression | Result |
+|---|---|
+| `NULL + 5` | NULL |
+| `NULL * 0` | NULL |
+| `NULL AND TRUE` | NULL |
+| `NULL OR TRUE` | TRUE (special case) |
+
+**COALESCE** replaces NULL with a default:
+
+```{.sql filename="query.sql"}
+SELECT
+    product_name,
+    COALESCE(discontinued_date, 'Active') AS status
+FROM products;
+```
+
+If `discontinued_date` is NULL, shows "Active"; otherwise shows the date.
+
+::: {.notes}
+LIVE DEMO: Run the COALESCE query. Show how NULL values are replaced. Emphasize the logic: if the product was discontinued, we have a date; if not, it's NULL, so show "Active" instead. This is common in analytics: replacing missing values with meaningful labels.
+:::
+
+---
+
+## ORDER BY: Sorting Results
+
+Sort by one or more columns:
+
+```{.sql filename="query.sql"}
+SELECT product_name, unit_price
+FROM products
+ORDER BY unit_price DESC;
+```
+
+`DESC` = descending (high to low). Default is `ASC` (ascending).
+
+```{.sql filename="multiple"}
+ORDER BY category_id, unit_price DESC
+```
+
+Sort by category first, then by price descending within each category.
+
+::: {.notes}
+LIVE DEMO: Run `SELECT product_name, unit_price FROM products ORDER BY unit_price DESC LIMIT 5;` (most expensive products). Then run `ORDER BY unit_price ASC` (cheapest). Emphasize: multiple columns sort like Excel—primary, then secondary. Ask: "How would you find the newest orders?" (ORDER BY order_date DESC)
+:::
+
+---
+
+## LIMIT: Capping Results
+
+```{.sql filename="query.sql"}
+SELECT product_name, unit_price
+FROM products
+ORDER BY unit_price DESC
+LIMIT 10;
+```
+
+Returns only the top 10 rows (after sorting).
+
+```{.sql filename="offset"}
+LIMIT 10 OFFSET 20
+```
+
+Skips the first 20, then returns 10 (rows 21-30). Useful for pagination.
+
+::: {.notes}
+LIVE DEMO: Show `LIMIT 5` (top 5 expensive products). Then show `LIMIT 10 OFFSET 5` (skip the first 5, then show the next 10). Emphasize: LIMIT is crucial for performance when exploring large datasets. Don't SELECT everything; peek at rows first with LIMIT.
+:::
+
+---
+
+## Aggregate Functions
+
+Functions that summarize data:
+
+| Function | Purpose |
+|---|---|
+| `COUNT(*)` | Number of rows |
+| `COUNT(column)` | Non-NULL values in column |
+| `SUM(column)` | Total of a column |
+| `AVG(column)` | Average |
+| `MIN(column)` | Smallest value |
+| `MAX(column)` | Largest value |
+
+::: {.notes}
+These are the backbone of analytical queries. Show examples of each. LIVE DEMO: `SELECT COUNT(*) FROM products;` (how many products). `SELECT SUM(units_in_stock) FROM products;` (total inventory). `SELECT AVG(unit_price) FROM products;` (average price). Ask: "What would `SELECT MAX(unit_price), MIN(unit_price) FROM products;` return?" (Most and least expensive products)
+:::
+
+---
+
+## Prediction Exercise {background-color="#3B4252"}
+
+```{.sql filename="query"}
+SELECT
+    COUNT(*) AS total_orders,
+    SUM(units_in_stock) AS total_inventory,
+    AVG(unit_price) AS avg_price
+FROM products
+WHERE unit_price > 25;
+```
+
+**How many rows does this return?**
+
+A. One row (summary stats)
+
+B. Multiple rows (one per product)
+
+C. Zero rows (aggregates need grouping)
+
+D. Error: can't mix aggregates with WHERE
+
+::: {.notes}
+Answer is A. Aggregates without GROUP BY always return a single summary row. This is often confusing to new SQL users. If you want stats *per category*, you'd need GROUP BY. Ask the follow-up: "What if I wanted the average price per category?" (Add GROUP BY category_id to the query—we'll cover this next class.)
+:::
+
+---
+
+## CASE Expressions: Conditional Logic
+
+Create columns based on conditions:
+
+```{.sql filename="query.sql"}
+SELECT
+    product_name,
+    unit_price,
+    CASE
+        WHEN unit_price < 10 THEN 'Budget'
+        WHEN unit_price < 50 THEN 'Standard'
+        ELSE 'Premium'
+    END AS price_tier
+FROM products;
+```
+
+Evaluates conditions top-to-bottom and returns the matching result.
+
+::: {.notes}
+LIVE DEMO: Run the query above. Show how products are categorized into tiers. Emphasize: CASE is the SQL equivalent of if-then-else. You can nest them, use multiple columns, whatever. Ask: "How would you flag products that are both expensive (> $50) and low on stock (< 10 units)?" (Use nested AND in the WHEN clause.)
+:::
+
+---
+
+## Set Operations: UNION, INTERSECT, EXCEPT
+
+Combine results from multiple queries.
+
+**UNION** — all rows from both queries (unique):
+
+```{.sql filename="query.sql"}
+SELECT product_name FROM products WHERE discontinued IS NOT NULL
+UNION
+SELECT product_name FROM products WHERE units_in_stock = 0;
+```
+
+Returns discontinued products and out-of-stock products (no duplicates).
+
+**UNION ALL** — all rows (including duplicates) ✓ Usually what you want.
+
+::: {.notes}
+Set operations are less common in day-to-day work but powerful for combining queries. UNION is the most used. Explain: if you need to combine two different result sets (discontinued products from one table, out-of-stock from a different condition), UNION merges them. INTERSECT (rows in both), EXCEPT (rows in first but not second). LIVE DEMO if time: show a simple UNION ALL query.
+:::
+
+---
+
+## Chapter 7 Recap {.smaller}
+
+- **SQL is declarative**: you describe *what*, not *how*
+- **Execution order** (FROM → WHERE → SELECT → ORDER BY → LIMIT) explains confusing behaviors
+- **SELECT** chooses columns; **WHERE** filters rows (keep in order!)
+- **NULL** requires special handling: use `IS NULL`, `IS NOT NULL`, `COALESCE`
+- **ORDER BY** sorts; **LIMIT** caps output
+- **Aggregates** (COUNT, SUM, AVG, MIN, MAX) summarize data
+- **CASE** adds conditional logic to results
+- **Set operations** (UNION, INTERSECT, EXCEPT) combine queries
+- Write queries with one clause at a time; build incrementally
+
+::: {.notes}
+Quick recap. Ask: "What's the one thing that was most surprising or confusing?" Likely answers: NULL behavior, execution order, or the ability to compute new columns. Those are the key insights. Foreshadow: "Next class we answer questions that require data from multiple tables. That's where joins come in—combining a product table with a supplier table, an order table with a customer table. Everything you learned today still applies; we're just adding the ability to bring tables together."
+:::
+
+---
+
+## Next Time {background-color="#3B4252"}
+
+::: {.r-fit-text}
+Chapter 8: Joining Tables
+:::
+
+Primary keys, foreign keys, and combining data from multiple sources.

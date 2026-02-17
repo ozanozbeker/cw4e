@@ -21,45 +21,59 @@ book:
     - introduction.qmd
     - prerequisites.qmd
 
-    - part: foundations/index.qmd
+    - part: foundations.qmd
       chapters:
-        - foundations/computers.qmd
-        - foundations/files.qmd
-        - foundations/cli.qmd
-        - foundations/git.qmd
-        - foundations/github.qmd
-    - part: databases/index.qmd
+        - chapters/01-computers.qmd
+        - chapters/02-filesystem.qmd
+        - chapters/03-cli.qmd
+        - chapters/04-git.qmd
+        - chapters/05-github.qmd
+    - part: databases.qmd
       chapters:
-        - databases/databases.qmd
-        - databases/querying.qmd
-        - databases/joins.qmd
-        - databases/analytics.qmd
-        - databases/modeling.qmd
-    # - part: 03_programming/index.qmd
-    # - part: 04_integration/index.qmd
-    # - part: 05_delivery/index.qmd
-
-    # - references.qmd
+        - chapters/06-databases.qmd
+        - chapters/07-querying.qmd
+        - chapters/08-joins.qmd
+        - chapters/09-analytics.qmd
+        - chapters/10-modeling.qmd
+    - part: programming.qmd
+      chapters:
+        - chapters/11-python-fundamentals.qmd
+        - chapters/12-collections.qmd
+        - chapters/13-functions.qmd
+        - chapters/14-file-io.qmd
+        - chapters/15-objects.qmd
+    - part: integration.qmd
+      chapters:
+        - chapters/16-python-sql.qmd
+        - chapters/17-marimo.qmd
+        - chapters/18-polars.qmd
+        - chapters/19-altair.qmd
+        - chapters/20-excel.qmd
+    - part: production.qmd
+      chapters:
+        - chapters/21-python-projects.qmd
+        - chapters/22-quarto.qmd
+        - chapters/23-code-quality.qmd
+        - chapters/24-arrow.qmd
+        - chapters/25-typer.qmd
 
   appendices:
-    # - appendices/basedpyright.qmd
     - appendices/brew.qmd
-    # - appendices/duckdb.qmd
-    - appendices/git.qmd
-    - appendices/github.qmd
-    # - appendices/marimo.qmd
-    # - appendices/uv.qmd
-    # - appendices/ruff.qmd
     - appendices/winget.qmd
     - appendices/zed.qmd
-
-bibliography: references.bib
+    - appendices/git.qmd
+    - appendices/github.qmd
+    - appendices/northwind.qmd
+    - appendices/duckdb.qmd
+    - appendices/uv.qmd
+    - appendices/marimo.qmd
+    - appendices/ruff.qmd
+    - appendices/basedpyright.qmd
 
 format:
   html:
     theme:
       - cosmo
-      - styles.scss
     author-meta: "Ozan Ozbeker"
     callout-appearance: "simple"
     highlight-style: nord

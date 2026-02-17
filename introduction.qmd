@@ -1,4 +1,4 @@
-# Introduction {.unnumbered}
+# Introduction
 
 Every piece of data you encounter in your engineering career started somewhere and is going somewhere. A sensor reading captured at a manufacturing station will travel through databases, transformations, and reports before influencing a production decision. A survey response will join thousands of others, get cleaned and aggregated, and eventually appear in a dashboard that shapes policy. Understanding this journey, and knowing how to build the infrastructure that makes it reliable, is what this book is about.
 
@@ -28,7 +28,7 @@ This book focuses on a specific toolkit: the command line for navigation and aut
 
 **SQL** is the language of data. Every major database speaks it. Every data warehouse, every analytics platform, every business intelligence tool understands SQL queries. When you need to extract, filter, aggregate, or join data, SQL is almost always the right tool. It's declarative (you describe *what* you want, not *how* to compute it), which makes it concise and lets the database optimize execution. Learning SQL gives you access to decades of engineering investment in making data operations fast and reliable.
 
-**Python** is the connective tissue. It's not the best language for any single task, but it's good enough at everything and excellent at connecting things together. Python can read files in any format, call any API, invoke any command-line tool, and generate any output. When you need to orchestrate a workflow that touches multiple systems, Python is the natural choice. Its ecosystem of libraries for data work (pandas, polars, DuckDB, httpx) is unmatched.
+**Python** is the connective tissue. It's not the best language for any single task, but it's good enough at everything and excellent at connecting things together. Python can read files in any format, call any API, invoke any command-line tool, and generate any output. When you need to orchestrate a workflow that touches multiple systems, Python is the natural choice. Its ecosystem of libraries for data work (polars, DuckDB, httpx, openpyxl) is unmatched.
 
 **The command line** is the universal interface. Every tool you'll encounter, from Git to Python to database clients to cloud services, can be operated through text commands. Learning the command line gives you access to every tool, including ones that haven't been invented yet. It also enables automation: anything you can type, you can script.
 
@@ -62,7 +62,7 @@ The transformation isn't instant. You'll start as a passenger in each new domain
 
 By the end of this book, you'll have built several complete data products:
 
-You'll create automated reports that pull data from sources, perform transformations, and generate formatted output, all triggered by a single command or scheduled to run automatically.
+You'll create automated reports that pull data from sources, perform transformations, and generate formatted output, all triggered by a single command or scheduled to run on a timer.
 
 You'll build data pipelines that extract information from files and APIs, clean and transform it using SQL, and load it into databases where it can be queried and analyzed.
 

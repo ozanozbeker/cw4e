@@ -13,5 +13,11 @@ Thumbs.db
 # DuckDB
 *.wal
 
+# SQLite
+*.sqlite-journal
+
 # Python
 .venv/
+
+# Claude
+CLAUDE.md

@@ -1,0 +1,29 @@
+# Integration
+
+You now have two powerful tools in your workflow. SQL retrieves and transforms data inside a database. Python reads files, defines functions, builds modules, and handles the logic and orchestration around data. In this module, you'll connect them.
+
+Integration is where everything comes together. You'll write SQL queries from Python scripts, move your work into interactive notebooks, transform data with DataFrames, visualize findings with charts, and deliver results as formatted Excel reports. Each chapter adds a layer to a progressive analytical workflow, and by the end, you'll have built a complete pipeline from database to deliverable. This is the "whole game" of data analysis: extracting data, transforming it, understanding it visually, and communicating your findings in a format your stakeholders can use.
+
+The environment shifts in this module. Until now, you've written `.py` scripts in Zed and run them from the terminal. That workflow is excellent for automation and production code, and you'll return to it in the Production module. Here, you'll also work in *notebooks*, an environment designed for interactive exploration where code, output, and narrative live side by side. Specifically, you'll use Marimo, a modern notebook tool whose reactive execution model enforces the good habits you've been building: clear variable dependencies, reproducible execution order, and code that works the same way every time you run it.
+
+The Northwind database returns in this module, but now as a live DuckDB database rather than flat CSV files. The familiar queries from the Databases module, revenue by category, customer order history, monthly trends, become building blocks for complete analytical products. You'll reconnect with data you already understand and see how much more you can do when SQL and Python work together.
+
+## What You'll Learn
+
+**Python & SQL** (@sec-python-sql) connects Python to DuckDB and establishes the data access layer. You'll write parameterized queries, convert results to Python data structures, and build a reusable module that separates data retrieval from analysis logic.
+
+**Marimo Notebooks** (@sec-marimo) moves that work into a reactive notebook with native SQL cells. You'll discover an environment designed for interactive exploration where code, output, and narrative live side by side, with execution guarantees that prevent the hidden-state bugs common in traditional notebooks.
+
+**Polars** (@sec-polars) introduces DataFrames as the bridge between SQL results and Python computation. You'll learn to express data transformations in Python syntax that mirrors the SQL thinking you already know, and understand when each tool is the better choice.
+
+**Altair** (@sec-altair) adds data visualization through the grammar of graphics. Rather than memorizing chart recipes, you'll learn a composable system of encodings and marks that lets you build any visualization from first principles.
+
+**Excel Delivery** (@sec-excel) closes the loop by delivering results in the format businesses actually use: formatted, multi-sheet Excel workbooks. Each chapter's output becomes the next chapter's input, and the exercises accumulate into a cohesive Northwind business review.
+
+## How to Learn This Material
+
+This module asks you to hold multiple tools in your head at once. That's harder than learning any single tool, and it's also more realistic. Professional data work rarely involves just SQL or just Python. It involves connecting them, and the connection points are where most bugs and confusion live.
+
+When you encounter something that feels familiar from an earlier module, pay attention to how it behaves in its new context. A SQL query that worked in the DuckDB CLI might need small adjustments when executed from Python. A data transformation you wrote in SQL might be easier to express in Polars, or vice versa. These comparisons are where the real learning happens.
+
+The exercises in this module are cumulative. Each chapter adds to the Northwind analysis you started in the previous one. If you skip a chapter's exercises, the next chapter's exercises will be harder to complete. Work through them in order.

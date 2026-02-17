@@ -1,1 +1,117 @@
-# DuckDB
+# DuckDB {#sec-duckdb-config}
+
+## What Problem Does DuckDB Solve?
+
+Most databases you've heard of, PostgreSQL, MySQL, SQL Server, are designed for a world where many users hit a central server simultaneously. A bank processes thousands of ATM transactions per second. An online store handles concurrent orders from customers worldwide. These **server-based** databases are built for that: they run as a background service, listen for network connections, require configuration and administration, and need someone (a database administrator) to keep them healthy.
+
+That's overkill for analytical work. When you're exploring a dataset, answering business questions, or building a report, you don't need a server. You need to point a tool at some data files and start asking questions. You're the only user. The data lives on your laptop. Setting up and maintaining a database server just to practice SQL is like renting a commercial kitchen to make a sandwich.
+
+**DuckDB is a database engine that runs inside your application, not beside it.** There is no server to install, no service to start, no port to configure, and no password to remember. You run `duckdb` from the terminal (or connect from a Python script), and you have a full-featured SQL engine ready to go. It reads CSV, Parquet, and JSON files directly, meaning you can query data without loading it into anything first.
+
+## Why DuckDB for This Course?
+
+DuckDB is an **OLAP** (Online Analytical Processing) engine, which means it's optimized for the kind of work analysts and engineers actually do: scanning large datasets, aggregating columns, and computing summaries. It stores data column by column rather than row by row, which makes analytical queries dramatically faster than they'd be in a traditional row-oriented database.
+
+Beyond performance, DuckDB has several qualities that make it ideal for learning SQL. It supports ANSI SQL, which means the syntax you learn transfers directly to other databases. It's cross-platform, running identically on Windows, macOS, and Linux. It requires zero configuration. And it has a Python API, so when you start combining SQL with Python later in the course, the integration is seamless.
+
+The alternative would be something like SQLite, which is also embedded and serverless. But SQLite is an OLTP engine designed for transactional workloads (it powers every iPhone and Android device). Analytical queries on SQLite are noticeably slower, and it lacks modern SQL features like window functions and `EXCLUDE` clauses that make analytical work elegant. DuckDB gives you a professional-grade analytical engine with the simplicity of a file on your desktop.
+
+## Two Ways to Use DuckDB
+
+DuckDB shows up in two forms throughout this course, and understanding the distinction matters because the same pattern appears with other tools.
+
+### The CLI Tool (Installed via Package Manager)
+
+The DuckDB CLI is a standalone program you install through your system's package manager. This gives you an interactive SQL shell for writing and running queries directly.
+
+On **Windows** with WinGet:
+
+```{.powershell filename="terminal"}
+winget install DuckDB.cli
+```
+
+On **macOS** with Homebrew:
+
+```{.bash filename="terminal"}
+brew install duckdb
+```
+
+After installation, close and reopen your terminal, then verify:
+
+```{.bash filename="terminal"}
+duckdb --version
+```
+
+You should see a version number like `v1.2.0`. If you get a "command not found" error, revisit the installation steps or check that your package manager is configured correctly (see the Homebrew or WinGet appendix).
+
+This is what you'll use throughout the Database module: an interactive environment for learning SQL, exploring data, and running queries against the Northwind dataset.
+
+### The Python Library (Installed via uv)
+
+When you start combining SQL with Python in the Integration module, you'll add DuckDB as a project dependency:
+
+```{.bash filename="terminal"}
+uv add duckdb
+```
+
+This installs the `duckdb` Python package into your project's virtual environment. It's the same engine as the CLI, but accessed through Python's `import duckdb` rather than a terminal command. Your Python scripts can open databases, run SQL queries, and convert results to Polars DataFrames or other formats.
+
+The CLI and the Python library are independent installations. The CLI lives on your system (managed by brew/winget), while the Python library lives in your project (managed by uv). You'll use both, but for different purposes: the CLI for interactive SQL work, the Python library for automated pipelines and scripts.
+
+## The DuckDB CLI
+
+Running `duckdb` without arguments opens an **in-memory** session, a temporary database that disappears when you exit. This is useful for quick exploration and one-off queries.
+
+Running `duckdb` with a filename creates or opens a **persistent** database file:
+
+```{.bash filename="terminal"}
+duckdb my_database.duckdb
+```
+
+The CLI supports standard SQL input, command-dot directives (like `.tables` to list tables, `.schema` to show table definitions), and direct querying of files:
+
+```{.sql filename="duckdb-cli"}
+SELECT * FROM 'data/orders.csv' LIMIT 5;
+```
+
+That query reads a CSV file directly, without any `CREATE TABLE` or `LOAD` step. This is one of DuckDB's most powerful features for exploratory work.
+
+To exit the CLI, type `.exit` or press `Ctrl+D`.
+
+## The DuckDB UI
+
+DuckDB also ships with a browser-based interface that provides a SQL notebook experience. When you start the CLI with the `-ui` flag:
+
+```{.bash filename="terminal"}
+duckdb -ui
+```
+
+Your browser opens to a local interface where you can write and run SQL queries with syntax highlighting, see results in formatted tables, and work in a notebook-style environment with multiple query cells. This is a convenient alternative to the CLI when you want a more visual workflow.
+
+## What Happens Next
+
+DuckDB is introduced in @sec-databases and used throughout the database module. You'll also connect to DuckDB from Python in @sec-python-sql and use it inside Marimo notebooks in @sec-marimo. The SQL you write against DuckDB is standard ANSI SQL that transfers to any other database engine.
+
+## Glossary
+
+**OLAP**
+: Online Analytical Processing, a database approach optimized for analyzing large datasets by scanning columns and computing summaries, as opposed to transactional workloads.
+
+**Embedded Database**
+: A database engine that runs inside your application rather than as a separate server, requiring no external service or network configuration.
+
+**Columnar Storage**
+: A data storage format that organizes data by column rather than by row, making analytical queries dramatically faster by reading only the columns needed.
+
+**In-Memory Database**
+: A temporary database session that exists only in RAM and disappears when you exit, useful for quick exploration and one-off queries.
+
+**Persistent Database**
+: A database stored as a file on disk that retains data between sessions and can be reopened and queried multiple times.
+
+## Resources
+
+- [DuckDB Documentation](https://duckdb.org/docs/) - Complete reference for SQL syntax, configuration, and features
+- [DuckDB Installation](https://duckdb.org/docs/installation/) - Platform-specific installation instructions and alternative methods
+- [DuckDB CLI Reference](https://duckdb.org/docs/api/cli/overview) - Detailed CLI usage, dot commands, and output formats
+- [DuckDB Python API](https://duckdb.org/docs/api/python/overview) - Connecting to DuckDB from Python scripts

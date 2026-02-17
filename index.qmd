@@ -1,4 +1,4 @@
-# Welcome {.unnumbered}
+# Welcome
 
 This is the website for **"Computational Workflows for Engineers"**. This book will teach you how to build data products using SQL, Python, and the professional tools that connect them. You'll learn to extract data from various sources, transform it into useful forms, create reports and analyses, and share your results through packaging and automation.
 
@@ -20,11 +20,11 @@ The book progresses through five modules, each building on the previous:
 
 **Databases** introduces databases and the query language that powers analytical work. You'll learn to think in sets rather than loops, and to let the database do the heavy lifting.
 
-**Programming** teaches programming as a tool for orchestrating workflows. Rather than treating Python as a general-purpose language, we focus on the patterns most useful for data work: reading files, calling APIs, transforming data, and generating outputs.
+**Programming** teaches programming as a tool for orchestrating workflows. Rather than treating Python as a general-purpose language, we focus on the patterns most useful for data work: reading files, fetching data from web APIs, transforming data, and generating outputs.
 
-**Integration** brings SQL and Python together, showing how to build complete data pipelines that extract, transform, and load data reliably.
+**Integration** brings SQL and Python together. You'll work in reactive notebooks, transform data with DataFrames, visualize findings with charts, and deliver results as formatted Excel reports.
 
-**Delivery** covers the skills that turn projects into products: documentation, testing, packaging, and deployment.
+**Production** covers the skills that turn projects into products: project structure, documentation, code quality, distribution as installable command-line tools, and automating workflows with scheduling.
 
 ## What You Won't Find Here
 

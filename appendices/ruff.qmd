@@ -1,0 +1,92 @@
+# Ruff {#sec-ruff-config}
+
+## What Problem Does Ruff Solve?
+
+Code formatting debates are a waste of time. Tabs or spaces? Single quotes or double quotes? Where do you break a long line? These questions have no correct answer, but they consume hours of discussion and create noisy diffs in version control when different team members use different styles.
+
+Beyond formatting, Python code can contain subtle issues that won't crash your program immediately but will cause problems later: an imported module you never use, a variable you accidentally shadow, a comparison to `None` using `==` instead of `is`. Catching these issues by reading your own code is unreliable, because you see what you *intended* to write, not what you *actually* wrote.
+
+**Ruff is a Python linter and formatter that automates both of these concerns.** As a formatter, it rewrites your code with consistent style every time you save. As a linter, it performs static analysis, reading your code without running it, to find bugs, style violations, and deviations from best practices. It replaces an entire constellation of older Python tools (Black, isort, flake8, pycodestyle, pyflakes, pydocstyle, and many others) with a single, fast tool.
+
+## Why Ruff for This Course?
+
+Ruff is written in Rust and is 10-100x faster than the tools it replaces, fast enough to run on every keystroke without you noticing. But speed is just a convenience. The real reason this course uses Ruff is that it teaches professional habits by enforcing them automatically.
+
+When Ruff formats your code on save, you internalize PEP 8's style conventions without memorizing rules. When the linter flags an unused import, you learn to keep your imports clean. When it catches `== None` and suggests `is None`, you learn the idiomatic Python pattern. Over time, the tool trains your instincts so that you naturally write code that would pass linting without it.
+
+Ruff also integrates with Zed as a **language server**, which means it provides real-time feedback directly in your editor: squiggles under problems, hover explanations, and automatic fixes on save. You don't need to run a separate command to check your code. The feedback loop is instant.
+
+## Three Ways to Use Ruff
+
+Ruff can live in different places depending on what you need from it. Understanding the distinction matters because it comes up with many Python tools.
+
+### Zed's Built-in Language Server (No Installation Needed)
+
+Zed ships with Ruff built in. When you open a Python file, Zed starts a Ruff language server in the background that formats your code on save and shows linting diagnostics inline. You don't install anything, you don't configure anything, it just works. This is what you'll use through the Foundations, Database, Programming, and Integration modules.
+
+The limitation is that this version of Ruff only talks to Zed. It can't be run from the terminal, which means you can't pipe its output to other tools, include it in automated scripts, or let an AI coding agent use it.
+
+### Project Dependency: `uv add --dev ruff`
+
+Adding Ruff as a development dependency installs it into your project's virtual environment:
+
+```{.bash filename="terminal"}
+uv add --dev ruff
+```
+
+Now you can run Ruff from the command line:
+
+```{.bash filename="terminal"}
+# Format all Python files
+uv run ruff format
+
+# Lint all Python files
+uv run ruff check
+
+# Lint and auto-fix what it can
+uv run ruff check --fix
+```
+
+This is the version you'll add in the Production module (@sec-code-quality). Having Ruff available in the terminal is essential once you start working with AI tools, whether that's copying linting output into a prompt or letting a coding agent run `uv run ruff check` on your behalf. It's also what you'd use in a CI pipeline to enforce code quality on every push.
+
+Because it's declared in your `pyproject.toml`, anyone who clones your project and runs `uv sync` gets the same version of Ruff automatically. The tool travels with the project.
+
+### Standalone Tool: `uv tool install ruff`
+
+For completeness: `uv tool install ruff` installs Ruff into its own isolated environment outside any project. This gives you a global `ruff` command that works everywhere. It's a valid approach for personal use, but in this course we keep everything inside the project's virtual environment so that the project is fully self-contained and reproducible.
+
+## Configuration
+
+Ruff is configured with a `ruff.toml` file in your project root. A starter configuration for this course:
+
+```{.toml filename="ruff.toml"}
+target-version = "py313"
+line-length = 88
+
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes (unused imports, undefined names)
+    "I",    # isort (import ordering)
+    "UP",   # pyupgrade (modernize syntax for Python 3.13)
+    "D",    # pydocstyle (docstring enforcement)
+    "N",    # pep8-naming (naming conventions)
+]
+
+[lint.pydocstyle]
+convention = "google"
+```
+
+The details of these rule categories and how to customize them are covered in @sec-code-quality. For now, the key idea is that this file lives in your project and travels with it, so everyone who works on the project uses the same rules.
+
+## What Happens Next
+
+Ruff runs silently in the background from the moment you start writing Python in @sec-python-fundamentals. The "reveal" happens in @sec-code-quality, where you'll learn what Ruff has been doing, how to read its diagnostics, and how to configure it for your own projects.
+
+## Resources
+
+- [Ruff Documentation](https://docs.astral.sh/ruff/) - Complete reference for all rules, configuration, and editor integration
+- [Ruff Rules](https://docs.astral.sh/ruff/rules/) - Searchable index of every linting rule Ruff supports
+- [Ruff Configuration](https://docs.astral.sh/ruff/configuration/) - All configuration options for `ruff.toml` and `pyproject.toml`
+- [Ruff Editor Integration](https://docs.astral.sh/ruff/editors/) - Setup guides for Zed, VS Code, Neovim, and other editors

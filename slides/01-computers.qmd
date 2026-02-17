@@ -1,0 +1,331 @@
+---
+title: "Computer Fundamentals"
+subtitle: "Chapter 1 · Computational Workflows for Engineers"
+format:
+  revealjs:
+    theme: default
+    highlight-style: nord
+    code-line-numbers: false
+    slide-number: true
+    progress: true
+    hash-type: number
+    footer: "IENG 331 · Computational Workflows for Engineers"
+    transition: fade
+    transition-speed: fast
+    embed-resources: true
+    title-slide-attributes:
+      data-background-color: "#2E3440"
+---
+
+## Where We're Going {.smaller}
+
+By the end of this course, you'll build **complete data products** that serve real customers.
+
+. . .
+
+Today: the mental models that make everything else click.
+
+::: {.notes}
+Welcome to the course. Frame the big picture: we're going from computational passengers to drivers. Today is foundational — no coding yet, but these concepts will explain nearly every "weird" behavior they encounter later. Ask: "How many of you have lost work because you forgot to save?" Use that as a hook.
+:::
+
+---
+
+## Passengers vs. Drivers
+
+> Most people interact with computers as **passengers**. They click buttons, wait for responses, and hope for the best.
+
+. . .
+
+We're becoming **drivers**: people who understand the machine well enough to diagnose problems and make informed decisions.
+
+::: {.notes}
+Spend a minute on this metaphor. Drivers don't need to be mechanics, but they understand enough to know what's wrong when the engine light comes on. That's our goal.
+:::
+
+---
+
+## Programs vs. Applications {.smaller}
+
+| | Program | Application |
+|---|---|---|
+| **Purpose** | Execute instructions | Serve an end user |
+| **Interface** | Not guaranteed | Designed for humans |
+| **Error handling** | May crash cryptically | Fails gracefully |
+| **Examples** | A Python script, a cron job | Gmail, Excel, `git` |
+
+::: {.notes}
+Don't belabor this slide — it's a quick framing. The key insight: this semester they'll write **programs**. By the final project, those programs should start becoming **applications**. Ask: "What makes `git` an application even though it has no GUI?" (comprehensive help, consistent commands, meaningful errors)
+:::
+
+---
+
+## The Big Idea
+
+::: {.r-fit-text}
+Computers are not slow.
+
+**Accessing data** is slow.
+:::
+
+::: {.notes}
+Pause here. Let this land. This single idea explains most of the performance issues they'll encounter all semester. Modern CPUs do billions of ops/sec — the bottleneck is always data movement.
+:::
+
+---
+
+## Memory vs. Storage
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+### ⚡ RAM (temporary)
+
+- 8–16 GB typical
+- Nanosecond access
+- **Lost when power is off**
+
+:::
+
+::: {.column width="10%"}
+
+::: {.r-fit-text}
+⟷
+:::
+
+~1,000x slower
+
+:::
+
+::: {.column width="45%"}
+
+### 💾 Disk (permanent)
+
+- 256 GB – 2 TB typical
+- Millisecond access
+- **Survives power loss**
+
+:::
+
+::::
+
+::: {.notes}
+LIVE DEMO: Open Activity Monitor (Mac) or Task Manager (Windows). Show real memory usage. Point out how much RAM the browser alone uses. Ask students to check their own machines if they have laptops open.
+:::
+
+---
+
+## Why This Matters
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Fits in RAM**
+
+- Fast, smooth
+- Data stays put
+- "Normal" experience
+:::
+
+::: {.column width="50%"}
+**Exceeds RAM**
+
+- Swapping to disk
+- Everything crawls
+- "Is my computer frozen?"
+:::
+
+::::
+
+. . .
+
+Every performance problem is a question about **where the data lives**.
+
+::: {.notes}
+Connect to their lived experience: "Ever had your laptop grind to a halt with too many Chrome tabs?" That's RAM filling up. The OS starts swapping to disk. This isn't a mystery — it's physics.
+:::
+
+---
+
+## Prediction Exercise {background-color="#3B4252"}
+
+Your laptop has **16 GB RAM**. You're running:
+
+| App | RAM |
+|---|---|
+| Browser | 4 GB |
+| Excel | 2 GB |
+| Python script | 3 GB |
+| Slack | 1 GB |
+| Zed | 0.5 GB |
+
+You try to open an **8 GB** data file.
+
+**What happens?**
+
+::: {.notes}
+Cold call or think-pair-share. Let them work it out: 10.5 GB in use, 5.5 GB free, need 8 GB. The OS will swap. Everything slows to a crawl. Follow up: "What are your options?" (Close apps, process in chunks, use a tool like DuckDB that doesn't load everything into RAM.) Foreshadow Module 2.
+:::
+
+---
+
+## The Two Lives of a File
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### On Disk 💾
+- Permanent
+- Survives power loss
+- The "saved" version
+- Just bytes sitting there
+:::
+
+::: {.column width="50%"}
+### In Memory ⚡
+- Temporary copy
+- Lost without saving
+- What you see & edit
+- Created when you open
+:::
+
+::::
+
+::: {.notes}
+Use the library book analogy: the book on the shelf (disk) is permanent. When you check it out and take notes (memory), that's your working copy. The shelf copy doesn't change until you return the book. This is the key conceptual gap for the "autosave generation."
+:::
+
+---
+
+## What Saving Actually Does {.smaller}
+
+| Step | What happens | Where |
+|:---:|---|---|
+| 1 | You open `script.py` | Disk → RAM |
+| 2 | You type changes | RAM only |
+| 3 | Unsaved indicator appears (●) | RAM ≠ Disk |
+| 4 | You press **Ctrl+S** | RAM → Disk |
+| 5 | Indicator disappears (✓) | RAM = Disk |
+| 6 | You close the editor | RAM copy discarded |
+
+::: {.notes}
+LIVE DEMO: Open a file in Zed. Point out the unsaved indicator (dot). Type some changes — the dot appears. Save — the dot disappears. Then emphasize: "Everything between opening and saving exists ONLY in RAM." Ask: "What happens if you pull the power cord right now?"
+:::
+
+---
+
+## Why Code Isn't Google Docs {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Documents ✅ Autosave
+A half-finished paragraph is still a readable paragraph.
+:::
+
+::: {.column width="50%"}
+### Code ❌ Manual Save
+A half-finished function is a **syntax error**.
+:::
+
+::::
+
+. . .
+
+Saving code is a **deliberate checkpoint**: "this version is complete enough to keep."
+
+. . .
+
+This leads directly to **version control** (Chapter 4).
+
+::: {.notes}
+This is the "aha moment" for students who've only known Google Docs. Saving isn't just about preventing data loss — it's a statement about code consistency. Connect forward: "If saving is a deliberate act, committing in Git is an even MORE deliberate act."
+:::
+
+---
+
+## Text Editors vs. Word Processors
+
+|  | Text Editor | Word Processor |
+|---|---|---|
+| **Content** | Plain text | Rich text |
+| **Hidden codes** | None | Formatting embedded |
+| **What you see** | Exactly what's in the file | Rendered formatting |
+| **Use for code?** | ✅ Yes | ❌ No |
+
+::: {.notes}
+Quick distinction. If time allows, LIVE DEMO: open a simple .py file in both Zed and Word. Show how Word's "plain" view still embeds formatting. The punchline: Python doesn't know what to do with Microsoft's hidden formatting codes.
+:::
+
+---
+
+## Our Editor: Zed {.smaller}
+
+Four features that matter right now:
+
+1. **Syntax highlighting** — colors code by meaning
+2. **Auto-completion** — suggests as you type
+3. **Integrated terminal** — code and commands in one window
+4. **Unsaved indicators** — the dot that tells you RAM ≠ disk
+
+::: {.notes}
+LIVE DEMO: Quick tour of Zed. Open a Python file, point out syntax highlighting. Start typing and show autocomplete. Open the integrated terminal (Ctrl+`). Save/unsave to show the indicator. Don't go deep — they'll live in Zed all semester. Just enough to orient them.
+:::
+
+---
+
+## Package Managers
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### macOS
+```{.bash filename="terminal"}
+$ brew install git
+```
+:::
+
+::: {.column width="50%"}
+### Windows
+```{.bash filename="terminal"}
+> winget install Git.Git
+```
+:::
+
+::::
+
+. . .
+
+Like an App Store for developer tools, but from the command line. Handles **dependencies** automatically.
+
+::: {.notes}
+LIVE DEMO: Run `brew list` or `winget list` to show what's already installed. Install something small to demonstrate the workflow. Emphasize: "From now on, we install tools this way — not by downloading .exe files from random websites." Connect forward to Chapter 3 (CLI).
+:::
+
+---
+
+## Chapter 1 Recap {.smaller}
+
+- **Programs** execute instructions; **applications** serve end users
+- **RAM** is fast & temporary; **disk** is slow & permanent
+- Every performance problem → where does the data live?
+- Files have two lives: on disk (permanent) and in memory (temporary)
+- **Saving** = writing the memory copy back to disk
+- Code needs **manual saves** because consistency matters
+- **Text editors** (Zed) for code, not word processors
+- **Package managers** for installing developer tools
+
+::: {.notes}
+Quick recap, don't read the slide. Instead ask: "What's the one thing from today that surprised you?" or "What's one thing you'll do differently now?" Preview next class: "Next time, we'll look at how your computer actually organizes all those files on disk — the file system."
+:::
+
+---
+
+## Next Time {background-color="#3B4252"}
+
+::: {.r-fit-text}
+Chapter 2: The File System
+:::
+
+How your computer organizes files, and why understanding it matters for everything we'll build.

@@ -1,0 +1,27 @@
+# Production
+
+You've come a long way. In Foundations, you learned to navigate your computer from the command line and track your work with Git. In Databases, you learned to think in sets, writing SQL queries that retrieve and transform data. In Programming, you wrote Python scripts that process files, define functions, and build reusable modules. In Integration, you connected all of it: SQL queries from Python, interactive notebooks, DataFrames, visualizations, and formatted Excel reports.
+
+Everything you've built works. This module asks a different question: does it work *professionally*? Can someone else clone your project, install the dependencies, and run your code without asking you for help? Can they read your code and understand what it does? Can they trust that it handles edge cases correctly? Can they run your analysis from the command line without opening a notebook?
+
+Production is about the invisible infrastructure that separates working code from professional code. You'll learn project engineering, structuring your work so it's reproducible and shareable. You'll learn Quarto, turning your analyses into polished documents and presentations. You'll discover that Zed has been running two powerful tools on your code all semester, Ruff and basedpyright, and you'll learn to configure and run them yourself. You'll understand why Polars and DuckDB interoperate so seamlessly, and how Python connects to databases beyond DuckDB. And you'll turn your scripts into command-line tools that anyone can install and run.
+
+The metaphor that ties this module together is manufacturing. In a factory, the product matters, but so do the assembly instructions, the quality checks, the packaging, and the distribution system. You've been building the product all semester. Now you'll build everything around it.
+
+## What You'll Learn
+
+**Python Projects** (@sec-python-projects) structures your project so that every subsequent tool has a proper home. You'll use `uv` to create a reproducible project with locked dependencies, a well-organized directory layout, and a configuration file that makes your intentions explicit.
+
+**Quarto** (@sec-quarto) turns your analyses into polished documents and presentations. You already know Markdown from writing README files. Quarto extends that syntax with cross-references, code execution, and output formats that range from HTML reports to slide decks.
+
+**Code Quality** (@sec-code-quality) reveals the formatting, linting, and type-checking tools that have been working behind the scenes in Zed all semester. You'll learn to configure and run Ruff and basedpyright yourself, understanding why automated quality checks catch bugs that testing alone cannot.
+
+**Arrow & Database Connectivity** (@sec-arrow) explains the data infrastructure that powers your tools. You'll understand why Polars and DuckDB interoperate so seamlessly, and how Python connects to databases beyond DuckDB through ADBC and other interfaces.
+
+**CLI Tools with Typer** (@sec-typer) closes the course by turning your scripts into professional command-line tools that anyone can install and run. This is the final step in the passenger-to-driver transformation: building tools that serve other people, not just yourself.
+
+## How to Learn This Material
+
+This module is less about learning new concepts and more about raising the standard of everything you've already built. The temptation will be to treat these chapters as checklists: add a `pyproject.toml`, run Ruff, move on. Resist that. Each tool exists because professional teams discovered, usually painfully, that working code isn't enough. Understanding *why* these practices matter will determine whether you adopt them permanently or abandon them after the course ends.
+
+The exercises in this module ask you to revisit code you wrote in earlier chapters and improve it. This is intentional. Seeing your own code through the lens of project structure, formatting, linting, and type safety reveals patterns you couldn't have noticed while writing it for the first time. That experience of revising your own work is one of the most valuable things this module offers.

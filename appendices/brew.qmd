@@ -1,4 +1,4 @@
-# Homebrew
+# Homebrew {#sec-brew-config}
 
 ## What Problem Does Homebrew Solve?
 
@@ -20,11 +20,11 @@ Open the **Terminal** application on your Mac. You can find it by pressing `Cmd 
 
 Once Terminal is open, copy and paste the following command, then press Enter:
 
-```bash
+```{.bash filename="terminal"}
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-The installer will explain what it plans to do and ask for your password (the same password you use to log into your Mac). As you type your password, you won't see any characters appear on screen—this is normal security behavior. Just type your password and press Enter.
+The installer will explain what it plans to do and ask for your password (the same password you use to log into your Mac). As you type your password, you won't see any characters appear on screen, this is normal security behavior. Just type your password and press Enter.
 
 The installation takes a few minutes. When it finishes, **read the output carefully**. Homebrew will print instructions telling you to run one or two additional commands to complete the setup. These commands add Homebrew to your system's PATH, which is how your computer knows where to find programs. Copy and run those commands exactly as shown.
 
@@ -34,4 +34,10 @@ To verify everything worked, close your Terminal window, open a fresh one, and t
 
 Once Homebrew is installed, you'll have access to thousands of tools through simple commands. We'll introduce specific commands as we need them throughout the book. For now, just know that Homebrew is the foundation that makes installing everything else straightforward.
 
-If you're curious, Homebrew's website at [brew.sh](https://brew.sh) has documentation and a searchable list of available packages. But don't feel pressured to explore on your own yet—we'll guide you through each tool as it becomes relevant to your work.
+If you're curious, Homebrew's website at [brew.sh](https://brew.sh) has documentation and a searchable list of available packages. But don't feel pressured to explore on your own yet, we'll guide you through each tool as it becomes relevant to your work.
+
+## Resources
+
+- [Homebrew Documentation](https://docs.brew.sh/) - Complete reference for commands, configuration, and troubleshooting
+- [Homebrew Formulae](https://formulae.brew.sh/) - Searchable list of all available packages
+- [Homebrew Installation](https://brew.sh/) - Official installation instructions

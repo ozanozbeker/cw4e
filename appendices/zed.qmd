@@ -1,15 +1,127 @@
 ---
 resources:
   - zed-foundations/settings.json
-  - zed-integrations/settings.json
+  - zed-production/settings.json
 
 other-links:
   - text: "Zed Settings | Foundations"
     href: zed-foundations/settings.json
     icon: filetype-json
-  - text: "Zed Settings | Integrations"
-    href: zed-integrations/settings.json
+  - text: "Zed Settings | Production"
+    href: zed-production/settings.json
     icon: filetype-json
 ---
 
-# Zed (WIP)
+# Zed {#sec-zed-config}
+
+## What Problem Does Zed Solve?
+
+Writing code in a plain text editor like Notepad is technically possible, but it's like building furniture with a hand saw when a table saw is available. A **code editor** is a text editor designed for programming. It understands the structure of your code and uses that understanding to help you work faster and catch mistakes earlier.
+
+The features that separate a code editor from a generic text editor include syntax highlighting (coloring keywords, strings, and comments so the structure of your code is visible at a glance), autocomplete (suggesting function names, variable names, and method signatures as you type), inline diagnostics (showing errors and warnings directly in the editor without running the code), an integrated terminal (so you don't have to switch between windows to run commands), and Git integration (showing which lines changed, which files are staged, and letting you commit without leaving the editor).
+
+**Zed is a modern code editor built for speed.** It starts instantly, handles large files without lag, and runs language servers (the tools behind autocomplete and diagnostics) efficiently. It's open-source, cross-platform, and designed with a clean interface that doesn't overwhelm you with menus and panels.
+
+## Why Zed for This Course?
+
+The principles you learn in this course apply to any editor: VS Code, Neovim, Sublime Text, or anything else that supports the Language Server Protocol. The book uses Zed because it offers an excellent experience out of the box with minimal configuration, and its interface is clean enough that screenshots and instructions stay readable.
+
+Zed's key advantages for this course are its first-class support for language servers (Ruff and basedpyright run seamlessly in the background), its built-in terminal (you can edit code and run commands in the same window), its native Git panel (you can stage, commit, and view diffs without leaving the editor), and its speed (it never gets in the way of your thinking).
+
+If you have a strong preference for another editor, that's fine. The concepts transfer. Just make sure your editor supports the Language Server Protocol so you get the Ruff and basedpyright integration that the course relies on.
+
+## Installation
+
+On **Windows** with WinGet:
+
+```{.powershell filename="terminal"}
+winget install Zed.Zed
+```
+
+On **macOS** with Homebrew:
+
+```{.bash filename="terminal"}
+brew install --cask zed
+```
+
+Alternatively, download from [zed.dev](https://zed.dev).
+
+After installation, verify the command-line tool is available:
+
+```{.bash filename="terminal"}
+zed --version
+```
+
+On macOS, if `zed` isn't recognized, open the Zed application, then go to the menu: Zed → Install CLI. This adds the `zed` command to your PATH.
+
+## Configuration
+
+Zed is configured through a JSON settings file. Open it from within Zed using `Cmd+,` (macOS) or `Ctrl+,` (Windows/Linux), or from the command palette (`Cmd+Shift+P` / `Ctrl+Shift+P`) by searching for "Open Settings."
+
+The settings file controls everything from appearance (themes, font size, line height) to editor behavior (tab size, format on save) to language-specific options (Python line length, Markdown whitespace handling). Two reference configuration files are linked at the top of this page: one for the Foundations module (basic editor setup) and one for the Production module (with language server configuration for Ruff and basedpyright).
+
+A few settings worth understanding early:
+
+```{.jsonc filename="settings.json"}
+{
+  // Format Python files with Ruff every time you save
+  "languages": {
+    "Python": {
+      "preferred_line_length": 88,
+      "wrap_guides": [88]
+    }
+  },
+
+  // Use Zed as Git's default editor
+  // (configured in Git with: git config --global core.editor "zed --wait")
+}
+```
+
+Zed automatically detects and starts language servers for Python (Ruff and basedpyright) when you open a Python file in a project that has them installed. No additional editor configuration is needed beyond having the tools in your project's dependencies.
+
+## Essential Keyboard Shortcuts
+
+These are the shortcuts you'll use most frequently. Zed follows platform conventions, so `Cmd` on macOS maps to `Ctrl` on Windows/Linux.
+
+| Action | macOS | Windows/Linux |
+|--------|-------|---------------|
+| Command palette | `Cmd+Shift+P` | `Ctrl+Shift+P` |
+| Open file | `Cmd+P` | `Ctrl+P` |
+| Toggle terminal | `` Ctrl+` `` | `` Ctrl+` `` |
+| Go to definition | `F12` | `F12` |
+| Find in file | `Cmd+F` | `Ctrl+F` |
+| Find in project | `Cmd+Shift+F` | `Ctrl+Shift+F` |
+| Toggle sidebar | `Cmd+B` | `Ctrl+B` |
+| Save file | `Cmd+S` | `Ctrl+S` |
+
+: Essential Zed shortcuts {#tbl-zed-shortcuts}
+
+The **command palette** (`Cmd+Shift+P`) is the most important one to remember. It provides access to every Zed command through a searchable list. If you forget a shortcut or want to discover new features, start there.
+
+## What Happens Next
+
+Zed is used from the very first chapter as your primary code editor. The language server integration with Ruff and basedpyright, which runs silently in the background throughout the course, is explained in @sec-code-quality.
+
+## Glossary
+
+**Language Server Protocol (LSP)**
+: A standardized protocol that allows code editors to communicate with language-specific tools (like linters and type checkers) to provide features like autocomplete, diagnostics, and go-to-definition.
+
+**Extension**
+: An add-on package that extends Zed's functionality with support for additional languages, themes, or features.
+
+**Keybinding**
+: A keyboard shortcut that triggers a Zed command, typically mapped using platform conventions (Cmd on macOS, Ctrl on Windows/Linux).
+
+**Language Mode**
+: The file type or programming language associated with an open file, which determines which language server and syntax highlighting rules apply.
+
+**Settings File**
+: A JSON file that stores Zed configuration preferences, controlling appearance, editor behavior, and language-specific options.
+
+## Resources
+
+- [Zed Documentation](https://zed.dev/docs) - Complete reference for configuration, key bindings, and features
+- [Zed Key Bindings](https://zed.dev/docs/key-bindings) - Full list of keyboard shortcuts and how to customize them
+- [Zed Languages](https://zed.dev/docs/languages) - Language-specific setup and configuration guides
+- [Zed Extensions](https://zed.dev/extensions) - Browsable list of available extensions for additional language support

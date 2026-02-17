@@ -1,1 +1,75 @@
-# uv
+# uv {#sec-uv-config}
+
+## What Problem Does uv Solve?
+
+Python's packaging ecosystem has a reputation problem, and it's earned. To start a Python project the traditional way, you might need `pyenv` to manage Python versions, `venv` or `virtualenv` to create isolated environments, `pip` to install packages, `pip-compile` or `pip-tools` to pin dependency versions, and `setuptools` or `poetry` to build and distribute your project. Each tool has its own commands, configuration files, and quirks. Experienced developers have spent years assembling and debugging these toolchains. Beginners are expected to figure it out on their own, and the error messages are rarely helpful.
+
+**uv replaces all of them with a single tool.** It installs Python versions, creates virtual environments, resolves and installs dependencies, manages lock files, runs scripts, and builds packages. One tool, one set of commands, one configuration file (`pyproject.toml`). If Homebrew and WinGet solved the "how do I install software?" problem for your operating system, uv solves the same problem for your Python projects.
+
+## Why uv for This Course?
+
+Speed is the most immediately noticeable difference. uv is written in Rust and resolves dependencies 10-100x faster than pip. But speed is a secondary benefit. The real value is *reliability*.
+
+When you run `uv init`, uv creates a `pyproject.toml` (your project's configuration), a `.python-version` file (pinning which Python version to use), and a `uv.lock` file (recording the exact versions of every dependency and sub-dependency). When a classmate clones your project and runs `uv sync`, they get *exactly* the same environment you have. Not "probably compatible versions," but byte-for-byte identical dependencies. The "it works on my machine" class of bugs simply disappears.
+
+uv also manages Python itself. Instead of downloading Python from python.org and wrestling with PATH configuration, you run `uv python install 3.13` and uv handles the rest. This means Python installation is the same on Windows, macOS, and Linux, which matters in a class where students use all three.
+
+Beyond project management, uv can run one-off scripts with inline dependency declarations using `uv run`. And it integrates with the broader Python packaging ecosystem: anything you learn about uv transfers to working with PyPI, pip, and `pyproject.toml` in the real world.
+
+## Installation
+
+On **Windows** with WinGet:
+
+```{.powershell filename="terminal"}
+winget install astral-sh.uv
+```
+
+On **macOS** with Homebrew:
+
+```{.bash filename="terminal"}
+brew install uv
+```
+
+After installation, close and reopen your terminal, then verify:
+
+```{.bash filename="terminal"}
+uv --version
+```
+
+You should see a version number. If you get a "command not found" error, revisit the installation steps.
+
+Then install the Python version used throughout this course:
+
+```{.bash filename="terminal"}
+uv python install 3.13
+```
+
+This downloads and installs Python 3.13 in a location uv manages. You don't need to touch PATH variables or worry about conflicting system Python installations.
+
+## What Happens Next
+
+You'll use `uv init` to create your first Python project in @sec-python-fundamentals and `uv add` to install libraries like DuckDB, Polars, and Marimo throughout the integration module. The full depth of uv's project engineering capabilities is covered in @sec-python-projects, where you'll learn about dependency groups, lock files, and the different project initialization modes.
+
+## Glossary
+
+**Virtual Environment**
+: An isolated Python environment on your machine where project dependencies are installed separately from the system Python, preventing version conflicts between projects.
+
+**Lock File**
+: A file (uv.lock) that records the exact versions of every dependency and sub-dependency in your project, ensuring reproducible environments across machines and team members.
+
+**Dependency**
+: A Python package that your project requires to run, declared in pyproject.toml and installed into your virtual environment.
+
+**Package Manager**
+: A tool that automates the process of finding, downloading, installing, and updating software dependencies, replacing the need to manage multiple separate tools.
+
+**Python Version Manager**
+: A tool that downloads and manages multiple Python versions on your machine, allowing you to easily switch between different Python versions for different projects.
+
+## Resources
+
+- [uv Documentation](https://docs.astral.sh/uv/) - Complete reference for all uv commands and configuration
+- [uv Getting Started](https://docs.astral.sh/uv/getting-started/) - Official quickstart guide
+- [uv Python Version Management](https://docs.astral.sh/uv/guides/install-python/) - Managing Python installations with uv
+- [uv Tool Management](https://docs.astral.sh/uv/guides/tools/) - Installing and running standalone Python tools

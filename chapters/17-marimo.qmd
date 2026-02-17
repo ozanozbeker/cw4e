@@ -1,0 +1,278 @@
+# Notebooks with Marimo {#sec-marimo}
+
+In @sec-python-sql, you wrote Python scripts that connect to DuckDB and run SQL queries. Scripts are powerful for automation, but they have a limitation: to see results, you have to run the whole file, read the terminal output, edit the file, and run it again. That cycle is fine for production code, but it's slow for exploration. When you're investigating a dataset, trying different aggregations, and iterating on your analysis, you need a faster feedback loop.
+
+*Computational notebooks* solve this problem. A notebook is a document that interleaves code, output, and narrative. You write code in individual cells, run each cell independently, and see the results immediately below. This makes notebooks ideal for interactive data exploration, for building analyses incrementally, and for presenting your findings alongside the code that produced them.
+
+This chapter introduces Marimo, a modern notebook tool that addresses the reliability problems that have plagued traditional notebooks. Marimo's reactive execution model and strict variable rules produce notebooks that are reproducible by design, not by discipline. You'll also discover that Marimo has native SQL cells that connect directly to DuckDB, making it the natural home for the SQL-Python workflow you started building in the previous chapter.
+
+## What Are Computational Notebooks?
+
+A computational notebook is a document that combines three things: executable code, the output that code produces, and written explanations that provide context. Instead of writing a script in one file and reading its output in the terminal, you work in a single environment where code and results live together.
+
+Notebooks emerged from scientific computing, where researchers needed to document their analysis process alongside the results. The idea is simple: a colleague (or your future self) should be able to read a notebook and understand not just *what* you found but *how* you found it, the queries you ran, the transformations you applied, and the reasoning behind your choices.
+
+### Notebooks vs. Scripts
+
+Both notebooks and scripts are valid tools, but they excel at different tasks:
+
+| Aspect | Scripts (`.py`) | Notebooks (`.py` in Marimo) |
+|--------|----------------|---------------------------|
+| Best for | Automation, production code, reusable modules | Exploration, prototyping, communication |
+| Execution | Top to bottom, all at once | Cell by cell, interactive |
+| Output | Terminal or file | Inline, next to the code |
+| Editing | Edit → Run → Read output → Edit | Edit cell → See result immediately |
+| Version control | Clean diffs in Git | Marimo: clean diffs (it's a `.py` file) |
+| Importing | `import my_module` works | Not designed for importing |
+
+: Scripts vs. notebooks {#tbl-scripts-notebooks}
+
+The key insight is that these are *different tools for different stages* of your workflow. Use notebooks when you're exploring data and building your analysis. Use scripts when you're automating a pipeline or building reusable functions. In practice, many workflows start as a notebook (where you figure out the right queries and transformations) and mature into scripts (where you package those steps for repeated execution).
+
+## Why Marimo?
+
+If you've heard of Jupyter notebooks, you might wonder why this course uses Marimo instead. Jupyter is the most popular notebook tool, but it has well-documented problems that make it unreliable for serious work.
+
+### The Hidden State Problem
+
+In traditional notebooks like Jupyter, cells share a global namespace. You can run cells in any order, delete cells, and redefine variables without the notebook tracking what happened. This leads to *hidden state*: the notebook's results depend on the order you happened to run cells in, which might not match the order they appear on screen. A notebook that works when you run it interactively can produce different results (or errors) when someone runs it from top to bottom.
+
+Marimo eliminates this problem with two design decisions.
+
+**Reactive execution.** When you change a cell, Marimo automatically re-executes every cell that depends on its output. If cell A defines `revenue = 1000` and cell B uses `revenue`, changing cell A automatically updates cell B. You never have stale results.
+
+**The one-definition rule.** Each variable can be defined in exactly one cell. If cell A defines `revenue` and you try to define `revenue` again in cell C, Marimo raises an error. This prevents the "which `revenue` is current?" confusion that plagues Jupyter notebooks.
+
+These constraints might feel restrictive at first, but they're the same principles behind good software design: clear dependencies, no hidden state, and reproducible behavior. A Marimo notebook produces the same results every time, regardless of the order you edited cells during your session.
+
+### Marimo Notebooks Are Python Files
+
+Unlike Jupyter notebooks, which are stored as JSON files, Marimo notebooks are stored as `.py` files. This has significant practical benefits: they produce clean diffs in Git, they can be run as scripts from the terminal, and they can be opened in any text editor. When you version a Marimo notebook with Git, the history shows exactly what code changed, not buried JSON metadata.
+
+## Installing Marimo
+
+Install Marimo following the instructions in @sec-marimo-config. For now, use the standalone tool installation (`uv tool install marimo`). In the Production module (@sec-python-projects), when you structure your project as a proper package, you'll switch to the project dependency approach.
+
+## Your First Marimo Notebook
+
+Create and open a new notebook:
+
+```{.bash filename="terminal"}
+marimo edit notebook.py
+```
+
+Marimo opens in your browser. You'll see an empty notebook with a single cell.
+
+### Creating Cells
+
+Click in the cell and type a Python expression:
+
+```{.python filename="marimo"}
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+```
+
+Press `Ctrl+Enter` (or `Cmd+Enter` on macOS) to run the cell. Marimo executes the code and shows any output below the cell. Now create a new cell below (click the `+` button or press `Ctrl+Shift+Enter` after running) and use the connection:
+
+```{.python filename="marimo"}
+result = conn.sql("""
+    SELECT category_name, COUNT(*) AS product_count
+    FROM products
+    JOIN categories ON products.category_id = categories.category_id
+    GROUP BY category_name
+    ORDER BY product_count DESC
+""")
+result.pl()
+```
+
+The Polars DataFrame renders as a formatted, interactive table in the notebook output. This is the feedback loop that makes notebooks powerful: you write a query, see the results instantly, and iterate.
+
+### Markdown Cells
+
+Click the cell type selector and choose **Markdown** (or use the keyboard shortcut) to create a narrative cell:
+
+```{.markdown filename="marimo"}
+# Northwind Category Analysis
+
+This notebook explores the Northwind product catalog,
+examining how products are distributed across categories
+and identifying pricing patterns.
+```
+
+Markdown cells render as formatted text, creating a document that weaves explanation with code and results. This is the communication power of notebooks: the analysis and the story exist in the same place.
+
+### Reactivity in Action
+
+To see Marimo's reactive model, create three cells:
+
+```{.python filename="marimo"}
+# Cell 1: Define a threshold
+min_price = 20
+```
+
+```{.python filename="marimo"}
+# Cell 2: Query products above the threshold
+expensive = conn.sql(f"""
+    SELECT product_name, unit_price
+    FROM products
+    WHERE unit_price > {min_price}
+    ORDER BY unit_price DESC
+""").pl()
+expensive
+```
+
+```{.python filename="marimo"}
+# Cell 3: Count the results
+f"Found {len(expensive)} products above ${min_price:.2f}"
+```
+
+Now go back to Cell 1 and change `min_price` to `50`. When you run Cell 1, Marimo automatically re-executes Cells 2 and 3 because they depend on `min_price`. The table updates, the count updates, and you see the new results immediately, with no manual re-running.
+
+### The Cell Dependency Graph
+
+Marimo tracks which variables each cell reads and writes, building a dependency graph. You can view this graph in the notebook interface to understand the relationships between cells. The graph also determines execution order: Marimo runs cells in dependency order, not in the order they appear on screen. This means you can arrange cells for readability (explanation first, implementation second) without worrying about execution order.
+
+## SQL Cells in Marimo {#sec-marimo-sql}
+
+Marimo has a native SQL cell type that connects directly to DuckDB. Instead of writing `conn.sql(...)` in a Python cell, you write SQL directly and Marimo handles the connection and result conversion.
+
+To create a SQL cell, click the cell type dropdown and select **SQL**. The SQL cell has two configuration fields at the top: a **database** dropdown where you select which database connection to use, and an **output variable** field where you name the Python variable that will hold the query result. If you've already created a DuckDB connection in a Python cell (like the `conn` variable from earlier), Marimo automatically discovers it and makes it available in the dropdown.
+
+```{.sql filename="marimo SQL cell"}
+SELECT
+    c.category_name,
+    ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+    COUNT(DISTINCT o.order_id) AS order_count
+FROM order_details AS od
+JOIN orders AS o ON od.order_id = o.order_id
+JOIN products AS p ON od.product_id = p.product_id
+JOIN categories AS c ON p.category_id = c.category_id
+GROUP BY c.category_name
+ORDER BY revenue DESC
+```
+
+With the database set to your DuckDB connection and the output variable set to `category_revenue`, the result is automatically assigned as a Polars DataFrame. You can then use it in a Python cell:
+
+```{.python filename="marimo"}
+# This cell uses category_revenue from the SQL cell above
+total = category_revenue["revenue"].sum()
+f"Total revenue across all categories: ${total:,.2f}"
+```
+
+The power of this approach is that SQL and Python cells participate in the same reactive graph. If you change the SQL query, the downstream Python cells automatically re-execute with the updated data.
+
+### Chaining SQL and Python
+
+You can chain SQL cells with Python cells to build a multi-step analysis:
+
+1. **SQL cell** → Joins and aggregates raw data → outputs `raw_revenue`
+2. **Python cell** → Computes derived columns (growth rates, percentages) → assigns to `enriched`
+3. **SQL cell** → Queries the `enriched` DataFrame for specific patterns → outputs `flagged`
+4. **Python cell** → Formats and displays the final results
+
+Each step uses the tool best suited to its task: SQL for joins and aggregations, Python for custom computations and formatting. Marimo's reactivity ensures the whole chain updates when any upstream cell changes.
+
+## Interactive Features
+
+Marimo provides UI elements that make notebooks interactive. The `mo.ui` module (where `mo` is Marimo's standard import alias) offers dropdowns, sliders, text inputs, and other controls that bind to Python variables.
+
+```{.python filename="marimo"}
+import marimo as mo
+
+category_dropdown = mo.ui.dropdown(
+    options=category_revenue["category_name"].to_list(),
+    label="Select a category",
+)
+category_dropdown
+```
+
+This creates a dropdown menu in the notebook. When the user selects a value, Marimo assigns it to `category_dropdown.value` and re-executes any cell that depends on it:
+
+```{.python filename="marimo"}
+# This cell re-executes when the dropdown selection changes
+selected = category_dropdown.value
+
+if selected:
+    filtered = category_revenue.filter(
+        category_revenue["category_name"] == selected
+    )
+    filtered
+```
+
+Interactive elements turn a static analysis into an explorable tool. A stakeholder can select different categories, adjust thresholds, or filter date ranges without touching any code.
+
+::: {.callout-tip}
+## Interactive elements for exploration
+
+Interactive elements are most useful during the exploration and presentation phases of your work. When you're investigating data, a slider that adjusts a threshold is faster than editing a variable and re-running. When presenting to stakeholders, a dropdown that lets them explore different categories makes the analysis more engaging than a static report.
+:::
+
+## Organizing a Notebook
+
+A well-organized notebook tells a clear story. Here are principles that keep notebooks maintainable.
+
+### Cell Ordering for Readability
+
+Because Marimo determines execution order from the dependency graph, you can arrange cells for *readability* rather than *execution order*. A common pattern is to put the narrative and high-level results at the top, with implementation details further down. The reader sees the story first, and the supporting code is available if they want to dig deeper.
+
+### Markdown for Narrative
+
+Use Markdown cells liberally to explain your reasoning. Good notebooks answer three questions: *What question are you investigating?* (stated at the top), *How did you approach it?* (explained alongside the code), and *What did you find?* (highlighted in the results).
+
+### When to Refactor to a Script
+
+Notebooks are for exploration, not for building libraries. If you find yourself wanting to import functions from a notebook into another file, it's time to extract those functions into a `.py` module (like the `northwind_data.py` from @sec-python-sql) and import them *into* your notebook. The notebook calls the module's functions; the module doesn't depend on the notebook.
+
+A good heuristic: if a cell contains a reusable function with no UI elements or display logic, it probably belongs in a module. If a cell connects data to a visualization or formats output for presentation, it belongs in the notebook.
+
+## Exercises {.unnumbered}
+
+### Script to Notebook {.unnumbered}
+
+Take one of your Python scripts from the Programming module (the revenue pipeline from @sec-file-io is a good candidate) and convert it into a Marimo notebook. Break the script into logical cells, add Markdown cells explaining each step, and verify that Marimo's reactivity tracks the dependencies correctly.
+
+### SQL Cells with Northwind {.unnumbered}
+
+Build a Marimo notebook with at least three SQL cells that query the Northwind database:
+
+1. A query that shows revenue by category (the familiar aggregation from the Databases module).
+2. A query that shows the top 10 customers by total revenue (`SUM(unit_price * quantity * (1 - discount))`).
+3. A query that shows monthly order counts.
+
+Use Python cells between the SQL cells to add commentary, format numbers, or compute derived values.
+
+### Interactive Category Explorer {.unnumbered}
+
+Create a notebook with a `mo.ui.dropdown` that lists all product categories from the Northwind database. When a category is selected, a SQL cell queries the products in that category, and a Python cell displays a formatted summary including: number of products, price range, average price, and total stock value.
+
+### The One-Definition Rule {.unnumbered}
+
+In a Marimo notebook, deliberately violate the one-definition rule by defining the same variable in two different cells. Observe Marimo's error message. Then restructure the cells to resolve the conflict. Write a Markdown cell explaining why this constraint exists and how it prevents the hidden state problems that plague other notebook tools.
+
+## Summary {.unnumbered}
+
+Marimo notebooks provide a reactive environment where code, output, and narrative coexist. The reactive execution model ensures that downstream cells always reflect the current state of upstream cells, eliminating the stale-state bugs that make traditional notebooks unreliable. The one-definition rule prevents the "which version of this variable is current?" confusion.
+
+SQL cells connect directly to DuckDB, letting you write SQL queries that produce Polars DataFrames without any boilerplate code. Interactive UI elements turn static analyses into explorable tools. And because Marimo notebooks are `.py` files under the hood, they integrate cleanly with Git and the rest of your development workflow.
+
+In the next chapter, you'll learn Polars, the DataFrame library that bridges the gap between SQL query results and Python computation. The DataFrames that SQL cells produce in Marimo are already Polars DataFrames, so you're well positioned to work with them.
+
+## Glossary {.unnumbered}
+
+cell
+: A unit of code in a notebook. Each cell can be run independently and produces its own output.
+
+computational notebook
+: A document that interleaves executable code, output, and narrative text. Used for interactive data exploration and analysis communication.
+
+dependency graph
+: The network of relationships between cells in a Marimo notebook, determined by which variables each cell reads and writes. Marimo uses this graph to determine execution order and reactive updates.
+
+one-definition rule
+: Marimo's constraint that each variable can be defined in exactly one cell. Prevents ambiguity about which cell "owns" a variable.
+
+reactive execution
+: Marimo's execution model where changing a cell automatically re-executes all cells that depend on its outputs. Ensures results are always current.
+
+SQL cell
+: A Marimo cell type that executes SQL directly against a database connection. Results are assigned to a Python variable as a Polars DataFrame.

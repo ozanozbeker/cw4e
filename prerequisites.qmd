@@ -1,8 +1,21 @@
-# Prerequisites {.unnumbered}
+# Prerequisites
 
 This chapter lists the tools you'll need throughout the book. Rather than installing everything at once, you'll set up each tool as it becomes relevant. This approach lets you start quickly and spreads the installation work across the course.
 
-Each tool listing includes what it does, when you'll need it, and a reference to installation instructions. If you encounter problems during installation, check the appendix for troubleshooting steps specific to your operating system.
+Here's the full toolchain in the order you'll install each one:
+
+- **Homebrew** (macOS) or **WinGet** (Windows): Package managers that automate installing everything else. See @sec-brew-config or @sec-winget-config.
+- **Zed**: A modern code editor with syntax highlighting, autocomplete, and an integrated terminal. See @sec-zed-config.
+- **Git**: A version control system that tracks changes to files and enables collaboration. See @sec-git-config.
+- **GitHub**: A platform for hosting Git repositories and collaborating on projects (free account). See @sec-github-config.
+- **DuckDB**: An embedded analytical database that runs SQL queries on local files without server setup. Installed as a CLI tool first, then as a Python library later. See @sec-duckdb-config.
+- **uv**: A Python project manager that handles Python installation, virtual environments, and dependencies in a single tool. See @sec-uv-config.
+- **Marimo**: A reactive notebook tool for interactive data exploration with native SQL support. See @sec-marimo-config.
+- **Quarto**: A publishing system that renders Markdown documents into HTML, PDF, and presentations. No appendix, installed via package manager.
+- **Ruff**: A Python linter and formatter that enforces code style and catches bugs automatically. Zed runs it out of the box; added as a project dependency in the Production module. See @sec-ruff-config.
+- **basedpyright**: A static type checker that verifies your type hints before you run your code. Zed runs it out of the box; added as a project dependency in the Production module. See @sec-basedpyright-config.
+
+Each tool listing below includes what it does, when you'll need it, and a reference to installation instructions. If you encounter problems during installation, check the corresponding appendix for troubleshooting steps specific to your operating system.
 
 ## Before You Begin
 
@@ -14,7 +27,7 @@ A stable internet connection is required for downloading tools and, later, for p
 
 ## Foundations Module
 
-These tools support should be installed before or during the first week of work.
+These tools should be installed before or during the first week of work.
 
 ### GitHub Account
 
@@ -52,7 +65,7 @@ These tools support should be installed before or during the first week of work.
 
 After installation, configure your identity:
 
-```bash
+```{.bash filename="terminal"}
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
@@ -92,14 +105,14 @@ These tools support the SQL and database chapters.
 
 **What it is:** An embedded analytical database that runs SQL queries on local files without server setup.
 
-**When you need it:** The SQL chapters (to be referenced once written).
+**When you need it:** @sec-databases (Databases) through @sec-modeling (Data Modeling).
 
 **How to get it:**
 
 - **Windows:** `winget install DuckDB.cli`
 - **macOS:** `brew install duckdb`
 
-**Notes:** DuckDB can query CSV, Parquet, and JSON files directly, making it ideal for learning SQL without database administration overhead.
+**Notes:** DuckDB can query CSV, Parquet, and JSON files directly, making it ideal for learning SQL without database administration overhead. You'll later add `duckdb` as a Python library (`uv add duckdb`) when connecting SQL to Python in the Integration module. See @sec-duckdb-config for the distinction between the CLI tool and the Python library.
 
 ## Programming Module
 
@@ -109,7 +122,7 @@ These tools support the Python chapters.
 
 **What it is:** The Python programming language, installed and managed through the `uv` tool for reliable dependency management.
 
-**When you need it:** The Python chapters (to be referenced once written).
+**When you need it:** @sec-python-fundamentals (Python Fundamentals) through @sec-objects (Objects & Type Hints).
 
 **How to get it:**
 
@@ -122,13 +135,27 @@ Then install Python: `uv python install 3.13`
 
 ## Integration Module
 
-These tools support the chapters on combining SQL, Python, and documentation.
+These tools support the chapters on combining SQL, Python, and notebooks.
+
+### Marimo
+
+**What it is:** A reactive notebook tool for interactive data exploration, with native SQL cells that connect directly to DuckDB.
+
+**When you need it:** @sec-marimo (Notebooks with Marimo).
+
+**How to get it:** `uv tool install marimo` initially, then `uv add marimo` as a project dependency later.
+
+**Notes:** Marimo notebooks are stored as `.py` files, so they produce clean diffs in Git and can be run as scripts. See @sec-marimo-config for details.
+
+## Production Module
+
+These tools support the chapters on project structure, documentation, and code quality.
 
 ### Quarto
 
 **What it is:** A publishing system that renders Markdown documents into HTML, PDF, presentations, and other formats.
 
-**When you need it:** The documentation and reporting chapters (to be referenced once written).
+**When you need it:** @sec-quarto (Documents & Presentations with Quarto).
 
 **How to get it:**
 
@@ -137,34 +164,62 @@ These tools support the chapters on combining SQL, Python, and documentation.
 
 **Notes:** Quarto is what renders this book. Learning it gives you the ability to create professional documentation for your own projects.
 
+### Ruff
+
+**What it is:** A Python linter and formatter that automatically enforces code style and catches common bugs.
+
+**When you need it:** Zed runs Ruff in the background from @sec-python-fundamentals onward, no installation required. You'll add it as a project dependency in @sec-code-quality.
+
+**How to get it:** Nothing to install initially. Zed handles it. Later: `uv add --dev ruff`
+
+**Notes:** Adding Ruff as a project dependency gives you command-line access (`uv run ruff check`), which is essential for AI-assisted workflows and CI pipelines. See @sec-ruff-config for the full explanation of the three installation modes.
+
+### basedpyright
+
+**What it is:** A static type checker that verifies your type hints and catches type errors before you run your code.
+
+**When you need it:** Zed runs a type checker in the background from @sec-python-fundamentals onward, no installation required. You'll add basedpyright as a project dependency in @sec-code-quality.
+
+**How to get it:** Nothing to install initially. Zed handles it. Later: `uv add --dev basedpyright`
+
+**Notes:** Zed already bundles basedpyright, so you get type checking for free. Adding it as a project dependency gives you command-line access (`uv run basedpyright`) and pins the version for your team. See @sec-basedpyright-config for the full explanation.
+
 ## Verification Checklist
 
 After installing tools for each module, verify they're working:
 
 ### Foundations Module
 
-```bash
+```{.bash filename="terminal"}
 git --version        # Should print version number
 zed --version        # Should print version number (or open Zed)
 ```
 
-### Data Engineering Module
+### Database Module
 
-```bash
+```{.bash filename="terminal"}
 duckdb --version     # Should print version number
 ```
 
 ### Python Module
 
-```bash
+```{.bash filename="terminal"}
 uv --version         # Should print version number
 python --version     # Should print Python 3.13.x (after uv python install)
 ```
 
 ### Integration Module
 
-```bash
-quarto --version     # Should print version number
+```{.bash filename="terminal"}
+uv run marimo --version  # Should print version number
+```
+
+### Production Module
+
+```{.bash filename="terminal"}
+quarto --version              # Should print version number
+uv run ruff --version         # Should print version number (after uv add --dev ruff)
+uv run basedpyright --version # Should print version number (after uv add --dev basedpyright)
 ```
 
 If any command fails with "command not found" or similar, revisit the installation instructions or check the troubleshooting appendix.

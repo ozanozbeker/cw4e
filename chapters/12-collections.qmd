@@ -1,0 +1,789 @@
+# Collections & Control Flow {#sec-collections}
+
+The previous chapter introduced Python's scalar types: individual values like numbers, strings, and booleans. Real-world data, though, comes in groups. A database table is a collection of rows. A CSV file is a collection of records. An order has a collection of line items. To work with grouped data, you need *collection types*, and to process those collections, you need *control flow*: the ability to make decisions and repeat actions.
+
+This chapter covers both. You'll learn Python's four built-in collection types, then the control flow constructs that operate on them. The chapter builds toward *comprehensions*, a distinctly Pythonic way of transforming collections that you'll use constantly for the rest of the course.
+
+## Lists
+
+A list is an ordered, mutable collection of values. You create one with square brackets:
+
+```{.python filename="lists.py"}
+products = ["Chai", "Chang", "Aniseed Syrup", "Chef Anton's Cajun Seasoning"]
+prices = [18.00, 19.00, 10.00, 22.00]
+mixed = [42, "hello", True, None, 3.14]  # Lists can hold any type
+empty = []
+```
+
+Unlike arrays in many other languages, Python lists can hold values of different types. In practice, you'll usually keep lists homogeneous (all the same type) because mixed-type lists are hard to reason about and harder to process.
+
+### Indexing
+
+You access individual elements by their position, starting from zero:
+
+```{.python filename="indexing.py"}
+products = ["Chai", "Chang", "Aniseed Syrup", "Tofu"]
+
+products[0]    # "Chai"       (first element)
+products[1]    # "Chang"      (second element)
+products[3]    # "Tofu"       (fourth element)
+products[-1]   # "Tofu"       (last element)
+products[-2]   # "Aniseed Syrup" (second to last)
+```
+
+::: {.callout-warning}
+## Zero-based indexing
+
+Python, like most programming languages, counts from zero. The first element is at index `0`, the second is at index `1`, and so on. If you're coming from Matlab, where indexing starts at `1`, this takes some adjustment. Off-by-one errors are one of the most common bugs in programming, and they often come from forgetting which index a language starts at.
+
+A list with `n` elements has valid indices from `0` to `n - 1`.
+:::
+
+Negative indices count backward from the end. `-1` is the last element, `-2` is the second to last, and so on. This is useful when you don't know the length of a list but need to access elements near the end.
+
+### Slicing
+
+A *slice* extracts a portion of a list. The syntax is `list[start:stop]`, where `start` is included and `stop` is excluded:
+
+```{.python filename="slicing.py"}
+products = ["Chai", "Chang", "Aniseed Syrup", "Tofu", "Miso"]
+
+products[1:3]   # ["Chang", "Aniseed Syrup"]  (index 1 and 2, not 3)
+products[:2]    # ["Chai", "Chang"]            (from the beginning)
+products[2:]    # ["Aniseed Syrup", "Tofu", "Miso"]  (to the end)
+products[:]     # A copy of the entire list
+products[::2]   # ["Chai", "Aniseed Syrup", "Miso"]  (every other element)
+```
+
+The `start:stop:step` form lets you skip elements. `products[::2]` takes every second element. `products[::-1]` reverses the list entirely.
+
+::: {.callout-note}
+## Slices never raise IndexError
+
+If you access an index that doesn't exist, like `products[99]`, Python raises an `IndexError`. But slices are forgiving: `products[99:200]` simply returns an empty list. This makes slicing safe for boundary cases.
+:::
+
+### Mutability
+
+Lists are *mutable*, meaning you can change their contents after creation:
+
+```{.python filename="list_mutation.py"}
+products = ["Chai", "Chang", "Tofu"]
+
+# Change an element
+products[0] = "Earl Grey"       # ["Earl Grey", "Chang", "Tofu"]
+
+# Add elements
+products.append("Miso")         # ["Earl Grey", "Chang", "Tofu", "Miso"]
+products.insert(1, "Matcha")    # ["Earl Grey", "Matcha", "Chang", "Tofu", "Miso"]
+
+# Remove elements
+products.pop()                  # Removes and returns "Miso"
+products.remove("Chang")        # Removes the first occurrence of "Chang"
+
+# Extend with another list
+products.extend(["Soy Sauce", "Wasabi"])
+```
+
+The distinction between `append()` and `extend()` matters. `append()` adds a single element to the end. `extend()` adds every element from another iterable:
+
+```{.python filename="append_vs_extend.py"}
+a = [1, 2, 3]
+a.append([4, 5])    # [1, 2, 3, [4, 5]]  ← a nested list!
+
+b = [1, 2, 3]
+b.extend([4, 5])    # [1, 2, 3, 4, 5]    ← flat list
+```
+
+### Useful List Operations
+
+A few more operations you'll use regularly:
+
+```{.python filename="list_ops.py"}
+numbers = [3, 1, 4, 1, 5, 9, 2, 6]
+
+len(numbers)            # 8 (number of elements)
+sorted(numbers)         # [1, 1, 2, 3, 4, 5, 6, 9] (returns a new list)
+numbers.sort()          # Sorts in place, returns None
+numbers.reverse()       # Reverses in place
+min(numbers)            # 1
+max(numbers)            # 9
+sum(numbers)            # 31
+numbers.count(1)        # 2 (how many times 1 appears)
+numbers.index(5)        # 4 (index of first occurrence of 5)
+```
+
+Note the difference between `sorted(numbers)`, which returns a *new* sorted list and leaves the original unchanged, and `numbers.sort()`, which sorts the list *in place* and returns `None`. This distinction between "returns a new thing" and "modifies in place" is a recurring theme in Python.
+
+## Tuples and Unpacking
+
+A tuple looks like a list but uses parentheses instead of square brackets, and it's *immutable*: once created, you can't change its contents.
+
+```{.python filename="tuples.py"}
+coordinates = (40.4406, -79.9959)  # Pittsburgh, PA
+product = ("Chai", 18.00, 39)
+single = (42,)                      # Note the trailing comma for one-element tuples
+```
+
+Tuples are useful when you have a fixed collection of related values that shouldn't change, like a coordinate pair or a database record. You can read elements by index, just like lists:
+
+```{.python filename="tuple_access.py"}
+coordinates[0]   # 40.4406
+coordinates[1]   # -79.9959
+```
+
+But you can't modify them:
+
+```{.python filename="tuple_immutable.py"}
+coordinates[0] = 41.0  # TypeError: 'tuple' object does not support item assignment
+```
+
+### Tuple Unpacking
+
+The most powerful feature of tuples is *unpacking*: assigning each element to a separate variable in one statement.
+
+```{.python filename="unpacking.py"}
+product = ("Chai", 18.00, 39)
+
+name, price, stock = product  # Unpacks into three variables
+print(name)    # "Chai"
+print(price)   # 18.0
+print(stock)   # 39
+```
+
+If you don't need every value, use `_` as a throwaway placeholder:
+
+```{.python filename="throwaway.py"}
+name, _, stock = product  # We don't need the price right now
+```
+
+Unpacking works with any iterable, not just tuples. You'll see it frequently with functions that return multiple values and with loops over dictionaries.
+
+## Dictionaries
+
+A dictionary stores *key-value pairs*. Each key maps to a value, like a lookup table. You create one with curly braces:
+
+```{.python filename="dicts.py"}
+product = {
+    "name": "Chai",
+    "category": "Beverages",
+    "unit_price": 18.00,
+    "units_in_stock": 39,
+    "discontinued": False,
+}
+```
+
+If you've used SQL, think of a dictionary as a single row from a table, where the keys are column names and the values are cell values.
+
+### Accessing Values
+
+You access values by key, not by position:
+
+```{.python filename="dict_access.py"}
+product["name"]          # "Chai"
+product["unit_price"]    # 18.0
+product["color"]         # KeyError! Key doesn't exist
+```
+
+Accessing a key that doesn't exist raises a `KeyError`. To avoid this, use the `.get()` method, which returns a default value instead:
+
+```{.python filename="dict_get.py"}
+product.get("name")              # "Chai"
+product.get("color")             # None (default when key is missing)
+product.get("color", "Unknown")  # "Unknown" (custom default)
+```
+
+The `.get()` method is safer than bracket access when you aren't certain a key exists. It's especially useful when processing data that might have missing fields.
+
+### Modifying Dictionaries
+
+Dictionaries are mutable. You can add, change, and remove key-value pairs:
+
+```{.python filename="dict_modify.py"}
+product = {"name": "Chai", "price": 18.00}
+
+# Add a new key
+product["category"] = "Beverages"
+
+# Change an existing key
+product["price"] = 19.50
+
+# Remove a key
+del product["category"]
+
+# Remove and return a value
+price = product.pop("price")          # 19.5
+missing = product.pop("color", None)  # None (no error if key is missing)
+```
+
+### Iterating Over Dictionaries
+
+Dictionaries provide three views of their contents:
+
+```{.python filename="dict_iteration.py"}
+product = {"name": "Chai", "price": 18.00, "stock": 39}
+
+product.keys()     # dict_keys(["name", "price", "stock"])
+product.values()   # dict_values(["Chai", 18.0, 39])
+product.items()    # dict_items([("name", "Chai"), ("price", 18.0), ("stock", 39)])
+```
+
+The `.items()` method is especially useful because it gives you both keys and values, which you can unpack in a loop:
+
+```{.python filename="dict_loop.py"}
+for key, value in product.items():
+    print(f"{key}: {value}")
+```
+
+```
+name: Chai
+price: 18.0
+stock: 39
+```
+
+### Nested Dictionaries
+
+Dictionaries can contain other dictionaries, creating hierarchical structures that mirror JSON data:
+
+```{.python filename="nested_dict.py"}
+order = {
+    "order_id": 10248,
+    "customer": {
+        "id": "VINET",
+        "name": "Vins et alcools Chevalier",
+        "country": "France",
+    },
+    "items": [
+        {"product": "Queso Cabrales", "quantity": 12, "unit_price": 14.00},
+        {"product": "Singaporean Hokkien Fried Mee", "quantity": 10, "unit_price": 9.80},
+    ],
+}
+
+# Access nested values
+order["customer"]["name"]         # "Vins et alcools Chevalier"
+order["items"][0]["product"]      # "Queso Cabrales"
+order["items"][1]["unit_price"]   # 9.8
+```
+
+This structure, dictionaries containing lists of dictionaries, is exactly the format you'll encounter when working with JSON files in @sec-file-io.
+
+### When to Use a Dictionary vs. a List
+
+Use a **list** when you have an ordered collection of similar items and access them by position: a list of product names, a list of daily temperatures, a list of file paths.
+
+Use a **dictionary** when you need to look up values by name: a product record, a configuration, a mapping from category names to counts.
+
+## Sets
+
+A set is an unordered collection of unique elements:
+
+```{.python filename="sets.py"}
+categories = {"Beverages", "Condiments", "Seafood", "Beverages"}
+print(categories)  # {"Beverages", "Condiments", "Seafood"} ← duplicate removed
+```
+
+Sets are useful for two things: removing duplicates and performing membership tests efficiently.
+
+```{.python filename="set_operations.py"}
+a = {1, 2, 3, 4, 5}
+b = {4, 5, 6, 7, 8}
+
+a | b    # {1, 2, 3, 4, 5, 6, 7, 8}  Union
+a & b    # {4, 5}                      Intersection
+a - b    # {1, 2, 3}                   Difference (in a but not in b)
+a ^ b    # {1, 2, 3, 6, 7, 8}         Symmetric difference (in one but not both)
+```
+
+If you remember set operations from a math or statistics course, these work exactly the same way. If you've used SQL's `UNION`, `INTERSECT`, and `EXCEPT`, sets are the Python equivalent.
+
+::: {.callout-note}
+## Creating an empty set
+
+`{}` creates an empty *dictionary*, not an empty set. To create an empty set, use `set()`:
+
+```{.python filename="empty_set.py"}
+empty_dict = {}       # This is a dictionary
+empty_set = set()     # This is a set
+```
+:::
+
+## Conditionals
+
+Conditionals let your code make decisions. Python's `if` statement evaluates a condition and executes a block of code only if the condition is truthy:
+
+```{.python filename="if_statement.py"}
+units_in_stock = 5
+reorder_level = 10
+
+if units_in_stock <= reorder_level:
+    print("Stock is low. Time to reorder.")
+```
+
+Notice that the block under `if` is indented. Python uses indentation to define code blocks, not braces or keywords like `end`. This means indentation isn't just a style choice, it's part of the language's syntax. The standard is four spaces per level.
+
+### `if` / `elif` / `else`
+
+For multiple branches, use `elif` (short for "else if") and `else`:
+
+```{.python filename="elif.py"}
+score = 78
+
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+elif score >= 60:
+    grade = "D"
+else:
+    grade = "F"
+
+print(f"Score: {score}, Grade: {grade}")  # Score: 78, Grade: C
+```
+
+Python evaluates conditions from top to bottom and executes only the first branch that matches. Once a branch is taken, the remaining `elif` and `else` blocks are skipped entirely.
+
+### Conditional Expressions (Ternary)
+
+For simple two-way decisions, Python supports a compact inline form:
+
+```{.python filename="ternary.py"}
+status = "Active" if not discontinued else "Discontinued"
+```
+
+This is equivalent to:
+
+```{.python filename="ternary_expanded.py"}
+if not discontinued:
+    status = "Active"
+else:
+    status = "Discontinued"
+```
+
+The inline form reads like English: "*status* is *'Active'* if *not discontinued*, else *'Discontinued'*." Use it for simple assignments. For anything more complex, the full `if`/`else` block is clearer.
+
+### Structural Pattern Matching
+
+Python 3.10 introduced `match`/`case` for structural pattern matching. It's useful when you're checking a value against multiple specific options:
+
+```{.python filename="match_case.py"}
+def describe_http_status(code: int) -> str:
+    match code:
+        case 200:
+            return "OK"
+        case 301:
+            return "Moved Permanently"
+        case 404:
+            return "Not Found"
+        case 500:
+            return "Internal Server Error"
+        case _:
+            return f"Unknown status: {code}"
+
+print(describe_http_status(404))  # "Not Found"
+```
+
+The `_` in the last case is a wildcard that matches anything, like `else` in an `if` chain. Pattern matching is more powerful than this simple example suggests (it can destructure collections and objects), but for now, think of it as a cleaner alternative to long `if`/`elif` chains when you're matching a value against known options.
+
+## Loops
+
+Loops repeat a block of code. Python has two kinds: `for` loops that iterate over a collection, and `while` loops that repeat as long as a condition is true.
+
+### `for` Loops
+
+A `for` loop visits each element in a sequence, one at a time:
+
+```{.python filename="for_loop.py"}
+products = ["Chai", "Chang", "Tofu", "Miso"]
+
+for product in products:
+    print(f"Processing: {product}")
+```
+
+```
+Processing: Chai
+Processing: Chang
+Processing: Tofu
+Processing: Miso
+```
+
+The variable `product` takes on each value in the list, one per iteration. After the loop, `product` holds the last value, `"Miso"`.
+
+### `range()` for Numeric Iteration
+
+When you need to iterate over a sequence of numbers, use `range()`:
+
+```{.python filename="range.py"}
+for i in range(5):
+    print(i)    # Prints 0, 1, 2, 3, 4
+
+for i in range(2, 8):
+    print(i)    # Prints 2, 3, 4, 5, 6, 7
+
+for i in range(0, 20, 5):
+    print(i)    # Prints 0, 5, 10, 15
+```
+
+Like slicing, `range(start, stop)` includes `start` but excludes `stop`. The optional third argument is the step size.
+
+### `enumerate()` for Index + Value
+
+When you need both the index and the value, use `enumerate()`:
+
+```{.python filename="enumerate.py"}
+products = ["Chai", "Chang", "Tofu"]
+
+for index, product in products:  # This would fail! Can't unpack a string
+    print(f"{index}: {product}")
+
+for index, product in enumerate(products):
+    print(f"{index}: {product}")
+```
+
+```
+0: Chai
+1: Chang
+2: Tofu
+```
+
+`enumerate()` returns pairs of `(index, value)`, which you unpack directly in the loop header. This is much cleaner than maintaining a separate counter variable.
+
+### `zip()` for Parallel Iteration
+
+When you need to iterate over two (or more) sequences together, use `zip()`:
+
+```{.python filename="zip.py"}
+products = ["Chai", "Chang", "Tofu"]
+prices = [18.00, 19.00, 6.50]
+
+for product, price in zip(products, prices):
+    print(f"{product}: ${price:.2f}")
+```
+
+```
+Chai: $18.00
+Chang: $19.00
+Tofu: $6.50
+```
+
+`zip()` pairs elements by position: first with first, second with second, and so on. If the sequences have different lengths, `zip()` stops at the shortest one.
+
+### `while` Loops
+
+A `while` loop repeats as long as its condition is truthy:
+
+```{.python filename="while_loop.py"}
+countdown = 5
+
+while countdown > 0:
+    print(f"T-minus {countdown}")
+    countdown -= 1
+
+print("Launch!")
+```
+
+Use `while` when you don't know in advance how many iterations you need. Use `for` when you're iterating over a known collection or range. In data processing, `for` loops are far more common.
+
+::: {.callout-warning}
+## Infinite loops
+
+If a `while` condition never becomes falsy, the loop runs forever. Always make sure something inside the loop moves you toward the exit condition. If your program hangs, press `Ctrl+C` to interrupt it.
+:::
+
+### `break` and `continue`
+
+`break` exits the loop entirely. `continue` skips the rest of the current iteration and moves to the next one:
+
+```{.python filename="break_continue.py"}
+# Find the first discontinued product
+products = [
+    {"name": "Chai", "discontinued": False},
+    {"name": "Chang", "discontinued": False},
+    {"name": "Chef Anton's", "discontinued": True},
+    {"name": "Tofu", "discontinued": False},
+]
+
+for product in products:
+    if product["discontinued"]:
+        print(f"Found discontinued: {product['name']}")
+        break
+```
+
+```{.python filename="continue.py"}
+# Print only active products
+for product in products:
+    if product["discontinued"]:
+        continue  # Skip this iteration
+    print(product["name"])
+```
+
+## Comprehensions {#sec-comprehensions}
+
+Comprehensions are one of Python's most distinctive features. A list comprehension creates a new list by transforming and/or filtering an existing iterable, all in a single expression.
+
+### From Loop to Comprehension
+
+Consider this loop that computes the square of each number:
+
+```{.python filename="loop_version.py"}
+numbers = [1, 2, 3, 4, 5]
+squares = []
+
+for n in numbers:
+    squares.append(n ** 2)
+
+# squares = [1, 4, 9, 16, 25]
+```
+
+The equivalent list comprehension:
+
+```{.python filename="comprehension_version.py"}
+numbers = [1, 2, 3, 4, 5]
+squares = [n ** 2 for n in numbers]
+
+# squares = [1, 4, 9, 16, 25]
+```
+
+The comprehension reads as: "give me `n ** 2` for each `n` in `numbers`." It's more concise, and once you're used to the pattern, it's more readable too.
+
+### Adding a Filter
+
+You can add an `if` clause to filter which elements are included:
+
+```{.python filename="filtered_comprehension.py"}
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+evens = [n for n in numbers if n % 2 == 0]
+# [2, 4, 6, 8, 10]
+
+large_squares = [n ** 2 for n in numbers if n > 5]
+# [36, 49, 64, 81, 100]
+```
+
+This reads as: "give me `n ** 2` for each `n` in `numbers`, but only if `n > 5`."
+
+### Dictionary and Set Comprehensions
+
+The same pattern works for dictionaries and sets:
+
+```{.python filename="dict_comprehension.py"}
+products = ["Chai", "Chang", "Tofu"]
+prices = [18.00, 19.00, 6.50]
+
+price_lookup = {name: price for name, price in zip(products, prices)}
+# {"Chai": 18.0, "Chang": 19.0, "Tofu": 6.5}
+```
+
+```{.python filename="set_comprehension.py"}
+words = ["hello", "world", "hello", "python"]
+unique_lengths = {len(word) for word in words}
+# {5, 6}
+```
+
+### A Practical Example
+
+Here's a comprehension that processes Northwind product data, filtering to active products and computing stock values:
+
+```{.python filename="northwind_comprehension.py"}
+products = [
+    {"name": "Chai", "price": 18.00, "stock": 39, "discontinued": False},
+    {"name": "Chang", "price": 19.00, "stock": 17, "discontinued": False},
+    {"name": "Chef Anton's", "price": 22.00, "stock": 53, "discontinued": True},
+    {"name": "Tofu", "price": 23.25, "stock": 35, "discontinued": False},
+]
+
+# Stock values for active products only
+stock_values = [
+    {"name": p["name"], "value": p["price"] * p["stock"]}
+    for p in products
+    if not p["discontinued"]
+]
+
+for item in stock_values:
+    print(f"{item['name']}: ${item['value']:,.2f}")
+```
+
+```
+Chai: $702.00
+Chang: $323.00
+Tofu: $813.75
+```
+
+### When Not to Use Comprehensions
+
+Comprehensions are powerful, but they can become unreadable if you push too much logic into them. A good rule of thumb: if a comprehension doesn't fit on one or two lines, or if it requires nested loops with complex conditions, use an explicit loop instead. Clarity beats cleverness.
+
+```{.python filename="too_complex.py"}
+# This is too complex for a comprehension. Use a loop.
+result = [
+    (x, y, z)
+    for x in range(1, 30)
+    for y in range(x, 30)
+    for z in range(y, 30)
+    if x ** 2 + y ** 2 == z ** 2
+]
+```
+
+## Putting It Together: Northwind Order Processing
+
+Let's combine collections and control flow to process Northwind data. Given a list of order detail records, we'll compute revenue by category:
+
+```{.python filename="order_processing.py"}
+# Sample order details (in later chapters, we'll read this from files)
+order_details = [
+    {"product": "Chai", "category": "Beverages", "price": 18.00, "quantity": 10},
+    {"product": "Chang", "category": "Beverages", "price": 19.00, "quantity": 5},
+    {"product": "Aniseed Syrup", "category": "Condiments", "price": 10.00, "quantity": 20},
+    {"product": "Tofu", "category": "Produce", "price": 23.25, "quantity": 15},
+    {"product": "Miso", "category": "Condiments", "price": 13.00, "quantity": 8},
+]
+
+# Compute revenue per item
+revenues = [
+    {**item, "revenue": item["price"] * item["quantity"]}
+    for item in order_details
+]
+
+# Aggregate revenue by category using a dictionary
+category_totals = {}
+
+for item in revenues:
+    category = item["category"]
+    revenue = item["revenue"]
+
+    if category in category_totals:
+        category_totals[category] += revenue
+    else:
+        category_totals[category] = revenue
+
+# Sort by revenue (descending) and display
+sorted_categories = sorted(
+    category_totals.items(),
+    key=lambda pair: pair[1],
+    reverse=True,
+)
+
+print(f"{'Category':<15} {'Revenue':>10}")
+print(f"{'-' * 15} {'-' * 10}")
+for category, total in sorted_categories:
+    print(f"{category:<15} ${total:>9,.2f}")
+```
+
+```
+Category             Revenue
+--------------- ----------
+Produce         $   348.75
+Condiments      $   304.00
+Beverages       $   275.00
+```
+
+This script uses lists of dictionaries, a `for` loop with an `if`/`else` branch to build an aggregation dictionary, `sorted()` with a `key` function, tuple unpacking, and f-strings with alignment. It's a miniature version of what SQL's `GROUP BY` does, implemented entirely in Python. In @sec-file-io, you'll read this data from actual CSV files instead of hardcoding it.
+
+## Exercises {.unnumbered}
+
+### Collection Operations {.unnumbered}
+
+1. Create a list of 10 integers. Use slicing to extract the first three, the last three, and every other element. Use `sorted()` to get them in descending order.
+
+2. Given two lists of the same length, create a dictionary that maps elements from the first list (as keys) to elements of the second (as values). Use `zip()`.
+
+3. Given a list of product names that may contain duplicates, use a set to get the unique names, then convert back to a sorted list.
+
+### Loop Practice {.unnumbered}
+
+1. Write a `for` loop that prints the first 20 numbers in the Fibonacci sequence (1, 1, 2, 3, 5, 8, ...).
+
+2. Given a list of dictionaries representing products (with `"name"`, `"price"`, and `"stock"` keys), use a `for` loop to find and print the most expensive product.
+
+3. Use `enumerate()` to print a numbered list of products, starting from 1 instead of 0. (Hint: `enumerate()` accepts a `start` argument.)
+
+### Comprehension Practice {.unnumbered}
+
+1. Rewrite each of these loops as a comprehension:
+
+    ```{.python filename="to_comprehension.py"}
+    # Loop 1
+    names = []
+    for p in products:
+        names.append(p["name"].upper())
+
+    # Loop 2
+    expensive = []
+    for p in products:
+        if p["price"] > 20:
+            expensive.append(p["name"])
+    ```
+
+2. Now go the other direction. Rewrite this comprehension as an explicit loop:
+
+    ```{.python filename="to_loop.py"}
+    summary = {p["name"]: p["price"] * p["stock"] for p in products if p["stock"] > 0}
+    ```
+
+3. Given the `order_details` list from the chapter example, write a comprehension that produces a list of product names where revenue exceeds $150.
+
+### Northwind Category Analysis {.unnumbered}
+
+Using the `order_details` list from the chapter, write a script that:
+
+1. Groups items by category into a dictionary of lists (each category key maps to a list of its items).
+2. For each category, computes the average unit price and total quantity ordered.
+3. Prints a formatted summary table.
+
+## Summary {.unnumbered}
+
+This chapter introduced Python's four built-in collection types, each with a distinct purpose. Lists store ordered sequences you access by position. Tuples are immutable lists, useful for fixed groups of related values and for unpacking. Dictionaries store key-value pairs for named lookups. Sets store unique elements and support mathematical set operations.
+
+Control flow, `if`/`elif`/`else` for decisions and `for`/`while` for repetition, lets you process collections element by element. The `enumerate()`, `zip()`, and `range()` functions are essential companions to `for` loops that you'll reach for constantly.
+
+Comprehensions condense the common pattern of "build a new collection by transforming and filtering an existing one" into a single, readable expression. They're one of the features that makes Python code distinctive, and you'll use them throughout the rest of the course.
+
+In the next chapter, you'll learn to organize your code into reusable functions and modules, the building blocks that turn scripts into maintainable software.
+
+## Glossary {.unnumbered}
+
+comprehension
+: A concise syntax for creating lists, dictionaries, or sets by transforming and filtering an iterable. Example: `[x ** 2 for x in range(10)]`.
+
+dictionary
+: A mutable collection of key-value pairs. Keys must be unique and hashable. Created with `{}` or `dict()`.
+
+`enumerate()`
+: A built-in function that yields `(index, value)` pairs from an iterable.
+
+immutable
+: An object that cannot be changed after creation. Strings, tuples, and frozensets are immutable.
+
+iterable
+: Any object that can be looped over with a `for` statement. Lists, tuples, dictionaries, sets, strings, and ranges are all iterable.
+
+key-value pair
+: A single entry in a dictionary, consisting of a key (used for lookup) and its associated value.
+
+list
+: An ordered, mutable collection of values. Created with `[]` or `list()`.
+
+mutable
+: An object that can be changed after creation. Lists, dictionaries, and sets are mutable.
+
+pattern matching
+: Python's `match`/`case` syntax for comparing a value against multiple patterns. Introduced in Python 3.10.
+
+set
+: An unordered collection of unique elements. Supports mathematical set operations like union and intersection.
+
+slice
+: A way to extract a portion of a sequence using `start:stop:step` notation.
+
+tuple
+: An ordered, immutable collection of values. Created with `()` or `tuple()`.
+
+tuple unpacking
+: Assigning each element of a tuple (or other iterable) to a separate variable in one statement. Example: `a, b, c = (1, 2, 3)`.
+
+zero-based indexing
+: A numbering convention where the first element is at position 0, the second at position 1, and so on.
+
+`zip()`
+: A built-in function that pairs elements from two or more iterables together.

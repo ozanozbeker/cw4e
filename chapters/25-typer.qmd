@@ -1,0 +1,740 @@
+# CLI Tools with Typer {#sec-typer}
+
+In Foundations, you ran CLI tools that other people built: `git commit`, `duckdb northwind.duckdb`, `uv run`. You learned the conventions, flags took double hyphens, `--help` showed documentation, arguments were positional, and options were named. You became fluent in *using* the command line.
+
+Now you'll build your own.
+
+This chapter turns the Python scripts you've been writing all semester into professional command-line applications. The tool is Typer, a library that generates CLI interfaces from type-annotated Python functions. If you can write a function with type hints and a docstring, you can build a CLI tool. The type hints from @sec-objects define the interface. The docstring from @sec-functions becomes the help text. And the module system from @sec-functions organizes your code so the CLI is a thin layer over the logic you've already written.
+
+By the end of this chapter, you'll have a `northwind` command that anyone can install and run to generate reports from the Northwind database. The course arc completes: you started as a passenger, running tools others built. You finish as a driver, building tools others can use.
+
+## From Scripts to Tools
+
+Throughout Programming and Integration, you wrote scripts for *yourself*: files you run from the terminal with `uv run script.py` to see results. A professional tool is different. It's a script that *anyone* can run, even someone who has never seen your code.
+
+The difference is the interface. When you run `uv run revenue.py`, there's no documentation, no parameter validation, and no way to customize the behavior without editing the source file. When you run `uv run northwind revenue --category "Beverages" --output report.csv`, the command documents itself, validates inputs, and adapts to the user's needs.
+
+The CLI is the "front door" to your code. It's where other people interact with your work. Good CLI design follows the same conventions you've been relying on all semester: `--help` explains what the tool does, options have sensible defaults, errors produce clear messages, and the tool does one thing well.
+
+## Why Typer?
+
+Python's standard library includes `argparse`, a module for building CLI interfaces. It works, but it's verbose and dated. Building even a simple command requires dozens of lines of boilerplate: creating a parser, adding arguments, calling `parse_args()`, and extracting values.
+
+Typer takes a different approach. It reads your function's type hints and docstring and generates the CLI interface automatically. A typed function *is* the CLI:
+
+```{.python filename="greet.py"}
+import typer
+
+
+def main(name: str) -> None:
+    """Greet someone by name."""
+    print(f"Hello, {name}!")
+
+
+if __name__ == "__main__":
+    typer.run(main)
+```
+
+```{.bash filename="terminal"}
+$ uv run python greet.py --help
+Usage: greet.py [OPTIONS] NAME
+
+  Greet someone by name.
+
+Arguments:
+  NAME  [required]
+
+Options:
+  --help  Show this message and exit.
+
+$ uv run python greet.py "World"
+Hello, World!
+```
+
+Typer read the function signature (`name: str`), determined that `name` is a required argument (because it has no default value), and generated the `--help` text from the docstring. No parser construction, no boilerplate, no argument extraction. The function *is* the interface.
+
+Typer is built on Click, the most popular Python CLI library. This means it's production-grade: the same foundation powers tools used by thousands of developers.
+
+Install Typer in your project:
+
+```{.bash filename="terminal"}
+uv add typer
+```
+
+## Arguments and Options
+
+Typer distinguishes between *arguments* (positional, required inputs) and *options* (named, usually optional inputs with defaults). The distinction is determined by how you annotate the function parameters.
+
+### Arguments
+
+A parameter with a bare type hint becomes a positional argument:
+
+```{.python filename="arguments.py"}
+import typer
+
+
+def main(name: str, count: int = 1) -> None:
+    """Greet someone, optionally multiple times.
+
+    Args:
+        name: The name to greet.
+        count: Number of times to print the greeting.
+    """
+    for _ in range(count):
+        print(f"Hello, {name}!")
+
+
+if __name__ == "__main__":
+    typer.run(main)
+```
+
+```{.bash filename="terminal"}
+$ uv run python arguments.py Alice
+Hello, Alice!
+
+$ uv run python arguments.py Alice 3
+Hello, Alice!
+Hello, Alice!
+Hello, Alice!
+```
+
+`name` is required (no default value). `count` is optional with a default of 1. Both are positional arguments because they use bare type hints.
+
+### Options
+
+To create named options (the `--flag value` style), use `Annotated` with `typer.Option`:
+
+```{.python filename="options.py"}
+import typer
+from typing import Annotated
+
+
+def main(
+    name: str,
+    greeting: Annotated[str, typer.Option(help="The greeting to use")] = "Hello",
+    shout: Annotated[bool, typer.Option(help="Print in uppercase")] = False,
+) -> None:
+    """Greet someone with customizable options."""
+    message = f"{greeting}, {name}!"
+    if shout:
+        message = message.upper()
+    print(message)
+
+
+if __name__ == "__main__":
+    typer.run(main)
+```
+
+```{.bash filename="terminal"}
+$ uv run python options.py Alice
+Hello, Alice!
+
+$ uv run python options.py Alice --greeting "Good morning" --shout
+GOOD MORNING, ALICE!
+
+$ uv run python options.py --help
+Usage: options.py [OPTIONS] NAME
+
+  Greet someone with customizable options.
+
+Arguments:
+  NAME  [required]
+
+Options:
+  --greeting TEXT  The greeting to use  [default: Hello]
+  --shout / --no-shout  Print in uppercase  [default: no-shout]
+  --help          Show this message and exit.
+```
+
+The `Annotated` type wraps the parameter's type (`str`, `bool`) with metadata (`typer.Option`) that tells Typer to create a named option. The `help` parameter provides the description shown in `--help`. Boolean options automatically generate `--flag / --no-flag` pairs.
+
+### The Pattern
+
+| Parameter Style | CLI Behavior |
+|----------------|-------------|
+| `name: str` | Required positional argument |
+| `name: str = "default"` | Optional positional argument |
+| `name: Annotated[str, typer.Option()]` | Named option (optional) |
+| `name: Annotated[str, typer.Option()] = "default"` | Named option with default |
+| `flag: Annotated[bool, typer.Option()]` | Boolean flag (`--flag / --no-flag`) |
+
+: Typer parameter styles {#tbl-typer-params}
+
+Notice that the type hints do double duty. In @sec-objects, they documented the function interface for human readers and editor tooling. In @sec-code-quality, basedpyright used them to catch type errors. Now Typer uses them to generate the CLI interface. The same annotation serves three purposes: documentation, verification, and interface generation.
+
+::: {.callout-note collapse="true" title="Exercise: From Function to CLI"}
+You have a Python function:
+
+```python
+def summarize_sales(min_amount: float = 1000.0, category: str = "All", verbose: bool = False) -> None:
+    """Summarize sales data."""
+    # implementation...
+```
+
+Convert this into a Typer CLI where:
+- `--min-amount` is a named option with default 1000.0
+- `--category` is a named option with default "All"
+- `--verbose` is a boolean flag (should produce `--verbose / --no-verbose`)
+- The docstring describes what the command does
+
+::: {.callout-tip collapse="true" title="Solution"}
+```python
+import typer
+from typing import Annotated
+
+app = typer.Typer()
+
+@app.command()
+def summarize_sales(
+    min_amount: Annotated[float, typer.Option(help="Minimum sale amount to include")] = 1000.0,
+    category: Annotated[str, typer.Option(help="Product category filter")] = "All",
+    verbose: Annotated[bool, typer.Option(help="Print detailed information")] = False,
+) -> None:
+    """Summarize sales data by category and amount."""
+    # implementation...
+```
+
+This produces CLI options: `--min-amount 1500 --category "Beverages" --verbose`. The type hints tell Typer to create named options with `typer.Option()`. The default values determine what `--help` shows.
+:::
+:::
+
+## Building a Northwind CLI Tool
+
+Let's build a real tool. The `northwind` command will generate reports from the Northwind database, combining the data access functions from @sec-python-sql, the Polars transformations from @sec-polars, and the Excel output from @sec-excel.
+
+### Multiple Commands with `typer.Typer()`
+
+For a tool with multiple subcommands (like `git commit`, `git push`, `git log`), use `typer.Typer()` as a decorator:
+
+Begin with imports and the `Typer` app object. The `get_connection()` helper function opens a read-only connection to the database and validates that the file exists before returning the connection. This pattern isolates database access logic from individual commands, making it easier to change the database path or add error handling globally.
+
+```{.python filename="src/northwind_analysis/cli.py"}
+"""CLI interface for Northwind database reporting."""
+
+import typer
+from pathlib import Path
+from typing import Annotated
+
+import duckdb
+import polars as pl
+
+app = typer.Typer(help="Northwind database reporting tool.")
+
+
+def get_connection(db_path: str = "data/northwind.duckdb") -> duckdb.DuckDBPyConnection:
+    """Open a read-only connection to the Northwind database.
+
+    Args:
+        db_path: Path to the DuckDB database file.
+
+    Returns:
+        A DuckDB connection object.
+    """
+    path = Path(db_path)
+    if not path.exists():
+        print(f"Error: database not found at {path}")
+        raise typer.Exit(code=1)
+    return duckdb.connect(str(path), read_only=True)
+```
+
+The `revenue` command generates reports by category. It accepts three options: `--category` to filter a single category, `--output` to specify the report file, and `--top-n` to limit results when not filtering by category. The command branches based on whether a category filter is provided, executing different SQL queries for each case.
+
+```{.python filename="src/northwind_analysis/cli.py"}
+
+@app.command()
+def revenue(
+    category: Annotated[
+        str | None, typer.Option(help="Filter by product category")
+    ] = None,
+    output: Annotated[
+        Path, typer.Option(help="Output file path")
+    ] = Path("revenue.csv"),
+    top_n: Annotated[
+        int, typer.Option(help="Number of categories to show")
+    ] = 10,
+) -> None:
+    """Generate a revenue report by product category."""
+    conn = get_connection()
+
+    if category is not None:
+        df = conn.sql("""
+            SELECT
+                c.category_name,
+                ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+                COUNT(DISTINCT o.order_id) AS order_count
+            FROM order_details AS od
+            JOIN orders AS o ON od.order_id = o.order_id
+            JOIN products AS p ON od.product_id = p.product_id
+            JOIN categories AS c ON p.category_id = c.category_id
+            WHERE c.category_name = $1
+            GROUP BY c.category_name
+        """, params=[category]).pl()
+    else:
+        df = conn.sql("""
+            SELECT
+                c.category_name,
+                ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+                COUNT(DISTINCT o.order_id) AS order_count
+            FROM order_details AS od
+            JOIN orders AS o ON od.order_id = o.order_id
+            JOIN products AS p ON od.product_id = p.product_id
+            JOIN categories AS c ON p.category_id = c.category_id
+            GROUP BY c.category_name
+            ORDER BY revenue DESC
+            LIMIT $1
+        """, params=[top_n]).pl()
+
+    # Display to terminal
+    print(df)
+
+    # Write to file
+    df.write_csv(output)
+    print(f"\nReport written to {output}")
+
+    conn.close()
+```
+
+The `customers` command lists top customers ranked by total order value. It demonstrates optional output with the `Path | None` type, which allows the command to display results to the terminal without writing a file if `--output` is not specified.
+
+```{.python filename="src/northwind_analysis/cli.py"}
+
+@app.command()
+def customers(
+    top_n: Annotated[
+        int, typer.Option(help="Number of top customers to show")
+    ] = 10,
+    output: Annotated[
+        Path | None, typer.Option(help="Output file path (optional)")
+    ] = None,
+) -> None:
+    """List top customers by total order value."""
+    conn = get_connection()
+
+    df = conn.sql("""
+        SELECT
+            c.company_name,
+            c.contact_name,
+            COUNT(DISTINCT o.order_id) AS total_orders,
+            ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS total_revenue
+        FROM customers AS c
+        JOIN orders AS o ON c.customer_id = o.customer_id
+        JOIN order_details AS od ON o.order_id = od.order_id
+        GROUP BY c.company_name, c.contact_name
+        ORDER BY total_revenue DESC
+        LIMIT $1
+    """, params=[top_n]).pl()
+
+    print(df)
+
+    if output is not None:
+        df.write_csv(output)
+        print(f"\nReport written to {output}")
+
+    conn.close()
+```
+
+The `products` command demonstrates client-side filtering with Polars. The SQL query retrieves all products, then Polars filters by category and minimum price. The command also maps a user-friendly sort parameter (`price`, `stock`, `name`) to the underlying column names, making the CLI more intuitive.
+
+```{.python filename="src/northwind_analysis/cli.py"}
+
+@app.command()
+def products(
+    category: Annotated[
+        str | None, typer.Option(help="Filter by category")
+    ] = None,
+    min_price: Annotated[
+        float, typer.Option(help="Minimum unit price filter")
+    ] = 0.0,
+    sort_by: Annotated[
+        str, typer.Option(help="Sort column: price, stock, or name")
+    ] = "price",
+) -> None:
+    """List products with optional filtering and sorting."""
+    conn = get_connection()
+
+    df = conn.sql("""
+        SELECT
+            p.product_name,
+            c.category_name,
+            p.unit_price,
+            p.units_in_stock,
+            p.discontinued
+        FROM products AS p
+        JOIN categories AS c ON p.category_id = c.category_id
+        ORDER BY p.unit_price DESC
+    """).pl()
+
+    # Apply filters with Polars
+    if category is not None:
+        df = df.filter(pl.col("category_name") == category)
+
+    if min_price > 0:
+        df = df.filter(pl.col("unit_price") >= min_price)
+
+    # Apply sorting
+    sort_map = {
+        "price": "unit_price",
+        "stock": "units_in_stock",
+        "name": "product_name",
+    }
+    sort_col = sort_map.get(sort_by, "unit_price")
+    df = df.sort(sort_col, descending=(sort_by != "name"))
+
+    print(df)
+    conn.close()
+```
+
+Finally, the `if __name__ == "__main__"` block invokes the app. When run as a script, the `app()` call activates Typer's CLI parser, which handles all argument parsing and command routing.
+
+```{.python filename="src/northwind_analysis/cli.py"}
+
+if __name__ == "__main__":
+    app()
+```
+
+This tool has three subcommands: `revenue`, `customers`, and `products`. Each subcommand is a decorated function with typed parameters that Typer converts into CLI options. The tool's `--help` shows all available commands, and each command has its own `--help` with its specific options:
+
+```{.bash filename="terminal"}
+$ uv run python -m northwind_analysis.cli --help
+Usage: cli.py [OPTIONS] COMMAND [ARGS]...
+
+  Northwind database reporting tool.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  revenue    Generate a revenue report by product category.
+  customers  List top customers by total order value.
+  products   List products with optional filtering and sorting.
+
+$ uv run python -m northwind_analysis.cli revenue --help
+Usage: cli.py revenue [OPTIONS]
+
+  Generate a revenue report by product category.
+
+Options:
+  --category TEXT     Filter by product category
+  --output PATH       Output file path  [default: revenue.csv]
+  --top-n INTEGER     Number of categories to show  [default: 10]
+  --help              Show this message and exit.
+
+$ uv run python -m northwind_analysis.cli revenue --category "Beverages"
+```
+
+### The Pattern: Typer Handles the Interface, Your Functions Handle the Logic
+
+Notice that the CLI functions in the example above contain both the interface logic (Typer decorators, parameters) and the business logic (SQL queries, DataFrame operations). In a production tool, you'd separate these concerns. The CLI module calls functions from your existing modules:
+
+```{.python filename="src/northwind_analysis/cli.py"}
+"""CLI interface for Northwind database reporting."""
+
+import typer
+from typing import Annotated
+from pathlib import Path
+
+from northwind_analysis.data import get_connection, revenue_by_category
+from northwind_analysis.reports import write_csv_report
+
+app = typer.Typer(help="Northwind database reporting tool.")
+
+
+@app.command()
+def revenue(
+    category: Annotated[str | None, typer.Option(help="Filter by category")] = None,
+    output: Annotated[Path, typer.Option(help="Output file path")] = Path("revenue.csv"),
+) -> None:
+    """Generate a revenue report by product category."""
+    conn = get_connection()
+    df = revenue_by_category(conn, category=category)
+    print(df)
+    write_csv_report(df, output)
+    print(f"\nReport written to {output}")
+    conn.close()
+```
+
+The `northwind_analysis.data` module (built from the data access layer in @sec-python-sql) handles queries. The `northwind_analysis.reports` module handles output formatting. The CLI module is a thin layer that wires user input to existing functions. This separation means your functions are usable from notebooks, scripts, *and* the CLI.
+
+::: {.callout-note collapse="true" title="Exercise: Separate Logic from CLI"}
+You have a CLI function that both retrieves data and displays results:
+
+```python
+@app.command()
+def revenue(category: Annotated[str | None, typer.Option()] = None):
+    """Generate revenue report."""
+    conn = get_connection()
+    df = conn.sql(f"SELECT ... WHERE category = '{category}'").pl()
+    print(df)
+    conn.close()
+```
+
+Refactor this by extracting the business logic into a separate module. The CLI function should only handle:
+1. Parsing arguments
+2. Calling a reusable function
+3. Formatting output
+
+::: {.callout-tip collapse="true" title="Solution"}
+Create a `northwind_analysis/data.py` module:
+
+```python
+def get_revenue(conn: duckdb.DuckDBPyConnection, category: str | None) -> pl.DataFrame:
+    """Get revenue data, optionally filtered by category."""
+    if category:
+        return conn.sql(
+            "SELECT ... WHERE category = $1",
+            params=[category]
+        ).pl()
+    return conn.sql("SELECT ...").pl()
+```
+
+Then the CLI becomes:
+
+```python
+from northwind_analysis.data import get_revenue
+
+@app.command()
+def revenue(category: Annotated[str | None, typer.Option()] = None):
+    """Generate revenue report."""
+    conn = get_connection()
+    df = get_revenue(conn, category)
+    print(df)
+    conn.close()
+```
+
+Now `get_revenue()` is reusable from notebooks, scripts, or other CLI commands. The CLI only wires arguments to functions and formats output.
+:::
+:::
+
+## Distributing Your CLI Tool {#sec-distributing-cli}
+
+The `[project.scripts]` section in `pyproject.toml` (@sec-pyproject) registers your CLI as an installable command:
+
+```{.toml filename="pyproject.toml"}
+[project.scripts]
+northwind = "northwind_analysis.cli:app"
+```
+
+After `uv sync`, the command is available:
+
+```{.bash filename="terminal"}
+$ uv run northwind --help
+$ uv run northwind revenue --category "Beverages"
+$ uv run northwind customers --top-n 5
+```
+
+### Sharing with Others
+
+Once your project is on GitHub, anyone can install your tool:
+
+```{.bash filename="terminal"}
+# Install as a tool (available globally)
+uv tool install git+https://github.com/username/northwind-analysis
+
+# Now the command is available without uv run
+northwind revenue --category "Beverages"
+```
+
+If you publish to PyPI (@sec-python-projects), installation is even simpler:
+
+```{.bash filename="terminal"}
+uv tool install northwind-analysis
+```
+
+The full circle is complete. At the start of the course, you ran `uv tool install marimo` to install a CLI tool someone else built. Now you can publish your own tool, and anyone in the world can install it the same way.
+
+## Automating with Scripts and Schedules {#sec-scheduling}
+
+You've built a CLI tool that anyone can run with a single command. The next step is making it run *without* anyone. Automation means your report generates itself every Monday morning, your data pipeline refreshes overnight, and your quality checks run after every push, all without you typing a command.
+
+The foundation is simple: if you can run it from the terminal, you can run it from a script. And if you can run it from a script, you can run it on a schedule.
+
+### Shell Scripts with `uv run`
+
+A shell script is a text file containing terminal commands. On macOS and Linux, these are `.sh` files. On Windows, they're `.bat` files. The `uv run` command makes these scripts remarkably simple because it handles the virtual environment automatically: you don't need to activate anything, install anything, or worry about paths.
+
+On **macOS/Linux**, create a file called `run_report.sh`:
+
+```{.bash filename="run_report.sh"}
+#!/bin/bash
+cd /path/to/your/project
+uv run northwind revenue --output reports/weekly_revenue.csv
+uv run northwind customers --top-n 20 --output reports/top_customers.csv
+echo "Reports generated at $(date)"
+```
+
+Make it executable and run it:
+
+```{.bash filename="terminal"}
+chmod +x run_report.sh
+./run_report.sh
+```
+
+On **Windows**, create a file called `run_report.bat`:
+
+```{.powershell filename="run_report.bat"}
+@echo off
+cd /d C:\path\to\your\project
+uv run northwind revenue --output reports\weekly_revenue.csv
+uv run northwind customers --top-n 20 --output reports\top_customers.csv
+echo Reports generated at %date% %time%
+```
+
+Double-click it or run it from the terminal. That's it. No virtual environment activation, no `python -m`, no PATH gymnastics. The `uv run` prefix handles everything, which is why `uv` makes automation so much simpler than traditional Python tooling.
+
+### Scheduling with cron (macOS/Linux)
+
+The `cron` utility runs commands on a schedule. You define the schedule in a crontab (cron table), a file where each line specifies when and what to run.
+
+Open your crontab:
+
+```{.bash filename="terminal"}
+crontab -e
+```
+
+Add a line to run your report every Monday at 7:00 AM:
+
+```{.bash filename="crontab"}
+0 7 * * 1 /path/to/your/project/run_report.sh >> /path/to/your/project/logs/cron.log 2>&1
+```
+
+The five fields before the command are: minute (0), hour (7), day of month (\*), month (\*), day of week (1 = Monday). The `>>` appends output to a log file so you can check whether the job ran successfully.
+
+::: {.callout-tip}
+## Reading cron expressions
+
+The syntax is `minute hour day-of-month month day-of-week`. An asterisk means "every." So `0 7 * * 1` means "at minute 0, hour 7, every day of the month, every month, on Monday." The site [crontab.guru](https://crontab.guru) lets you type an expression and see a plain-English description of when it runs.
+:::
+
+### Scheduling with Task Scheduler (Windows)
+
+Windows uses Task Scheduler instead of cron. You can configure it through the GUI or from PowerShell:
+
+```{.powershell filename="terminal"}
+$action = New-ScheduledTaskAction -Execute "C:\path\to\your\project\run_report.bat"
+$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At 7am
+Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "NorthwindWeeklyReport"
+```
+
+This registers a task that runs your batch file every Monday at 7:00 AM. You can view and manage scheduled tasks in the Task Scheduler application (search for it in the Start menu).
+
+### The Automation Principle
+
+The pattern here generalizes beyond reports. Any workflow you've built in this course, a data pipeline that enriches Northwind orders with weather data, a quality check that runs Ruff and basedpyright, an Excel report that pulls fresh numbers from DuckDB, can be automated the same way: wrap the `uv run` commands in a script, schedule the script, and log the output. The tools change (GitHub Actions for CI, Airflow for data pipelines), but the principle is the same: if a human has to remember to run it, it won't get run.
+
+::: {.callout-note collapse="true" title="Exercise: CLI to Scheduled Task"}
+You have a working CLI command: `uv run northwind revenue --output weekly_report.csv`. You want this to run automatically every Friday at 9:00 AM on **macOS/Linux**. Write a shell script (`.sh` file) and a crontab entry that will accomplish this.
+
+::: {.callout-tip collapse="true" title="Solution"}
+**File: `run_weekly_report.sh`**
+
+```bash
+#!/bin/bash
+cd /path/to/your/northwind-analysis
+uv run northwind revenue --output reports/weekly_report.csv
+echo "Weekly report generated at $(date)" >> logs/report.log
+```
+
+Make it executable:
+```bash
+chmod +x run_weekly_report.sh
+```
+
+**Add to crontab:**
+
+```bash
+crontab -e
+```
+
+Then add this line:
+```
+0 9 * * 5 /path/to/your/northwind-analysis/run_weekly_report.sh >> /path/to/your/northwind-analysis/logs/cron.log 2>&1
+```
+
+The fields are: `minute hour day month day-of-week`. So `0 9 * * 5` means 9:00 AM on Friday (day 5, where 0=Sunday). The `>>` appends output to a log file so you can check if the job ran successfully.
+:::
+:::
+
+## From Passenger to Driver
+
+Let's take a moment to trace the arc of this course.
+
+In **Foundations**, you were a passenger. You ran commands that other people built: `cd`, `ls`, `git`, `duckdb`. You learned how the machine works, but you were using someone else's tools.
+
+In **Databases**, you learned SQL, a language for asking questions of data. You wrote queries that the database executed. The database was the driver; you were the navigator.
+
+In **Programming**, you started driving. You wrote Python scripts that read files, defined functions, and built reusable modules. You controlled the logic. But your scripts only ran on your machine, and only you knew how to use them.
+
+In **Integration**, you combined everything: SQL for data retrieval, Python for orchestration, Polars for transformation, Altair for visualization, Excel for delivery. You built complete analytical workflows. But they lived in notebooks and scripts that required your presence to run.
+
+In **Production**, you made your work professional. You structured your project for reproducibility (@sec-python-projects). You presented your findings in polished documents and slides (@sec-quarto). You ensured your code meets quality standards (@sec-code-quality). You understood the infrastructure that makes your tools interoperate (@sec-arrow). And now, you've turned your scripts into a CLI tool that anyone can install and run without you.
+
+You started the course running `git commit`. You finish the course having built a tool as polished as the ones you've been using all semester. That's the journey from passenger to driver.
+
+### What to Learn Next
+
+The skills you've built in this course, computational literacy, SQL, Python, data engineering practices, are foundational. They transfer to whatever comes next. Here are some directions to explore:
+
+**Deeper Python.** Asynchronous programming (`asyncio`), testing (`pytest`), and web frameworks (FastAPI) build on the language skills from Programming. **Data engineering.** Apache Airflow, dbt, and Dagster use the SQL and Python skills you've learned to orchestrate data pipelines at scale. **Machine learning.** Scikit-learn, PyTorch, and the broader ML ecosystem build on DataFrames, visualization, and the iterative analysis workflow from Integration. **Cloud platforms.** AWS, GCP, and Azure offer managed databases, compute resources, and deployment tools that extend the local workflows you've built into production systems. **Web development.** FastAPI and Django use Python, SQL, and the project engineering practices from this module to build applications.
+
+Every one of these paths uses the tools and practices from this course. The specific technologies will change (they always do), but the fundamentals endure: understand your data, write clear code, document your work, and build things that others can use.
+
+## Exercises {.unnumbered}
+
+### Convert a Script to a CLI {.unnumbered}
+
+Take the revenue report script from @sec-python-sql and convert it into a Typer CLI with these options: `--category` (optional string filter on `category_name`), `--start-date` and `--end-date` (date range filters on `order_date`, accepting `YYYY-MM-DD` format), and `--output` (file path with a sensible default like `revenue.csv`). Use `Annotated` with `typer.Option` for all named options. When date filters are provided, include a `WHERE order_date >= $start AND order_date <= $end` clause in the SQL query.
+
+### Multiple Subcommands {.unnumbered}
+
+Extend the Northwind CLI with at least three subcommands: `revenue` (revenue by category), `customers` (top customers), and `products` (product listing with filters). Each subcommand should have its own set of options and help text.
+
+### Entry Point Registration {.unnumbered}
+
+Register your CLI as a `[project.scripts]` entry point in `pyproject.toml`. Run `uv sync` and verify that `uv run northwind --help` works. Test each subcommand.
+
+### Peer Distribution {.unnumbered}
+
+Push your project to GitHub. Have a classmate install it with `uv tool install git+https://github.com/your-username/northwind-analysis`. Verify that they can run `northwind --help` and execute each subcommand on their machine. If something breaks, debug it together and fix the project configuration.
+
+### Final Project Assembly {.unnumbered}
+
+Ensure your Northwind analysis repository is complete. Verify that it contains: a `pyproject.toml` with all dependencies and metadata, a `uv.lock` for reproducibility, a `ruff.toml` and `pyrightconfig.json` for code quality, a `README.md` that a classmate can follow, documented source code with type hints and Google-style docstrings, at least one Marimo notebook with the analytical workflow, a Quarto presentation for the final exam, and a working CLI tool registered as an entry point. Run the full quality check: `uv run ruff format`, `uv run ruff check`, `uv run basedpyright`. Commit, push, and confirm that a fresh `git clone` followed by `uv sync` reproduces the entire project.
+
+## Summary {.unnumbered}
+
+Typer turns typed Python functions into professional CLI tools. Type hints define the interface: bare types become positional arguments, `Annotated` types with `typer.Option` become named options, and `bool` parameters become flags. Docstrings become help text. The function *is* the command.
+
+Multiple subcommands are organized with `typer.Typer()` and the `@app.command()` decorator. The CLI layer should be thin, delegating business logic to the modules and functions you've already written. Entry points in `pyproject.toml` make your tool installable, and publishing to PyPI or GitHub makes it available to anyone.
+
+Shell scripts and scheduling close the automation loop. Because `uv run` handles virtual environments transparently, a shell script (`.sh` or `.bat`) that calls your CLI tool is just a few lines. Scheduling that script with `cron` (macOS/Linux) or Task Scheduler (Windows) means your workflow runs on a timer without human intervention.
+
+This chapter closes the course arc from passenger to driver. You started by running CLI tools others built. You finish by building tools that others can install, run, and schedule. The skills that got you here, computational literacy, SQL, Python, project engineering, code quality, data visualization, and professional communication, are the skills that will carry you forward, regardless of which specific tools and technologies you encounter next.
+
+## Glossary {.unnumbered}
+
+argument
+: A positional CLI input. In Typer, created by a function parameter with a bare type hint and no default value.
+
+`Annotated`
+: A Python typing construct that attaches metadata to a type hint. Used with `typer.Option` to create named CLI options.
+
+CLI (Command-Line Interface)
+: A text-based interface where users interact with a program by typing commands and reading text output.
+
+`cron`
+: A macOS/Linux utility that runs commands on a schedule defined in a crontab file. Each line specifies the minute, hour, day, month, and day of week to run a command.
+
+entry point
+: A command registered in `[project.scripts]` in `pyproject.toml`. After installation, the command is available in the terminal.
+
+option
+: A named CLI input, prefixed with `--`. In Typer, created with `Annotated[type, typer.Option()]`.
+
+subcommand
+: A secondary command within a CLI tool. For example, in `git commit`, `commit` is a subcommand of `git`.
+
+shell script
+: A text file containing terminal commands that can be executed as a single unit. `.sh` on macOS/Linux, `.bat` on Windows.
+
+Typer
+: A Python library that generates CLI interfaces from type-annotated functions. Built on Click.

@@ -1,0 +1,467 @@
+---
+title: "The Command Line"
+subtitle: "Chapter 3 · Computational Workflows for Engineers"
+format:
+  revealjs:
+    theme: default
+    highlight-style: nord
+    code-line-numbers: false
+    slide-number: true
+    progress: true
+    hash-type: number
+    footer: "IENG 331 · Computational Workflows for Engineers"
+    transition: fade
+    transition-speed: fast
+    embed-resources: true
+    title-slide-attributes:
+      data-background-color: "#2E3440"
+---
+
+## Where We Are {.smaller}
+
+You understand the file system: directories, paths, how files are organized.
+
+. . .
+
+Today: the **command line** — the text-based interface that gives you direct control.
+
+. . .
+
+This skill connects everything: Git, Python, SQL, automation. It's the universal interface.
+
+::: {.notes}
+The command line feels unfamiliar to most students because they've never had to type system commands. Frame it as a superpower: instead of clicking through menus, you can automate, script, and chain tools together. By the end of this class, they'll wonder how they ever got things done without it.
+:::
+
+---
+
+## Why Learn the Command Line? {.smaller}
+
+**Agility**: Fast feedback loop. Type, press Enter, see results immediately.
+
+**Tool connection**: Chain tools together. Output from one becomes input to another.
+
+**Automation**: Save commands to scripts. Run them repeatedly, on schedule, on any machine.
+
+**Ubiquity**: Every supercomputer, every cloud server, every professional tool uses this.
+
+::: {.notes}
+Hit these points hard. Most students see the CLI as an anachronism until you connect it to their goals. "You want to automate processing 500 files? The command line." "You want your analysis to run every night?" CLI. "You're deploying to a cloud server?" No GUI—pure CLI. This is real.
+:::
+
+---
+
+## The Layers {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+You ↕️
+
+Terminal (window)
+
+Shell (interpreter)
+
+Tools (programs)
+
+OS/Kernel
+
+Hardware
+
+:::
+
+::: {.column width="50%"}
+
+The **terminal** is the window where you type.
+
+The **shell** interprets what you type (Zsh, Bash, PowerShell).
+
+**Tools** are programs the shell runs (ls, cd, python, git).
+
+The **OS** manages resources and executes programs.
+
+:::
+
+::::
+
+::: {.notes}
+This architecture matters because when something goes wrong, you'll debug at one of these layers. "Command not found" is a shell issue. A slow command might be OS/hardware. Understanding the layers helps diagnose problems.
+:::
+
+---
+
+## Setting Up: macOS {.smaller}
+
+macOS comes with **Terminal** (Applications → Utilities).
+
+Modern macOS uses **Zsh** (Z shell) as the default.
+
+You'll see a prompt like:
+
+```{.bash filename="terminal"}
+ozan %
+```
+
+The `%` means the shell is ready for input.
+
+::: {.notes}
+LIVE DEMO for macOS users: Open Terminal. Show the prompt. Type `pwd` and press Enter. Show output. This demystifies the blank screen.
+:::
+
+---
+
+## Setting Up: Windows {.smaller}
+
+Windows users: Install **Windows Terminal** from Microsoft Store (if not already present).
+
+Inside Windows Terminal, use **PowerShell** as the shell.
+
+You'll see a prompt like:
+
+```{.powershell filename="terminal"}
+C:\Users\ozan >
+```
+
+The `>` means the shell is ready.
+
+::: {.callout-warning}
+Avoid older Windows apps: old Command Prompt, old PowerShell app, Git Bash. They work but lack modern features. **Always use Windows Terminal.**
+:::
+
+::: {.notes}
+Windows users often get confused by multiple terminal options. Be explicit: Windows Terminal only. PowerShell aliases map Unix commands (`ls`, `pwd`) to PowerShell equivalents, so the commands in this book work on both platforms.
+:::
+
+---
+
+## The Prompt {.smaller}
+
+Throughout this book, commands are shown like:
+
+```{.bash filename="terminal"}
+$ pwd
+/Users/ozan
+```
+
+The `$` is a convention representing the prompt. **You don't type the `$`.**
+
+You type only: `pwd` and press Enter.
+
+The output (no `$`) is what the command returns.
+
+::: {.notes}
+This is a common source of confusion. Show an example with multiple commands and outputs. Emphasize: dollar sign is just notation, not something you type.
+:::
+
+---
+
+## Finding Your Location: `pwd` {.smaller}
+
+**pwd** = print working directory. Shows where you are right now.
+
+```{.bash filename="terminal"}
+$ pwd
+/Users/ozan/Documents
+```
+
+The path traces a route from root to your current location.
+
+::: {.notes}
+LIVE DEMO: Open terminal. Run `pwd`. Show the output. Ask students to run it on their own machines. Discuss: where are they? Is this expected? This anchors them in the filesystem.
+:::
+
+---
+
+## Listing Files: `ls` {.smaller}
+
+**ls** = list. Shows the contents of your current directory.
+
+```{.bash filename="terminal"}
+$ ls
+Desktop     Documents   Downloads   Pictures
+```
+
+Add options to modify behavior:
+
+| Option | What it does |
+|--------|---|
+| `-l` | Long format (size, date, permissions) |
+| `-a` | All files (including hidden `.` files) |
+| `-la` | Both (all files in long format) |
+
+::: {.notes}
+LIVE DEMO: Run `ls`, then `ls -l`, then `ls -la`. Show how options change the output. On macOS, show hidden files appearing. This teaches option mechanics through concrete examples.
+:::
+
+---
+
+## Moving Around: `cd` {.smaller}
+
+**cd** = change directory. Moves you to a different location.
+
+```{.bash filename="terminal"}
+$ cd Documents
+$ pwd
+/Users/ozan/Documents
+```
+
+Use **relative paths** (from here) or **absolute paths** (from root):
+
+```{.bash filename="terminal"}
+$ cd ~/Projects/my-analysis    # Absolute (from home)
+$ cd ../data                   # Relative (up one, then into data)
+```
+
+::: {.notes}
+LIVE DEMO: cd into a subdirectory, run pwd to confirm. Go up with `cd ..`. Navigate using absolute path. Show how the same destination can be reached different ways. Connect back to Ch 2: this is paths in action.
+:::
+
+---
+
+## Navigation Shortcuts {.smaller}
+
+| Symbol | Means |
+|--------|-------|
+| `.` | Current directory |
+| `..` | Parent directory (up one level) |
+| `~` | Home directory |
+| `-` | Previous directory (macOS/Linux only) |
+
+Use them to reduce typing:
+
+```{.bash filename="terminal"}
+$ pwd
+/Users/ozan/Documents/Projects
+
+$ cd ../..        # Go up two levels to /Users/ozan
+$ pwd
+/Users/ozan
+
+$ cd -            # Go back to previous directory
+/Users/ozan/Documents/Projects
+```
+
+::: {.notes}
+These shortcuts are professional habits that save hours over time. Develop muscle memory: `cd ..` is faster than typing full paths. The hyphen trick is Unix magic—show how it bounces you back.
+:::
+
+---
+
+## Tab Completion {.smaller}
+
+**The best shortcut**: Press Tab to auto-complete.
+
+```{.bash filename="terminal"}
+$ cd Doc<Tab>
+$ cd Documents/
+```
+
+No need to type the full name. If multiple matches exist, press Tab again to see options.
+
+. . .
+
+Tab completion works for:
+- Directory and file names
+- Command names
+- Flags and options
+
+**Master this. It saves thousands of keystrokes.**
+
+::: {.notes}
+LIVE DEMO: Type `cd D` and press Tab. Show how it completes to `Desktop`, `Documents`, `Downloads` if ambiguous. Type another letter and Tab again. This is the secret sauce of CLI efficiency. Emphasize: professionals use Tab constantly.
+:::
+
+---
+
+## Creating Directories: `mkdir` {.smaller}
+
+**mkdir** = make directory. Creates a new folder.
+
+```{.bash filename="terminal"}
+$ mkdir my-project
+$ ls
+Desktop     Documents   my-project
+```
+
+Create nested directories:
+
+```{.bash filename="terminal"}
+$ mkdir -p my-project/data/raw
+```
+
+The `-p` flag means "create parent directories if needed."
+
+::: {.notes}
+LIVE DEMO: Create a directory, list to show it exists. Then use `-p` to create a nested structure. Emphasize naming: no spaces. Hyphens are professional.
+:::
+
+---
+
+## Removing Files and Directories {.smaller}
+
+**rm** = remove files. Deletes immediately, no undo, no recycle bin.
+
+```{.bash filename="terminal"}
+$ rm temp.txt        # Delete a file
+$ rm -r my-folder    # Delete directory and contents (recursive)
+```
+
+::: {.callout-warning}
+**There is no undo.** Once you `rm` something, it's gone. Double-check before you press Enter, especially with wildcards like `rm *.txt` (deletes all .txt files).
+:::
+
+**rmdir** = remove directory, but only if it's empty. Safer.
+
+::: {.notes}
+This is serious. Scare them a little. Stories help: "I once deleted my entire project with `rm -r` because I made a typo. Check your commands." Then reassure: with practice, you'll become careful and precise. This is why backups and Git matter.
+:::
+
+---
+
+## Command Structure {.smaller}
+
+Every command follows a pattern:
+
+```text
+command [options] [arguments]
+```
+
+Example:
+
+```{.bash filename="terminal"}
+$ ls -la ~/Documents
+```
+
+- **ls** = command (the verb: list)
+- **-la** = options/flags (modifiers: long format + all files)
+- **~/Documents** = argument (what to list)
+
+::: {.notes}
+This pattern is universal. Once they understand it, every new tool makes sense. Break down a few examples: `git commit -m "message" --no-verify`. Identify each part. Show how options modify behavior and arguments specify targets.
+:::
+
+---
+
+## Getting Help {.smaller}
+
+When stuck, use `--help`:
+
+```{.bash filename="terminal"}
+$ ls --help
+$ git --help
+$ python --help
+```
+
+Most commands show usage, available options, and examples.
+
+. . .
+
+Also helpful: web searches for "[command] examples" or "[task] command line."
+
+::: {.notes}
+LIVE DEMO: Run a `--help` command and show the output. It looks intimidating at first but becomes readable with practice. Point out: "Here's the `-l` flag I just showed you. See? It says 'long format.'"
+:::
+
+---
+
+## Prediction Exercise {background-color="#3B4252"}
+
+You're in `/Users/ozan/Documents`.
+
+You run:
+```{.bash filename="terminal"}
+$ cd Projects/sales-analysis
+$ pwd
+```
+
+What does `pwd` output?
+
+. . .
+
+Now you run:
+```{.bash filename="terminal"}
+$ cd ../../Downloads
+$ pwd
+```
+
+What's the output now?
+
+::: {.notes}
+First: `/Users/ozan/Documents/Projects/sales-analysis`. Second: `/Users/ozan/Downloads`. Walk through the second one: start at sales-analysis, `..` goes to Documents, another `..` goes to ozan, then down into Downloads. This cements relative path navigation.
+:::
+
+---
+
+## Types of Commands {.smaller}
+
+Not all commands are the same:
+
+**Binary executables**: Compiled programs (python, git, node)
+
+**Shell builtins**: Built into the shell itself (cd, pwd, echo)
+
+**Interpreted scripts**: Text files run by interpreters (bash scripts, python scripts)
+
+**Aliases**: Shortcuts that expand into other commands (PowerShell's `ls` → `Get-ChildItem`)
+
+Use `type` to find out:
+
+```{.bash filename="terminal"}
+$ type cd
+cd is a shell builtin
+
+$ type python
+python is /usr/local/bin/python
+```
+
+::: {.notes}
+This helps when something goes wrong. "Command not found" means the shell couldn't find an executable at the expected location. If something behaves differently on macOS vs. Windows, it might be an alias or builtin difference. Understanding types helps you debug.
+:::
+
+---
+
+## Coming Attractions {.smaller}
+
+Today you learned navigation and basic file manipulation.
+
+Next chapters connect this foundation:
+
+- **Chapter 4**: Git (version control) — manage project history
+- **Chapter 5**: GitHub (collaboration) — share and sync work
+- **Later**: Python scripts, SQL queries, automation workflows
+
+Everything chains together via the command line.
+
+::: {.notes}
+Build anticipation. The command line is the glue that makes everything work together. Show a preview: "Imagine writing a Python script that reads data, a shell command that runs it automatically every night, and Git tracking the changes. That's all possible because of what you're learning now."
+:::
+
+---
+
+## Recap: Essential Commands {.smaller}
+
+| Command | What it does |
+|---------|---|
+| `pwd` | Show your current location |
+| `ls` | List directory contents |
+| `cd` | Move to a different directory |
+| `mkdir` | Create a directory |
+| `rm` | Delete files or directories |
+| `--help` | Get help for any command |
+
+**Practice these until they're muscle memory.**
+
+::: {.notes}
+These six commands are 80% of what they'll use. Emphasize practice. "You'll feel slow at first. In a week, you won't think about it. Tab completion, muscle memory, confidence."
+:::
+
+---
+
+## Next Time {background-color="#3B4252"}
+
+::: {.r-fit-text}
+Chapter 4: Version Control with Git
+:::
+
+Track changes to your projects. Build a complete history, experiment fearlessly, and collaborate safely.

@@ -1,1 +1,65 @@
-# Marimo
+# Marimo {#sec-marimo-config}
+
+## What Problem Does Marimo Solve?
+
+When you're exploring a dataset, you need a fast feedback loop: write a query, see the results, adjust, repeat. Python scripts are great for automation, but the edit-run-read cycle is slow for exploratory work. You change one line, re-run the entire script, and scroll through terminal output to find what changed. Computational notebooks solve this by letting you run code in individual cells and see results immediately.
+
+The most popular notebook tool is Jupyter, but it has a fundamental reliability problem. Jupyter notebooks let you run cells in any order, delete cells, and redefine variables without tracking what happened. The result is **hidden state**: a notebook that works when you run it interactively might produce different results (or crash) when someone runs it from top to bottom. This makes Jupyter notebooks difficult to trust, difficult to version control (they're stored as JSON), and difficult to reproduce.
+
+**Marimo is a modern notebook tool that eliminates hidden state by design.** When you change a cell, Marimo automatically re-runs every cell that depends on it. Each variable can only be defined in one cell. And Marimo notebooks are stored as `.py` files, not JSON, so they produce clean diffs in Git and can be run as scripts from the terminal. These constraints might sound limiting, but they're the same principles behind reliable software: clear dependencies, no ambiguity, and reproducible behavior.
+
+## Why Marimo for This Course?
+
+Marimo fits naturally into the workflow this course builds. It has **native SQL cells** that connect directly to DuckDB, so you can write SQL queries alongside Python code without any boilerplate connection logic. It integrates with uv for dependency management. And because notebooks are `.py` files, they work seamlessly with Git, Ruff, and the rest of your quality tooling.
+
+Marimo also bridges the gap between exploration and production. You start by exploring data interactively in a notebook. When you're ready to automate, the notebook is already a valid Python script. There's no "export to .py" step, no translation layer, no risk of the exported code diverging from what you tested in the notebook.
+
+## Installation
+
+Marimo is installed as a dependency in your project:
+
+```{.bash filename="terminal"}
+uv add marimo
+```
+
+This adds Marimo to your project's virtual environment, where it can see all your other project dependencies (DuckDB, Polars, etc.) directly. Verify the installation:
+
+```{.bash filename="terminal"}
+uv run marimo --version
+```
+
+To create and open a new notebook:
+
+```{.bash filename="terminal"}
+uv run marimo edit notebook.py
+```
+
+Marimo opens in your default web browser. To open an existing notebook, pass its filename the same way.
+
+## What Happens Next
+
+Marimo is introduced in @sec-marimo, where you'll use its reactive cells, native SQL integration with DuckDB, and Python cells to build interactive data explorations. The notebook workflow continues through the integration module as you combine SQL, Python, Polars, and Altair in a single environment.
+
+## Glossary
+
+**Reactive Execution**
+: The process where a notebook automatically re-runs cells that depend on a changed cell, ensuring all outputs stay synchronized and eliminating hidden state.
+
+**Notebook**
+: An interactive computational document that combines code cells with their outputs, allowing for exploratory work with immediate feedback.
+
+**Cell**
+: A discrete unit of code or markdown in a notebook that can be executed independently and displays its output below.
+
+**Kernel**
+: The runtime engine that executes code cells in a notebook and maintains the state of variables and objects between cell executions.
+
+**DAG (Directed Acyclic Graph)**
+: A data structure that represents the dependencies between cells in a notebook, used by Marimo to determine the execution order and which cells to re-run when changes occur.
+
+## Resources
+
+- [Marimo Documentation](https://docs.marimo.io/) - Complete reference for cells, UI elements, and configuration
+- [Marimo Getting Started](https://docs.marimo.io/getting_started/) - Official quickstart guide
+- [Marimo SQL Support](https://docs.marimo.io/guides/working-with-data/sql/) - Native SQL cells and database integration
+- [Marimo vs. Jupyter](https://docs.marimo.io/faq/#faq-jupyter) - Detailed comparison of the two notebook tools

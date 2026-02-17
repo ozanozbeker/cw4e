@@ -1,0 +1,161 @@
+# Northwind Dataset {#sec-northwind-dataset}
+
+::: {.callout-note appearance="minimal"}
+## Download Files
+
+**Databases**
+
+- [northwind.duckdb](../../data/northwind.duckdb){download="northwind.duckdb"}
+- [northwind.sqlite](../../data/northwind.sqlite){download="northwind.sqlite"}
+
+**Parquet**
+
+- [northwind_flat.parquet](../../data/northwind_flat.parquet){download="northwind_flat.parquet"}
+
+**CSV Files**
+
+- [categories.csv](../../data/categories.csv){download="categories.csv"}
+- [customers.csv](../../data/customers.csv){download="customers.csv"}
+- [employees.csv](../../data/employees.csv){download="employees.csv"}
+- [order_details.csv](../../data/order_details.csv){download="order_details.csv"}
+- [orders.csv](../../data/orders.csv){download="orders.csv"}
+- [products.csv](../../data/products.csv){download="products.csv"}
+- [regions.csv](../../data/regions.csv){download="regions.csv"}
+- [shippers.csv](../../data/shippers.csv){download="shippers.csv"}
+- [suppliers.csv](../../data/suppliers.csv){download="suppliers.csv"}
+
+**Documentation**
+
+- [data_dictionary.csv](../../data/data_dictionary.csv){download="data_dictionary.csv"}
+:::
+
+
+## About the Dataset
+
+The Northwind dataset represents a fictional wholesale company that imports and exports specialty foods worldwide. Originally created by Microsoft as a sample database for Access and SQL Server, it has become one of the most widely used teaching datasets for relational databases.
+
+Throughout this book, we use a modernized version of Northwind that includes realistic business features like customer segments, payment methods, order statuses, and industry classifications. The dataset contains sales transactions, customer information, product catalogs, employee records, and supplier relationships, all structured in a normalized relational model that mirrors real-world business systems.
+
+## Dataset Structure
+
+The Northwind database consists of nine tables:
+
+- **Orders**: Customer orders with dates, shipping information, and order status
+- **Order Details**: Line items for each order, including product, quantity, and pricing
+- **Customers**: Company information, contacts, and customer segmentation
+- **Products**: Product catalog with pricing, inventory, and categorization
+- **Categories**: Product category groupings
+- **Suppliers**: Supplier company information and contacts
+- **Employees**: Employee records with regional assignments
+- **Shippers**: Shipping company information
+- **Regions**: Geographic region and territory definitions
+
+For detailed field descriptions, download the [data dictionary](../data/data_dictionary.csv).
+
+::: {.callout-note}
+## Column Naming Conventions
+The CSV files use **camelCase** column names (`orderID`, `unitPrice`, `companyName`) matching the original Microsoft Northwind convention. The DuckDB and SQLite databases use **snake_case** column names (`order_id`, `unit_price`, `company_name`), which is the modern convention preferred by most data teams. The denormalized Parquet file also uses snake_case, with table-prefixed names where needed to avoid ambiguity (e.g., `customer_city` vs. `supplier_city`). Code examples throughout the book use whichever convention matches the file format being used in that chapter.
+:::
+
+## Available Formats
+
+The dataset is provided in multiple formats to support different learning objectives throughout the book. Choose the format that matches your current chapter or exercise.
+
+### DuckDB Database
+
+The primary format used throughout the **Databases** and **Integration** modules. This single-file database contains all nine tables in a normalized structure, ready for SQL queries.
+
+**Download**: [northwind.duckdb](../data/northwind.duckdb)
+
+**Usage**:
+```{.bash filename="terminal"}
+duckdb northwind.duckdb
+```
+
+### SQLite Database
+
+Used in the **Production** module to demonstrate cross-database compatibility with ADBC drivers. Contains the same schema and data as the DuckDB version.
+
+**Download**: [northwind.sqlite](../data/northwind.sqlite)
+
+**Usage**:
+```{.bash filename="terminal"}
+sqlite3 northwind.sqlite
+```
+
+### Apache Parquet
+
+A denormalized, flattened version of the dataset optimized for analytical workflows with Polars and Arrow. Used primarily in the **Integration** and **Production** modules.
+
+**Download**: [northwind_flat.parquet](../data/northwind_flat.parquet)
+
+**Usage**:
+```{.python filename="analysis.py"}
+import polars as pl
+df = pl.read_parquet("northwind_flat.parquet")
+```
+
+### CSV Files
+
+Individual CSV files for each table, used in the **Programming** module to teach file I/O operations and data processing fundamentals. These files demonstrate working with plain-text data formats.
+
+**Download individual files**:
+
+- [categories.csv](../data/categories.csv)
+- [customers.csv](../data/customers.csv)
+- [employees.csv](../data/employees.csv)
+- [order_details.csv](../data/order_details.csv)
+- [orders.csv](../data/orders.csv)
+- [products.csv](../data/products.csv)
+- [regions.csv](../data/regions.csv)
+- [shippers.csv](../data/shippers.csv)
+- [suppliers.csv](../data/suppliers.csv)
+
+**Usage**:
+```{.python filename="load_data.py"}
+from pathlib import Path
+import csv
+
+with open("customers.csv") as f:
+    reader = csv.DictReader(f)
+    customers = list(reader)
+```
+
+### Data Dictionary
+
+A comprehensive reference documenting every field in the dataset, including table names, field names, and descriptions.
+
+**Download**: [data_dictionary.csv](../data/data_dictionary.csv)
+
+## When to Use Each Format
+
+- **Learning SQL** (@sec-databases through @sec-analytics): Use `northwind.duckdb`
+- **Python file I/O** (@sec-file-io): Use the individual CSV files
+- **Python-SQL integration** (@sec-python-sql): Use `northwind.duckdb` with the DuckDB Python library
+- **Analytical workflows with Polars** (@sec-polars, @sec-altair): Use `northwind_flat.parquet`
+- **Cross-database compatibility** (@sec-arrow): Use both `northwind.duckdb` and `northwind.sqlite`
+
+## File Storage Recommendations
+
+Store the dataset files in a dedicated `data` directory within your course or project folder. This matches the relative paths used in code examples throughout the book:
+
+```{.text filename="project structure"}
+your-project/
+├── data/
+│   ├── northwind.duckdb
+│   ├── northwind.sqlite
+│   ├── northwind_flat.parquet
+│   ├── categories.csv
+│   ├── customers.csv
+│   └── ...
+└── scripts/
+    └── analysis.py
+```
+
+This structure allows you to reference data files using relative paths like `../data/northwind.duckdb` from your working directory, matching the patterns demonstrated in exercises and examples.
+
+## Dataset Maintenance
+
+The DuckDB and SQLite databases are self-contained files that persist changes across sessions. When you insert, update, or delete data, those modifications are saved to disk. If you need to reset the database to its original state, simply re-download the file.
+
+The Parquet and CSV files are read-only for the purposes of this book. Any transformations or modifications you make to the data should be written to new files rather than overwriting the originals, preserving the source data for future exercises.

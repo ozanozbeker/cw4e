@@ -1,0 +1,605 @@
+# Working with Excel {#sec-excel}
+
+You've built a complete analytical workflow: SQL pulls data from the Northwind database, Polars transforms it, and Altair visualizes it in a Marimo notebook. There's one step left. The people who need your analysis, managers, clients, colleagues in other departments, don't open Marimo notebooks. They open Excel.
+
+Excel is the lingua franca of business. Every analyst, engineer, and manager knows how to open a spreadsheet, read a table, and scan conditional formatting for patterns. Regardless of how sophisticated your analysis tools are, the deliverable often needs to be an `.xlsx` file that stakeholders can open on their own machines, filter, sort, and forward to others.
+
+This chapter closes the loop. You'll learn to read Excel files into Python (because colleagues will send you data in that format), and more importantly, to write formatted, presentation-ready Excel files from your analytical pipeline. By the end, you'll have a complete notebook that queries the database, transforms data, charts the results, and exports a polished Excel report. That's the whole game of data analysis, built one chapter at a time.
+
+## Why Excel Still Matters
+
+There's a distinction between *analyzing in Excel* and *delivering to Excel*. This chapter is about the second. You're not building your analysis inside a spreadsheet with fragile formulas and manual copy-paste. You're using SQL, Polars, and Python to do the analytical work reliably and reproducibly, and then writing the results into a format your stakeholders already know how to use.
+
+This is a common pattern in industry. Data engineers and analysts build pipelines that run automatically, but the final output is often an Excel report that arrives in someone's inbox every Monday morning. The pipeline does the work; Excel is the presentation layer.
+
+The tools in this chapter handle both directions of that workflow. When a colleague sends you data in an `.xlsx` file, you'll read it into a Polars DataFrame with `fastexcel`. When you need to deliver results, you'll write formatted Excel files with `XlsxWriter`. And for quick reads where you don't need a Python library at all, DuckDB can query Excel files directly with SQL.
+
+## Reading Excel Files with fastexcel
+
+The `fastexcel` library reads Excel files into Arrow-compatible data structures that convert to Polars DataFrames with zero-copy transfer. It's fast because it's built on the `calamine` Rust library rather than Python-native parsing:
+
+```{.bash filename="terminal"}
+uv add fastexcel
+```
+
+### Basic Reading
+
+```{.python filename="read_basic.py"}
+import fastexcel
+import polars as pl
+
+# Open the workbook and load the first sheet
+reader = fastexcel.read_excel("data/sales_data.xlsx")
+df = pl.DataFrame(reader.load_sheet(0))
+print(df.head())
+print(df.schema)
+```
+
+The `read_excel()` function returns a reader object, and `load_sheet()` loads a specific sheet by index or name. Wrapping the result in `pl.DataFrame()` converts it to a Polars DataFrame via Arrow with zero-copy transfer. By default, `fastexcel` uses the first row as column headers and infers data types from the cell values. This handles the most common case: a colleague sends you a clean, single-sheet workbook with headers.
+
+### Sheet Selection and Ranges
+
+For workbooks with multiple sheets or data that doesn't start at cell A1:
+
+```{.python filename="read_options.py"}
+import fastexcel
+import polars as pl
+
+reader = fastexcel.read_excel("data/report.xlsx")
+
+# Read a specific sheet by name
+df = pl.DataFrame(reader.load_sheet("Q4 Revenue"))
+
+# Read a specific sheet by index (0-based)
+df = pl.DataFrame(reader.load_sheet(2))
+
+# List all available sheets
+print(reader.sheet_names)  # ["Summary", "Q3 Revenue", "Q4 Revenue"]
+```
+
+### When to Use fastexcel vs. openpyxl
+
+`fastexcel` is designed for one job: reading Excel data into DataFrames quickly. It handles headers, basic type inference, and sheet selection. For most data ingestion tasks, it's all you need.
+
+When you need to read Excel features beyond the data itself, like cell formatting, formulas, merged cells, comments, or charts, you need `openpyxl`, a full-featured library that understands the complete Excel file format.
+
+## Reading Excel Files with openpyxl
+
+Install openpyxl for full Excel access:
+
+```{.bash filename="terminal"}
+uv add openpyxl
+```
+
+### Reading Cell Values
+
+```{.python filename="openpyxl_read.py"}
+from openpyxl import load_workbook
+
+wb = load_workbook("data/complex_report.xlsx")
+ws = wb.active  # Get the active sheet
+
+# Read individual cells
+print(ws["A1"].value)       # Cell A1
+print(ws["B2"].value)       # Cell B2
+print(ws.cell(row=3, column=1).value)  # Cell A3
+
+# Iterate over rows
+for row in ws.iter_rows(min_row=2, values_only=True):
+    print(row)
+```
+
+### Handling Complex Workbooks
+
+Real-world Excel files are often messy: merged cells, multiple header rows, mixed data types, and formatting that carries meaning. `openpyxl` handles these cases:
+
+```{.python filename="openpyxl_complex.py"}
+from openpyxl import load_workbook
+import polars as pl
+
+wb = load_workbook("data/messy_report.xlsx")
+ws = wb["Raw Data"]
+
+# Skip merged header rows, start reading from row 4
+data = []
+headers = [cell.value for cell in ws[4]]  # Row 4 has the real headers
+
+for row in ws.iter_rows(min_row=5, values_only=True):
+    # Skip empty rows
+    if all(cell is None for cell in row):
+        continue
+    data.append(dict(zip(headers, row)))
+
+# Convert to a Polars DataFrame
+df = pl.DataFrame(data)
+```
+
+This manual approach is more work than `fastexcel`, but it gives you full control over how the data is extracted. Use `openpyxl` when the Excel file doesn't follow the clean "headers in row 1, data starting in row 2" convention.
+
+## Writing Formatted Excel Files with XlsxWriter {#sec-xlsxwriter}
+
+Reading Excel files is useful when you receive data from colleagues. Writing Excel files is where the real value lies: automating the creation of polished, professional reports that previously required hours of manual formatting.
+
+`XlsxWriter` is a Python library for creating Excel files with full formatting control. It doesn't read Excel files (that's what `fastexcel` and `openpyxl` are for), but it writes them with features that make the output look like a human carefully formatted it by hand:
+
+```{.bash filename="terminal"}
+uv add xlsxwriter
+```
+
+### Creating a Workbook
+
+```{.python filename="xlsxwriter_basic.py"}
+import xlsxwriter
+
+workbook = xlsxwriter.Workbook("output/report.xlsx")
+worksheet = workbook.add_worksheet("Revenue Summary")
+
+# Write some data
+worksheet.write(0, 0, "Category")     # Row 0, Column 0
+worksheet.write(0, 1, "Revenue")      # Row 0, Column 1
+worksheet.write(1, 0, "Beverages")    # Row 1, Column 0
+worksheet.write(1, 1, 267868.15)      # Row 1, Column 1
+
+workbook.close()
+```
+
+XlsxWriter uses zero-based row and column indices. `worksheet.write(0, 0, value)` writes to cell A1. The `workbook.close()` call is essential: it writes the file to disk. If you forget it, the file will be empty or corrupt.
+
+::: {.callout-tip}
+## Use a context manager
+
+XlsxWriter supports the `with` pattern you learned in @sec-context-managers, which ensures the file is properly closed even if an error occurs:
+
+```{.python filename="xlsxwriter_with.py"}
+import xlsxwriter
+
+with xlsxwriter.Workbook("output/report.xlsx") as workbook:
+    worksheet = workbook.add_worksheet("Summary")
+    worksheet.write(0, 0, "Hello, Excel!")
+# File is automatically closed and saved here
+```
+:::
+
+### Cell Formatting
+
+Formatting is what separates a data dump from a professional report. XlsxWriter lets you define *format objects* that control the appearance of cells:
+
+```{.python filename="formatting.py"}
+import xlsxwriter
+
+with xlsxwriter.Workbook("output/formatted_report.xlsx") as workbook:
+    worksheet = workbook.add_worksheet("Revenue")
+
+    # Define formats
+    header_fmt = workbook.add_format({
+        "bold": True,
+        "font_size": 12,
+        "bg_color": "#4472C4",
+        "font_color": "white",
+        "border": 1,
+        "align": "center",
+    })
+
+    currency_fmt = workbook.add_format({
+        "num_format": "$#,##0.00",
+        "border": 1,
+    })
+
+    text_fmt = workbook.add_format({
+        "border": 1,
+    })
+
+    # Write headers
+    headers = ["Category", "Revenue", "Order Count", "Avg Order Value"]
+    for col, header in enumerate(headers):
+        worksheet.write(0, col, header, header_fmt)
+
+    # Write data rows
+    data = [
+        ("Beverages", 267868.15, 404, 662.79),
+        ("Dairy Products", 234507.29, 366, 640.73),
+        ("Confections", 167357.23, 334, 501.07),
+    ]
+
+    for row_idx, (category, revenue, count, avg) in enumerate(data, start=1):
+        worksheet.write(row_idx, 0, category, text_fmt)
+        worksheet.write(row_idx, 1, revenue, currency_fmt)
+        worksheet.write(row_idx, 2, count, text_fmt)
+        worksheet.write(row_idx, 3, avg, currency_fmt)
+
+    # Set column widths for readability
+    worksheet.set_column(0, 0, 20)   # Column A: 20 characters wide
+    worksheet.set_column(1, 1, 15)   # Column B: 15 characters wide
+    worksheet.set_column(2, 2, 15)   # Column C
+    worksheet.set_column(3, 3, 18)   # Column D
+```
+
+The format objects are reusable: define a currency format once and apply it to every revenue cell. This keeps your formatting consistent and your code DRY (Don't Repeat Yourself).
+
+### Writing Polars DataFrames to Excel
+
+Rather than writing data cell by cell, you can write an entire Polars DataFrame at once. Here's a helper function that handles the common case:
+
+```{.python filename="df_to_excel.py"}
+import polars as pl
+import xlsxwriter
+
+
+def write_dataframe(
+    workbook: xlsxwriter.Workbook,
+    worksheet: xlsxwriter.worksheet.Worksheet,
+    df: pl.DataFrame,
+    start_row: int = 0,
+    start_col: int = 0,
+    header_format: xlsxwriter.format.Format | None = None,
+    data_format: xlsxwriter.format.Format | None = None,
+) -> int:
+    """Write a Polars DataFrame to an Excel worksheet.
+
+    Args:
+        workbook: The XlsxWriter workbook.
+        worksheet: The worksheet to write to.
+        df: The Polars DataFrame to write.
+        start_row: First row to write to (0-based).
+        start_col: First column to write to (0-based).
+        header_format: Format for the header row.
+        data_format: Format for data cells.
+
+    Returns:
+        The row index after the last written row.
+    """
+    # Write headers
+    for col_idx, col_name in enumerate(df.columns):
+        worksheet.write(start_row, start_col + col_idx, col_name, header_format)
+
+    # Write data
+    for row_idx, row in enumerate(df.iter_rows(), start=1):
+        for col_idx, value in enumerate(row):
+            worksheet.write(
+                start_row + row_idx,
+                start_col + col_idx,
+                value,
+                data_format,
+            )
+
+    return start_row + len(df) + 1
+```
+
+### Conditional Formatting
+
+Conditional formatting highlights cells based on their values, drawing attention to important patterns:
+
+```{.python filename="conditional_formatting.py"}
+import xlsxwriter
+
+with xlsxwriter.Workbook("output/conditional.xlsx") as workbook:
+    worksheet = workbook.add_worksheet("Revenue")
+
+    # ... write headers and data ...
+
+    # Highlight revenue cells above $200,000 in green
+    worksheet.conditional_format(1, 1, 10, 1, {
+        "type": "cell",
+        "criteria": ">",
+        "value": 200000,
+        "format": workbook.add_format({"bg_color": "#C6EFCE"}),
+    })
+
+    # Highlight revenue cells below $100,000 in red
+    worksheet.conditional_format(1, 1, 10, 1, {
+        "type": "cell",
+        "criteria": "<",
+        "value": 100000,
+        "format": workbook.add_format({"bg_color": "#FFC7CE"}),
+    })
+```
+
+The four numeric arguments to `conditional_format()` define the range: first row, first column, last row, last column (all zero-based).
+
+### Professional Touches
+
+A few additional features turn a functional spreadsheet into a polished report:
+
+```{.python filename="professional.py"}
+import xlsxwriter
+
+with xlsxwriter.Workbook("output/polished.xlsx") as workbook:
+    worksheet = workbook.add_worksheet("Revenue Summary")
+
+    # Freeze the top row so headers stay visible when scrolling
+    worksheet.freeze_panes(1, 0)
+
+    # Add auto-filters to all columns (the dropdown arrows in the header row)
+    worksheet.autofilter(0, 0, 100, 5)
+
+    # Set the print area and repeat headers on each printed page
+    worksheet.set_landscape()
+    worksheet.set_paper(1)  # Letter size
+    worksheet.repeat_rows(0)
+
+    # Add a page header and footer
+    worksheet.set_header("&LNorthwind Revenue Report&R&D")
+    worksheet.set_footer("&CPage &P of &N")
+```
+
+Freezing panes, auto-filters, and print settings are the details that distinguish a quick data export from a report someone would actually present in a meeting. They take a few extra lines of code but dramatically improve the usability of the output.
+
+## A Complete Report Pipeline {#sec-complete-pipeline}
+
+Here's the full workflow in a single script, combining every tool from this module:
+
+```{.python filename="northwind_report.py"}
+"""Generate a formatted Northwind revenue report.
+
+This script queries the Northwind database for revenue data,
+transforms it with Polars, and writes a formatted Excel report
+with multiple sheets, conditional formatting, and auto-filters.
+"""
+
+import duckdb
+import polars as pl
+import xlsxwriter
+from pathlib import Path
+
+
+def query_revenue(conn: duckdb.DuckDBPyConnection) -> pl.DataFrame:
+    """Query revenue by category and month from Northwind.
+
+    Args:
+        conn: DuckDB connection to the Northwind database.
+
+    Returns:
+        DataFrame with category_name, order_month, revenue, and order_count.
+    """
+    return conn.sql("""
+        SELECT
+            c.category_name,
+            DATE_TRUNC('month', o.order_date) AS order_month,
+            ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+            COUNT(DISTINCT o.order_id) AS order_count
+        FROM order_details AS od
+        JOIN orders AS o ON od.order_id = o.order_id
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+        GROUP BY c.category_name, DATE_TRUNC('month', o.order_date)
+        ORDER BY c.category_name, order_month
+    """).pl()
+
+
+def compute_summary(monthly_data: pl.DataFrame) -> pl.DataFrame:
+    """Compute category-level summary from monthly data.
+
+    Args:
+        monthly_data: DataFrame with monthly revenue by category.
+
+    Returns:
+        DataFrame with total revenue, order count, and average
+        monthly revenue per category.
+    """
+    return monthly_data.group_by("category_name").agg(
+        pl.col("revenue").sum().alias("total_revenue"),
+        pl.col("order_count").sum().alias("total_orders"),
+        pl.col("revenue").mean().alias("avg_monthly_revenue"),
+    ).sort("total_revenue", descending=True)
+
+
+def write_report(
+    summary: pl.DataFrame,
+    monthly: pl.DataFrame,
+    output_path: Path,
+) -> None:
+    """Write a formatted Excel report with summary and detail sheets.
+
+    Args:
+        summary: Category-level summary DataFrame.
+        monthly: Monthly revenue detail DataFrame.
+        output_path: Path for the output Excel file.
+    """
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with xlsxwriter.Workbook(str(output_path)) as workbook:
+        # Define formats
+        title_fmt = workbook.add_format({
+            "bold": True, "font_size": 14, "bottom": 2,
+        })
+        header_fmt = workbook.add_format({
+            "bold": True, "bg_color": "#4472C4", "font_color": "white",
+            "border": 1, "align": "center",
+        })
+        currency_fmt = workbook.add_format({
+            "num_format": "$#,##0.00", "border": 1,
+        })
+        number_fmt = workbook.add_format({
+            "num_format": "#,##0", "border": 1,
+        })
+        text_fmt = workbook.add_format({"border": 1})
+        total_label_fmt = workbook.add_format({
+            "bold": True, "border": 1, "top": 2,
+        })
+        total_currency_fmt = workbook.add_format({
+            "bold": True, "num_format": "$#,##0.00", "border": 1, "top": 2,
+        })
+        total_number_fmt = workbook.add_format({
+            "bold": True, "num_format": "#,##0", "border": 1, "top": 2,
+        })
+
+        # --- Summary Sheet ---
+        ws_summary = workbook.add_worksheet("Summary")
+
+        ws_summary.write(0, 0, "Northwind Revenue Summary", title_fmt)
+        ws_summary.set_row(0, 25)
+
+        headers = ["Category", "Total Revenue", "Total Orders", "Avg Monthly Revenue"]
+        for col, header in enumerate(headers):
+            ws_summary.write(2, col, header, header_fmt)
+
+        for row_idx, row in enumerate(summary.iter_rows(), start=3):
+            category, revenue, orders, avg_monthly = row
+            ws_summary.write(row_idx, 0, category, text_fmt)
+            ws_summary.write(row_idx, 1, revenue, currency_fmt)
+            ws_summary.write(row_idx, 2, orders, number_fmt)
+            ws_summary.write(row_idx, 3, avg_monthly, currency_fmt)
+
+        # Totals row
+        total_row = 3 + len(summary)
+        ws_summary.write(total_row, 0, "TOTAL", total_label_fmt)
+        ws_summary.write(total_row, 1, summary["total_revenue"].sum(), total_currency_fmt)
+        ws_summary.write(total_row, 2, summary["total_orders"].sum(), total_number_fmt)
+        ws_summary.write(total_row, 3, summary["avg_monthly_revenue"].mean(), total_currency_fmt)
+
+        # Conditional formatting on revenue column
+        ws_summary.conditional_format(3, 1, total_row - 1, 1, {
+            "type": "data_bar",
+            "bar_color": "#4472C4",
+        })
+
+        ws_summary.set_column(0, 0, 22)
+        ws_summary.set_column(1, 3, 20)
+        ws_summary.freeze_panes(3, 0)
+        ws_summary.autofilter(2, 0, total_row - 1, 3)
+
+        # --- Monthly Detail Sheet ---
+        ws_monthly = workbook.add_worksheet("Monthly Detail")
+
+        ws_monthly.write(0, 0, "Monthly Revenue Detail", title_fmt)
+        ws_monthly.set_row(0, 25)
+
+        detail_headers = ["Category", "Month", "Revenue", "Order Count"]
+        for col, header in enumerate(detail_headers):
+            ws_monthly.write(2, col, header, header_fmt)
+
+        date_fmt = workbook.add_format({
+            "num_format": "yyyy-mm", "border": 1,
+        })
+
+        for row_idx, row in enumerate(monthly.iter_rows(), start=3):
+            category, month, revenue, orders = row
+            ws_monthly.write(row_idx, 0, category, text_fmt)
+            ws_monthly.write_datetime(row_idx, 1, month, date_fmt)
+            ws_monthly.write(row_idx, 2, revenue, currency_fmt)
+            ws_monthly.write(row_idx, 3, orders, number_fmt)
+
+        ws_monthly.set_column(0, 0, 22)
+        ws_monthly.set_column(1, 1, 14)
+        ws_monthly.set_column(2, 3, 16)
+        ws_monthly.freeze_panes(3, 0)
+        ws_monthly.autofilter(2, 0, 2 + len(monthly), 3)
+
+
+if __name__ == "__main__":
+    conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+    # Step 1: SQL retrieves the data
+    monthly_data = query_revenue(conn)
+
+    # Step 2: Polars computes the summary
+    summary_data = compute_summary(monthly_data)
+
+    # Step 3: XlsxWriter writes the formatted report
+    output = Path("output") / "northwind_revenue_report.xlsx"
+    write_report(summary_data, monthly_data, output)
+
+    print(f"Report written to {output}")
+    print(f"  Summary: {len(summary_data)} categories")
+    print(f"  Detail: {len(monthly_data)} monthly records")
+
+    conn.close()
+```
+
+This script is the culmination of the entire Integration module. SQL retrieves and joins the data (@sec-python-sql). Polars transforms and summarizes it (@sec-polars). And XlsxWriter exports a professionally formatted Excel report with two sheets, conditional formatting, frozen panes, auto-filters, and proper number formats. In a Marimo notebook (@sec-marimo), you would add Altair charts (@sec-altair) as an additional step between the Polars transformation and the Excel export, giving you both an interactive visual analysis and a portable deliverable.
+
+## DuckDB's Excel Support
+
+DuckDB can also read Excel files directly with SQL, eliminating the need for Python libraries in simple cases:
+
+```{.python filename="duckdb_excel.py"}
+import duckdb
+
+conn = duckdb.connect()
+
+# Install and load the spatial extension (required for Excel support)
+conn.sql("INSTALL spatial")
+conn.sql("LOAD spatial")
+
+# Query an Excel file directly with SQL
+result = conn.sql("""
+    SELECT *
+    FROM read_xlsx('data/sales_data.xlsx', sheet='Q4 Revenue')
+    WHERE revenue > 100000
+    ORDER BY revenue DESC
+""")
+
+print(result)
+```
+
+This is convenient for quick exploration: you can apply SQL filtering, sorting, and aggregation to Excel data without loading it into Python first. For more complex reading tasks (merged cells, multiple header rows, formatting-dependent data), use `openpyxl`.
+
+### Choosing the Right Reading Tool
+
+| Need | Tool | Why |
+|------|------|-----|
+| Quick read into a DataFrame | `fastexcel` | Fastest, returns Polars directly |
+| SQL filtering on Excel data | DuckDB `read_xlsx()` | No Python library needed |
+| Merged cells, formulas, formatting | `openpyxl` | Full Excel feature access |
+| Writing formatted output | `XlsxWriter` | Best formatting control |
+
+: When to use each Excel tool {#tbl-excel-tools}
+
+## Exercises {.unnumbered}
+
+### Reading Messy Data {.unnumbered}
+
+Create an Excel file called `messy_sales.xlsx` with two sheets. On the first sheet ("Q1 Sales"), merge cells A1:D1 to create a title row ("Q1 Regional Sales"), put actual column headers in row 2 (`Region`, `Product`, `Revenue`, `Notes`), then fill in about 10 rows of data with some cells left blank and at least one revenue cell containing text like "N/A" instead of a number. On the second sheet ("Summary"), create a small table with merged cells in the header. Then write a Python script that uses `openpyxl` to read this file, skip the merged title rows, extract the actual column headers, and load the data into a Polars DataFrame. Clean any type inconsistencies (for example, coercing non-numeric revenue values to `null`).
+
+### Formatted Revenue Report {.unnumbered}
+
+Write a script that queries Northwind for total revenue by category (computed as `SUM(unit_price * quantity * (1 - discount))` from `order_details` joined through `products` to `categories`) and exports a formatted Excel file with: bold headers with a colored background, currency formatting on all dollar amounts, conditional formatting (data bars or color scales) on the revenue column, frozen header row, auto-filters on all columns, and a totals row at the bottom. The report should look professional enough to present in a meeting.
+
+### Complete Pipeline {.unnumbered}
+
+Build a complete Marimo notebook that performs the entire analytical workflow:
+
+1. A SQL cell that queries Northwind for monthly revenue by category.
+2. A Polars cell that computes growth rates and identifies declining categories.
+3. An Altair cell that visualizes the trends.
+4. A Python cell that writes the results to a formatted Excel file.
+
+This exercise is the "whole game" of the Integration module: database to deliverable in a single notebook.
+
+### Multi-Sheet Report {.unnumbered}
+
+Create an Excel file with one sheet per product category. Each sheet should contain: a title with the category name, a formatted table of products in that category showing the product name, unit price, units in stock, and total revenue (computed by joining `order_details` to `products` and summing `unit_price * quantity * (1 - discount)` for each product), and a summary row with totals for price, stock, and revenue. Use a loop to create the sheets dynamically from the query results.
+
+## Summary {.unnumbered}
+
+This chapter completed the analytical workflow that the Integration module has been building. Excel is the delivery format that stakeholders expect, and Python gives you the tools to generate polished Excel files automatically. `fastexcel` and `openpyxl` read incoming Excel data. `XlsxWriter` produces formatted output with headers, currency formatting, conditional formatting, frozen panes, and auto-filters. DuckDB can even query Excel files directly with SQL.
+
+The complete pipeline, SQL retrieves data, Polars transforms it, Altair visualizes it, XlsxWriter exports it, is the "whole game" of data analysis. Each chapter in this module added one layer to that pipeline. You now have the skills to go from a question about your data to a deliverable report, automatically, reproducibly, and professionally.
+
+In the Production module, you'll add the infrastructure that makes this workflow sustainable: project engineering, documentation, code quality tools, and command-line interfaces that let others run your pipelines without opening a notebook.
+
+## Glossary {.unnumbered}
+
+auto-filter
+: The dropdown arrows in an Excel header row that let users filter and sort data interactively. Added with `worksheet.autofilter()`.
+
+conditional formatting
+: Rules that change cell appearance based on values. Common examples: data bars, color scales, and icon sets.
+
+`fastexcel`
+: A Python library for reading Excel files into Polars DataFrames, built on the Rust `calamine` library for speed.
+
+freeze panes
+: An Excel feature that keeps header rows or columns visible while scrolling through data. Set with `worksheet.freeze_panes()`.
+
+`openpyxl`
+: A full-featured Python library for reading and writing Excel files, with access to formatting, formulas, merged cells, and other Excel features.
+
+workbook
+: An Excel file (`.xlsx`), which contains one or more worksheets.
+
+worksheet
+: A single sheet within an Excel workbook, containing a grid of cells.
+
+`XlsxWriter`
+: A Python library for creating Excel files with full formatting control. Write-only (cannot read existing files).
