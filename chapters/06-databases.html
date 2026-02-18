@@ -797,7 +797,7 @@ Column-Oriented Storage (OLAP):
 Enter ".help" for usage hints.
 Connected to a transient in-memory database.
 Use ".open FILENAME" to reopen on a persistent database.
-D </code></pre>
+D</code></pre>
 </div>
 <p>At first glance, it looks similar to anything else in your terminal. But you’re actually inside DuckDB’s own command-line interface (CLI), which interprets your input as SQL commands rather than shell commands. This is an important distinction: if you type <code>ls</code> or <code>cd</code> here, DuckDB won’t understand, because those are shell commands and you’re no longer in the shell.</p>
 <p>The way to tell where you are is to look at your <strong>prompt</strong>, the text that appears before your cursor. Compare these:</p>
@@ -885,7 +885,7 @@ D </code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>When you join a company as a data professional, your first task is almost always to figure out what data exists and where it lives. The workflow is exactly what you’re learning here: connect to a database, run <code>SHOW TABLES</code>, run <code>DESCRIBE</code> on everything interesting, and query the data dictionary if one exists. This process of exploring an unfamiliar schema is a skill you’ll use more often than writing complex queries, so treat these first exercises as rehearsal for a real onboarding experience.</p>
+<p>When you join a company as a data professional, your first task is almost always to figure out what data exists and where it lives. The workflow is exactly what you’re learning here: connect to a database, query <code>information_schema</code> to see what tables and columns exist, and consult the data dictionary if one exists. This process of exploring an unfamiliar schema is a skill you’ll use more often than writing complex queries, so treat these first exercises as rehearsal for a real onboarding experience.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-warning callout-titled">
@@ -898,29 +898,34 @@ D </code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you provide a filename that doesn’t exist, DuckDB silently creates an empty database instead of warning you. If <code>SHOW TABLES</code> returns nothing, you likely opened the wrong file or are in the wrong directory. Use <code>ls</code> and <code>pwd</code> to verify your location before launching DuckDB. See <a href="../appendices/northwind.html" class="quarto-xref"><span>Appendix F</span></a> for detailed troubleshooting.</p>
+<p>If you provide a filename that doesn’t exist, DuckDB silently creates an empty database instead of warning you. If your <code>information_schema.tables</code> query returns nothing, you likely opened the wrong file or are in the wrong directory. Use <code>ls</code> and <code>pwd</code> to verify your location before launching DuckDB. See <a href="../appendices/northwind.html" class="quarto-xref"><span>Appendix F</span></a> for detailed troubleshooting.</p>
 </div>
 </div>
 </section>
 <section id="exploring-the-schema" class="level3" data-number="9.6.2">
 <h3 data-number="9.6.2" class="anchored" data-anchor-id="exploring-the-schema"><span class="header-section-number">9.6.2</span> Exploring the Schema</h3>
-<p>Before writing queries, it’s worth getting a feel for what’s in the database. Run:</p>
+<p>Before writing queries, it’s worth getting a feel for what’s in the database. The SQL standard defines a set of <code>information_schema</code> views that let you inspect any database’s structure. To see what tables exist, run:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>DuckDB CLI</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>SHOW <span class="kw">TABLES</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> table_name</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">tables</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_schema <span class="op">=</span> <span class="st">'main'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This lists every table in the database. You should see ten tables: the nine Northwind entity tables (<code>categories</code>, <code>customers</code>, <code>employees</code>, <code>order_details</code>, <code>orders</code>, <code>products</code>, <code>regions</code>, <code>shippers</code>, and <code>suppliers</code>) plus a <code>data_dictionary</code> table, which is a <strong>data dictionary</strong>: a table that describes the other tables. Data dictionaries document what each table and column represents, what values are expected, and how tables relate to each other. In professional environments, a data dictionary is often the first thing you consult when working with an unfamiliar database. We’ll query ours in the exercises below.</p>
-<p>To see the columns and data types for a specific table, use <code>DESCRIBE</code>:</p>
+<p>To see the columns and data types for a specific table, query <code>information_schema.columns</code>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>DuckDB CLI</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DESCRIBE products;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="DuckDB CLI"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> column_name, data_type, is_nullable</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> information_schema.<span class="kw">columns</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_name <span class="op">=</span> <span class="st">'products'</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> ordinal_position;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You’ll see columns like <code>product_name</code> with type <code>VARCHAR</code> (text), <code>unit_price</code> with type <code>DOUBLE</code> (numbers), and <code>discontinued</code> with type <code>BIGINT</code> (whole numbers). These <strong>data types</strong> determine what operations are valid on each column: you can calculate an average of <code>DOUBLE</code> values but not of <code>VARCHAR</code> values. We’ll explore data types more in <a href="10-modeling.html" class="quarto-xref"><span>Chapter 13</span></a>, but for now, knowing how to inspect what’s in a database is the important skill.</p>
-<p><code>SHOW TABLES</code> and <code>DESCRIBE</code> are your first tools for orienting yourself in an unfamiliar database. In a professional setting, you’ll use them constantly, every new project starts with figuring out what data is available and how it’s structured.</p>
+<p>These <code>information_schema</code> queries are your first tools for orienting yourself in an unfamiliar database. They’re standard SQL that works on PostgreSQL, MySQL, SQL Server, and every other major database. In a professional setting, you’ll use them constantly, every new project starts with figuring out what data is available and how it’s structured.</p>
 </section>
 </section>
 <section id="your-first-query" class="level2" data-number="9.7">
@@ -940,7 +945,7 @@ D </code></pre>
 <li><p>Run <code>SELECT * FROM products;</code> and examine the output. How many columns does the products table have? How many rows? Which column would you use to connect a product to its supplier?</p></li>
 <li><p>Run <code>SELECT * FROM categories;</code> and then <code>SELECT * FROM suppliers;</code>. Without writing any joins (we’ll learn those later), just by reading the data, can you identify which category “Chai” belongs to? Which country supplies the most products?</p></li>
 <li><p>Try running <code>SELECT * FROM employees;</code> and look at the <code>reports_to</code> column. Some values are numbers and one is empty (NULL). What do you think this column represents? What would it mean for an employee to have a NULL value here?</p></li>
-<li><p>Run <code>SELECT * FROM data_dictionary;</code> and read through the results. Pick two tables you haven’t explored yet and use <code>DESCRIBE</code> followed by <code>SELECT *</code> to examine them. Does the data dictionary’s description match what you actually see in the tables?</p></li>
+<li><p>Run <code>SELECT * FROM data_dictionary;</code> and read through the results. Pick two tables you haven’t explored yet and query <code>information_schema.columns</code> followed by <code>SELECT *</code> to examine them. Does the data dictionary’s description match what you actually see in the tables?</p></li>
 </ol>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
@@ -1026,7 +1031,7 @@ D </code></pre>
 <p><strong>1.</strong> i=OLTP Server (frequent transactions across 12 clinics). ii=OLAP/DuckDB (analytical scans of 5 years of data). iii=Embedded OLTP/SQLite (mobile app caching appointments locally).</p>
 <p><strong>2.</strong> Problems: redundancy across 12 monthly tabs, manual merge for annual analysis, 890MB/1min load time. Solutions: single table with dates (not tabs), SQL queries replace 12 pivot tables, proper storage eliminates bloat.</p>
 <p><strong>3.</strong> DuckDB is faster because of columnar storage (reads only unit_price column), vectorized execution (processes batches of 2048 values using SIMD), and morsel-driven parallelism (splits work across CPU cores).</p>
-<p><strong>4.</strong> Querying CSVs directly is fine for one-off exploration. Persistent tables win for repeated queries (cached vs.&nbsp;re-reading), enforced types (rejects invalid data), and discoverability (DESCRIBE, schema documentation).</p>
+<p><strong>4.</strong> Querying CSVs directly is fine for one-off exploration. Persistent tables win for repeated queries (cached vs.&nbsp;re-reading), enforced types (rejects invalid data), and discoverability (<code>information_schema</code>, schema documentation).</p>
 <p><strong>5.</strong> A: NULL (number + NULL = NULL). B: TRUE (‘h’ &gt; ‘H’ in ASCII). C: First query returns 1 row (top manager); second returns 0 (= NULL is always unknown, never TRUE).</p>
 <p><strong>6.</strong> Three risks: silent row truncation at Excel’s limit, automatic type conversion (leading zeros stripped, dates reformatted), floating-point precision loss. A database enforces types at import and preserves full precision.</p>
 </div>

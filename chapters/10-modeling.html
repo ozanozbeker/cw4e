@@ -988,7 +988,7 @@ order_details: order_id, product_id, quantity</code></pre>
 <p>Creating tables and views is only half of database design. The other half is making sure people (including future you) can find and understand the data. In a professional setting, the question “where is the data I need, and what does it mean?” consumes an enormous amount of time. Research suggests employees spend roughly 1.8 hours per day searching for information, and the majority of enterprise data goes unanalyzed simply because people don’t know it exists.</p>
 <p>The solution at scale is a <strong>data catalog</strong>, a system that inventories the data assets in an organization, their definitions, ownership, relationships, and usage patterns. Enterprise tools like DataHub, Alation, and Collibra provide sophisticated catalog capabilities, and teams using the dbt framework get lightweight documentation automatically generated from their code.</p>
 <p>You won’t build an enterprise data catalog while working through this book, but the habits that catalogs formalize are worth developing now, because they scale to every level of work.</p>
-<p>Even DuckDB’s UI demonstrates basic catalog principles. The left panel shows your databases, schemas, and tables. The <code>SHOW TABLES</code> command lists what’s available. <code>DESCRIBE table_name</code> reveals column names and types. The <code>information_schema</code> tables let you query metadata programmatically:</p>
+<p>Even DuckDB’s UI demonstrates basic catalog principles. The left panel shows your databases, schemas, and tables. The <code>information_schema</code> views you learned in <a href="06-databases.html" class="quarto-xref"><span>Chapter 9</span></a> let you query this metadata programmatically:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>duckdb</strong></pre>
@@ -1101,7 +1101,7 @@ order_details: order_id, product_id, quantity</code></pre>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> table_name <span class="op">=</span> <span class="st">'products'</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> ordinal_position;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>What information does <code>information_schema</code> provide that <code>DESCRIBE products</code> doesn’t? Why is the programmatic approach (<code>information_schema</code>) more useful than the interactive approach (<code>DESCRIBE</code>) for data catalog automation?</p></li>
+<p>Compare the output to querying <code>information_schema.columns</code> with no filters. Why is <code>information_schema</code> more useful than ad-hoc inspection for data catalog automation?</p></li>
 <li><p>Write a short README (3-5 sentences per table) documenting the manufacturing quality control schema from this chapter. For each table, state what it represents, its primary key, its key relationships, and any important constraints. This is the kind of documentation a teammate would need to start querying your data.</p></li>
 </ol>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
@@ -1125,7 +1125,7 @@ order_details: order_id, product_id, quantity</code></pre>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> suppliers <span class="kw">AS</span> s <span class="kw">ON</span> p.supplier_id <span class="op">=</span> s.supplier_id</span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> p.discontinued <span class="op">=</span> <span class="dv">0</span> <span class="kw">AND</span> p.units_in_stock <span class="op">&lt;=</span> p.reorder_level;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>2.</strong> INSERT three rows, UPDATE one capacity, DELETE one row, verify with SELECT after each step. (Straightforward DML practice,see the chapter examples for exact syntax.)</p>
-<p><strong>3.</strong> information_schema is programmatic and queryable,you can filter columns by type, join with constraint metadata, and automate schema documentation. DESCRIBE is interactive only.</p>
+<p><strong>3.</strong> <code>information_schema</code> is programmatic and queryable: you can filter columns by type, join with constraint metadata, and automate schema documentation across all tables at once.</p>
 <p><strong>4.</strong> (Documentation exercise,write 3-5 sentences per table describing purpose, PK, relationships, and constraints for production_lines, operators, inspections, and defects.)</p>
 </div>
 </div>
@@ -1147,7 +1147,7 @@ order_details: order_id, product_id, quantity</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter teaches you to design databases, but in your career you’ll spend ten times more effort understanding databases other people designed. The <code>SHOW TABLES</code> → <code>DESCRIBE</code> → data dictionary workflow you learned in the first chapter is the most frequently used skill in professional data work. Every new project, every new client, every new job starts with “what data exists, what does it mean, and where does it come from?” The design skills in this chapter make you better at reading schemas too, because you’ll recognize the patterns (star schemas, junction tables, normalization levels) and understand the trade-offs the designer was making.</p>
+<p>This chapter teaches you to design databases, but in your career you’ll spend ten times more effort understanding databases other people designed. The <code>information_schema</code> → data dictionary workflow you learned in <a href="06-databases.html" class="quarto-xref"><span>Chapter 9</span></a> is the most frequently used skill in professional data work. Every new project, every new client, every new job starts with “what data exists, what does it mean, and where does it come from?” The design skills in this chapter make you better at reading schemas too, because you’ll recognize the patterns (star schemas, junction tables, normalization levels) and understand the trade-offs the designer was making.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note callout-titled">
