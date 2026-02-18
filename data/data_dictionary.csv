@@ -1,60 +1,60 @@
-table,field,description
-orders,orderID,Unique identifier for each order
-orders,customerID,The customer who placed the order
-orders,employeeID,The employee who processed the order
-orders,orderDate,The date when the order was placed
-orders,requiredDate,The date when the customer requested the order to be delivered
-orders,shippedDate,The date when the order was shipped (empty if not yet shipped)
-orders,shipperID,The ID of the shipping company used for the order (empty if not shipped)
+table_name,field,description
+orders,order_id,Unique identifier for each order
+orders,customer_id,The customer who placed the order
+orders,employee_id,The employee who processed the order
+orders,order_date,The date when the order was placed
+orders,required_date,The date when the customer requested the order to be delivered
+orders,shipped_date,The date when the order was shipped (empty if not yet shipped)
+orders,shipper_id,The ID of the shipping company used for the order (empty if not shipped)
 orders,freight,The shipping cost for the order in USD
-orders,orderStatus,"Current status: Delivered, Shipped, Processing, Cancelled, or Returned"
-orders,paymentMethod,"Payment method: Credit Card, Wire Transfer, Purchase Order, Check, or ACH"
-order_details,orderID,The ID of the order this line item belongs to
-order_details,productID,The ID of the product being ordered
-order_details,unitPrice,The price per unit of the product at the time of order in USD (before discount)
+orders,order_status,"Current status: Delivered, Shipped, Processing, Cancelled, or Returned"
+orders,payment_method,"Payment method: Credit Card, Wire Transfer, Purchase Order, Check, or ACH"
+order_details,order_id,The ID of the order this line item belongs to
+order_details,product_id,The ID of the product being ordered
+order_details,unit_price,The price per unit of the product at the time of order in USD (before discount)
 order_details,quantity,The number of units ordered
 order_details,discount,The discount percentage applied to the unit price (0.0 to 0.25)
-customers,customerID,Unique 5-letter identifier for each customer
-customers,companyName,The name of the customer's company
-customers,contactName,The name of the primary contact
-customers,contactTitle,The job title of the primary contact
+customers,customer_id,Unique 5-letter identifier for each customer
+customers,company_name,The name of the customer's company
+customers,contact_name,The name of the primary contact
+customers,contact_title,The job title of the primary contact
 customers,city,The city where the customer is located
 customers,country,The country where the customer is located
 customers,segment,"Customer segment: Corporate, Small Business, Government, Wholesale, or Retail"
 customers,industry,The customer's primary industry
-customers,registrationDate,The date the customer account was created
-customers,creditLimit,The customer's credit limit in USD
-products,productID,Unique identifier for each product
-products,productName,The name of the product
-products,quantityPerUnit,The quantity of the product per package
-products,unitPrice,The current list price per unit in USD
+customers,registration_date,The date the customer account was created
+customers,credit_limit,The customer's credit limit in USD
+products,product_id,Unique identifier for each product
+products,product_name,The name of the product
+products,quantity_per_unit,The quantity of the product per package
+products,unit_price,The current list price per unit in USD
 products,discontinued,"1 if the product has been discontinued, 0 otherwise"
-products,categoryID,The ID of the category the product belongs to
-products,supplierID,The ID of the supplier for this product
-products,unitsInStock,Current inventory level
-products,reorderLevel,Minimum stock level that triggers a reorder
+products,category_id,The ID of the category the product belongs to
+products,supplier_id,The ID of the supplier for this product
+products,units_in_stock,Current inventory level
+products,reorder_level,Minimum stock level that triggers a reorder
 products,weight_kg,Weight of one unit in kilograms
-categories,categoryID,Unique identifier for each product category
-categories,categoryName,The name of the category
+categories,category_id,Unique identifier for each product category
+categories,category_name,The name of the category
 categories,description,A description of the category and its products
-suppliers,supplierID,Unique identifier for each supplier
-suppliers,companyName,The name of the supplier company
-suppliers,contactName,The name of the primary contact at the supplier
-suppliers,contactTitle,The job title of the supplier contact
+suppliers,supplier_id,Unique identifier for each supplier
+suppliers,company_name,The name of the supplier company
+suppliers,contact_name,The name of the primary contact at the supplier
+suppliers,contact_title,The job title of the supplier contact
 suppliers,city,The city where the supplier is located
 suppliers,country,The country where the supplier is located
 suppliers,phone,The supplier's phone number
-employees,employeeID,Unique identifier for each employee
-employees,employeeName,Full name of the employee
+employees,employee_id,Unique identifier for each employee
+employees,employee_name,Full name of the employee
 employees,title,The employee's job title
 employees,city,The city where the employee works
 employees,country,The country where the employee works
-employees,reportsTo,The employee ID of this employee's manager (empty for top-level)
-employees,regionID,The ID of the region the employee is assigned to
-employees,hireDate,The date the employee was hired
-shippers,shipperID,Unique identifier for each shipper
-shippers,companyName,The name of the shipping company
+employees,reports_to,The employee ID of this employee's manager (empty for top-level)
+employees,region_id,The ID of the region the employee is assigned to
+employees,hire_date,The date the employee was hired
+shippers,shipper_id,Unique identifier for each shipper
+shippers,company_name,The name of the shipping company
 shippers,phone,The shipper's contact phone number
-regions,regionID,Unique identifier for each region
-regions,regionName,"The broad geographic region (e.g., North America, Europe)"
+regions,region_id,Unique identifier for each region
+regions,region_name,"The broad geographic region (e.g., North America, Europe)"
 regions,territory,The specific territory within the region

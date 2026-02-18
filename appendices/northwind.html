@@ -500,43 +500,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Download Files
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Databases</strong></p>
-<ul>
-<li><a href="../../data/northwind.duckdb" download="northwind.duckdb">northwind.duckdb</a></li>
-<li><a href="../../data/northwind.sqlite" download="northwind.sqlite">northwind.sqlite</a></li>
-</ul>
-<p><strong>Parquet</strong></p>
-<ul>
-<li><a href="../../data/northwind_flat.parquet" download="northwind_flat.parquet">northwind_flat.parquet</a></li>
-</ul>
-<p><strong>CSV Files</strong></p>
-<ul>
-<li><a href="../../data/categories.csv" download="categories.csv">categories.csv</a></li>
-<li><a href="../../data/customers.csv" download="customers.csv">customers.csv</a></li>
-<li><a href="../../data/employees.csv" download="employees.csv">employees.csv</a></li>
-<li><a href="../../data/order_details.csv" download="order_details.csv">order_details.csv</a></li>
-<li><a href="../../data/orders.csv" download="orders.csv">orders.csv</a></li>
-<li><a href="../../data/products.csv" download="products.csv">products.csv</a></li>
-<li><a href="../../data/regions.csv" download="regions.csv">regions.csv</a></li>
-<li><a href="../../data/shippers.csv" download="shippers.csv">shippers.csv</a></li>
-<li><a href="../../data/suppliers.csv" download="suppliers.csv">suppliers.csv</a></li>
-</ul>
-<p><strong>Documentation</strong></p>
-<ul>
-<li><a href="../../data/data_dictionary.csv" download="data_dictionary.csv">data_dictionary.csv</a></li>
-</ul>
-</div>
-</div>
 <section id="about-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-dataset">About the Dataset</h2>
 <p>The Northwind dataset represents a fictional wholesale company that imports and exports specialty foods worldwide. Originally created by Microsoft as a sample database for Access and SQL Server, it has become one of the most widely used teaching datasets for relational databases.</p>
@@ -557,19 +520,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Regions</strong>: Geographic region and territory definitions</li>
 </ul>
 <p>For detailed field descriptions, download the <a href="../data/data_dictionary.csv">data dictionary</a>.</p>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Column Naming Conventions
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The CSV files use <strong>camelCase</strong> column names (<code>orderID</code>, <code>unitPrice</code>, <code>companyName</code>) matching the original Microsoft Northwind convention. The DuckDB and SQLite databases use <strong>snake_case</strong> column names (<code>order_id</code>, <code>unit_price</code>, <code>company_name</code>), which is the modern convention preferred by most data teams. The denormalized Parquet file also uses snake_case, with table-prefixed names where needed to avoid ambiguity (e.g., <code>customer_city</code> vs.&nbsp;<code>supplier_city</code>). Code examples throughout the book use whichever convention matches the file format being used in that chapter.</p>
-</div>
-</div>
 </section>
 <section id="available-formats" class="level2">
 <h2 class="anchored" data-anchor-id="available-formats">Available Formats</h2>
@@ -616,27 +566,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Individual CSV files for each table, used in the <strong>Programming</strong> module to teach file I/O operations and data processing fundamentals. These files demonstrate working with plain-text data formats.</p>
 <p><strong>Download individual files</strong>:</p>
 <ul>
-<li><a href="../data/categories.csv">categories.csv</a></li>
-<li><a href="../data/customers.csv">customers.csv</a></li>
-<li><a href="../data/employees.csv">employees.csv</a></li>
-<li><a href="../data/order_details.csv">order_details.csv</a></li>
-<li><a href="../data/orders.csv">orders.csv</a></li>
-<li><a href="../data/products.csv">products.csv</a></li>
-<li><a href="../data/regions.csv">regions.csv</a></li>
-<li><a href="../data/shippers.csv">shippers.csv</a></li>
-<li><a href="../data/suppliers.csv">suppliers.csv</a></li>
+<li><a href="../data/categories.csv" download="categories.csv">categories.csv</a></li>
+<li><a href="../data/customers.csv" download="customers.csv">customers.csv</a></li>
+<li><a href="../data/employees.csv" download="employees.csv">employees.csv</a></li>
+<li><a href="../data/order_details.csv" download="order_details.csv">order_details.csv</a></li>
+<li><a href="../data/orders.csv" download="orders.csv">orders.csv</a></li>
+<li><a href="../data/products.csv" download="products.csv">products.csv</a></li>
+<li><a href="../data/regions.csv" download="regions.csv">regions.csv</a></li>
+<li><a href="../data/shippers.csv" download="shippers.csv">shippers.csv</a></li>
+<li><a href="../data/suppliers.csv" download="suppliers.csv">suppliers.csv</a></li>
 </ul>
 <p><strong>Usage</strong>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>load_data.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="load_data.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"customers.csv"</span>) <span class="im">as</span> f:</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    reader <span class="op">=</span> csv.DictReader(f)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    customers <span class="op">=</span> <span class="bu">list</span>(reader)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="load_data.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"customers.csv"</span>) <span class="im">as</span> f:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    reader <span class="op">=</span> csv.DictReader(f)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    customers <span class="op">=</span> <span class="bu">list</span>(reader)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="data-dictionary" class="level3">
