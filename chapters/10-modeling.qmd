@@ -434,7 +434,7 @@ The solution at scale is a **data catalog**, a system that inventories the data 
 
 You won't build an enterprise data catalog while working through this book, but the habits that catalogs formalize are worth developing now, because they scale to every level of work.
 
-Even DuckDB's UI demonstrates basic catalog principles. The left panel shows your databases, schemas, and tables. The `SHOW TABLES` command lists what's available. `DESCRIBE table_name` reveals column names and types. The `information_schema` tables let you query metadata programmatically:
+Even DuckDB's UI demonstrates basic catalog principles. The left panel shows your databases, schemas, and tables. The `information_schema` views you learned in @sec-databases let you query this metadata programmatically:
 
 ```{.sql filename="duckdb"}
 -- [STANDARD SQL] What tables exist in the database?
@@ -533,7 +533,7 @@ As an analyst, you'll use `INSERT` and `CREATE TABLE ... AS SELECT` frequently. 
     ORDER BY ordinal_position;
     ```
 
-    What information does `information_schema` provide that `DESCRIBE products` doesn't? Why is the programmatic approach (`information_schema`) more useful than the interactive approach (`DESCRIBE`) for data catalog automation?
+    Compare the output to querying `information_schema.columns` with no filters. Why is `information_schema` more useful than ad-hoc inspection for data catalog automation?
 
 4. Write a short README (3-5 sentences per table) documenting the manufacturing quality control schema from this chapter. For each table, state what it represents, its primary key, its key relationships, and any important constraints. This is the kind of documentation a teammate would need to start querying your data.
 
@@ -552,7 +552,7 @@ WHERE p.discontinued = 0 AND p.units_in_stock <= p.reorder_level;
 
 **2.** INSERT three rows, UPDATE one capacity, DELETE one row, verify with SELECT after each step. (Straightforward DML practice,see the chapter examples for exact syntax.)
 
-**3.** information_schema is programmatic and queryable,you can filter columns by type, join with constraint metadata, and automate schema documentation. DESCRIBE is interactive only.
+**3.** `information_schema` is programmatic and queryable: you can filter columns by type, join with constraint metadata, and automate schema documentation across all tables at once.
 
 **4.** (Documentation exercise,write 3-5 sentences per table describing purpose, PK, relationships, and constraints for production_lines, operators, inspections, and defects.)
 
@@ -568,7 +568,7 @@ The SQL skills transfer directly. In Perkins' language, you've been playing a ju
 
 ::: {.callout-tip}
 ## You'll Spend More Time Reading Schemas Than Writing Them
-This chapter teaches you to design databases, but in your career you'll spend ten times more effort understanding databases other people designed. The `SHOW TABLES` → `DESCRIBE` → data dictionary workflow you learned in the first chapter is the most frequently used skill in professional data work. Every new project, every new client, every new job starts with "what data exists, what does it mean, and where does it come from?" The design skills in this chapter make you better at reading schemas too, because you'll recognize the patterns (star schemas, junction tables, normalization levels) and understand the trade-offs the designer was making.
+This chapter teaches you to design databases, but in your career you'll spend ten times more effort understanding databases other people designed. The `information_schema` → data dictionary workflow you learned in @sec-databases is the most frequently used skill in professional data work. Every new project, every new client, every new job starts with "what data exists, what does it mean, and where does it come from?" The design skills in this chapter make you better at reading schemas too, because you'll recognize the patterns (star schemas, junction tables, normalization levels) and understand the trade-offs the designer was making.
 :::
 
 ::: {.callout-note}

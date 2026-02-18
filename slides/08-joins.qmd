@@ -87,7 +87,7 @@ products.supplier_id references suppliers.supplier_id
 This connection is how you say "Product 1 is supplied by Supplier 3."
 
 ::: {.notes}
-LIVE DEMO: Run `DESCRIBE products;` and point out `product_id` (primary key, unique identifier) and `supplier_id` (foreign key, reference to suppliers table). Then run `DESCRIBE suppliers;` and show `supplier_id` as the primary key there. The idea: product_id is the "address" of that product; supplier_id is the "address" of its supplier.
+LIVE DEMO: Query `information_schema.columns` for the `products` table and point out `product_id` (primary key, unique identifier) and `supplier_id` (foreign key, reference to suppliers table). Then query it for `suppliers` and show `supplier_id` as the primary key there. The idea: product_id is the "address" of that product; supplier_id is the "address" of its supplier.
 :::
 
 ---

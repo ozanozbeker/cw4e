@@ -19,7 +19,7 @@ format:
 
 ## Where We Are
 
-Last class: DuckDB is installed, Northwind is loaded, you've run `SHOW TABLES` and peeked at a few rows.
+Last class: DuckDB is installed, Northwind is loaded, you've queried `information_schema` and peeked at a few rows.
 
 Today: **precision**. How to write SQL that answers real questions: "Which products are under $20?" "What's our total inventory value?" "Which orders shipped late?"
 

@@ -331,17 +331,19 @@ LIVE DEMO: Open DuckDB with the Northwind database. If the file doesn't exist, D
 
 ---
 
-## First Command: SHOW TABLES
+## First Command: What Tables Exist?
 
 ```{.sql filename="DuckDB"}
-SHOW TABLES;
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'main';
 ```
 
 Output (partial):
 
 ```{.text filename="output"}
 ┌────────────────┐
-│     name       │
+│  table_name    │
 ├────────────────┤
 │ categories     │
 │ customers      │
@@ -356,36 +358,39 @@ Output (partial):
 These are your tables. Each one holds a different type of data.
 
 ::: {.notes}
-LIVE DEMO: Run `SHOW TABLES;` and show the output. Point out: every table from the list on the earlier slide is here. Ask: "Which table would you expect to have the most rows? Why?" (Probably order_details—millions of individual line items.)
+LIVE DEMO: Run this query and show the output. Point out: every table from the list on the earlier slide is here. This is standard SQL that works on any database (PostgreSQL, MySQL, SQL Server). Ask: "Which table would you expect to have the most rows? Why?" (Probably order_details—millions of individual line items.)
 :::
 
 ---
 
-## Understanding a Table: DESCRIBE
+## Understanding a Table: Column Metadata
 
 ```{.sql filename="DuckDB"}
-DESCRIBE products;
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_name = 'products'
+ORDER BY ordinal_position;
 ```
 
-Output:
+Output (partial):
 
 ```{.text filename="output"}
-┌──────────────────┬─────────┐
-│ column_name      │ type    │
-├──────────────────┼─────────┤
-│ product_id       │ INTEGER │
-│ product_name     │ VARCHAR │
-│ supplier_id      │ INTEGER │
-│ category_id      │ INTEGER │
-│ unit_price       │ DECIMAL │
-│ units_in_stock   │ INTEGER │
-└──────────────────┴─────────┘
+┌──────────────────┬───────────┬─────────────┐
+│ column_name      │ data_type │ is_nullable │
+├──────────────────┼───────────┼─────────────┤
+│ product_id       │ INTEGER   │ YES         │
+│ product_name     │ VARCHAR   │ YES         │
+│ supplier_id      │ INTEGER   │ YES         │
+│ category_id      │ INTEGER   │ YES         │
+│ unit_price       │ DOUBLE    │ YES         │
+│ units_in_stock   │ INTEGER   │ YES         │
+└──────────────────┴───────────┴─────────────┘
 ```
 
-Schema tells you: column names, data types, and constraints.
+Schema tells you: column names, data types, and nullability.
 
 ::: {.notes}
-LIVE DEMO: Run `DESCRIBE products;` and walk through the output. Explain data types briefly: INTEGER (whole numbers), VARCHAR (text), DECIMAL (money). Don't get into constraints yet—that's future material. Ask: "If you wanted to find products under $20, which column would you check?" (unit_price)
+LIVE DEMO: Run this query and walk through the output. Explain data types briefly: INTEGER (whole numbers), VARCHAR (text), DOUBLE (decimal numbers). Don't get into constraints yet—that's future material. This is standard SQL that works on any database. Ask: "If you wanted to find products under $20, which column would you check?" (unit_price)
 :::
 
 ---
@@ -445,7 +450,7 @@ Quick note: DuckDB persists data to the file. You can close the interactive sess
 - **Server databases** (PostgreSQL, MySQL) manage multiple users; **embedded databases** (DuckDB, SQLite) live on your machine
 - **DuckDB** = zero-config, column-oriented, perfect for learning SQL and analytical workflows
 - **Northwind** is our teaching dataset across all of Module 2
-- **SHOW TABLES** to see what's there; **DESCRIBE** to understand a table; **SELECT...FROM...LIMIT** to peek at the data
+- **information_schema.tables** to see what's there; **information_schema.columns** to understand a table; **SELECT...FROM...LIMIT** to peek at the data
 
 ::: {.notes}
 Quick recap, don't read slide-by-slide. Ask: "What's one insight about databases that was new to you?" or "Why would DuckDB be better than Excel for analyzing a million-row dataset?" Foreshadow next class: "You've seen the tables. Next time we'll query them with real precision—filtering rows, choosing columns, aggregating results. That's where SQL gets powerful."

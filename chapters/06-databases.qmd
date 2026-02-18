@@ -236,7 +236,7 @@ DuckDB v1.4.4 (Andium) 6ddac802ff
 Enter ".help" for usage hints.
 Connected to a transient in-memory database.
 Use ".open FILENAME" to reopen on a persistent database.
-D 
+D
 ```
 
 At first glance, it looks similar to anything else in your terminal. But you're actually inside DuckDB's own command-line interface (CLI), which interprets your input as SQL commands rather than shell commands. This is an important distinction: if you type `ls` or `cd` here, DuckDB won't understand, because those are shell commands and you're no longer in the shell.
@@ -302,33 +302,38 @@ duckdb northwind.duckdb
 
 ::: {.callout-tip}
 ## Your First Week on the Job
-When you join a company as a data professional, your first task is almost always to figure out what data exists and where it lives. The workflow is exactly what you're learning here: connect to a database, run `SHOW TABLES`, run `DESCRIBE` on everything interesting, and query the data dictionary if one exists. This process of exploring an unfamiliar schema is a skill you'll use more often than writing complex queries, so treat these first exercises as rehearsal for a real onboarding experience.
+When you join a company as a data professional, your first task is almost always to figure out what data exists and where it lives. The workflow is exactly what you're learning here: connect to a database, query `information_schema` to see what tables and columns exist, and consult the data dictionary if one exists. This process of exploring an unfamiliar schema is a skill you'll use more often than writing complex queries, so treat these first exercises as rehearsal for a real onboarding experience.
 :::
 
 ::: {.callout-warning}
 ## DuckDB Creates Missing Files Silently
-If you provide a filename that doesn't exist, DuckDB silently creates an empty database instead of warning you. If `SHOW TABLES` returns nothing, you likely opened the wrong file or are in the wrong directory. Use `ls` and `pwd` to verify your location before launching DuckDB. See @sec-northwind-dataset for detailed troubleshooting.
+If you provide a filename that doesn't exist, DuckDB silently creates an empty database instead of warning you. If your `information_schema.tables` query returns nothing, you likely opened the wrong file or are in the wrong directory. Use `ls` and `pwd` to verify your location before launching DuckDB. See @sec-northwind-dataset for detailed troubleshooting.
 :::
 
 ### Exploring the Schema
 
-Before writing queries, it's worth getting a feel for what's in the database. Run:
+Before writing queries, it's worth getting a feel for what's in the database. The SQL standard defines a set of `information_schema` views that let you inspect any database's structure. To see what tables exist, run:
 
 ```{.sql filename="DuckDB CLI"}
-SHOW TABLES;
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'main';
 ```
 
 This lists every table in the database. You should see ten tables: the nine Northwind entity tables (`categories`, `customers`, `employees`, `order_details`, `orders`, `products`, `regions`, `shippers`, and `suppliers`) plus a `data_dictionary` table, which is a **data dictionary**: a table that describes the other tables. Data dictionaries document what each table and column represents, what values are expected, and how tables relate to each other. In professional environments, a data dictionary is often the first thing you consult when working with an unfamiliar database. We'll query ours in the exercises below.
 
-To see the columns and data types for a specific table, use `DESCRIBE`:
+To see the columns and data types for a specific table, query `information_schema.columns`:
 
 ```{.sql filename="DuckDB CLI"}
-DESCRIBE products;
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_name = 'products'
+ORDER BY ordinal_position;
 ```
 
 You'll see columns like `product_name` with type `VARCHAR` (text), `unit_price` with type `DOUBLE` (numbers), and `discontinued` with type `BIGINT` (whole numbers). These **data types** determine what operations are valid on each column: you can calculate an average of `DOUBLE` values but not of `VARCHAR` values. We'll explore data types more in @sec-modeling, but for now, knowing how to inspect what's in a database is the important skill.
 
-`SHOW TABLES` and `DESCRIBE` are your first tools for orienting yourself in an unfamiliar database. In a professional setting, you'll use them constantly, every new project starts with figuring out what data is available and how it's structured.
+These `information_schema` queries are your first tools for orienting yourself in an unfamiliar database. They're standard SQL that works on PostgreSQL, MySQL, SQL Server, and every other major database. In a professional setting, you'll use them constantly, every new project starts with figuring out what data is available and how it's structured.
 
 ## Your First Query
 
@@ -351,7 +356,7 @@ That's the whole game in miniature: someone has a question, you have data, and S
 
 3. Try running `SELECT * FROM employees;` and look at the `reports_to` column. Some values are numbers and one is empty (NULL). What do you think this column represents? What would it mean for an employee to have a NULL value here?
 
-4. Run `SELECT * FROM data_dictionary;` and read through the results. Pick two tables you haven't explored yet and use `DESCRIBE` followed by `SELECT *` to examine them. Does the data dictionary's description match what you actually see in the tables?
+4. Run `SELECT * FROM data_dictionary;` and read through the results. Pick two tables you haven't explored yet and query `information_schema.columns` followed by `SELECT *` to examine them. Does the data dictionary's description match what you actually see in the tables?
 
 ::: {.callout-tip title="Solutions" collapse="true"}
 
@@ -391,9 +396,9 @@ Notice that we launched the UI with `duckdb -ui northwind.duckdb`, pointing it a
 
 These exercises bring together concepts from the entire chapter. They require you to think across sections rather than recalling a single idea.
 
-1. **Architecture matching.** A regional hospital network is modernizing their data systems. They have three needs: 
+1. **Architecture matching.** A regional hospital network is modernizing their data systems. They have three needs:
     i) a system to record patient check-ins, prescription fills, and appointment bookings in real time across 12 clinics
-    ii) a system for their analytics team to study readmission patterns and treatment outcomes across 5 years of historical data, and 
+    ii) a system for their analytics team to study readmission patterns and treatment outcomes across 5 years of historical data, and
     iii) a system for a mobile app that caches the current user's appointment schedule locally on their phone. For each need, recommend a specific database type (OLTP server, OLAP server, embedded OLTP, or embedded OLAP) and name one real database product that fits.
 
 2. **Spreadsheet autopsy.** You inherit a 14-tab Excel workbook that tracks product quality inspections for a manufacturing facility. Tab 1 is a lookup table of inspector names. Tabs 2 through 13 are monthly inspection logs (one tab per month) with columns for date, inspector ID, product ID, pass/fail, and notes. Tab 14 contains pivot tables and charts that summarize annual defect rates. The file is 890 MB and takes over a minute to open. Diagnose at least three specific problems with this setup, and describe, at a conceptual level (not SQL syntax), how a database would solve each one.
@@ -419,7 +424,7 @@ These exercises bring together concepts from the entire chapter. They require yo
 
 **3.** DuckDB is faster because of columnar storage (reads only unit_price column), vectorized execution (processes batches of 2048 values using SIMD), and morsel-driven parallelism (splits work across CPU cores).
 
-**4.** Querying CSVs directly is fine for one-off exploration. Persistent tables win for repeated queries (cached vs. re-reading), enforced types (rejects invalid data), and discoverability (DESCRIBE, schema documentation).
+**4.** Querying CSVs directly is fine for one-off exploration. Persistent tables win for repeated queries (cached vs. re-reading), enforced types (rejects invalid data), and discoverability (`information_schema`, schema documentation).
 
 **5.** A: NULL (number + NULL = NULL). B: TRUE ('h' > 'H' in ASCII). C: First query returns 1 row (top manager); second returns 0 (= NULL is always unknown, never TRUE).
 
