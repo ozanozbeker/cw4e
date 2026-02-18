@@ -16,9 +16,3 @@ Thumbs.db
 
 # SQLite
 *.sqlite-journal
-
-# Python
-.venv/
-
-# Claude
-CLAUDE.md
