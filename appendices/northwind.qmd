@@ -1,35 +1,5 @@
 # Northwind Dataset {#sec-northwind-dataset}
 
-::: {.callout-note appearance="minimal"}
-## Download Files
-
-**Databases**
-
-- [northwind.duckdb](../../data/northwind.duckdb){download="northwind.duckdb"}
-- [northwind.sqlite](../../data/northwind.sqlite){download="northwind.sqlite"}
-
-**Parquet**
-
-- [northwind_flat.parquet](../../data/northwind_flat.parquet){download="northwind_flat.parquet"}
-
-**CSV Files**
-
-- [categories.csv](../../data/categories.csv){download="categories.csv"}
-- [customers.csv](../../data/customers.csv){download="customers.csv"}
-- [employees.csv](../../data/employees.csv){download="employees.csv"}
-- [order_details.csv](../../data/order_details.csv){download="order_details.csv"}
-- [orders.csv](../../data/orders.csv){download="orders.csv"}
-- [products.csv](../../data/products.csv){download="products.csv"}
-- [regions.csv](../../data/regions.csv){download="regions.csv"}
-- [shippers.csv](../../data/shippers.csv){download="shippers.csv"}
-- [suppliers.csv](../../data/suppliers.csv){download="suppliers.csv"}
-
-**Documentation**
-
-- [data_dictionary.csv](../../data/data_dictionary.csv){download="data_dictionary.csv"}
-:::
-
-
 ## About the Dataset
 
 The Northwind dataset represents a fictional wholesale company that imports and exports specialty foods worldwide. Originally created by Microsoft as a sample database for Access and SQL Server, it has become one of the most widely used teaching datasets for relational databases.
@@ -51,11 +21,6 @@ The Northwind database consists of nine tables:
 - **Regions**: Geographic region and territory definitions
 
 For detailed field descriptions, download the [data dictionary](../data/data_dictionary.csv).
-
-::: {.callout-note}
-## Column Naming Conventions
-The CSV files use **camelCase** column names (`orderID`, `unitPrice`, `companyName`) matching the original Microsoft Northwind convention. The DuckDB and SQLite databases use **snake_case** column names (`order_id`, `unit_price`, `company_name`), which is the modern convention preferred by most data teams. The denormalized Parquet file also uses snake_case, with table-prefixed names where needed to avoid ambiguity (e.g., `customer_city` vs. `supplier_city`). Code examples throughout the book use whichever convention matches the file format being used in that chapter.
-:::
 
 ## Available Formats
 
@@ -101,19 +66,18 @@ Individual CSV files for each table, used in the **Programming** module to teach
 
 **Download individual files**:
 
-- [categories.csv](../data/categories.csv)
-- [customers.csv](../data/customers.csv)
-- [employees.csv](../data/employees.csv)
-- [order_details.csv](../data/order_details.csv)
-- [orders.csv](../data/orders.csv)
-- [products.csv](../data/products.csv)
-- [regions.csv](../data/regions.csv)
-- [shippers.csv](../data/shippers.csv)
-- [suppliers.csv](../data/suppliers.csv)
+- [categories.csv](../data/categories.csv){download="categories.csv"}
+- [customers.csv](../data/customers.csv){download="customers.csv"}
+- [employees.csv](../data/employees.csv){download="employees.csv"}
+- [order_details.csv](../data/order_details.csv){download="order_details.csv"}
+- [orders.csv](../data/orders.csv){download="orders.csv"}
+- [products.csv](../data/products.csv){download="products.csv"}
+- [regions.csv](../data/regions.csv){download="regions.csv"}
+- [shippers.csv](../data/shippers.csv){download="shippers.csv"}
+- [suppliers.csv](../data/suppliers.csv){download="suppliers.csv"}
 
 **Usage**:
 ```{.python filename="load_data.py"}
-from pathlib import Path
 import csv
 
 with open("customers.csv") as f:

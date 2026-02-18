@@ -2,6 +2,7 @@
 /.quarto/
 **/*.quarto_ipynb
 _book/
+slides/*.html
 
 # macOS
 .DS_Store
