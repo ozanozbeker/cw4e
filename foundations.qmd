@@ -1,4 +1,4 @@
-# Foundations
+# Foundations {.unnumbered}
 
 Before you write a single line of Python or craft your first SQL query, you need to understand the environment where your code will run. This module builds the computational foundation that makes everything else in the book possible.
 

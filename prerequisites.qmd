@@ -1,4 +1,4 @@
-# Prerequisites
+# Prerequisites {.unnumbered}
 
 This chapter lists the tools you'll need throughout the book. Rather than installing everything at once, you'll set up each tool as it becomes relevant. This approach lets you start quickly and spreads the installation work across the course.
 

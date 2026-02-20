@@ -1,4 +1,4 @@
-# Production
+# Production {.unnumbered}
 
 You've come a long way. In Foundations, you learned to navigate your computer from the command line and track your work with Git. In Databases, you learned to think in sets, writing SQL queries that retrieve and transform data. In Programming, you wrote Python scripts that process files, define functions, and build reusable modules. In Integration, you connected all of it: SQL queries from Python, interactive notebooks, DataFrames, visualizations, and formatted Excel reports.
 

@@ -1,4 +1,4 @@
-# Databases
+# Databases {.unnumbered}
 
 In the Foundations module, you learned to navigate your computer like an engineer: managing files from the command line, tracking changes with Git, and collaborating through GitHub. Those skills gave you the infrastructure to work reliably. Now we need something to work *on*.
 

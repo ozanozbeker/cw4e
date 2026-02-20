@@ -1,4 +1,4 @@
-# Integration
+# Integration {.unnumbered}
 
 You now have two powerful tools in your workflow. SQL retrieves and transforms data inside a database. Python reads files, defines functions, builds modules, and handles the logic and orchestration around data. In this module, you'll connect them.
 

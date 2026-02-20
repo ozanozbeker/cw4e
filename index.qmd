@@ -1,4 +1,4 @@
-# Welcome
+# Welcome {.unnumbered}
 
 This is the website for **"Computational Workflows for Engineers"**. This book will teach you how to build data products using SQL, Python, and the professional tools that connect them. You'll learn to extract data from various sources, transform it into useful forms, create reports and analyses, and share your results through packaging and automation.
 

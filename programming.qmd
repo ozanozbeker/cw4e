@@ -1,4 +1,4 @@
-# Programming
+# Programming {.unnumbered}
 
 In the Foundations module, you learned to navigate your computer through the command line, manage files, and track your work with Git. In Databases, you learned to think in sets, writing SQL queries that let the database do the heavy lifting of filtering, joining, and aggregating data. Now you'll add a third tool to your workflow: Python.
 
