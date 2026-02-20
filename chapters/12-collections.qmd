@@ -235,7 +235,7 @@ for key, value in product.items():
     print(f"{key}: {value}")
 ```
 
-```
+```{.text filename="output"}
 name: Chai
 price: 18.0
 stock: 39
@@ -401,7 +401,7 @@ for product in products:
     print(f"Processing: {product}")
 ```
 
-```
+```{.text filename="output"}
 Processing: Chai
 Processing: Chang
 Processing: Tofu
@@ -441,7 +441,7 @@ for index, product in enumerate(products):
     print(f"{index}: {product}")
 ```
 
-```
+```{.text filename="output"}
 0: Chai
 1: Chang
 2: Tofu
@@ -461,7 +461,7 @@ for product, price in zip(products, prices):
     print(f"{product}: ${price:.2f}")
 ```
 
-```
+```{.text filename="output"}
 Chai: $18.00
 Chang: $19.00
 Tofu: $6.50
@@ -604,7 +604,7 @@ for item in stock_values:
     print(f"{item['name']}: ${item['value']:,.2f}")
 ```
 
-```
+```{.text filename="output"}
 Chai: $702.00
 Chang: $323.00
 Tofu: $813.75
@@ -670,7 +670,7 @@ for category, total in sorted_categories:
     print(f"{category:<15} ${total:>9,.2f}")
 ```
 
-```
+```{.text filename="output"}
 Category             Revenue
 --------------- ----------
 Produce         $   348.75

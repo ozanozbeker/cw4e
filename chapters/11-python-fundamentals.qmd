@@ -43,7 +43,7 @@ cd my-project
 
 This creates a directory with the following structure:
 
-```
+```{.text filename="output"}
 my-project/
 ├── pyproject.toml    # project metadata and dependencies
 ├── .python-version   # pins the Python version
@@ -86,7 +86,7 @@ Run it from the terminal:
 uv run hello.py
 ```
 
-```
+```{.text filename="output"}
 Hello from my-project!
 ```
 
@@ -174,7 +174,7 @@ uv run python
 
 You'll see something like:
 
-```
+```{.text filename="output"}
 Python 3.13.2 (main, Feb  4 2025, 14:51:09) [Clang 19.1.6] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
@@ -568,7 +568,7 @@ print(f"Stock Value: ${total_value:,.2f}")
 print(f"{'=' * 40}")
 ```
 
-```
+```{.text filename="output"}
 ========================================
 Product: Chai
 Category: Beverages

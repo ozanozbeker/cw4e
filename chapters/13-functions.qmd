@@ -74,7 +74,7 @@ def calculate_revenue(unit_price, quantity):
 
 In the REPL, `help(calculate_revenue)` will display:
 
-```
+```{.text filename="output"}
 Help on function calculate_revenue in module __main__:
 
 calculate_revenue(unit_price, quantity)
@@ -554,7 +554,7 @@ When you run `uv run my_module.py`, Python sets `__name__` to `"__main__"`, so t
 
 Organizing code into modules is one of the most important habits in professional Python development. Consider this structure:
 
-```
+```{.text filename="output"}
 northwind-analysis/
 ├── pyproject.toml
 ├── northwind_utils.py     # Your reusable functions

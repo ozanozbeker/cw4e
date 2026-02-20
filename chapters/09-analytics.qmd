@@ -83,7 +83,7 @@ You cannot use `HAVING` without `GROUP BY`, and you cannot use a column alias in
 
 Here's the complete logical execution order with all clauses you've learned so far:
 
-```
+```{.text filename="output"}
 FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT
 ```
 

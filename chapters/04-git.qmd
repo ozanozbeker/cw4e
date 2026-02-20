@@ -102,7 +102,7 @@ git init
 
 Git responds with confirmation:
 
-```
+```{.text filename="output"}
 Initialized empty Git repository in C:/Users/yourname/quality-report/.git/
 ```
 
@@ -118,7 +118,7 @@ The `git status` command is your window into Git's perspective. Run it frequentl
 git status
 ```
 
-```
+```{.text filename="output"}
 On branch main
 
 No commits yet
@@ -151,7 +151,7 @@ Now check the status in your terminal:
 git status
 ```
 
-```
+```{.text filename="output"}
 On branch main
 
 No commits yet
@@ -181,7 +181,7 @@ Check the status:
 git status
 ```
 
-```
+```{.text filename="output"}
 On branch main
 
 No commits yet
@@ -203,7 +203,7 @@ Create a commit with the `git commit` command. Every commit requires a message d
 git commit -m "Start quality analysis report with executive summary"
 ```
 
-```
+```{.text filename="output"}
 [main (root-commit) a1b2c3d] Start quality analysis report with executive summary
  1 file changed, 6 insertions(+)
  create mode 100644 report.md
@@ -258,7 +258,7 @@ Check what Git sees:
 git status
 ```
 
-```
+```{.text filename="output"}
 On branch main
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
@@ -335,7 +335,7 @@ As you make more commits, you'll want to review the project's history. The `git 
 git log
 ```
 
-```
+```{.text filename="output"}
 commit b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3 (HEAD -> main)
 Author: Your Name <your.email@example.com>
 Date:   Mon Jan 15 14:30:00 2025 -0500
@@ -357,7 +357,7 @@ For a more compact view:
 git log --oneline
 ```
 
-```
+```{.text filename="output"}
 b4c5d6e Add methodology section describing data collection
 a1b2c3d Start quality analysis report with executive summary
 ```
@@ -518,7 +518,7 @@ See all branches and which one you're on:
 git branch
 ```
 
-```
+```{.text filename="output"}
 * add-visualizations
   main
 ```
@@ -561,7 +561,7 @@ git switch main
 git merge add-visualizations
 ```
 
-```
+```{.text filename="output"}
 Updating b4c5d6e..c7d8e9f
 Fast-forward
  report.md | 15 +++++++++++++++
@@ -578,7 +578,7 @@ After merging, you can delete the branch:
 git branch -d add-visualizations
 ```
 
-```
+```{.text filename="output"}
 Deleted branch add-visualizations (was c7d8e9f).
 ```
 
@@ -631,7 +631,7 @@ Good commits make your project history useful. Here are guidelines that professi
 
 Write clear, descriptive commit messages. The first line should be a brief summary (50 characters or less). If more detail is needed, add a blank line followed by a longer explanation:
 
-```
+```{.text filename="output"}
 Add statistical analysis section with defect correlations
 
 Include Pareto analysis of defect types showing that three defect

@@ -10,7 +10,7 @@ This is the problem that project engineering solves. A properly structured proje
 
 When you ran `uv init my-project` in @sec-python-fundamentals, `uv` created this structure:
 
-```
+```{.text filename="output"}
 my-project/
 ├── pyproject.toml
 ├── .python-version
@@ -31,7 +31,7 @@ That's a *simple project*: a flat directory with a configuration file and some s
 uv init my-scripts
 ```
 
-```
+```{.text filename="output"}
 my-scripts/
 ├── pyproject.toml
 ├── .python-version
@@ -48,7 +48,7 @@ This is what you've been using. Scripts live at the top level. There's no `src/`
 uv init --package northwind-analysis
 ```
 
-```
+```{.text filename="output"}
 northwind-analysis/
 ├── pyproject.toml
 ├── .python-version
@@ -69,7 +69,7 @@ Notice that the project name uses hyphens (`northwind-analysis`) but the package
 uv init --library northwind-utils
 ```
 
-```
+```{.text filename="output"}
 northwind-utils/
 ├── pyproject.toml
 ├── .python-version
@@ -416,7 +416,7 @@ uv run marimo edit notebooks/analysis.py
 
 ## Project Structure
 
-```
+```{.text filename="output"}
 src/northwind_analysis/   Source code and modules
 notebooks/                Marimo analysis notebooks
 data/                     Northwind database and flat files

@@ -286,13 +286,13 @@ An **absolute path** specifies a location starting from the root of the file sys
 
 macOS/Linux absolute paths start with `/`:
 
-```
+```{.text filename="output"}
 /Users/ozan/Projects/sales-analysis/data/sales.csv
 ```
 
 Windows absolute paths start with a drive letter:
 
-```
+```{.text filename="output"}
 C:\Users\ozan\Projects\sales-analysis\data\sales.csv
 ```
 
@@ -302,7 +302,7 @@ Reading a path from left to right traces a route through the directory tree: sta
 
 A **relative path** specifies a location relative to some starting point, usually your current directory. They're shorter and often more portable.
 
-```
+```{.text filename="output"}
 data/sales.csv
 ```
 
@@ -331,7 +331,7 @@ Several symbols have special meaning in paths:
 
 The double-dot (`..`) is particularly useful for navigating "up" the tree:
 
-```
+```{.text filename="output"}
 ../../shared/data/reference.csv
 ```
 
@@ -366,7 +366,7 @@ How you organize files within a project affects how easily you (and others) can 
 
 A typical data project structure might look like:
 
-```
+```{.text filename="output"}
 sales-analysis/
 ├── README.md           # Project description and instructions
 ├── data/

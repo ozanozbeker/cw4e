@@ -164,7 +164,7 @@ The `F` rules (pyflakes) are the most immediately useful. They catch unused impo
 ::: {.callout-note collapse="true" title="Exercise: Categorize Ruff Diagnostics"}
 Running `uv run ruff check` on a Northwind analysis script produces these diagnostics:
 
-```
+```{.text filename="output"}
 revenue.py:1:1: D100 Missing docstring in public module
 revenue.py:3:8: F401 `json` imported but unused
 revenue.py:7:1: D103 Missing docstring in public function

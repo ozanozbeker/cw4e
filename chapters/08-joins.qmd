@@ -49,7 +49,7 @@ A **one-to-one** relationship means each row in one table matches exactly one ro
 
 A **many-to-many** relationship means entities on both sides can relate to multiple entities on the other. Consider students and courses: each student takes many courses, and each course has many students. You can't represent this with a single foreign key on either side. Instead, you need a **junction table** (also called a bridge table or associative table) that sits between them. The Northwind `order_details` table is exactly this: it connects `orders` to `products`, because one order can contain many products, and one product can appear in many orders. Each row in `order_details` represents one specific product within one specific order, with foreign keys to both tables.
 
-```
+```{.text filename="output"}
 orders ──┐
          ├── order_details ──┐
 products ┘                   │
@@ -107,7 +107,7 @@ Think of an `INNER JOIN` as a handshake between two tables. Every row in the lef
 
 If a product has `supplier_id = 99` but no supplier with that ID exists, that product is *excluded* from the results. Similarly, if a supplier exists but no products reference it, that supplier doesn't appear. An `INNER JOIN` only returns the intersection: rows that match on both sides.
 
-```
+```{.text filename="output"}
 Products Table          Suppliers Table
 supplier_id: 1  ───────► supplier_id: 1  ✓ Match! Combined in result
 supplier_id: 1  ───────► supplier_id: 1  ✓ Match! Combined in result

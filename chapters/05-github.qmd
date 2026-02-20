@@ -38,7 +38,7 @@ Verify the remote configuration:
 git remote -v
 ```
 
-```
+```{.text filename="output"}
 origin  https://github.com/username/project-name.git (fetch)
 origin  https://github.com/username/project-name.git (push)
 ```
@@ -343,7 +343,7 @@ For collaborative projects, add a `CONTRIBUTING.md` file explaining how to set u
 
 Organize code logically. A typical Python project structure might be:
 
-```
+```{.text filename="output"}
 project-name/
 ├── README.md
 ├── LICENSE

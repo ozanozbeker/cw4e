@@ -20,7 +20,7 @@ The process follows three steps:
 
 For the manufacturing quality control example, that sketch might look like:
 
-```
+```{.text filename="output"}
 production_lines: line_id, line_name, building, capacity
 operators: operator_id, name, shift, certification_level
 inspections: inspection_id, line_id, operator_id, inspection_date, batch_size
@@ -260,7 +260,7 @@ You already understand *that* data is split across tables (from the joins chapte
 
 Consider this badly-designed table:
 
-```
+```{.text filename="output"}
 orders_flat:
 | order_id | customer_name | customer_address    | product_name | supplier_name | quantity |
 |----------|---------------|---------------------|--------------|---------------|----------|
@@ -280,7 +280,7 @@ Three problems are immediately visible.
 
 Normalization solves this by splitting into separate tables:
 
-```
+```{.text filename="output"}
 customers: customer_id, customer_name, customer_address
 products:  product_id, product_name, supplier_id
 suppliers: supplier_id, supplier_name
@@ -322,7 +322,7 @@ A well-designed dimension table uses verbose, human-readable descriptions rather
 
 When you arrange a central fact table with dimension tables radiating outward, the structure looks like a star, hence the name **star schema**. This is the dominant design pattern in analytical databases and data warehouses.
 
-```
+```{.text filename="output"}
              ┌──────────┐
              │ products │
              └────┬─────┘

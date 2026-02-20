@@ -54,7 +54,7 @@ Verify your authentication:
 gh auth status
 ```
 
-```
+```{.text filename="output"}
 github.com
   ✓ Logged in to github.com as your-username (oauth_token)
   ✓ Git operations for github.com configured to use https protocol.
