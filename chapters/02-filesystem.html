@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -892,15 +892,30 @@ Figure&nbsp;2.2: Files are organized in a hierarchical tree of directories
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="absolute-paths"><span class="header-section-number">2.4.1</span> Absolute Paths</h3>
 <p>An <strong>absolute path</strong> specifies a location starting from the root of the file system. It’s the complete “address” that works regardless of where you currently are.</p>
 <p>macOS/Linux absolute paths start with <code>/</code>:</p>
-<pre><code>/Users/ozan/Projects/sales-analysis/data/sales.csv</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>/Users/ozan/Projects/sales-analysis/data/sales.csv</code></pre>
+</div>
 <p>Windows absolute paths start with a drive letter:</p>
-<pre><code>C:\Users\ozan\Projects\sales-analysis\data\sales.csv</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>C:\Users\ozan\Projects\sales-analysis\data\sales.csv</code></pre>
+</div>
 <p>Reading a path from left to right traces a route through the directory tree: start at root, enter Users, enter ozan, enter Projects, and so on until you reach the file.</p>
 </section>
 <section id="relative-paths" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="relative-paths"><span class="header-section-number">2.4.2</span> Relative Paths</h3>
 <p>A <strong>relative path</strong> specifies a location relative to some starting point, usually your current directory. They’re shorter and often more portable.</p>
-<pre><code>data/sales.csv</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>data/sales.csv</code></pre>
+</div>
 <p>This means “from wherever I am, go into the data directory, and the file is sales.csv.” If you’re in <code>/Users/ozan/Projects/sales-analysis</code>, this relative path points to <code>/Users/ozan/Projects/sales-analysis/data/sales.csv</code>.</p>
 </section>
 <section id="path-separators" class="level3" data-number="2.4.3">
@@ -951,7 +966,12 @@ Table&nbsp;2.1: Special path symbols and their meanings
 </figure>
 </div>
 <p>The double-dot (<code>..</code>) is particularly useful for navigating “up” the tree:</p>
-<pre><code>../../shared/data/reference.csv</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>../../shared/data/reference.csv</code></pre>
+</div>
 <p>This means: go up one directory, go up another directory, then descend into shared, then data, and find reference.csv.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Predicting Path Behavior">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
@@ -1002,7 +1022,11 @@ Table&nbsp;2.1: Special path symbols and their meanings
 <h2 data-number="2.5" class="anchored" data-anchor-id="project-organization"><span class="header-section-number">2.5</span> Project Organization</h2>
 <p>How you organize files within a project affects how easily you (and others) can understand and work with it. A well-organized project is easier to navigate, debug, and share.</p>
 <p>A typical data project structure might look like:</p>
-<pre><code>sales-analysis/
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>sales-analysis/
 ├── README.md           # Project description and instructions
 ├── data/
 │   ├── raw/            # Original, unmodified data
@@ -1010,6 +1034,7 @@ Table&nbsp;2.1: Special path symbols and their meanings
 ├── scripts/            # Python/SQL code
 ├── outputs/            # Generated reports, figures
 └── docs/               # Additional documentation</code></pre>
+</div>
 <p>Key principles:</p>
 <ul>
 <li><p><strong>Separate raw from processed data</strong>. Never modify original data files; create processed versions instead. This ensures you can always reproduce your work from the source.</p></li>

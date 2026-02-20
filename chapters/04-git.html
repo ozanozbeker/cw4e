@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -719,7 +719,12 @@ Figure&nbsp;4.1: Commits form a linked chain representing your project’s histo
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Git responds with confirmation:</p>
-<pre><code>Initialized empty Git repository in C:/Users/yourname/quality-report/.git/</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Initialized empty Git repository in C:/Users/yourname/quality-report/.git/</code></pre>
+</div>
 <p>This command created a hidden <code>.git</code> directory containing Git’s database. Your project folder looks empty, but Git is now watching it, ready to track changes.</p>
 <p><strong>In Zed</strong>: You can also open Zed, create a new folder, and then open the terminal panel (Ctrl+` or View → Terminal) to run <code>git init</code>. Zed will automatically detect that the folder is now a Git repository and enable its Git features.</p>
 </section>
@@ -732,11 +737,16 @@ Figure&nbsp;4.1: Commits form a linked chain representing your project’s histo
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>On branch main
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>On branch main
 
 No commits yet
 
 nothing to commit (create/copy files and use "git add" to track)</code></pre>
+</div>
 <p>Git tells us we’re on a branch called <code>main</code> (more on branches later), we haven’t made any commits yet, and there’s nothing to commit because we haven’t created any files.</p>
 <p><strong>In Zed</strong>: The Source Control panel (click the branch icon in the left sidebar, or press Ctrl+Shift+G) shows similar information. It displays changed files, staged files, and lets you perform Git operations with clicks instead of commands.</p>
 </section>
@@ -762,7 +772,11 @@ nothing to commit (create/copy files and use "git add" to track)</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>On branch main
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>On branch main
 
 No commits yet
 
@@ -771,6 +785,7 @@ Untracked files:
         report.md
 
 nothing added to commit but untracked files present (use "git add" to track)</code></pre>
+</div>
 <p>Git sees the new file but labels it as “untracked.” Git doesn’t automatically track every file in your directory. You must explicitly tell Git which files to track. This is a feature, not a limitation. It lets you keep temporary files, large datasets, or sensitive configuration files out of version control.</p>
 <p><strong>In Zed</strong>: The Source Control panel shows <code>report.md</code> under “Untracked Files”. In the file explorer, the filename may appear in a different color (often green) to indicate it’s new and untracked.</p>
 </section>
@@ -790,13 +805,18 @@ nothing added to commit but untracked files present (use "git add" to track)</co
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>On branch main
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>On branch main
 
 No commits yet
 
 Changes to be committed:
   (use "git rm --cached &lt;file&gt;..." to unstage)
         new file:   report.md</code></pre>
+</div>
 <p>The file moved from “untracked” to “changes to be committed.” It’s now in the staging area, ready to be recorded in a commit.</p>
 <p><strong>In Zed</strong>: You can stage files by clicking the checkbox icon next to the filename in the Source Control panel, or by right-clicking and selecting “Stage File”. The file moves from the “Changes” section to the “Staged Changes” section.</p>
 </section>
@@ -809,9 +829,14 @@ Changes to be committed:
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Start quality analysis report with executive summary"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>[main (root-commit) a1b2c3d] Start quality analysis report with executive summary
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>[main (root-commit) a1b2c3d] Start quality analysis report with executive summary
  1 file changed, 6 insertions(+)
  create mode 100644 report.md</code></pre>
+</div>
 <p>You’ve made your first commit. Git recorded a snapshot of your project that you can return to at any time.</p>
 <p><strong>In Zed</strong>: Type your commit message in the text box at the bottom of the Source Control panel, then click “Commit Tracked”. Zed calls the same <code>git commit</code> command behind the scenes.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
@@ -866,13 +891,18 @@ Changes to be committed:
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>On branch main
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>On branch main
 Changes not staged for commit:
   (use "git add &lt;file&gt;..." to update what will be committed)
   (use "git restore &lt;file&gt;..." to discard changes in working directory)
         modified:   report.md
 
 no changes added to commit (use "git add" and/or "git commit -a")</code></pre>
+</div>
 <p>Git detected that the file changed. To see exactly what changed, use <code>git diff</code>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -956,7 +986,11 @@ no changes added to commit (use "git add" and/or "git commit -a")</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>commit b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3 (HEAD -&gt; main)
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>commit b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3 (HEAD -&gt; main)
 Author: Your Name &lt;your.email@example.com&gt;
 Date:   Mon Jan 15 14:30:00 2025 -0500
 
@@ -967,6 +1001,7 @@ Author: Your Name &lt;your.email@example.com&gt;
 Date:   Mon Jan 15 14:00:00 2025 -0500
 
     Start quality analysis report with executive summary</code></pre>
+</div>
 <p>Each commit shows its unique hash, author, date, and message. The <code>HEAD -&gt; main</code> label indicates where you currently are in the history.</p>
 <p>For a more compact view:</p>
 <div class="code-with-filename">
@@ -975,8 +1010,13 @@ Date:   Mon Jan 15 14:00:00 2025 -0500
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>b4c5d6e Add methodology section describing data collection
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>b4c5d6e Add methodology section describing data collection
 a1b2c3d Start quality analysis report with executive summary</code></pre>
+</div>
 <p><strong>In Zed</strong>: As of writing, Zed does not have a “History” or “Commits” section showing recent commits, but it is in development.</p>
 <p>To see what changed in a specific commit:</p>
 <div class="code-with-filename">
@@ -1143,8 +1183,13 @@ a1b2c3d Start quality analysis report with executive summary</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>* add-visualizations
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>* add-visualizations
   main</code></pre>
+</div>
 <p>The asterisk indicates your current branch.</p>
 <p><strong>In Zed</strong>: The current branch name appears in the bottom-left status bar. Click it to see all branches.</p>
 </section>
@@ -1214,10 +1259,15 @@ a1b2c3d Start quality analysis report with executive summary</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch main</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge add-visualizations</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>Updating b4c5d6e..c7d8e9f
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Updating b4c5d6e..c7d8e9f
 Fast-forward
  report.md | 15 +++++++++++++++
  1 file changed, 15 insertions(+)</code></pre>
+</div>
 <p>The branch’s commits are now part of main’s history. Open <code>report.md</code> and the visualization section is there.</p>
 </section>
 <section id="deleting-merged-branches" class="level3" data-number="4.6.7">
@@ -1229,7 +1279,12 @@ Fast-forward
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-d</span> add-visualizations</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>Deleted branch add-visualizations (was c7d8e9f).</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Deleted branch add-visualizations (was c7d8e9f).</code></pre>
+</div>
 </section>
 </section>
 <section id="the-.gitignore-file" class="level2" data-number="4.7">
@@ -1287,11 +1342,16 @@ Fast-forward
 <section id="commit-messages" class="level3" data-number="4.8.1">
 <h3 data-number="4.8.1" class="anchored" data-anchor-id="commit-messages"><span class="header-section-number">4.8.1</span> Commit Messages</h3>
 <p>Write clear, descriptive commit messages. The first line should be a brief summary (50 characters or less). If more detail is needed, add a blank line followed by a longer explanation:</p>
-<pre><code>Add statistical analysis section with defect correlations
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Add statistical analysis section with defect correlations
 
 Include Pareto analysis of defect types showing that three defect
 codes account for 78% of all failures. Add correlation analysis
 between temperature and defect rate.</code></pre>
+</div>
 <p>Use imperative mood (“Add section” not “Added section”). Think of the message as completing the sentence “This commit will…”</p>
 </section>
 <section id="commit-size" class="level3" data-number="4.8.2">

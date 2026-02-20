@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -593,10 +593,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A <strong>one-to-many</strong> relationship is the most common. One supplier has many products. One customer has many orders. One order has many line items. The “one” side has the primary key, and the “many” side has the foreign key. When you join these tables, each row on the “one” side can match multiple rows on the “many” side.</p>
 <p>A <strong>one-to-one</strong> relationship means each row in one table matches exactly one row in another. These are less common, but you see them when a table is split for organizational reasons (like separating sensitive employee data from general employee information).</p>
 <p>A <strong>many-to-many</strong> relationship means entities on both sides can relate to multiple entities on the other. Consider students and courses: each student takes many courses, and each course has many students. You can’t represent this with a single foreign key on either side. Instead, you need a <strong>junction table</strong> (also called a bridge table or associative table) that sits between them. The Northwind <code>order_details</code> table is exactly this: it connects <code>orders</code> to <code>products</code>, because one order can contain many products, and one product can appear in many orders. Each row in <code>order_details</code> represents one specific product within one specific order, with foreign keys to both tables.</p>
-<pre><code>orders ──┐
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>orders ──┐
          ├── order_details ──┐
 products ┘                   │
                              └── Each row: one product in one order</code></pre>
+</div>
 <p>Understanding these patterns helps you predict how many rows a join will produce, which, as you’ll see later in this chapter, is one of the most important things to get right.</p>
 </section>
 <section id="exercises" class="level3" data-number="8.2.2">
@@ -651,12 +656,17 @@ products ┘                   │
 <h3 data-number="8.3.1" class="anchored" data-anchor-id="how-inner-join-works"><span class="header-section-number">8.3.1</span> How INNER JOIN Works</h3>
 <p>Think of an <code>INNER JOIN</code> as a handshake between two tables. Every row in the left table extends its hand (the join column value), and every row in the right table extends its hand. Only when two hands match (the values are equal) do those rows combine into a result row.</p>
 <p>If a product has <code>supplier_id = 99</code> but no supplier with that ID exists, that product is <em>excluded</em> from the results. Similarly, if a supplier exists but no products reference it, that supplier doesn’t appear. An <code>INNER JOIN</code> only returns the intersection: rows that match on both sides.</p>
-<pre><code>Products Table          Suppliers Table
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Products Table          Suppliers Table
 supplier_id: 1  ───────► supplier_id: 1  ✓ Match! Combined in result
 supplier_id: 1  ───────► supplier_id: 1  ✓ Match! Combined in result
 supplier_id: 2  ───────► supplier_id: 2  ✓ Match! Combined in result
 supplier_id: 99 ───────► (no match)     ✗ Product excluded
                         supplier_id: 5  ✗ Supplier excluded (no products)</code></pre>
+</div>
 </section>
 <section id="exercises-1" class="level3" data-number="8.3.2">
 <h3 data-number="8.3.2" class="anchored" data-anchor-id="exercises-1"><span class="header-section-number">8.3.2</span> Exercises</h3>

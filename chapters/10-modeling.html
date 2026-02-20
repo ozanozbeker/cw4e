@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -538,10 +538,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Identify the attributes of each entity. These become the columns in each table.</li>
 </ol>
 <p>For the manufacturing quality control example, that sketch might look like:</p>
-<pre><code>production_lines: line_id, line_name, building, capacity
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>production_lines: line_id, line_name, building, capacity
 operators: operator_id, name, shift, certification_level
 inspections: inspection_id, line_id, operator_id, inspection_date, batch_size
 defects: defect_id, inspection_id, defect_type, severity, description</code></pre>
+</div>
 <p>Each entity has a primary key (<code>line_id</code>, <code>operator_id</code>, etc.), and relationships are expressed through foreign keys (<code>line_id</code> in <code>inspections</code> references <code>production_lines</code>, <code>inspection_id</code> in <code>defects</code> references <code>inspections</code>).</p>
 <section id="drawing-er-diagrams-with-dbdiagram.io" class="level3" data-number="10.1.1">
 <h3 data-number="10.1.1" class="anchored" data-anchor-id="drawing-er-diagrams-with-dbdiagram.io"><span class="header-section-number">10.1.1</span> Drawing ER Diagrams with dbdiagram.io</h3>
@@ -834,23 +839,33 @@ Table defects {
 <p>You already understand <em>that</em> data is split across tables (from the joins chapter), but understanding <em>why</em>, at a deeper level, prevents you from making poor design decisions in your own work.</p>
 <p><strong>Normalization</strong> is the process of organizing a database to reduce redundancy and prevent inconsistencies. The formal theory involves “normal forms” (1NF, 2NF, 3NF, and beyond), but the practical intuition is simpler: <strong>each fact should live in exactly one place</strong>.</p>
 <p>Consider this badly-designed table:</p>
-<pre><code>orders_flat:
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>orders_flat:
 | order_id | customer_name | customer_address    | product_name | supplier_name | quantity |
 |----------|---------------|---------------------|--------------|---------------|----------|
 | 1001     | Acme Corp     | 123 Main St, NYC    | Widget A     | Parts Inc     | 50       |
 | 1001     | Acme Corp     | 123 Main St, NYC    | Gadget B     | Tools Ltd     | 20       |
 | 1002     | Acme Corp     | 123 Main St, NYC    | Widget A     | Parts Inc     | 30       |
 | 1003     | Beta LLC      | 456 Oak Ave, Boston | Widget A     | Parts Inc     | 75       |</code></pre>
+</div>
 <p>Three problems are immediately visible.</p>
 <p><strong>Redundancy</strong>: “Acme Corp” and “123 Main St, NYC” are stored three times. “Widget A” and “Parts Inc” are stored three times. This wastes storage, but more importantly, it creates the next two problems.</p>
 <p><strong>Update anomaly</strong>: If Acme Corp moves to a new address, you must update every row that mentions them. Miss one, and the database now says Acme Corp is at two different addresses. Which one is right?</p>
 <p><strong>Delete anomaly</strong>: If you delete order 1003 (the only order from Beta LLC), you lose the fact that Beta LLC exists and their address. The customer information disappears because it was entangled with the order data.</p>
 <p>Normalization solves this by splitting into separate tables:</p>
-<pre><code>customers: customer_id, customer_name, customer_address
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>customers: customer_id, customer_name, customer_address
 products:  product_id, product_name, supplier_id
 suppliers: supplier_id, supplier_name
 orders:    order_id, customer_id
 order_details: order_id, product_id, quantity</code></pre>
+</div>
 <p>Now each fact lives once. Updating Acme Corp’s address changes one row. Deleting an order doesn’t destroy customer data. Adding a new customer doesn’t require an order to exist.</p>
 <section id="how-much-normalization" class="level3" data-number="10.3.1">
 <h3 data-number="10.3.1" class="anchored" data-anchor-id="how-much-normalization"><span class="header-section-number">10.3.1</span> How Much Normalization?</h3>
@@ -877,7 +892,11 @@ order_details: order_id, product_id, quantity</code></pre>
 <section id="star-schema" class="level3" data-number="10.4.3">
 <h3 data-number="10.4.3" class="anchored" data-anchor-id="star-schema"><span class="header-section-number">10.4.3</span> Star Schema</h3>
 <p>When you arrange a central fact table with dimension tables radiating outward, the structure looks like a star, hence the name <strong>star schema</strong>. This is the dominant design pattern in analytical databases and data warehouses.</p>
-<pre><code>             ┌──────────┐
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>             ┌──────────┐
              │ products │
              └────┬─────┘
                   │
@@ -897,6 +916,7 @@ order_details: order_id, product_id, quantity</code></pre>
              ┌────┴─────┐
              │ suppliers │
              └──────────┘</code></pre>
+</div>
 <p>Star schemas are popular in analytics because they’re simple to understand (the design mirrors how business people think about data), they require few joins (usually just one hop from fact to dimension), and database engines are heavily optimized for this pattern.</p>
 <p>Think of the fact table as a control panel showing measurements, and each dimension as a selector switch that filters what you see. Want to see sales by region? Join the region dimension. By product category? Join the product dimension. The star schema makes this kind of slicing and dicing natural.</p>
 <p>A variation called the <strong>snowflake schema</strong> normalizes the dimension tables further, breaking hierarchies like <code>product → category → department</code> into separate tables. Kimball generally advises against snowflaking unless dimension tables are extremely large, because the added joins increase query complexity without significant benefit for most analytical workloads.</p>

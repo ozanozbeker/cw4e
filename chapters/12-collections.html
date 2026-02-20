@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -805,9 +805,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="dict_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> product.items():</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>name: Chai
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>name: Chai
 price: 18.0
 stock: 39</code></pre>
+</div>
 </section>
 <section id="nested-dictionaries" class="level3" data-number="12.3.4">
 <h3 data-number="12.3.4" class="anchored" data-anchor-id="nested-dictionaries"><span class="header-section-number">12.3.4</span> Nested Dictionaries</h3>
@@ -986,10 +991,15 @@ stock: 39</code></pre>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Processing: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>Processing: Chai
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Processing: Chai
 Processing: Chang
 Processing: Tofu
 Processing: Miso</code></pre>
+</div>
 <p>The variable <code>product</code> takes on each value in the list, one per iteration. After the loop, <code>product</code> holds the last value, <code>"Miso"</code>.</p>
 </section>
 <section id="range-for-numeric-iteration" class="level3" data-number="12.6.2">
@@ -1025,9 +1035,14 @@ Processing: Miso</code></pre>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, product <span class="kw">in</span> <span class="bu">enumerate</span>(products):</span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>index<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>0: Chai
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>0: Chai
 1: Chang
 2: Tofu</code></pre>
+</div>
 <p><code>enumerate()</code> returns pairs of <code>(index, value)</code>, which you unpack directly in the loop header. This is much cleaner than maintaining a separate counter variable.</p>
 </section>
 <section id="zip-for-parallel-iteration" class="level3" data-number="12.6.4">
@@ -1043,9 +1058,14 @@ Processing: Miso</code></pre>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices):</span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>Chai: $18.00
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Chai: $18.00
 Chang: $19.00
 Tofu: $6.50</code></pre>
+</div>
 <p><code>zip()</code> pairs elements by position: first with first, second with second, and so on. If the sequences have different lengths, <code>zip()</code> stops at the shortest one.</p>
 </section>
 <section id="while-loops" class="level3" data-number="12.6.5">
@@ -1203,9 +1223,14 @@ Tofu: $6.50</code></pre>
 <span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> stock_values:</span>
 <span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>item[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>item[<span class="st">'value'</span>]<span class="sc">:,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>Chai: $702.00
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Chai: $702.00
 Chang: $323.00
 Tofu: $813.75</code></pre>
+</div>
 </section>
 <section id="when-not-to-use-comprehensions" class="level3" data-number="12.7.5">
 <h3 data-number="12.7.5" class="anchored" data-anchor-id="when-not-to-use-comprehensions"><span class="header-section-number">12.7.5</span> When Not to Use Comprehensions</h3>
@@ -1271,11 +1296,16 @@ Tofu: $813.75</code></pre>
 <span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> category, total <span class="kw">in</span> sorted_categories:</span>
 <span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>category<span class="sc">:&lt;15}</span><span class="ss"> $</span><span class="sc">{</span>total<span class="sc">:&gt;9,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>Category             Revenue
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Category             Revenue
 --------------- ----------
 Produce         $   348.75
 Condiments      $   304.00
 Beverages       $   275.00</code></pre>
+</div>
 <p>This script uses lists of dictionaries, a <code>for</code> loop with an <code>if</code>/<code>else</code> branch to build an aggregation dictionary, <code>sorted()</code> with a <code>key</code> function, tuple unpacking, and f-strings with alignment. It’s a miniature version of what SQL’s <code>GROUP BY</code> does, implemented entirely in Python. In <a href="14-file-io.html" class="quarto-xref"><span>Chapter 14</span></a>, you’ll read this data from actual CSV files instead of hardcoding it.</p>
 </section>
 <section id="exercises" class="level2 unnumbered">

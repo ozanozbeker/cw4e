@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -614,10 +614,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> unit_price <span class="op">*</span> quantity</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In the REPL, <code>help(calculate_revenue)</code> will display:</p>
-<pre><code>Help on function calculate_revenue in module __main__:
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Help on function calculate_revenue in module __main__:
 
 calculate_revenue(unit_price, quantity)
     Calculate the total revenue for a line item.</code></pre>
+</div>
 <section id="the-google-docstring-convention" class="level3" data-number="13.2.1">
 <h3 data-number="13.2.1" class="anchored" data-anchor-id="the-google-docstring-convention"><span class="header-section-number">13.2.1</span> The Google Docstring Convention</h3>
 <p>For functions with multiple parameters, return values, or potential errors, a one-line docstring isn’t enough. This book uses the <em>Google</em> convention, one of the most widely used formats:</p>
@@ -1143,10 +1148,15 @@ calculate_revenue(unit_price, quantity)
 <section id="building-your-own-modules" class="level3" data-number="13.7.4">
 <h3 data-number="13.7.4" class="anchored" data-anchor-id="building-your-own-modules"><span class="header-section-number">13.7.4</span> Building Your Own Modules</h3>
 <p>Organizing code into modules is one of the most important habits in professional Python development. Consider this structure:</p>
-<pre><code>northwind-analysis/
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>northwind-analysis/
 ├── pyproject.toml
 ├── northwind_utils.py     # Your reusable functions
 └── analyze_revenue.py     # A script that uses them</code></pre>
+</div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>northwind_utils.py</strong></pre>

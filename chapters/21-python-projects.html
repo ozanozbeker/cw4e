@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -540,12 +540,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="from-basic-to-professional" class="level2" data-number="21.1">
 <h2 data-number="21.1" class="anchored" data-anchor-id="from-basic-to-professional"><span class="header-section-number">21.1</span> From Basic to Professional</h2>
 <p>When you ran <code>uv init my-project</code> in <a href="11-python-fundamentals.html" class="quarto-xref"><span>Chapter 11</span></a>, <code>uv</code> created this structure:</p>
-<pre><code>my-project/
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>my-project/
 ├── pyproject.toml
 ├── .python-version
 ├── README.md
 ├── .gitignore
 └── hello.py</code></pre>
+</div>
 <p>That’s a <em>simple project</em>: a flat directory with a configuration file and some scripts. It’s fine for homework assignments, quick experiments, and standalone scripts. But when your project grows to include modules, notebooks, data files, and multiple dependencies, you need more structure.</p>
 <p><code>uv</code> supports three project initialization modes, each creating a different structure for a different purpose.</p>
 </section>
@@ -559,12 +564,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init my-scripts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>my-scripts/
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>my-scripts/
 ├── pyproject.toml
 ├── .python-version
 ├── README.md
 ├── .gitignore
 └── hello.py</code></pre>
+</div>
 <p>This is what you’ve been using. Scripts live at the top level. There’s no <code>src/</code> directory and no package structure. You run scripts with <code>uv run hello.py</code>. This mode is ideal for one-off scripts, homework, and quick experiments.</p>
 </section>
 <section id="application-package-uv-init---package" class="level3" data-number="21.2.2">
@@ -575,7 +585,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init <span class="at">--package</span> northwind-analysis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>northwind-analysis/
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>northwind-analysis/
 ├── pyproject.toml
 ├── .python-version
 ├── README.md
@@ -583,6 +597,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 └── src/
     └── northwind_analysis/
         └── __init__.py</code></pre>
+</div>
 <p>The <code>--package</code> flag creates a proper Python package with a <code>src/</code> layout. The code inside <code>src/northwind_analysis/</code> is importable as a module, and the project can define CLI entry points (you’ll use this in <a href="25-typer.html" class="quarto-xref"><span>Chapter 25</span></a>). This mode is for tools and applications you want to distribute.</p>
 <p>Notice that the project name uses hyphens (<code>northwind-analysis</code>) but the package directory uses underscores (<code>northwind_analysis</code>). This is a Python convention: hyphens are standard in project names (what you see on PyPI), and underscores are required in package names (what you use in <code>import</code> statements). <code>uv</code> handles this mapping automatically.</p>
 </section>
@@ -594,7 +609,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init <span class="at">--library</span> northwind-utils</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>northwind-utils/
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>northwind-utils/
 ├── pyproject.toml
 ├── .python-version
 ├── README.md
@@ -605,6 +624,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 │       └── py.typed
 └── tests/
     └── __init__.py</code></pre>
+</div>
 <p>The <code>--library</code> flag is similar to <code>--package</code> but configured for code that others will install as a dependency. It includes a <code>tests/</code> directory and a <code>py.typed</code> marker file that tells type checkers the library ships with type information. This mode is for reusable code that other projects will <code>uv add</code> as a dependency.</p>
 </section>
 <section id="when-to-use-each" class="level3" data-number="21.2.4">
@@ -1092,7 +1112,7 @@ Table&nbsp;21.3: Project file inventory
 <span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project Structure</span></span>
 <span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{.text filename="output"}</span></span>
 <span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="in">src/northwind_analysis/   Source code and modules</span></span>
 <span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="in">notebooks/                Marimo analysis notebooks</span></span>
 <span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="in">data/                     Northwind database and flat files</span></span>

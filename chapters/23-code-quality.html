@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -728,11 +728,16 @@ Table&nbsp;23.1: Key Ruff rule categories
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Running <code>uv run ruff check</code> on a Northwind analysis script produces these diagnostics:</p>
-<pre><code>revenue.py:1:1: D100 Missing docstring in public module
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>revenue.py:1:1: D100 Missing docstring in public module
 revenue.py:3:8: F401 `json` imported but unused
 revenue.py:7:1: D103 Missing docstring in public function
 revenue.py:15:12: E711 Comparison to `None` should be `if x is None:`
 revenue.py:22:1: I001 Import block is un-sorted or un-formatted</code></pre>
+</div>
 <p>For each diagnostic, identify: (1) the rule category (<code>D</code>, <code>F</code>, etc.), (2) whether it’s auto-fixable with <code>ruff check --fix</code>, and (3) what the issue is.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">

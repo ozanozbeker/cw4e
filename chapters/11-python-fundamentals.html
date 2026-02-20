@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-58451a0f25a296358fdf5003a8540c5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -575,12 +575,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This creates a directory with the following structure:</p>
-<pre><code>my-project/
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>my-project/
 ├── pyproject.toml    # project metadata and dependencies
 ├── .python-version   # pins the Python version
 ├── README.md         # project documentation
 ├── .gitignore        # files Git should ignore
 └── hello.py          # starter script</code></pre>
+</div>
 <p>Each of these files serves a specific purpose. The <code>.python-version</code> file pins the exact Python version so that anyone who clones your project gets the same one. The <code>.gitignore</code> file tells Git to skip files that shouldn’t be tracked, like the virtual environment directory. The <code>README.md</code> is the front door of your project, a topic we’ll revisit in the Production module.</p>
 <p>The most important file is <code>pyproject.toml</code>. Open it in Zed:</p>
 <div class="code-with-filename">
@@ -617,7 +622,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run hello.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>Hello from my-project!</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Hello from my-project!</code></pre>
+</div>
 <p>The <code>uv run</code> command does several things behind the scenes: it creates a virtual environment if one doesn’t exist, installs any dependencies listed in <code>pyproject.toml</code>, and then executes your script using the correct Python version. You don’t need to activate environments manually or worry about which Python is being used. <code>uv run</code> handles all of it.</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -716,9 +726,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You’ll see something like:</p>
-<pre><code>Python 3.13.2 (main, Feb  4 2025, 14:51:09) [Clang 19.1.6] on darwin
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Python 3.13.2 (main, Feb  4 2025, 14:51:09) [Clang 19.1.6] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
 &gt;&gt;&gt;</code></pre>
+</div>
 <p>The <code>&gt;&gt;&gt;</code> prompt is where you type Python expressions. Try it:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -1261,7 +1276,11 @@ Table&nbsp;11.2: Falsy values in Python
 <span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Stock Value: $</span><span class="sc">{</span>total_value<span class="sc">:,.2f}</span><span class="ss">"</span>)</span>
 <span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'='</span> <span class="op">*</span> <span class="dv">40</span><span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<pre><code>========================================
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>========================================
 Product: Chai
 Category: Beverages
 Status: Active [REORDER NEEDED]
@@ -1270,6 +1289,7 @@ In Stock: 29 units
 On Order: 0 units
 Stock Value: $522.00
 ========================================</code></pre>
+</div>
 <p>This script uses variables, types, arithmetic operators, f-strings, comparison operators, boolean logic with <code>and</code> and <code>not</code>, and a conditional expression. It’s a small program, but it’s a complete one that produces useful output.</p>
 </section>
 <section id="exercises" class="level2 unnumbered">
