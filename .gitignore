@@ -4,6 +4,9 @@
 _book/
 slides/*.html
 
+# Python
+.venv/
+
 # macOS
 .DS_Store
 Thumbs.db
@@ -16,3 +19,6 @@ Thumbs.db
 
 # SQLite
 *.sqlite-journal
+
+# Marimo
+__marimo__/

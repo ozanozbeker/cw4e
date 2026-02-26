@@ -20,6 +20,10 @@ The Northwind database consists of nine tables:
 - **Shippers**: Shipping company information
 - **Regions**: Geographic region and territory definitions
 
+The entity-relationship diagram below shows how these tables connect through primary and foreign keys. You can also explore an [interactive version](https://dbdiagram.io/d/northwind_erd-69a0ade7a3f0aa31e13b3e83) of this diagram.
+
+![Northwind ERD](../images/northwind_erd.svg){#fig-northwind-erd}
+
 For detailed field descriptions, download the [data dictionary](../data/data_dictionary.csv).
 
 ## Available Formats

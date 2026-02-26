@@ -13,6 +13,7 @@ format:
     transition: fade
     transition-speed: fast
     embed-resources: true
+    scrollable: true
     title-slide-attributes:
       data-background-color: "#2E3440"
 ---
