@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>24&nbsp; Computational Documents – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/25-arrow.html" rel="next">
+<link href="../chapters/23-code-quality.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-4-data-products.html">Building Data Products</a></li><li class="breadcrumb-item"><a href="../chapters/24-computational-documents.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequisites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-1-toolkit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Professional Toolkit</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Professional Documents with Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-2-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data with SQL</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-3-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-python-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Collections</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-control-flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-file-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Working with Files</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-4-data-products.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building Data Products</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-computational-documents.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-typer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">CLI Tools with Typer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Zed</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/northwind.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Northwind Dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/duckdb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">DuckDB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/ruff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Ruff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/basedpyright.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">K</span>&nbsp; <span class="chapter-title">basedpyright</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#part-1-quarto-code-cells" id="toc-part-1-quarto-code-cells" class="nav-link active" data-scroll-target="#part-1-quarto-code-cells"><span class="header-section-number">24.1</span> Part 1: Quarto Code Cells</a>
+  <ul class="collapse">
+  <li><a href="#the-anatomy-of-a-code-cell" id="toc-the-anatomy-of-a-code-cell" class="nav-link" data-scroll-target="#the-anatomy-of-a-code-cell"><span class="header-section-number">24.1.1</span> The Anatomy of a Code Cell</a></li>
+  <li><a href="#cell-level-options" id="toc-cell-level-options" class="nav-link" data-scroll-target="#cell-level-options"><span class="header-section-number">24.1.2</span> Cell-Level Options</a></li>
+  <li><a href="#inline-code" id="toc-inline-code" class="nav-link" data-scroll-target="#inline-code"><span class="header-section-number">24.1.3</span> Inline Code</a></li>
+  <li><a href="#a-complete-quarto-example-revenue-report" id="toc-a-complete-quarto-example-revenue-report" class="nav-link" data-scroll-target="#a-complete-quarto-example-revenue-report"><span class="header-section-number">24.1.4</span> A Complete Quarto Example: Revenue Report</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">24.1.5</span> Exercises</a></li>
+  </ul></li>
+  <li><a href="#part-2-sql-cells-in-quarto" id="toc-part-2-sql-cells-in-quarto" class="nav-link" data-scroll-target="#part-2-sql-cells-in-quarto"><span class="header-section-number">24.2</span> Part 2: SQL Cells in Quarto</a>
+  <ul class="collapse">
+  <li><a href="#connecting-sql-to-your-database" id="toc-connecting-sql-to-your-database" class="nav-link" data-scroll-target="#connecting-sql-to-your-database"><span class="header-section-number">24.2.1</span> Connecting SQL to Your Database</a></li>
+  <li><a href="#exercises-1" id="toc-exercises-1" class="nav-link" data-scroll-target="#exercises-1"><span class="header-section-number">24.2.2</span> Exercises</a></li>
+  </ul></li>
+  <li><a href="#part-3-marimo-notebooks" id="toc-part-3-marimo-notebooks" class="nav-link" data-scroll-target="#part-3-marimo-notebooks"><span class="header-section-number">24.3</span> Part 3: Marimo Notebooks</a>
+  <ul class="collapse">
+  <li><a href="#when-to-use-marimo-vs.-quarto" id="toc-when-to-use-marimo-vs.-quarto" class="nav-link" data-scroll-target="#when-to-use-marimo-vs.-quarto"><span class="header-section-number">24.3.1</span> When to Use Marimo vs.&nbsp;Quarto</a></li>
+  <li><a href="#reactivity-as-a-superpower" id="toc-reactivity-as-a-superpower" class="nav-link" data-scroll-target="#reactivity-as-a-superpower"><span class="header-section-number">24.3.2</span> Reactivity as a Superpower</a></li>
+  <li><a href="#building-an-interactive-northwind-explorer" id="toc-building-an-interactive-northwind-explorer" class="nav-link" data-scroll-target="#building-an-interactive-northwind-explorer"><span class="header-section-number">24.3.3</span> Building an Interactive Northwind Explorer</a></li>
+  <li><a href="#sql-cells-in-marimo" id="toc-sql-cells-in-marimo" class="nav-link" data-scroll-target="#sql-cells-in-marimo"><span class="header-section-number">24.3.4</span> SQL Cells in Marimo</a></li>
+  <li><a href="#exercises-2" id="toc-exercises-2" class="nav-link" data-scroll-target="#exercises-2"><span class="header-section-number">24.3.5</span> Exercises</a></li>
+  </ul></li>
+  <li><a href="#part-4-when-to-use-what" id="toc-part-4-when-to-use-what" class="nav-link" data-scroll-target="#part-4-when-to-use-what"><span class="header-section-number">24.4</span> Part 4: When to Use What</a>
+  <ul class="collapse">
+  <li><a href="#a-complete-workflow-example" id="toc-a-complete-workflow-example" class="nav-link" data-scroll-target="#a-complete-workflow-example"><span class="header-section-number">24.4.1</span> A Complete Workflow Example</a></li>
+  </ul></li>
+  <li><a href="#capstone-building-a-complete-computational-analysis" id="toc-capstone-building-a-complete-computational-analysis" class="nav-link" data-scroll-target="#capstone-building-a-complete-computational-analysis"><span class="header-section-number">24.5</span> Capstone: Building a Complete Computational Analysis</a>
+  <ul class="collapse">
+  <li><a href="#project-brief" id="toc-project-brief" class="nav-link" data-scroll-target="#project-brief"><span class="header-section-number">24.5.1</span> Project Brief</a></li>
+  <li><a href="#success-criteria" id="toc-success-criteria" class="nav-link" data-scroll-target="#success-criteria"><span class="header-section-number">24.5.2</span> Success Criteria</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">24.6</span> Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">24.7</span> Glossary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/24-computational-documents.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://ozanozbeker.com/cw4e/playground/"><i class="bi bi-play-circle"></i>SQL &amp; Python Playground</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-4-data-products.html">Building Data Products</a></li><li class="breadcrumb-item"><a href="../chapters/24-computational-documents.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-computational-documents" class="quarto-section-identifier"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>You’ve built your analytical pipeline: SQL queries, Polars transformations, Altair visualizations, Excel exports. Now comes the final step, and it’s the one that matters most to the people who use your work, communication. You learned Quarto as a writing tool in <a href="03-quarto.html" class="quarto-xref"><span>Chapter 3</span></a>. You learned about Marimo notebooks as interactive exploration environments. Now you’ll make your documents come alive with embedded computation. Instead of copying results from a Python script into your report, your report <em>is</em> the script. Instead of running a notebook for yourself and then writing a separate document, your document executes live code during rendering or during interactive use.</p>
+<p>In this chapter, you’ll master two complementary approaches to computational documents. Quarto documents execute code <em>during rendering</em>, producing polished, reproducible reports that can be shared as standalone HTML, PDF, or Word files. Marimo notebooks execute code <em>during exploration</em>, providing a reactive environment where you and your stakeholders can adjust parameters and see results update instantly. Both tools eliminate the gap between analysis and communication, turning your technical work into something others can understand and act on.</p>
+<section id="part-1-quarto-code-cells" class="level2" data-number="24.1">
+<h2 data-number="24.1" class="anchored" data-anchor-id="part-1-quarto-code-cells"><span class="header-section-number">24.1</span> Part 1: Quarto Code Cells</h2>
+<p>You already know that Quarto documents are Markdown files with a YAML header and optional code blocks. What you’ll now focus on is the computational aspect: how code blocks work, how they integrate with your SQL and Python workflow, and how to control what appears in your rendered output.</p>
+<section id="the-anatomy-of-a-code-cell" class="level3" data-number="24.1.1">
+<h3 data-number="24.1.1" class="anchored" data-anchor-id="the-anatomy-of-a-code-cell"><span class="header-section-number">24.1.1</span> The Anatomy of a Code Cell</h3>
+<p>A code cell in Quarto is a Markdown code block with an executable language specified:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>::: {#48de32ba .cell}</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"data/northwind.duckdb"</span>, read_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>When you render this document, Quarto executes the Python code in your project’s virtual environment, captures any output, and includes it in the rendered document. This is different from a static code block (which Quarto treats as syntax-highlighted text): an executable code block actually <em>runs</em>.</p>
+<p>To make a code block executable, specify the language in curly braces. Quarto supports Python, SQL, R, and others. For non-executable blocks (when you want to show code without running it), omit the language specification and use a dot prefix:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This is a non-executable code block (shown as plain text)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello, world"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>::: {#3065a1c7 .cell}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># This is executable (Python runs it)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello, world"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="cell-level-options" class="level3" data-number="24.1.2">
+<h3 data-number="24.1.2" class="anchored" data-anchor-id="cell-level-options"><span class="header-section-number">24.1.2</span> Cell-Level Options</h3>
+<p>Every code cell can have options that control its behavior. These are specified using YAML comments at the top of the block, with the <code>#|</code> prefix:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>::: {#91f274fc .cell}</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pl.DataFrame({<span class="st">"x"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], <span class="st">"y"</span>: [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]})</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The most commonly used options are:</p>
+<div id="tbl-quarto-cell-options" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-quarto-cell-options-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;24.1: Quarto code cell options
+</figcaption>
+<div aria-describedby="tbl-quarto-cell-options-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>echo</code></td>
+<td><code>true</code></td>
+<td>Show the source code in the output</td>
+</tr>
+<tr class="even">
+<td><code>eval</code></td>
+<td><code>true</code></td>
+<td>Execute the code</td>
+</tr>
+<tr class="odd">
+<td><code>output</code></td>
+<td><code>true</code></td>
+<td>Show the code’s output</td>
+</tr>
+<tr class="even">
+<td><code>warning</code></td>
+<td><code>true</code></td>
+<td>Show warning messages</td>
+</tr>
+<tr class="odd">
+<td><code>label</code></td>
+<td>(none)</td>
+<td>An identifier for cross-referencing</td>
+</tr>
+<tr class="even">
+<td><code>fig-cap</code></td>
+<td>(none)</td>
+<td>Caption for a figure</td>
+</tr>
+<tr class="odd">
+<td><code>tbl-cap</code></td>
+<td>(none)</td>
+<td>Caption for a table</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<section id="using-echo-to-control-code-visibility" class="level4" data-number="24.1.2.1">
+<h4 data-number="24.1.2.1" class="anchored" data-anchor-id="using-echo-to-control-code-visibility"><span class="header-section-number">24.1.2.1</span> Using <code>echo</code> to Control Code Visibility</h4>
+<p><code>echo</code> controls whether the source code appears in the rendered document. This is your main tool for adapting documents to different audiences.</p>
+<p>For a technical report read by engineers and data scientists, you might show the code:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>technical_report.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="technical_report.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>::: {#f756e067 .cell}</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"data/northwind.duckdb"</span>, read_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> conn.sql(<span class="st">"SELECT * FROM products WHERE unit_price &gt; 50"</span>).pl()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>products.head()</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For a stakeholder presentation, you might hide the code and show only the output:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>stakeholder_report.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="stakeholder_report.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Both blocks run the same code and produce the same output table. The only difference is what the <em>reader</em> sees. Non-technical audiences are distracted by code; technical audiences want to verify the methodology. One code cell, two different purposes.</p>
+</section>
+<section id="using-eval-and-output-for-setup-code" class="level4" data-number="24.1.2.2">
+<h4 data-number="24.1.2.2" class="anchored" data-anchor-id="using-eval-and-output-for-setup-code"><span class="header-section-number">24.1.2.2</span> Using <code>eval</code> and <code>output</code> for Setup Code</h4>
+<p>Some code should run during rendering but not appear in the output. A typical use case is initial setup: connecting to a database, importing libraries, or loading configuration. You want this code to execute (so downstream cells can use the connection), but you don’t want the reader to see it.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu"># Analysis Section</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The first cell (<code>eval: true, output: false, echo: false</code>) runs silently: the connection is established, but no code or output appears in the document. The second cell uses that connection to retrieve data.</p>
+</section>
+<section id="using-warning-false-to-clean-up-output" class="level4" data-number="24.1.2.3">
+<h4 data-number="24.1.2.3" class="anchored" data-anchor-id="using-warning-false-to-clean-up-output"><span class="header-section-number">24.1.2.3</span> Using <code>warning: false</code> to Clean Up Output</h4>
+<p>Some operations produce harmless warnings. When rendering a report for stakeholders, these warnings distract from the findings. The <code>warning: false</code> option suppresses them:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>::: {#be056367 .cell}</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Polars may emit warnings about deprecated syntax; suppress them</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>revenue <span class="op">=</span> pl.read_csv(<span class="st">"data.csv"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>revenue</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="inline-code" class="level3" data-number="24.1.3">
+<h3 data-number="24.1.3" class="anchored" data-anchor-id="inline-code"><span class="header-section-number">24.1.3</span> Inline Code</h3>
+<p>In addition to code blocks, Quarto supports <em>inline code</em> that executes within narrative text. This is useful for embedding computed values in prose:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>The total revenue across all categories is <span class="in">`{python} revenue['revenue'].sum()`</span>.</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>According to our analysis of Northwind data,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>Beverages category leads with $<span class="in">`{python} int(revenue.filter(revenue['category_name'] == 'Beverages')['revenue'][0])`</span> in annual revenue.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>When rendered, the expressions evaluate and appear inline:</p>
+<blockquote class="blockquote">
+<p>The total revenue across all categories is $2,545,100.</p>
+<p>According to our analysis of Northwind data, Beverages category leads with $267,868 in annual revenue.</p>
+</blockquote>
+<p>Inline code is most useful for summary statistics: totals, counts, percentages, or key findings. It keeps your narrative precise and eliminates the possibility of manually typing a number that might become stale if the data changes.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Inline code keeps reports current
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you hard-code a number (“Beverages generated $267,868 in revenue”) and later the data updates, you have to manually find and correct the number. With inline code, the number updates automatically. This is a small but important advantage: your report stays accurate without manual maintenance.</p>
+</div>
+</div>
+</section>
+<section id="a-complete-quarto-example-revenue-report" class="level3" data-number="24.1.4">
+<h3 data-number="24.1.4" class="anchored" data-anchor-id="a-complete-quarto-example-revenue-report"><span class="header-section-number">24.1.4</span> A Complete Quarto Example: Revenue Report</h3>
+<p>Let’s build a realistic Quarto document that queries the Northwind database, computes summaries, and displays them alongside narrative and charts.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>northwind_revenue_report.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="northwind_revenue_report.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Northwind Revenue Analysis"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your Name"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> today</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> true</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="an">code-fold:</span><span class="co"> true</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>This report analyzes revenue patterns across product categories</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>in the Northwind database. We'll examine total revenue by category,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>identify top-performing categories, and investigate seasonal trends.</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Revenue by Category</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>As shown in @fig-category-revenue, Beverages leads with</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="in">`{python} f"${category_revenue[0, 'revenue']:,.2f}"`</span> in total revenue,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>followed by Dairy Products and Confections. Together, these three categories</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>represent <span class="in">`{python} f"{(category_revenue['revenue'].sum() / category_revenue['revenue'].sum() * 100):.1f}%"`</span> of all revenue.</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Category Summary Table</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## Monthly Trends</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>The monthly trends in @fig-monthly reveal clear seasonal patterns.</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>All three leading categories show peaks in Q4, consistent with holiday purchasing behavior.</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>Beverages and Dairy Products are the revenue engines of Northwind's business.</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>Strategic focus on inventory management and marketing for these categories</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>during Q4 is critical for maximizing annual revenue.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This document demonstrates the complete workflow: setup code that runs silently, queries that produce tables, inline code that embeds summaries in narrative, and charts with captions and cross-references. When you render it with <code>uv run quarto render northwind_revenue_report.qmd</code>, Quarto executes all the Python code, embeds the outputs, and produces a polished HTML report that’s ready to share.</p>
+</section>
+<section id="exercises" class="level3" data-number="24.1.5">
+<h3 data-number="24.1.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">24.1.5</span> Exercises</h3>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Example setup for a stakeholder report:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Q4 Revenue Analysis"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Analytics Team"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> html</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">code-fold</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co">      # Readers can expand code if curious, but it's hidden by default</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then use <code>echo: false</code> for all data cells and <code>echo: true</code> only for the final chart and summary. This gives stakeholders results without code distraction.</p>
+<p><strong>2.</strong> A setup cell with <code>eval: true, output: false, echo: false</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then downstream cells use the connection. Rendering the document will execute this setup cell (the connection is established), but no code or output appears in the report.</p>
+<p><strong>3.</strong> Inline code example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>The Beverages category generated</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="in">`{python} f"${category_revenue.filter(pl.col('category_name') == 'Beverages')['revenue'][0]:,.2f}"`</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>in total revenue.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This embeds the exact value from the data, so if the data updates, the number updates automatically.</p>
+<p><strong>4.</strong> A report with multiple outputs:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Analysis"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">html</span><span class="kw">,</span><span class="at"> docx</span><span class="kw">,</span><span class="at"> pdf</span><span class="kw">]</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Rendering with <code>uv run quarto render report.qmd</code> produces HTML, Word, and PDF versions from the same source. Alternatively, use the command line to override: <code>uv run quarto render report.qmd --to docx</code>.</p>
+</div>
+</div>
+</div>
+<ol type="1">
+<li><p>You’re writing a Quarto report for non-technical stakeholders. You have four code cells: a database connection, a SQL query, a Polars transformation, and an Altair chart. For each cell, decide which options (<code>echo</code>, <code>eval</code>, <code>output</code>) you’d set and explain why.</p></li>
+<li><p>Create a setup cell in Quarto that loads your DuckDB connection using <code>eval: true, output: false, echo: false</code>. Explain why this combination is useful.</p></li>
+<li><p>Write an inline code expression that embeds the total revenue from the Northwind Beverages category in a sentence. Make sure it formats the number as currency with commas.</p></li>
+<li><p>If you want to render a single <code>.qmd</code> file to both HTML and Word formats, how would you structure the YAML header?</p></li>
+</ol>
+</section>
+</section>
+<section id="part-2-sql-cells-in-quarto" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="part-2-sql-cells-in-quarto"><span class="header-section-number">24.2</span> Part 2: SQL Cells in Quarto</h2>
+<p>Quarto supports dedicated SQL code cells that execute against a database connection. This is particularly useful when your analysis is SQL-heavy and you want clean, readable queries inline with your narrative.</p>
+<p>A SQL cell looks similar to a Python cell, but the code block is marked <code>{sql}</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{sql}</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| output:</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#|   max-items: 10</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    c<span class="ch">.</span>category_name,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> product_count,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">AVG</span>(p<span class="ch">.</span>unit_price), <span class="dv">2</span>) <span class="kw">AS</span> avg_price</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p<span class="ch">.</span>category_id <span class="op">=</span> c<span class="ch">.</span>category_id</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c<span class="ch">.</span>category_name</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_count <span class="kw">DESC</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>By default, Quarto renders SQL output as a formatted table. The <code>output: max-items: 10</code> option limits the display to the first 10 rows (useful for large result sets).</p>
+<section id="connecting-sql-to-your-database" class="level3" data-number="24.2.1">
+<h3 data-number="24.2.1" class="anchored" data-anchor-id="connecting-sql-to-your-database"><span class="header-section-number">24.2.1</span> Connecting SQL to Your Database</h3>
+<p>For SQL cells to execute, Quarto needs access to a database connection. In Python, you establish this connection in a Python cell:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>document.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="document.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">## Product Categories</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="in">```{sql}</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#| connection: conn</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    c<span class="ch">.</span>category_name,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> product_count,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">AVG</span>(p<span class="ch">.</span>unit_price), <span class="dv">2</span>) <span class="kw">AS</span> avg_price</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> products <span class="kw">AS</span> p</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> categories <span class="kw">AS</span> c <span class="kw">ON</span> p<span class="ch">.</span>category_id <span class="op">=</span> c<span class="ch">.</span>category_id</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c<span class="ch">.</span>category_name</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_count <span class="kw">DESC</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>connection: conn</code> option tells Quarto’s SQL cell to use the <code>conn</code> variable from the Python environment. This is the same connection you established in Python.</p>
+</section>
+<section id="exercises-1" class="level3" data-number="24.2.2">
+<h3 data-number="24.2.2" class="anchored" data-anchor-id="exercises-1"><span class="header-section-number">24.2.2</span> Exercises</h3>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Example document with SQL cells:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Northwind Product Analysis"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Top Products by Revenue</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="in">```{sql}</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| connection: conn</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: max-items: 15</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    p<span class="ch">.</span>product_name,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ROUND</span>(<span class="fu">SUM</span>(od<span class="ch">.</span>unit_price <span class="op">*</span> od<span class="ch">.</span>quantity <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> od<span class="ch">.</span>discount)), <span class="dv">2</span>) <span class="kw">AS</span> revenue,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> od<span class="ch">.</span>order_id) <span class="kw">AS</span> orders</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> order_details <span class="kw">AS</span> od</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> products <span class="kw">AS</span> p <span class="kw">ON</span> od<span class="ch">.</span>product_id <span class="op">=</span> p<span class="ch">.</span>product_id</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> p<span class="ch">.</span>product_name</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> revenue <span class="kw">DESC</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>2.</strong> The SQL cell executes in Quarto’s computational context. The <code>connection: conn</code> option passes the DuckDB connection from the Python environment. Behind the scenes, Quarto executes the SQL query and renders the result as a table.</p>
+<p><strong>3.</strong> SQL cells can read from Python variables using parameter binding. If you define <code>min_price = 50</code> in a Python cell, you can reference it in a SQL cell using the <code>params</code> option or string formatting.</p>
+</div>
+</div>
+</div>
+<ol type="1">
+<li><p>Create a Quarto document with a Python cell that establishes a DuckDB connection to the Northwind database. Then add a SQL cell that queries the <code>products</code> table and displays the first 10 products sorted by <code>unit_price</code> descending. Use <code>connection: conn</code> in the SQL cell.</p></li>
+<li><p>In a SQL cell, where does the data come from? How does Quarto know how to execute the SQL?</p></li>
+<li><p>You want to create a SQL cell that only displays the top 20 rows of results. What option would you use?</p></li>
+</ol>
+</section>
+</section>
+<section id="part-3-marimo-notebooks" class="level2" data-number="24.3">
+<h2 data-number="24.3" class="anchored" data-anchor-id="part-3-marimo-notebooks"><span class="header-section-number">24.3</span> Part 3: Marimo Notebooks</h2>
+<p>Quarto documents execute code <em>during rendering</em>, producing static output. Marimo notebooks execute code <em>during interaction</em>, providing a reactive environment for exploration and visualization.</p>
+<p>You already learned the fundamentals of Marimo in the previous content: reactive execution, the one-definition rule, cell dependencies, and SQL cells. This section builds on those foundations to show how Marimo fits into your computational workflow.</p>
+<section id="when-to-use-marimo-vs.-quarto" class="level3" data-number="24.3.1">
+<h3 data-number="24.3.1" class="anchored" data-anchor-id="when-to-use-marimo-vs.-quarto"><span class="header-section-number">24.3.1</span> When to Use Marimo vs.&nbsp;Quarto</h3>
+<p>Both Quarto and Marimo are computational documents, but they serve different purposes:</p>
+<div id="tbl-quarto-vs-marimo" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-quarto-vs-marimo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;24.2: Quarto vs.&nbsp;Marimo
+</figcaption>
+<div aria-describedby="tbl-quarto-vs-marimo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aspect</th>
+<th>Quarto</th>
+<th>Marimo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>When</td>
+<td>Rendering reports for external audiences</td>
+<td>Exploring data, building dashboards</td>
+</tr>
+<tr class="even">
+<td>Output</td>
+<td>Static HTML, PDF, Word, slides</td>
+<td>Interactive web app (or export to HTML)</td>
+</tr>
+<tr class="odd">
+<td>Code execution</td>
+<td>During <code>quarto render</code></td>
+<td>During <code>marimo edit</code> or <code>marimo run</code></td>
+</tr>
+<tr class="even">
+<td>Updates</td>
+<td>Reader can’t change; requires re-render</td>
+<td>User can adjust parameters and see instant results</td>
+</tr>
+<tr class="odd">
+<td>Distribution</td>
+<td>Email as HTML file</td>
+<td>Share link, deploy to web server, or export</td>
+</tr>
+<tr class="even">
+<td>Git</td>
+<td>Clean diffs (Markdown)</td>
+<td>Clean diffs (.py file)</td>
+</tr>
+<tr class="odd">
+<td>Best for</td>
+<td>Polished deliverables, reports, presentations</td>
+<td>Exploration, dashboards, internal tools</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Use Quarto when your goal is a finished deliverable. Use Marimo when your goal is exploration or interactive analysis.</p>
+</section>
+<section id="reactivity-as-a-superpower" class="level3" data-number="24.3.2">
+<h3 data-number="24.3.2" class="anchored" data-anchor-id="reactivity-as-a-superpower"><span class="header-section-number">24.3.2</span> Reactivity as a Superpower</h3>
+<p>The defining feature of Marimo is <em>reactive execution</em>. When you change a cell, all downstream cells automatically re-execute. This tight feedback loop makes Marimo ideal for iterative analysis.</p>
+<p>Imagine you’re exploring Northwind data and you want to find all products above a certain price threshold. In a Quarto document, you’d edit the code, run <code>quarto render</code>, wait for the full document to re-render, and then view the output. In Marimo, you adjust the threshold, press Enter, and the result updates instantly.</p>
+<p>This difference becomes dramatic when you add interactive elements. A Marimo notebook can have a slider that controls the threshold. Move the slider, and dependent cells re-execute in milliseconds. No button clicks, no terminal commands, no waiting. This is exploration at the speed of thought.</p>
+</section>
+<section id="building-an-interactive-northwind-explorer" class="level3" data-number="24.3.3">
+<h3 data-number="24.3.3" class="anchored" data-anchor-id="building-an-interactive-northwind-explorer"><span class="header-section-number">24.3.3</span> Building an Interactive Northwind Explorer</h3>
+<p>Here’s a realistic Marimo notebook that explores Northwind data with interactive controls:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>northwind_explorer.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="northwind_explorer.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo <span class="im">as</span> mo</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ===== Setup (hidden, silent) =====</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> mo.md(<span class="st">"""</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="st"># Northwind Product Explorer</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="st">Explore Northwind products and their pricing patterns.</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Database connection</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"data/northwind.duckdb"</span>, read_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all product data</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>all_products <span class="op">=</span> conn.sql(<span class="st">"""</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="st">        p.product_id,</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="st">        p.product_name,</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="st">        c.category_name,</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="st">        p.unit_price,</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="st">        p.units_in_stock,</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="st">        p.reorder_level</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM products AS p</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="st">    JOIN categories AS c ON p.category_id = c.category_id</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY p.product_name</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).pl()</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co"># ===== Interactive Controls =====</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>min_price_slider <span class="op">=</span> mo.ui.slider(</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    start<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    stop<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    step<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Minimum price"</span>,</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    value<span class="op">=</span><span class="dv">20</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>mo.md(<span class="ss">f"### Price Filter</span><span class="ch">\n\n</span><span class="sc">{</span>min_price_slider<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>category_dropdown <span class="op">=</span> mo.ui.dropdown(</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>    options<span class="op">=</span>all_products[<span class="st">"category_name"</span>].unique().to_list(),</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Filter by category"</span>,</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>    value<span class="op">=</span><span class="va">None</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>mo.md(<span class="ss">f"### Category Filter</span><span class="ch">\n\n</span><span class="sc">{</span>category_dropdown<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="co"># ===== Filtered Data =====</span></span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>min_price <span class="op">=</span> min_price_slider.value</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>selected_category <span class="op">=</span> category_dropdown.value</span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>filtered_products <span class="op">=</span> all_products.<span class="bu">filter</span>(</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"unit_price"</span>) <span class="op">&gt;=</span> min_price) <span class="op">&amp;</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>        (pl.col(<span class="st">"category_name"</span>) <span class="op">==</span> selected_category)</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> selected_category</span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="va">True</span></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="co"># ===== Summary Statistics =====</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> mo.md(<span class="ss">f"""</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a><span class="ss">### Results</span></span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="ss">**Products matching filters:** </span><span class="sc">{</span><span class="bu">len</span>(filtered_products)<span class="sc">}</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="ss">**Price range:** $</span><span class="sc">{</span>filtered_products[<span class="st">'unit_price'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.2f}</span><span class="ss"> - $</span><span class="sc">{</span>filtered_products[<span class="st">'unit_price'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2f}</span></span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a><span class="ss">**Average price:** $</span><span class="sc">{</span>filtered_products[<span class="st">'unit_price'</span>]<span class="sc">.</span>mean()<span class="sc">:.2f}</span></span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="ss">**Total stock value:** $</span><span class="sc">{</span>(filtered_products[<span class="st">'unit_price'</span>] <span class="op">*</span> filtered_products[<span class="st">'units_in_stock'</span>])<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:,.2f}</span></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span>)</span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a>summary</span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a><span class="co"># ===== Data Table =====</span></span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>display_table <span class="op">=</span> filtered_products.select(</span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"product_name"</span>).alias(<span class="st">"Product"</span>),</span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"category_name"</span>).alias(<span class="st">"Category"</span>),</span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"unit_price"</span>)).alias(<span class="st">"Price"</span>),</span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"units_in_stock"</span>).alias(<span class="st">"Stock"</span>),</span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a>display_table</span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a><span class="co"># ===== Chart =====</span></span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(filtered_products) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>    chart <span class="op">=</span> alt.Chart(filtered_products).mark_circle().encode(</span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>alt.X(<span class="st">"unit_price:Q"</span>, title<span class="op">=</span><span class="st">"Unit Price ($)"</span>),</span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>alt.Y(<span class="st">"units_in_stock:Q"</span>, title<span class="op">=</span><span class="st">"Units in Stock"</span>),</span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">"category_name:N"</span>,</span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>        tooltip<span class="op">=</span>[<span class="st">"product_name"</span>, <span class="st">"unit_price"</span>, <span class="st">"units_in_stock"</span>]</span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a>    ).properties(</span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a>        width<span class="op">=</span><span class="dv">600</span>,</span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a>        height<span class="op">=</span><span class="dv">400</span>,</span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">"Price vs. Stock for Filtered Products"</span></span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a>    ).interactive()</span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a>    chart</span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a>    mo.md(<span class="st">"_No products match the selected filters._"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This notebook has three key features:</p>
+<ol type="1">
+<li><strong>Setup cells</strong> that load data (hidden from view with <code>mo.md()</code> for narrative).</li>
+<li><strong>Interactive controls</strong> (slider and dropdown) that users can adjust.</li>
+<li><strong>Reactive cells</strong> that depend on the controls and update automatically.</li>
+</ol>
+<p>When a user adjusts the slider or selects a category, the notebook re-executes only the cells that depend on those changes. The filtered data, summary statistics, table, and chart all update instantly.</p>
+</section>
+<section id="sql-cells-in-marimo" class="level3" data-number="24.3.4">
+<h3 data-number="24.3.4" class="anchored" data-anchor-id="sql-cells-in-marimo"><span class="header-section-number">24.3.4</span> SQL Cells in Marimo</h3>
+<p>Marimo has native SQL cells that execute directly against a database. This is useful when your analysis is SQL-heavy:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>northwind_sql.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="northwind_sql.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo <span class="im">as</span> mo</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup: establish connection</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"data/northwind.duckdb"</span>, read_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># SQL cell equivalent (as a Python cell with SQL string)</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>revenue_by_category <span class="op">=</span> conn.sql(<span class="st">"""</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="st">        c.category_name,</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="st">        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="st">        COUNT(DISTINCT o.order_id) AS order_count</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM order_details AS od</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="st">    JOIN orders AS o ON od.order_id = o.order_id</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="st">    JOIN products AS p ON od.product_id = p.product_id</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="st">    JOIN categories AS c ON p.category_id = c.category_id</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="st">    GROUP BY c.category_name</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY revenue DESC</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).pl()</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Display results</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>mo.md(<span class="ss">f"## Revenue by Category"</span>)</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>revenue_by_category</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>When using Marimo’s graphical interface (<code>marimo edit</code>), you can actually create a dedicated SQL cell by clicking the cell type dropdown. In a <code>.py</code> file, you write SQL as a string inside a Python cell.</p>
+</section>
+<section id="exercises-2" class="level3" data-number="24.3.5">
+<h3 data-number="24.3.5" class="anchored" data-anchor-id="exercises-2"><span class="header-section-number">24.3.5</span> Exercises</h3>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Example Marimo notebook structure:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo <span class="im">as</span> mo</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">"data/northwind.duckdb"</span>, read_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Interactive control</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>year_slider <span class="op">=</span> mo.ui.slider(start<span class="op">=</span><span class="dv">2010</span>, stop<span class="op">=</span><span class="dv">2014</span>, label<span class="op">=</span><span class="st">"Year"</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>mo.md(<span class="ss">f"### Filter by Year</span><span class="ch">\n\n</span><span class="sc">{</span>year_slider<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Query using the slider value</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>year <span class="op">=</span> year_slider.value</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>orders <span class="op">=</span> conn.sql(<span class="ss">f"SELECT * FROM orders WHERE YEAR(order_date) = </span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">"</span>).pl()</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Display results</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>mo.md(<span class="ss">f"Orders in </span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(orders)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>orders.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The dependency graph has: slider → year → orders → display. When the slider changes, all downstream cells re-execute.</p>
+<p><strong>2.</strong> Use <code>mo.md()</code> to create narrative cells and <code>mo.ui.*</code> for interactive controls. Keep data loading and transformations in regular Python cells.</p>
+<p><strong>3.</strong> Marimo automatically detects dependencies by analyzing which variables each cell reads and writes. You can view the dependency graph in the notebook interface (usually a graph icon or sidebar). This graph determines execution order and reactive updates.</p>
+</div>
+</div>
+</div>
+<ol type="1">
+<li><p>Create a Marimo notebook with an interactive slider that controls a minimum revenue threshold. Use this slider to filter products from the Northwind database and display the filtered results in a table.</p></li>
+<li><p>In Marimo, how do you create narrative text (markdown) alongside code cells?</p></li>
+<li><p>How does Marimo know which cells depend on a slider’s value? How would you view the dependency graph?</p></li>
+</ol>
+</section>
+</section>
+<section id="part-4-when-to-use-what" class="level2" data-number="24.4">
+<h2 data-number="24.4" class="anchored" data-anchor-id="part-4-when-to-use-what"><span class="header-section-number">24.4</span> Part 4: When to Use What</h2>
+<p>The three computational tools you’ve mastered each have a role:</p>
+<p><strong>Quarto</strong> is for polished deliverables that you share with others: - A report emailed to stakeholders - A presentation to leadership - A technical document for a team - An assignment or deliverable - A blog post or article</p>
+<p>Quarto produces <em>static</em> output that’s the same every time someone views it. This is appropriate for reports: the reader wants the finished analysis, not to fiddle with sliders.</p>
+<p><strong>Marimo</strong> is for interactive exploration and dashboards: - Investigating a dataset with multiple hypotheses - Building a tool for colleagues to explore data themselves - Prototyping an analysis before formalizing it in a report - Creating a dashboard that updates as you adjust parameters - An internal tool that your team uses repeatedly</p>
+<p>Marimo produces <em>interactive</em> output where the user can change parameters and see results update. This is appropriate for exploration: the analyst wants fast feedback.</p>
+<p><strong>Scripts</strong> (plain <code>.py</code> files) are for automation and reusable components: - Running the same analysis on new data weekly or monthly - Building functions that other code imports and uses - Processing data pipelines that run on a schedule - Any code that needs to run without human interaction</p>
+<p>Scripts execute top-to-bottom, produce output (files, databases, logs), and are reproducible. This is appropriate for production: the system runs automatically.</p>
+<p>In a real data engineering workflow, these three tools work together. You <em>script</em> your data pipeline (SQL queries, data cleaning). You <em>explore</em> the results in a <em>Marimo notebook</em>, trying different visualizations and aggregations. You <em>publish</em> your findings in a <em>Quarto report</em> that your stakeholders read. Each tool serves its purpose.</p>
+<section id="a-complete-workflow-example" class="level3" data-number="24.4.1">
+<h3 data-number="24.4.1" class="anchored" data-anchor-id="a-complete-workflow-example"><span class="header-section-number">24.4.1</span> A Complete Workflow Example</h3>
+<p>Here’s how the three tools might work together on a Northwind analysis:</p>
+<ol type="1">
+<li><p><strong>Script</strong> (<code>etl.py</code>): Extract monthly revenue data from the database, clean it, and save to a CSV file. Run this weekly on a schedule.</p></li>
+<li><p><strong>Marimo notebook</strong> (<code>explore.py</code>): Load the CSV file. Create interactive controls to filter by category, date range, and metric (revenue vs.&nbsp;order count). Explore different charts and summaries. This is where you figure out <em>what questions to ask</em>.</p></li>
+<li><p><strong>Quarto document</strong> (<code>report.qmd</code>): Based on findings from the notebook, write a polished report with fixed parameters. Show the top three findings with charts, tables, and narrative. This is where you <em>communicate what you learned</em>.</p></li>
+</ol>
+<p>The script ensures data freshness. The notebook enables fast exploration. The report communicates the findings. All three are necessary.</p>
+</section>
+</section>
+<section id="capstone-building-a-complete-computational-analysis" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="capstone-building-a-complete-computational-analysis"><span class="header-section-number">24.5</span> Capstone: Building a Complete Computational Analysis</h2>
+<p>Throughout this book, we’ve used the Northwind dataset. For your own projects, you’ll apply these same patterns to whatever dataset your work requires.</p>
+<p>Here’s a capstone project that brings everything together:</p>
+<section id="project-brief" class="level3" data-number="24.5.1">
+<h3 data-number="24.5.1" class="anchored" data-anchor-id="project-brief"><span class="header-section-number">24.5.1</span> Project Brief</h3>
+<p>You’re given a CSV file with historical sales data for your organization (or a public dataset of your choice). Your task is to:</p>
+<ol type="1">
+<li><p><strong>Explore the data</strong> using a Marimo notebook. Create interactive controls to filter by date range, product category, or other relevant dimensions. Build visualizations that help you understand the data’s structure and patterns.</p></li>
+<li><p><strong>Develop hypotheses</strong> about what drives revenue or customer behavior. Use SQL to answer specific questions (Which categories are growing? Which customers contribute the most? Are there seasonal patterns?).</p></li>
+<li><p><strong>Create a polished report</strong> using Quarto. Document your three key findings with charts, tables, and narrative explanation. Show the code (so a technical reader can verify your methodology) but make the findings clear to any audience.</p></li>
+<li><p><strong>Deploy the analysis</strong> as a Marimo dashboard. Create a tool that your stakeholders can use to explore the data themselves. Include sliders or dropdowns for the most important dimensions.</p></li>
+</ol>
+</section>
+<section id="success-criteria" class="level3" data-number="24.5.2">
+<h3 data-number="24.5.2" class="anchored" data-anchor-id="success-criteria"><span class="header-section-number">24.5.2</span> Success Criteria</h3>
+<ul>
+<li>Your Marimo notebook demonstrates reactive execution: when you change a control, dependent cells update.</li>
+<li>Your Quarto report renders without errors and can be exported to multiple formats.</li>
+<li>Your code follows the patterns from this book: SQL for data retrieval, Polars for transformation, Altair for visualization.</li>
+<li>Your analysis answers a genuine business question, not just summarizes data.</li>
+<li>Your narrative explains <em>why</em> the findings matter, not just <em>what</em> the data shows.</li>
+</ul>
+</section>
+</section>
+<section id="summary" class="level2" data-number="24.6">
+<h2 data-number="24.6" class="anchored" data-anchor-id="summary"><span class="header-section-number">24.6</span> Summary</h2>
+<p>Quarto documents and Marimo notebooks are complementary tools for computational communication. Quarto renders code into static documents, making it ideal for polished reports that you share with others. Marimo creates interactive notebooks, making it ideal for exploration and dashboards where users need to adjust parameters and see results update instantly.</p>
+<p>Code cells in Quarto execute during rendering. Cell options like <code>echo</code>, <code>eval</code>, and <code>output</code> let you control what appears in the finished document. Inline code embeds computed values in narrative. This separation between code and output enables you to write documents for different audiences: show code to engineers, hide code from stakeholders.</p>
+<p>Marimo notebooks execute during interaction. The reactive model ensures that changing a cell automatically updates all dependent cells. Interactive UI elements turn analyses into explorable tools. The one-definition rule prevents hidden state bugs that plague traditional notebooks.</p>
+<p>Together, Quarto and Marimo transform your analytical work into products that inform decision-making, not just papers that document what you did.</p>
+</section>
+<section id="glossary" class="level2" data-number="24.7">
+<h2 data-number="24.7" class="anchored" data-anchor-id="glossary"><span class="header-section-number">24.7</span> Glossary</h2>
+<dl>
+<dt>cell</dt>
+<dd>
+A unit of code in Quarto or Marimo. In Quarto, a cell is a code block that executes during rendering. In Marimo, a cell executes during interaction and can depend on other cells.
+</dd>
+<dt>code cell</dt>
+<dd>
+An executable code block (Python, SQL, R, etc.) in a Quarto document or Marimo notebook.
+</dd>
+<dt>code folding</dt>
+<dd>
+A Quarto feature that hides code by default but lets readers expand it to see the source. Controlled by the <code>code-fold</code> YAML option.
+</dd>
+<dt>computational document</dt>
+<dd>
+A document that interleaves code, output, and narrative. Includes Quarto documents and Marimo notebooks.
+</dd>
+<dt>inline code</dt>
+<dd>
+Code that executes within a paragraph of narrative text, not in a separate block. In Quarto, written as <code>`{python} expression`</code>.
+</dd>
+<dt>reactive execution</dt>
+<dd>
+Marimo’s model where changing a cell automatically re-executes all cells that depend on it.
+</dd>
+<dt>rendering</dt>
+<dd>
+The process of executing code blocks in a Quarto document and converting the <code>.qmd</code> file to output (HTML, PDF, Word, slides).
+</dd>
+</dl>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ozanozbeker\.com\/cw4e\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/23-code-quality.html" class="pagination-link" aria-label="Code Quality: Ruff, basedpyright, &amp; Language Servers">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/25-arrow.html" class="pagination-link" aria-label="Arrow, ADBC, &amp; Database Connectivity">
+        <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/24-computational-documents.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

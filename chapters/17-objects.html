@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>17&nbsp; Objects &amp; Type Hints – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../unit-4-data-products.html" rel="next">
+<link href="../chapters/16-file-io.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-3-python.html">Python</a></li><li class="breadcrumb-item"><a href="../chapters/17-objects.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequisites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-1-toolkit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Professional Toolkit</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Professional Documents with Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-2-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data with SQL</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-3-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-python-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Collections</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-control-flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-file-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Working with Files</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-objects.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-4-data-products.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building Data Products</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-computational-documents.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-typer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">CLI Tools with Typer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Zed</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/northwind.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Northwind Dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/duckdb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">DuckDB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/ruff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Ruff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/basedpyright.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">K</span>&nbsp; <span class="chapter-title">basedpyright</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-everything-is-an-object" id="toc-sec-everything-is-an-object" class="nav-link active" data-scroll-target="#sec-everything-is-an-object"><span class="header-section-number">17.1</span> Everything Is an Object</a>
+  <ul class="collapse">
+  <li><a href="#methods-and-attributes" id="toc-methods-and-attributes" class="nav-link" data-scroll-target="#methods-and-attributes"><span class="header-section-number">17.1.1</span> Methods and Attributes</a></li>
+  <li><a href="#functions-are-objects-too" id="toc-functions-are-objects-too" class="nav-link" data-scroll-target="#functions-are-objects-too"><span class="header-section-number">17.1.2</span> Functions Are Objects Too</a></li>
+  <li><a href="#even-types-are-objects" id="toc-even-types-are-objects" class="nav-link" data-scroll-target="#even-types-are-objects"><span class="header-section-number">17.1.3</span> Even Types Are Objects</a></li>
+  </ul></li>
+  <li><a href="#sec-dir-help" id="toc-sec-dir-help" class="nav-link" data-scroll-target="#sec-dir-help"><span class="header-section-number">17.2</span> Exploring with <code>dir()</code> and <code>help()</code></a>
+  <ul class="collapse">
+  <li><a href="#dir-what-can-this-object-do" id="toc-dir-what-can-this-object-do" class="nav-link" data-scroll-target="#dir-what-can-this-object-do"><span class="header-section-number">17.2.1</span> <code>dir()</code>: What Can This Object Do?</a></li>
+  <li><a href="#help-how-does-this-work" id="toc-help-how-does-this-work" class="nav-link" data-scroll-target="#help-how-does-this-work"><span class="header-section-number">17.2.2</span> <code>help()</code>: How Does This Work?</a></li>
+  <li><a href="#the-exploration-workflow" id="toc-the-exploration-workflow" class="nav-link" data-scroll-target="#the-exploration-workflow"><span class="header-section-number">17.2.3</span> The Exploration Workflow</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">17.2.4</span> Exercises</a></li>
+  </ul></li>
+  <li><a href="#sec-dunders" id="toc-sec-dunders" class="nav-link" data-scroll-target="#sec-dunders"><span class="header-section-number">17.3</span> Dunder Methods</a>
+  <ul class="collapse">
+  <li><a href="#how-operators-become-method-calls" id="toc-how-operators-become-method-calls" class="nav-link" data-scroll-target="#how-operators-become-method-calls"><span class="header-section-number">17.3.1</span> How Operators Become Method Calls</a></li>
+  <li><a href="#the-iteration-protocol" id="toc-the-iteration-protocol" class="nav-link" data-scroll-target="#the-iteration-protocol"><span class="header-section-number">17.3.2</span> The Iteration Protocol</a></li>
+  <li><a href="#why-dunders-matter" id="toc-why-dunders-matter" class="nav-link" data-scroll-target="#why-dunders-matter"><span class="header-section-number">17.3.3</span> Why Dunders Matter</a></li>
+  <li><a href="#exercises-1" id="toc-exercises-1" class="nav-link" data-scroll-target="#exercises-1"><span class="header-section-number">17.3.4</span> Exercises</a></li>
+  </ul></li>
+  <li><a href="#sec-classes" id="toc-sec-classes" class="nav-link" data-scroll-target="#sec-classes"><span class="header-section-number">17.4</span> Classes: Just Enough</a>
+  <ul class="collapse">
+  <li><a href="#defining-a-simple-class" id="toc-defining-a-simple-class" class="nav-link" data-scroll-target="#defining-a-simple-class"><span class="header-section-number">17.4.1</span> Defining a Simple Class</a></li>
+  <li><a href="#using-the-class" id="toc-using-the-class" class="nav-link" data-scroll-target="#using-the-class"><span class="header-section-number">17.4.2</span> Using the Class</a></li>
+  <li><a href="#reading-not-architecting" id="toc-reading-not-architecting" class="nav-link" data-scroll-target="#reading-not-architecting"><span class="header-section-number">17.4.3</span> Reading, Not Architecting</a></li>
+  </ul></li>
+  <li><a href="#sec-type-hints" id="toc-sec-type-hints" class="nav-link" data-scroll-target="#sec-type-hints"><span class="header-section-number">17.5</span> Type Hints</a>
+  <ul class="collapse">
+  <li><a href="#basic-annotations" id="toc-basic-annotations" class="nav-link" data-scroll-target="#basic-annotations"><span class="header-section-number">17.5.1</span> Basic Annotations</a></li>
+  <li><a href="#common-types" id="toc-common-types" class="nav-link" data-scroll-target="#common-types"><span class="header-section-number">17.5.2</span> Common Types</a></li>
+  <li><a href="#collection-types" id="toc-collection-types" class="nav-link" data-scroll-target="#collection-types"><span class="header-section-number">17.5.3</span> Collection Types</a></li>
+  <li><a href="#optional-values-with-none" id="toc-optional-values-with-none" class="nav-link" data-scroll-target="#optional-values-with-none"><span class="header-section-number">17.5.4</span> Optional Values with <code>None</code></a></li>
+  <li><a href="#how-zed-uses-type-hints" id="toc-how-zed-uses-type-hints" class="nav-link" data-scroll-target="#how-zed-uses-type-hints"><span class="header-section-number">17.5.5</span> How Zed Uses Type Hints</a></li>
+  <li><a href="#type-hints-are-hints-not-enforcement" id="toc-type-hints-are-hints-not-enforcement" class="nav-link" data-scroll-target="#type-hints-are-hints-not-enforcement"><span class="header-section-number">17.5.6</span> Type Hints Are Hints, Not Enforcement</a></li>
+  <li><a href="#exercises-2" id="toc-exercises-2" class="nav-link" data-scroll-target="#exercises-2"><span class="header-section-number">17.5.7</span> Exercises</a></li>
+  <li><a href="#adding-type-hints-to-existing-code" id="toc-adding-type-hints-to-existing-code" class="nav-link" data-scroll-target="#adding-type-hints-to-existing-code"><span class="header-section-number">17.5.8</span> Adding Type Hints to Existing Code</a></li>
+  </ul></li>
+  <li><a href="#reading-documentation-like-a-professional" id="toc-reading-documentation-like-a-professional" class="nav-link" data-scroll-target="#reading-documentation-like-a-professional"><span class="header-section-number">17.6</span> Reading Documentation Like a Professional</a>
+  <ul class="collapse">
+  <li><a href="#anatomy-of-library-documentation" id="toc-anatomy-of-library-documentation" class="nav-link" data-scroll-target="#anatomy-of-library-documentation"><span class="header-section-number">17.6.1</span> Anatomy of Library Documentation</a></li>
+  <li><a href="#reading-a-function-signature" id="toc-reading-a-function-signature" class="nav-link" data-scroll-target="#reading-a-function-signature"><span class="header-section-number">17.6.2</span> Reading a Function Signature</a></li>
+  <li><a href="#practice-the-exploration-loop" id="toc-practice-the-exploration-loop" class="nav-link" data-scroll-target="#practice-the-exploration-loop"><span class="header-section-number">17.6.3</span> Practice: The Exploration Loop</a></li>
+  </ul></li>
+  <li><a href="#putting-it-together-a-typed-northwind-module" id="toc-putting-it-together-a-typed-northwind-module" class="nav-link" data-scroll-target="#putting-it-together-a-typed-northwind-module"><span class="header-section-number">17.7</span> Putting It Together: A Typed Northwind Module</a></li>
+  <li><a href="#exercises-3" id="toc-exercises-3" class="nav-link" data-scroll-target="#exercises-3">Exercises</a>
+  <ul class="collapse">
+  <li><a href="#object-exploration" id="toc-object-exploration" class="nav-link" data-scroll-target="#object-exploration">Object Exploration</a></li>
+  <li><a href="#type-hints-practice" id="toc-type-hints-practice" class="nav-link" data-scroll-target="#type-hints-practice">Type Hints Practice</a></li>
+  <li><a href="#class-building" id="toc-class-building" class="nav-link" data-scroll-target="#class-building">Class Building</a></li>
+  <li><a href="#documentation-scavenger-hunt" id="toc-documentation-scavenger-hunt" class="nav-link" data-scroll-target="#documentation-scavenger-hunt">Documentation Scavenger Hunt</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/17-objects.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://ozanozbeker.com/cw4e/playground/"><i class="bi bi-play-circle"></i>SQL &amp; Python Playground</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-3-python.html">Python</a></li><li class="breadcrumb-item"><a href="../chapters/17-objects.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-objects" class="quarto-section-identifier"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter reveals the principle that unifies everything you’ve learned about Python. Every value you’ve worked with, every string, list, dictionary, function, and even <code>None</code>, is an <em>object</em>. Understanding what that means unlocks the ability to explore any Python library on your own, read unfamiliar code with confidence, and write code that communicates its intent clearly through type hints.</p>
+<p>We begin with the object model, the foundation beneath all of Python. We then introduce the tools for exploration: <code>dir()</code> and <code>help()</code>, which let you interrogate any object to learn what it can do. We look at dunder methods, the hidden protocols that power Python’s syntax. We cover just enough about classes to read library code that uses them. We end with type hints, which bridge from this module into Production by making your code self-documenting and enabling the editor intelligence you’ve been using in Zed all along.</p>
+<section id="sec-everything-is-an-object" class="level2" data-number="17.1">
+<h2 data-number="17.1" class="anchored" data-anchor-id="sec-everything-is-an-object"><span class="header-section-number">17.1</span> Everything Is an Object</h2>
+<p>In Python, every value has three properties: an <em>identity</em> (where it lives in memory), a <em>type</em> (what kind of thing it is), and a <em>value</em> (the data it holds). These three properties together make it an object.</p>
+<p>You’ve already seen <code>type()</code> for checking what kind of value something is. Python also provides <code>id()</code> for checking identity:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>object_properties.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="object_properties.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(x))  <span class="co"># &lt;class 'int'&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">id</span>(x))    <span class="co"># A memory address like 140234866221896</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Chai"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(name))  <span class="co"># &lt;class 'str'&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">id</span>(name))    <span class="co"># A different memory address</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that <code>type()</code> returns a <em>class</em>. In Python, types and classes are the same thing. <code>int</code> is a class. <code>str</code> is a class. <code>list</code> is a class. When you write <code>42</code>, Python creates an instance of the <code>int</code> class. When you write <code>"Chai"</code>, Python creates an instance of the <code>str</code> class.</p>
+<section id="methods-and-attributes" class="level3" data-number="17.1.1">
+<h3 data-number="17.1.1" class="anchored" data-anchor-id="methods-and-attributes"><span class="header-section-number">17.1.1</span> Methods and Attributes</h3>
+<p>Objects have <em>attributes</em> (data attached to them) and <em>methods</em> (functions attached to them). You access both with dot notation:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>methods_attributes.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="methods_attributes.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Chai"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Methods: actions the object can perform</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(name.upper())        <span class="co"># "CHAI"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(name.lower())        <span class="co"># "chai"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(name.startswith(<span class="st">"C"</span>))  <span class="co"># True</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(name.replace(<span class="st">"C"</span>, <span class="st">"T"</span>))  <span class="co"># "Thai"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Even integers have methods</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x.bit_length())      <span class="co"># 6 (number of bits needed to represent 42)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Lists have methods you already know</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>products.append(<span class="st">"Tofu"</span>)  <span class="co"># This is a method call on a list object</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This isn’t new. You’ve been calling methods since <a href="13-collections.html" class="quarto-xref"><span>Chapter 13</span></a>. What’s new is the realization that this is the <em>same mechanism</em> for every type. Strings have string methods, lists have list methods, and every type has its own set of methods because every type is a class.</p>
+</section>
+<section id="functions-are-objects-too" class="level3" data-number="17.1.2">
+<h3 data-number="17.1.2" class="anchored" data-anchor-id="functions-are-objects-too"><span class="header-section-number">17.1.2</span> Functions Are Objects Too</h3>
+<p>Here’s where it gets interesting. Functions, the ones you define with <code>def</code>, are also objects:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>function_objects.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="function_objects.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_revenue(price, quantity):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calculate line item revenue."""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> price <span class="op">*</span> quantity</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Functions have attributes</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calculate_revenue.<span class="va">__name__</span>)   <span class="co"># "calculate_revenue"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calculate_revenue.__doc__)    <span class="co"># "Calculate line item revenue."</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Functions can be assigned to variables (you saw this in @sec-functions)</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>calc <span class="op">=</span> calculate_revenue</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calc(<span class="fl">18.00</span>, <span class="dv">10</span>))  <span class="co"># 180.0</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Functions can be stored in collections</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>operations <span class="op">=</span> {<span class="st">"revenue"</span>: calculate_revenue}</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(operations[<span class="st">"revenue"</span>](<span class="fl">18.00</span>, <span class="dv">10</span>))  <span class="co"># 180.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>__name__</code> and <code>__doc__</code> attributes are how <code>help()</code> knows what to display. They’re just data attached to the function object.</p>
+</section>
+<section id="even-types-are-objects" class="level3" data-number="17.1.3">
+<h3 data-number="17.1.3" class="anchored" data-anchor-id="even-types-are-objects"><span class="header-section-number">17.1.3</span> Even Types Are Objects</h3>
+<p>The final layer: types themselves (like <code>int</code>, <code>str</code>, <code>list</code>) are objects of type <code>type</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>types_are_objects.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="types_are_objects.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(<span class="dv">42</span>))        <span class="co"># &lt;class 'int'&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(<span class="bu">int</span>))       <span class="co"># &lt;class 'type'&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(<span class="bu">type</span>))      <span class="co"># &lt;class 'type'&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You don’t need to understand the full implications of this right now. The practical takeaway is that Python has a single, consistent model: everything is an object with a type, attributes, and methods. There are no “primitive” types hiding behind a different mechanism. This consistency is what makes Python’s tooling, <code>dir()</code>, <code>help()</code>, hover documentation in Zed, possible. They all work because every value follows the same protocol.</p>
+</section>
+</section>
+<section id="sec-dir-help" class="level2" data-number="17.2">
+<h2 data-number="17.2" class="anchored" data-anchor-id="sec-dir-help"><span class="header-section-number">17.2</span> Exploring with <code>dir()</code> and <code>help()</code></h2>
+<p>When you encounter an unfamiliar object, two built-in functions tell you everything you need to know.</p>
+<section id="dir-what-can-this-object-do" class="level3" data-number="17.2.1">
+<h3 data-number="17.2.1" class="anchored" data-anchor-id="dir-what-can-this-object-do"><span class="header-section-number">17.2.1</span> <code>dir()</code>: What Can This Object Do?</h3>
+<p><code>dir()</code> returns a list of all attributes and methods on an object:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">dir</span>(<span class="st">"hello"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>[<span class="st">'__add__'</span>, <span class="st">'__class__'</span>, <span class="st">'__contains__'</span>, ..., <span class="st">'capitalize'</span>, <span class="st">'casefold'</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'center'</span>, <span class="st">'count'</span>, <span class="st">'encode'</span>, <span class="st">'endswith'</span>, <span class="st">'expandtabs'</span>, <span class="st">'find'</span>, <span class="st">'format'</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'format_map'</span>, <span class="st">'index'</span>, <span class="st">'isalnum'</span>, <span class="st">'isalpha'</span>, ...]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The output includes both <em>dunder methods</em> (names surrounded by double underscores, like <code>__add__</code>) and regular methods. The dunder methods are Python’s internal protocols; you’ll learn about them shortly. The regular methods are the ones you’ll call directly.</p>
+<p>To filter out the dunder methods and see only the “public” interface:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> [m <span class="cf">for</span> m <span class="kw">in</span> <span class="bu">dir</span>(<span class="st">"hello"</span>) <span class="cf">if</span> <span class="kw">not</span> m.startswith(<span class="st">"_"</span>)]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>[<span class="st">'capitalize'</span>, <span class="st">'casefold'</span>, <span class="st">'center'</span>, <span class="st">'count'</span>, <span class="st">'encode'</span>, <span class="st">'endswith'</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="st">'expandtabs'</span>, <span class="st">'find'</span>, <span class="st">'format'</span>, <span class="st">'format_map'</span>, <span class="st">'index'</span>, <span class="st">'isalnum'</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> <span class="st">'isalpha'</span>, <span class="st">'isascii'</span>, <span class="st">'isdecimal'</span>, <span class="st">'isdigit'</span>, <span class="st">'isidentifier'</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> <span class="st">'islower'</span>, <span class="st">'isnumeric'</span>, <span class="st">'isprintable'</span>, <span class="st">'isspace'</span>, <span class="st">'istitle'</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> <span class="st">'isupper'</span>, <span class="st">'join'</span>, <span class="st">'ljust'</span>, <span class="st">'lower'</span>, <span class="st">'lstrip'</span>, <span class="st">'maketrans'</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a> <span class="st">'partition'</span>, <span class="st">'removeprefix'</span>, <span class="st">'removesuffix'</span>, <span class="st">'replace'</span>, <span class="st">'rfind'</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a> <span class="st">'rindex'</span>, <span class="st">'rjust'</span>, <span class="st">'rpartition'</span>, <span class="st">'rsplit'</span>, <span class="st">'rstrip'</span>, <span class="st">'split'</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a> <span class="st">'splitlines'</span>, <span class="st">'startswith'</span>, <span class="st">'strip'</span>, <span class="st">'swapcase'</span>, <span class="st">'title'</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a> <span class="st">'translate'</span>, <span class="st">'upper'</span>, <span class="st">'zfill'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>That comprehension is from <a href="14-control-flow.html#sec-comprehensions" class="quarto-xref"><span>Section 14.3</span></a>. It gives you a concise view of everything a string can do.</p>
+</section>
+<section id="help-how-does-this-work" class="level3" data-number="17.2.2">
+<h3 data-number="17.2.2" class="anchored" data-anchor-id="help-how-does-this-work"><span class="header-section-number">17.2.2</span> <code>help()</code>: How Does This Work?</h3>
+<p><code>help()</code> displays the docstring and signature for any object:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">help</span>(<span class="bu">str</span>.replace)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Help on method_descriptor:</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>replace(<span class="va">self</span>, old, new, count<span class="op">=-</span><span class="dv">1</span>, <span class="op">/</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    Return a copy <span class="cf">with</span> <span class="bu">all</span> occurrences of substring old replaced by new.</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>      count</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        Maximum number of occurrences to replace.</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span><span class="dv">1</span> (the default value) means replace <span class="bu">all</span> occurrences.</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You can call <code>help()</code> on a module, a class, a function, or even a specific method. It pulls information from docstrings, which is why writing good docstrings (<a href="15-functions.html#sec-docstrings" class="quarto-xref"><span>Section 15.2</span></a>) matters.</p>
+</section>
+<section id="the-exploration-workflow" class="level3" data-number="17.2.3">
+<h3 data-number="17.2.3" class="anchored" data-anchor-id="the-exploration-workflow"><span class="header-section-number">17.2.3</span> The Exploration Workflow</h3>
+<p>When you encounter an unfamiliar object or library, use this three-step workflow:</p>
+<ol type="1">
+<li><strong><code>type(obj)</code></strong> to understand what kind of thing you’re looking at.</li>
+<li><strong><code>dir(obj)</code></strong> (filtered) to see what methods are available.</li>
+<li><strong><code>help(obj.method)</code></strong> to learn how a specific method works.</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> datetime <span class="im">import</span> date</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> today <span class="op">=</span> date.today()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>(today)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">'datetime.date'</span><span class="op">&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> [m <span class="cf">for</span> m <span class="kw">in</span> <span class="bu">dir</span>(today) <span class="cf">if</span> <span class="kw">not</span> m.startswith(<span class="st">"_"</span>)]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>[<span class="st">'ctime'</span>, <span class="st">'day'</span>, <span class="st">'fromisocalendar'</span>, <span class="st">'fromisoformat'</span>, <span class="st">'fromordinal'</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a> <span class="st">'fromtimestamp'</span>, <span class="st">'isocalendar'</span>, <span class="st">'isoformat'</span>, <span class="st">'isoweekday'</span>, <span class="st">'max'</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a> <span class="st">'min'</span>, <span class="st">'month'</span>, <span class="st">'replace'</span>, <span class="st">'resolution'</span>, <span class="st">'strftime'</span>, <span class="st">'timetuple'</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a> <span class="st">'today'</span>, <span class="st">'toordinal'</span>, <span class="st">'weekday'</span>, <span class="st">'year'</span>]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> today.year</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="dv">2025</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> today.isoformat()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">'2025-03-24'</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">help</span>(today.strftime)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This workflow lets you learn any library, any class, any object, without ever leaving the REPL. It’s the most transferable skill in this entire module, because it works with every Python object ever created and every one that will ever be created.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Zed does this for you
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you hover over a function call or object in Zed, the editor shows you type information and docstrings. When you use dot notation, Zed’s autocomplete shows available methods. This is the <em>same information</em> that <code>dir()</code> and <code>help()</code> provide, surfaced in a graphical interface. Understanding the underlying mechanism helps you trust the editor’s suggestions and recognize when it’s showing you something useful.</p>
+</div>
+</div>
+</section>
+<section id="exercises" class="level3" data-number="17.2.4">
+<h3 data-number="17.2.4" class="anchored" data-anchor-id="exercises"><span class="header-section-number">17.2.4</span> Exercises</h3>
+<ol type="1">
+<li><p>In the REPL, use <code>dir()</code> on a list to find all methods that do NOT start with an underscore. How many are there? Pick one you haven’t used before and use <code>help()</code> to learn what it does.</p></li>
+<li><p>Given <code>price = 18.99</code>, what does <code>type(price)</code> return? Use <code>dir(price)</code> to find a method that checks whether the float is a whole number. Test it with <code>18.99</code> and <code>19.0</code>.</p></li>
+<li><p>Explain why <code>"hello".__add__(" world")</code> produces the same result as <code>"hello" + " world"</code>. What does this tell you about how Python’s <code>+</code> operator works?</p></li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Show the code:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>public_methods <span class="op">=</span> [m <span class="cf">for</span> m <span class="kw">in</span> <span class="bu">dir</span>([]) <span class="cf">if</span> <span class="kw">not</span> m.startswith(<span class="st">"_"</span>)]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(public_methods)  <span class="co"># 11 methods</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: help(list.copy) → "Return a shallow copy of the list."</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>2.</strong> <code>type(price)</code> → <code>&lt;class 'float'&gt;</code>. The method is <code>.is_integer()</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>price <span class="op">=</span> <span class="fl">18.99</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>price.is_integer()  <span class="co"># False</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>whole <span class="op">=</span> <span class="fl">19.0</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>whole.is_integer()  <span class="co"># True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>3.</strong> Python’s <code>+</code> operator calls the <code>__add__</code> dunder method on the left operand. So <code>"hello" + " world"</code> is syntactic sugar for <code>"hello".__add__(" world")</code>. Every operator in Python maps to a dunder method call.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-dunders" class="level2" data-number="17.3">
+<h2 data-number="17.3" class="anchored" data-anchor-id="sec-dunders"><span class="header-section-number">17.3</span> Dunder Methods</h2>
+<p>The names surrounded by double underscores, <code>__init__</code>, <code>__str__</code>, <code>__add__</code>, and so on, are called <em>dunder methods</em> (short for “double underscore”) or <em>magic methods</em>. They’re the protocols that make Python’s syntax work.</p>
+<section id="how-operators-become-method-calls" class="level3" data-number="17.3.1">
+<h3 data-number="17.3.1" class="anchored" data-anchor-id="how-operators-become-method-calls"><span class="header-section-number">17.3.1</span> How Operators Become Method Calls</h3>
+<p>When you write <code>2 + 3</code>, Python doesn’t have a built-in “add” instruction. Instead, it calls <code>(2).__add__(3)</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>dunder_add.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="dunder_add.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These are equivalent:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span>)              <span class="co"># 5</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((<span class="dv">2</span>).<span class="fu">__add__</span>(<span class="dv">3</span>))     <span class="co"># 5</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Same for strings:</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"hello"</span> <span class="op">+</span> <span class="st">" world"</span>)          <span class="co"># "hello world"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"hello"</span>.<span class="fu">__add__</span>(<span class="st">" world"</span>))   <span class="co"># "hello world"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Every operator in Python maps to a dunder method:</p>
+<div id="tbl-dunders" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dunders-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;17.1: Operators and their dunder methods
+</figcaption>
+<div aria-describedby="tbl-dunders-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Dunder method</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>+</code></td>
+<td><code>__add__</code></td>
+<td><code>a + b</code> → <code>a.__add__(b)</code></td>
+</tr>
+<tr class="even">
+<td><code>-</code></td>
+<td><code>__sub__</code></td>
+<td><code>a - b</code> → <code>a.__sub__(b)</code></td>
+</tr>
+<tr class="odd">
+<td><code>*</code></td>
+<td><code>__mul__</code></td>
+<td><code>a * b</code> → <code>a.__mul__(b)</code></td>
+</tr>
+<tr class="even">
+<td><code>==</code></td>
+<td><code>__eq__</code></td>
+<td><code>a == b</code> → <code>a.__eq__(b)</code></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;</code></td>
+<td><code>__lt__</code></td>
+<td><code>a &lt; b</code> → <code>a.__lt__(b)</code></td>
+</tr>
+<tr class="even">
+<td><code>len()</code></td>
+<td><code>__len__</code></td>
+<td><code>len(a)</code> → <code>a.__len__()</code></td>
+</tr>
+<tr class="odd">
+<td><code>str()</code></td>
+<td><code>__str__</code></td>
+<td><code>str(a)</code> → <code>a.__str__()</code></td>
+</tr>
+<tr class="even">
+<td><code>a[i]</code></td>
+<td><code>__getitem__</code></td>
+<td><code>a[0]</code> → <code>a.__getitem__(0)</code></td>
+</tr>
+<tr class="odd">
+<td><code>in</code></td>
+<td><code>__contains__</code></td>
+<td><code>x in a</code> → <code>a.__contains__(x)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="the-iteration-protocol" class="level3" data-number="17.3.2">
+<h3 data-number="17.3.2" class="anchored" data-anchor-id="the-iteration-protocol"><span class="header-section-number">17.3.2</span> The Iteration Protocol</h3>
+<p>When you write a <code>for</code> loop, Python calls two dunder methods behind the scenes:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>iteration_protocol.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="iteration_protocol.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># This for loop:</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(product)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Is equivalent to:</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>iterator <span class="op">=</span> products.<span class="fu">__iter__</span>()     <span class="co"># Get an iterator from the list</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        product <span class="op">=</span> iterator.<span class="fu">__next__</span>()  <span class="co"># Get the next item</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(product)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">StopIteration</span>:</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span>                          <span class="co"># No more items</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>__iter__</code> returns an iterator object, and <code>__next__</code> produces the next value. When there are no more values, <code>__next__</code> raises <code>StopIteration</code>, and the loop ends. This is the same mechanism that generators (<a href="15-functions.html#sec-generators" class="quarto-xref"><span>Section 15.6</span></a>) use: <code>yield</code> implements <code>__next__</code>, pausing the function between calls.</p>
+</section>
+<section id="why-dunders-matter" class="level3" data-number="17.3.3">
+<h3 data-number="17.3.3" class="anchored" data-anchor-id="why-dunders-matter"><span class="header-section-number">17.3.3</span> Why Dunders Matter</h3>
+<p>You rarely need to call dunder methods directly. Their value is <em>conceptual</em>: understanding them lets you predict how any object will behave with Python’s syntax. When you see a new class in a library, you can check its dunder methods to understand what operators it supports, whether it’s iterable, how it prints, and whether it can be compared.</p>
+</section>
+<section id="exercises-1" class="level3" data-number="17.3.4">
+<h3 data-number="17.3.4" class="anchored" data-anchor-id="exercises-1"><span class="header-section-number">17.3.4</span> Exercises</h3>
+<ol type="1">
+<li>Predict what each of these dunder method calls returns, then verify:</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">10</span>).<span class="fu">__add__</span>(<span class="dv">5</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">"hello"</span>.<span class="fu">__len__</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>].<span class="fu">__contains__</span>(<span class="dv">2</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">"Chai"</span>.<span class="fu">__eq__</span>(<span class="st">"Chang"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="2" type="1">
+<li><p>Given a list <code>products = ["Chai", "Chang", "Tofu"]</code>, what happens when you call <code>products.__getitem__(1)</code>? What about <code>products.__getitem__(-1)</code>? How does this relate to <code>products[1]</code> and <code>products[-1]</code>?</p></li>
+<li><p>The <code>for</code> loop uses <code>__iter__</code> and <code>__next__</code> behind the scenes. Use these methods manually to get the first two elements from the list <code>["Chai", "Chang", "Tofu"]</code> without using a <code>for</code> loop or indexing.</p></li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> <code>(10).__add__(5)</code> → <code>15</code>, <code>"hello".__len__()</code> → <code>5</code>, <code>[1, 2, 3].__contains__(2)</code> → <code>True</code>, <code>"Chai".__eq__("Chang")</code> → <code>False</code>.</p>
+<p><strong>2.</strong> <code>products.__getitem__(1)</code> → <code>"Chang"</code>, <code>products.__getitem__(-1)</code> → <code>"Tofu"</code>. These are exactly equivalent to <code>products[1]</code> and <code>products[-1]</code>. Square-bracket indexing is syntactic sugar for calling <code>__getitem__</code>.</p>
+<p><strong>3.</strong> Show the code:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>iterator <span class="op">=</span> products.<span class="fu">__iter__</span>()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>first <span class="op">=</span> iterator.<span class="fu">__next__</span>()   <span class="co"># "Chai"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>second <span class="op">=</span> iterator.<span class="fu">__next__</span>()  <span class="co"># "Chang"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-classes" class="level2" data-number="17.4">
+<h2 data-number="17.4" class="anchored" data-anchor-id="sec-classes"><span class="header-section-number">17.4</span> Classes: Just Enough</h2>
+<p>A class is a blueprint for creating objects. When you write <code>int(42)</code>, Python uses the <code>int</code> class to create an integer object. When a library creates a <code>DataFrame</code> or a <code>Connection</code>, it uses a class definition to produce an object with specific attributes and methods.</p>
+<p>The goal here is not to make you an object-oriented programming expert. It’s to give you enough understanding to <em>read</em> code that uses classes, which is most library code you’ll encounter.</p>
+<section id="defining-a-simple-class" class="level3" data-number="17.4.1">
+<h3 data-number="17.4.1" class="anchored" data-anchor-id="defining-a-simple-class"><span class="header-section-number">17.4.1</span> Defining a Simple Class</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>product_class.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="product_class.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Product:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A product from the Northwind catalog."""</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, unit_price, units_in_stock, discontinued<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Initialize a Product.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">        Args:</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">            name: The product name.</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">            unit_price: Price per unit in dollars.</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">            units_in_stock: Current inventory count.</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">            discontinued: Whether the product is no longer sold.</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.name <span class="op">=</span> name</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unit_price <span class="op">=</span> unit_price</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.units_in_stock <span class="op">=</span> units_in_stock</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.discontinued <span class="op">=</span> discontinued</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> stock_value(<span class="va">self</span>):</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Compute the total value of current inventory."""</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.unit_price <span class="op">*</span> <span class="va">self</span>.units_in_stock</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> needs_reorder(<span class="va">self</span>, reorder_level<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Check whether stock is at or below the reorder level.</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co">        Args:</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="co">            reorder_level: The threshold below which to reorder.</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns:</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co">            True if stock is low and the product is not discontinued.</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.units_in_stock <span class="op">&lt;=</span> reorder_level <span class="kw">and</span> <span class="kw">not</span> <span class="va">self</span>.discontinued</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>):</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Return a developer-friendly string representation."""</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Product('</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">', $</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>unit_price<span class="sc">:.2f}</span><span class="ss">, stock=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>units_in_stock<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>):</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Return a human-friendly string representation."""</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        status <span class="op">=</span> <span class="st">"DISCONTINUED"</span> <span class="cf">if</span> <span class="va">self</span>.discontinued <span class="cf">else</span> <span class="st">"Active"</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">) - $</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>unit_price<span class="sc">:.2f}</span><span class="ss">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s break this down:</p>
+<p><strong><code>__init__</code></strong> is the constructor. It runs when you create a new <code>Product</code> object and sets up the instance’s attributes. The <code>self</code> parameter refers to the object being created. <code>self.name = name</code> stores the <code>name</code> argument as an attribute on the new object.</p>
+<p><strong><code>self</code></strong> appears as the first parameter of every method. When you call <code>chai.stock_value()</code>, Python passes <code>chai</code> as <code>self</code> automatically. It’s how the method knows which object it’s operating on.</p>
+<p><strong><code>__repr__</code></strong> and <strong><code>__str__</code></strong> control how the object displays. <code>__repr__</code> is the developer-facing representation (shown in the REPL), and <code>__str__</code> is the user-facing representation (shown by <code>print()</code>).</p>
+</section>
+<section id="using-the-class" class="level3" data-number="17.4.2">
+<h3 data-number="17.4.2" class="anchored" data-anchor-id="using-the-class"><span class="header-section-number">17.4.2</span> Using the Class</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>using_product.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="using_product.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>chai <span class="op">=</span> Product(<span class="st">"Chai"</span>, <span class="fl">18.00</span>, <span class="dv">39</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>chang <span class="op">=</span> Product(<span class="st">"Chang"</span>, <span class="fl">19.00</span>, <span class="dv">17</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>cajun <span class="op">=</span> Product(<span class="st">"Chef Anton's Cajun Seasoning"</span>, <span class="fl">22.00</span>, <span class="dv">53</span>, discontinued<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Attribute access</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chai.name)              <span class="co"># "Chai"</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chai.unit_price)        <span class="co"># 18.0</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Method calls</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chai.stock_value())     <span class="co"># 702.0</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chang.needs_reorder())  <span class="co"># False (17 &gt; 10)</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chang.needs_reorder(reorder_level<span class="op">=</span><span class="dv">20</span>))  <span class="co"># True (17 &lt;= 20)</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co"># __str__ is called by print()</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cajun)  <span class="co"># "Chef Anton's Cajun Seasoning (DISCONTINUED) - $22.00"</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># __repr__ is shown in the REPL</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>chai  <span class="co"># Product('Chai', $18.00, stock=39)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="reading-not-architecting" class="level3" data-number="17.4.3">
+<h3 data-number="17.4.3" class="anchored" data-anchor-id="reading-not-architecting"><span class="header-section-number">17.4.3</span> Reading, Not Architecting</h3>
+<p>The purpose of this section is recognition, not mastery. When you open a library’s source code or documentation and see a class definition with <code>__init__</code>, <code>self</code>, and methods, you now understand the structure. You can see that <code>__init__</code> sets up the object, methods operate on <code>self</code>, and dunder methods control how the object interacts with Python’s syntax.</p>
+<p>In this book, you’ll mostly <em>use</em> classes that other people wrote (like <code>Path</code>, <code>DictReader</code>, and later <code>DataFrame</code> and <code>Chart</code>) rather than writing your own. When you do write a class, it’s usually a simple data container like the <code>Product</code> example above.</p>
+</section>
+</section>
+<section id="sec-type-hints" class="level2" data-number="17.5">
+<h2 data-number="17.5" class="anchored" data-anchor-id="sec-type-hints"><span class="header-section-number">17.5</span> Type Hints</h2>
+<p>Type hints are annotations that describe what types a function expects and returns. Python itself ignores them at runtime, meaning they don’t affect how your code executes. Their purpose is threefold: documenting intent, enabling editor intelligence, and catching bugs with static analysis tools.</p>
+<section id="basic-annotations" class="level3" data-number="17.5.1">
+<h3 data-number="17.5.1" class="anchored" data-anchor-id="basic-annotations"><span class="header-section-number">17.5.1</span> Basic Annotations</h3>
+<p>You annotate function parameters with <code>: type</code> and return values with <code>-&gt; type</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>basic_hints.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="basic_hints.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_revenue(unit_price: <span class="bu">float</span>, quantity: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calculate line item revenue."""</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> unit_price <span class="op">*</span> quantity</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet(name: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Create a greeting message."""</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"Hello, </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">!"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_discontinued(product: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Check whether a product is discontinued."""</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> product.get(<span class="st">"discontinued"</span>, <span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>These annotations communicate <em>intent</em>. When you see <code>quantity: int</code>, you know the function expects a whole number. When you see <code>-&gt; float</code>, you know it returns a decimal number. This is the same information that a good docstring conveys, but type hints provide it in a form that editors and tools can process automatically.</p>
+</section>
+<section id="common-types" class="level3" data-number="17.5.2">
+<h3 data-number="17.5.2" class="anchored" data-anchor-id="common-types"><span class="header-section-number">17.5.2</span> Common Types</h3>
+<p>Python’s built-in types cover most situations:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>common_types.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="common_types.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_order(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    order_id: <span class="bu">int</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    customer_name: <span class="bu">str</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    total: <span class="bu">float</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    is_shipped: <span class="bu">bool</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Process a single order. Returns nothing."""</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="collection-types" class="level3" data-number="17.5.3">
+<h3 data-number="17.5.3" class="anchored" data-anchor-id="collection-types"><span class="header-section-number">17.5.3</span> Collection Types</h3>
+<p>For collections, specify the type of their contents using square brackets:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>collection_types.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="collection_types.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_average(values: <span class="bu">list</span>[<span class="bu">float</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Compute the mean of a list of floats."""</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(values) <span class="op">/</span> <span class="bu">len</span>(values)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_category_counts(orders: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">int</span>]:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Count orders per category."""</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    counts: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">int</span>] <span class="op">=</span> {}</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> order <span class="kw">in</span> orders:</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        category <span class="op">=</span> order[<span class="st">"category"</span>]</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        counts[category] <span class="op">=</span> counts.get(category, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>list[float]</code> means “a list whose elements are floats.” <code>dict[str, int]</code> means “a dictionary with string keys and integer values.” Tuples can specify the type of each position: <code>tuple[str, float, int]</code> means “a three-element tuple of string, float, and int.”</p>
+</section>
+<section id="optional-values-with-none" class="level3" data-number="17.5.4">
+<h3 data-number="17.5.4" class="anchored" data-anchor-id="optional-values-with-none"><span class="header-section-number">17.5.4</span> Optional Values with <code>None</code></h3>
+<p>When a value might be <code>None</code>, use the union syntax with <code>|</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>optional_types.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="optional_types.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_product(products: <span class="bu">list</span>[<span class="bu">dict</span>], name: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">dict</span> <span class="op">|</span> <span class="va">None</span>:</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Find a product by name, or return None if not found.</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">        products: List of product dictionaries.</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">        name: The product name to search for.</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">        The matching product dictionary, or None if no match.</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> product[<span class="st">"name"</span>] <span class="op">==</span> name:</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> product</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>dict | None</code> means the function returns either a dictionary or <code>None</code>. This is equivalent to the older <code>Optional[dict]</code> syntax from the <code>typing</code> module, but the pipe syntax (available since Python 3.10) is cleaner.</p>
+<p>The <code>| None</code> pattern is important because it forces both you and your editor to think about the <code>None</code> case. If <code>find_product</code> might return <code>None</code>, the caller needs to handle that possibility:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>handling_none.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="handling_none.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> find_product(products, <span class="st">"Chai"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Without checking, this might fail at runtime:</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result[<span class="st">"price"</span>])  <span class="co"># TypeError if result is None!</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check first:</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> result <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(result[<span class="st">"price"</span>])  <span class="co"># Safe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="how-zed-uses-type-hints" class="level3" data-number="17.5.5">
+<h3 data-number="17.5.5" class="anchored" data-anchor-id="how-zed-uses-type-hints"><span class="header-section-number">17.5.5</span> How Zed Uses Type Hints</h3>
+<p>Type hints power the editor features you’ve been using throughout this module. When you hover over a variable in Zed, the type information comes from type hints (and type inference). When you type a dot after a variable, the autocomplete suggestions come from knowing the variable’s type. When Zed draws a red squiggle under a line, it’s often because a type checker detected a mismatch.</p>
+<p>All of this happens through a <em>language server</em> running in the background, a topic we’ll explore fully in <a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>. For now, the practical lesson is: adding type hints to your functions makes your editor significantly more helpful.</p>
+</section>
+<section id="type-hints-are-hints-not-enforcement" class="level3" data-number="17.5.6">
+<h3 data-number="17.5.6" class="anchored" data-anchor-id="type-hints-are-hints-not-enforcement"><span class="header-section-number">17.5.6</span> Type Hints Are Hints, Not Enforcement</h3>
+<p>Python ignores type hints at runtime. This code runs without error:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>runtime_ignored.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="runtime_ignored.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Python doesn't care that we're passing strings:</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(add(<span class="st">"hello"</span>, <span class="st">" world"</span>))  <span class="co"># "hello world"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To actually <em>enforce</em> type hints, you need a static type checker like basedpyright, which analyzes your code without running it and reports type mismatches as errors. You’ll set this up in <a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>. For now, write type hints as documentation and let Zed’s built-in type checking give you early warnings.</p>
+</section>
+<section id="exercises-2" class="level3" data-number="17.5.7">
+<h3 data-number="17.5.7" class="anchored" data-anchor-id="exercises-2"><span class="header-section-number">17.5.7</span> Exercises</h3>
+<ol type="1">
+<li>Add type hints to this function signature:</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_expensive(products, threshold):</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [p <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p[<span class="st">"price"</span>] <span class="op">&gt;</span> threshold]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The function takes a list of dictionaries and a float, and returns a list of dictionaries.</p>
+<ol start="2" type="1">
+<li><p>What does <code>dict | None</code> mean as a return type? Write a function <code>get_product(name: str, products: list[dict]) -&gt; dict | None</code> that searches for a product by name and returns <code>None</code> if not found.</p></li>
+<li><p>Explain why <code>def add(a: int, b: int) -&gt; int</code> followed by <code>add("hello", " world")</code> runs without error. How would you catch this mistake before runtime?</p></li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Show the code:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_expensive(products: <span class="bu">list</span>[<span class="bu">dict</span>], threshold: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [p <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p[<span class="st">"price"</span>] <span class="op">&gt;</span> threshold]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>2.</strong> <code>dict | None</code> means the function returns either a dictionary or <code>None</code>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_product(name: <span class="bu">str</span>, products: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">dict</span> <span class="op">|</span> <span class="va">None</span>:</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Find a product by name.</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">        name: The product name to search for.</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">        products: List of product dictionaries.</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">        The matching product, or None if not found.</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> products:</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> p[<span class="st">"name"</span>] <span class="op">==</span> name:</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> p</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>3.</strong> Python ignores type hints at runtime, so passing strings to a function annotated with <code>int</code> produces no error. To catch the mismatch, use a static type checker like basedpyright, which analyzes your code without running it and reports type errors in your editor.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="adding-type-hints-to-existing-code" class="level3" data-number="17.5.8">
+<h3 data-number="17.5.8" class="anchored" data-anchor-id="adding-type-hints-to-existing-code"><span class="header-section-number">17.5.8</span> Adding Type Hints to Existing Code</h3>
+<p>The best place to start adding type hints is function signatures. They provide the most value for the least effort, because they document the contract between a function and its callers:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>typed_northwind_utils.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="typed_northwind_utils.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""Utility functions for Northwind order processing."""</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_by_category(</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    orders: <span class="bu">list</span>[<span class="bu">dict</span>],</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    category: <span class="bu">str</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Filter orders to a specific category."""</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [o <span class="cf">for</span> o <span class="kw">in</span> orders <span class="cf">if</span> o[<span class="st">"category"</span>] <span class="op">==</span> category]</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_revenue(orders: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Compute total revenue from a list of orders."""</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(o[<span class="st">"unit_price"</span>] <span class="op">*</span> o[<span class="st">"quantity"</span>] <span class="cf">for</span> o <span class="kw">in</span> orders)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_currency(amount: <span class="bu">float</span>, symbol: <span class="bu">str</span> <span class="op">=</span> <span class="st">"$"</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Format a number as currency."""</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>symbol<span class="sc">}{</span>amount<span class="sc">:,.2f}</span><span class="ss">"</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> revenue_by_category(orders: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>]:</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Compute revenue grouped by category."""</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    totals: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>] <span class="op">=</span> {}</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> order <span class="kw">in</span> orders:</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>        category: <span class="bu">str</span> <span class="op">=</span> order[<span class="st">"category"</span>]</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>        revenue: <span class="bu">float</span> <span class="op">=</span> order[<span class="st">"unit_price"</span>] <span class="op">*</span> order[<span class="st">"quantity"</span>]</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>        totals[category] <span class="op">=</span> totals.get(category, <span class="fl">0.0</span>) <span class="op">+</span> revenue</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> totals</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that the type hints match the Google-style docstrings you wrote in <a href="15-functions.html#sec-docstrings" class="quarto-xref"><span>Section 15.2</span></a>. They’re complementary: the docstring explains <em>what</em> and <em>why</em>, while the type hint specifies the <em>exact types</em> in a machine-readable format.</p>
+</section>
+</section>
+<section id="reading-documentation-like-a-professional" class="level2" data-number="17.6">
+<h2 data-number="17.6" class="anchored" data-anchor-id="reading-documentation-like-a-professional"><span class="header-section-number">17.6</span> Reading Documentation Like a Professional</h2>
+<p>The skills from this chapter, understanding the object model, using <code>dir()</code> and <code>help()</code>, and reading type hints, combine into a professional superpower: the ability to learn any Python library independently.</p>
+<section id="anatomy-of-library-documentation" class="level3" data-number="17.6.1">
+<h3 data-number="17.6.1" class="anchored" data-anchor-id="anatomy-of-library-documentation"><span class="header-section-number">17.6.1</span> Anatomy of Library Documentation</h3>
+<p>Most Python libraries structure their documentation with these sections:</p>
+<p><strong>Getting Started / Quickstart</strong> shows you how to install the library and run a basic example. Start here.</p>
+<p><strong>Tutorials / How-To Guides</strong> walk through common tasks step by step. Read these when you have a specific goal.</p>
+<p><strong>API Reference</strong> lists every class, function, and method with its signature, parameters, and return type. Read this when you need precise details about a specific feature.</p>
+<p><strong>Conceptual / Explanation</strong> covers the design philosophy and architecture. Read this when you want to understand <em>why</em> the library works the way it does.</p>
+</section>
+<section id="reading-a-function-signature" class="level3" data-number="17.6.2">
+<h3 data-number="17.6.2" class="anchored" data-anchor-id="reading-a-function-signature"><span class="header-section-number">17.6.2</span> Reading a Function Signature</h3>
+<p>When you encounter a function in documentation, you can now read its full signature:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>reading_signature.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="reading_signature.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_csv(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    filepath: <span class="bu">str</span> <span class="op">|</span> Path,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    delimiter: <span class="bu">str</span> <span class="op">=</span> <span class="st">","</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    has_header: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">"utf-8"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    skip_rows: <span class="bu">int</span> <span class="op">=</span> <span class="dv">0</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>]]:</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>From this signature alone, you know: the function takes a file path (string or <code>Path</code> object), several optional parameters with sensible defaults, and returns a list of dictionaries mapping string keys to string values. You can use it with just the file path and let the defaults handle everything else, or override specific options as needed.</p>
+</section>
+<section id="practice-the-exploration-loop" class="level3" data-number="17.6.3">
+<h3 data-number="17.6.3" class="anchored" data-anchor-id="practice-the-exploration-loop"><span class="header-section-number">17.6.3</span> Practice: The Exploration Loop</h3>
+<p>The next time you encounter an unfamiliar library, practice this cycle:</p>
+<ol type="1">
+<li>Read the quickstart to get a working example.</li>
+<li>Use <code>type()</code> on the objects it creates.</li>
+<li>Use <code>dir()</code> to see what methods are available.</li>
+<li>Use <code>help()</code> on the methods that look relevant.</li>
+<li>Experiment in the REPL.</li>
+<li>Return to the documentation for deeper understanding.</li>
+</ol>
+<p>This cycle, not memorizing APIs, is how professional developers learn new tools. Libraries change, APIs evolve, new tools emerge. The ability to explore and learn independently is the skill that outlasts any specific technology.</p>
+</section>
+</section>
+<section id="putting-it-together-a-typed-northwind-module" class="level2" data-number="17.7">
+<h2 data-number="17.7" class="anchored" data-anchor-id="putting-it-together-a-typed-northwind-module"><span class="header-section-number">17.7</span> Putting It Together: A Typed Northwind Module</h2>
+<p>Let’s build a complete module that uses classes, type hints, and proper documentation to model Northwind data:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>northwind.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="northwind.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""Typed data models and utilities for Northwind order processing.</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">This module defines Product and Order classes for representing</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">Northwind catalog and order data, along with utility functions</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">for loading data from CSV files and computing business metrics.</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Product:</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A product from the Northwind catalog."""</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>        product_id: <span class="bu">int</span>,</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>        name: <span class="bu">str</span>,</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>        category: <span class="bu">str</span>,</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>        unit_price: <span class="bu">float</span>,</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>        units_in_stock: <span class="bu">int</span>,</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>        discontinued: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.product_id <span class="op">=</span> product_id</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.name <span class="op">=</span> name</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.category <span class="op">=</span> category</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unit_price <span class="op">=</span> unit_price</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.units_in_stock <span class="op">=</span> units_in_stock</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.discontinued <span class="op">=</span> discontinued</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> stock_value(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Compute the total value of current inventory."""</span></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.unit_price <span class="op">*</span> <span class="va">self</span>.units_in_stock</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> is_available(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Check whether the product can be ordered."""</span></span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">not</span> <span class="va">self</span>.discontinued <span class="kw">and</span> <span class="va">self</span>.units_in_stock <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (</span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"Product(</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>product_id<span class="sc">}</span><span class="ss">, '</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">', "</span></span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"$</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>unit_price<span class="sc">:.2f}</span><span class="ss">, stock=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>units_in_stock<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>        status <span class="op">=</span> <span class="st">"DISCONTINUED"</span> <span class="cf">if</span> <span class="va">self</span>.discontinued <span class="cf">else</span> <span class="st">"Active"</span></span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">) - $</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>unit_price<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OrderLine:</span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A single line item within an order."""</span></span>
+<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a>        product: Product,</span>
+<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a>        quantity: <span class="bu">int</span>,</span>
+<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a>        unit_price: <span class="bu">float</span>,</span>
+<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a>        discount: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span>,</span>
+<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.product <span class="op">=</span> product</span>
+<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.quantity <span class="op">=</span> quantity</span>
+<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unit_price <span class="op">=</span> unit_price</span>
+<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.discount <span class="op">=</span> discount</span>
+<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> revenue(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Compute the revenue for this line item after discount."""</span></span>
+<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.unit_price <span class="op">*</span> <span class="va">self</span>.quantity <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="va">self</span>.discount)</span>
+<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-69"><a href="#cb28-69" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (</span>
+<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"OrderLine('</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>product<span class="sc">.</span>name<span class="sc">}</span><span class="ss">', "</span></span>
+<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"qty=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>quantity<span class="sc">}</span><span class="ss">, $</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>unit_price<span class="sc">:.2f}</span><span class="ss">)"</span></span>
+<span id="cb28-73"><a href="#cb28-73" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb28-74"><a href="#cb28-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-75"><a href="#cb28-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-76"><a href="#cb28-76" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_categories(filepath: Path) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>]:</span>
+<span id="cb28-77"><a href="#cb28-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Load a categoryID-to-name lookup from a CSV file.</span></span>
+<span id="cb28-78"><a href="#cb28-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-79"><a href="#cb28-79" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb28-80"><a href="#cb28-80" aria-hidden="true" tabindex="-1"></a><span class="co">        filepath: Path to the categories CSV file.</span></span>
+<span id="cb28-81"><a href="#cb28-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-82"><a href="#cb28-82" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb28-83"><a href="#cb28-83" aria-hidden="true" tabindex="-1"></a><span class="co">        A dictionary mapping categoryID strings to category names.</span></span>
+<span id="cb28-84"><a href="#cb28-84" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb28-85"><a href="#cb28-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filepath) <span class="im">as</span> f:</span>
+<span id="cb28-86"><a href="#cb28-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {row[<span class="st">"categoryID"</span>]: row[<span class="st">"categoryName"</span>] <span class="cf">for</span> row <span class="kw">in</span> csv.DictReader(f)}</span>
+<span id="cb28-87"><a href="#cb28-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-88"><a href="#cb28-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-89"><a href="#cb28-89" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_products(filepath: Path, categories: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[Product]:</span>
+<span id="cb28-90"><a href="#cb28-90" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Load products from a CSV file.</span></span>
+<span id="cb28-91"><a href="#cb28-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-92"><a href="#cb28-92" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb28-93"><a href="#cb28-93" aria-hidden="true" tabindex="-1"></a><span class="co">        filepath: Path to the products CSV file.</span></span>
+<span id="cb28-94"><a href="#cb28-94" aria-hidden="true" tabindex="-1"></a><span class="co">        categories: Dictionary mapping categoryID to category name,</span></span>
+<span id="cb28-95"><a href="#cb28-95" aria-hidden="true" tabindex="-1"></a><span class="co">            as returned by load_categories().</span></span>
+<span id="cb28-96"><a href="#cb28-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-97"><a href="#cb28-97" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb28-98"><a href="#cb28-98" aria-hidden="true" tabindex="-1"></a><span class="co">        A list of Product objects.</span></span>
+<span id="cb28-99"><a href="#cb28-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-100"><a href="#cb28-100" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
+<span id="cb28-101"><a href="#cb28-101" aria-hidden="true" tabindex="-1"></a><span class="co">        FileNotFoundError: If the file does not exist.</span></span>
+<span id="cb28-102"><a href="#cb28-102" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb28-103"><a href="#cb28-103" aria-hidden="true" tabindex="-1"></a>    products: <span class="bu">list</span>[Product] <span class="op">=</span> []</span>
+<span id="cb28-104"><a href="#cb28-104" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filepath) <span class="im">as</span> f:</span>
+<span id="cb28-105"><a href="#cb28-105" aria-hidden="true" tabindex="-1"></a>        reader <span class="op">=</span> csv.DictReader(f)</span>
+<span id="cb28-106"><a href="#cb28-106" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> row <span class="kw">in</span> reader:</span>
+<span id="cb28-107"><a href="#cb28-107" aria-hidden="true" tabindex="-1"></a>            products.append(</span>
+<span id="cb28-108"><a href="#cb28-108" aria-hidden="true" tabindex="-1"></a>                Product(</span>
+<span id="cb28-109"><a href="#cb28-109" aria-hidden="true" tabindex="-1"></a>                    product_id<span class="op">=</span><span class="bu">int</span>(row[<span class="st">"productID"</span>]),</span>
+<span id="cb28-110"><a href="#cb28-110" aria-hidden="true" tabindex="-1"></a>                    name<span class="op">=</span>row[<span class="st">"productName"</span>],</span>
+<span id="cb28-111"><a href="#cb28-111" aria-hidden="true" tabindex="-1"></a>                    category<span class="op">=</span>categories.get(row[<span class="st">"categoryID"</span>], <span class="st">"Unknown"</span>),</span>
+<span id="cb28-112"><a href="#cb28-112" aria-hidden="true" tabindex="-1"></a>                    unit_price<span class="op">=</span><span class="bu">float</span>(row[<span class="st">"unitPrice"</span>]),</span>
+<span id="cb28-113"><a href="#cb28-113" aria-hidden="true" tabindex="-1"></a>                    units_in_stock<span class="op">=</span><span class="bu">int</span>(row[<span class="st">"unitsInStock"</span>]),</span>
+<span id="cb28-114"><a href="#cb28-114" aria-hidden="true" tabindex="-1"></a>                    discontinued<span class="op">=</span><span class="bu">bool</span>(<span class="bu">int</span>(row[<span class="st">"discontinued"</span>])),</span>
+<span id="cb28-115"><a href="#cb28-115" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb28-116"><a href="#cb28-116" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb28-117"><a href="#cb28-117" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> products</span>
+<span id="cb28-118"><a href="#cb28-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-119"><a href="#cb28-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-120"><a href="#cb28-120" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_available(products: <span class="bu">list</span>[Product]) <span class="op">-&gt;</span> <span class="bu">list</span>[Product]:</span>
+<span id="cb28-121"><a href="#cb28-121" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return only products that are available for ordering.</span></span>
+<span id="cb28-122"><a href="#cb28-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-123"><a href="#cb28-123" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb28-124"><a href="#cb28-124" aria-hidden="true" tabindex="-1"></a><span class="co">        products: List of Product objects to filter.</span></span>
+<span id="cb28-125"><a href="#cb28-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-126"><a href="#cb28-126" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb28-127"><a href="#cb28-127" aria-hidden="true" tabindex="-1"></a><span class="co">        A new list containing only available products.</span></span>
+<span id="cb28-128"><a href="#cb28-128" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb28-129"><a href="#cb28-129" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [p <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p.is_available()]</span>
+<span id="cb28-130"><a href="#cb28-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-131"><a href="#cb28-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-132"><a href="#cb28-132" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> top_by_stock_value(</span>
+<span id="cb28-133"><a href="#cb28-133" aria-hidden="true" tabindex="-1"></a>    products: <span class="bu">list</span>[Product],</span>
+<span id="cb28-134"><a href="#cb28-134" aria-hidden="true" tabindex="-1"></a>    n: <span class="bu">int</span> <span class="op">=</span> <span class="dv">5</span>,</span>
+<span id="cb28-135"><a href="#cb28-135" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="bu">list</span>[Product]:</span>
+<span id="cb28-136"><a href="#cb28-136" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return the top N products by inventory value.</span></span>
+<span id="cb28-137"><a href="#cb28-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-138"><a href="#cb28-138" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb28-139"><a href="#cb28-139" aria-hidden="true" tabindex="-1"></a><span class="co">        products: List of Product objects.</span></span>
+<span id="cb28-140"><a href="#cb28-140" aria-hidden="true" tabindex="-1"></a><span class="co">        n: Number of products to return. Defaults to 5.</span></span>
+<span id="cb28-141"><a href="#cb28-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-142"><a href="#cb28-142" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb28-143"><a href="#cb28-143" aria-hidden="true" tabindex="-1"></a><span class="co">        A list of the top N products, sorted by stock value descending.</span></span>
+<span id="cb28-144"><a href="#cb28-144" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb28-145"><a href="#cb28-145" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(products, key<span class="op">=</span><span class="kw">lambda</span> p: p.stock_value(), reverse<span class="op">=</span><span class="va">True</span>)[:n]</span>
+<span id="cb28-146"><a href="#cb28-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-147"><a href="#cb28-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-148"><a href="#cb28-148" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb28-149"><a href="#cb28-149" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Demo: load and analyze products</span></span>
+<span id="cb28-150"><a href="#cb28-150" aria-hidden="true" tabindex="-1"></a>    data_dir <span class="op">=</span> Path(<span class="st">"data"</span>)</span>
+<span id="cb28-151"><a href="#cb28-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-152"><a href="#cb28-152" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb28-153"><a href="#cb28-153" aria-hidden="true" tabindex="-1"></a>        categories <span class="op">=</span> load_categories(data_dir <span class="op">/</span> <span class="st">"categories.csv"</span>)</span>
+<span id="cb28-154"><a href="#cb28-154" aria-hidden="true" tabindex="-1"></a>        products <span class="op">=</span> load_products(data_dir <span class="op">/</span> <span class="st">"products.csv"</span>, categories)</span>
+<span id="cb28-155"><a href="#cb28-155" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">FileNotFoundError</span> <span class="im">as</span> e:</span>
+<span id="cb28-156"><a href="#cb28-156" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">. Using sample data."</span>)</span>
+<span id="cb28-157"><a href="#cb28-157" aria-hidden="true" tabindex="-1"></a>        products <span class="op">=</span> [</span>
+<span id="cb28-158"><a href="#cb28-158" aria-hidden="true" tabindex="-1"></a>            Product(<span class="dv">1</span>, <span class="st">"Chai"</span>, <span class="st">"Beverages"</span>, <span class="fl">18.00</span>, <span class="dv">29</span>),</span>
+<span id="cb28-159"><a href="#cb28-159" aria-hidden="true" tabindex="-1"></a>            Product(<span class="dv">2</span>, <span class="st">"Chang"</span>, <span class="st">"Beverages"</span>, <span class="fl">19.00</span>, <span class="dv">68</span>),</span>
+<span id="cb28-160"><a href="#cb28-160" aria-hidden="true" tabindex="-1"></a>            Product(<span class="dv">3</span>, <span class="st">"Aniseed Syrup"</span>, <span class="st">"Condiments"</span>, <span class="fl">10.00</span>, <span class="dv">79</span>),</span>
+<span id="cb28-161"><a href="#cb28-161" aria-hidden="true" tabindex="-1"></a>            Product(<span class="dv">5</span>, <span class="st">"Chef Anton's Gumbo Mix"</span>, <span class="st">"Condiments"</span>, <span class="fl">21.35</span>, <span class="dv">45</span>, <span class="va">True</span>),</span>
+<span id="cb28-162"><a href="#cb28-162" aria-hidden="true" tabindex="-1"></a>            Product(<span class="dv">14</span>, <span class="st">"Tofu"</span>, <span class="st">"Produce"</span>, <span class="fl">23.25</span>, <span class="dv">77</span>),</span>
+<span id="cb28-163"><a href="#cb28-163" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb28-164"><a href="#cb28-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-165"><a href="#cb28-165" aria-hidden="true" tabindex="-1"></a>    available <span class="op">=</span> filter_available(products)</span>
+<span id="cb28-166"><a href="#cb28-166" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Available products: </span><span class="sc">{</span><span class="bu">len</span>(available)<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(products)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb28-167"><a href="#cb28-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-168"><a href="#cb28-168" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Top 3 by stock value:"</span>)</span>
+<span id="cb28-169"><a href="#cb28-169" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> product <span class="kw">in</span> top_by_stock_value(available, n<span class="op">=</span><span class="dv">3</span>):</span>
+<span id="cb28-170"><a href="#cb28-170" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>product<span class="sc">.</span>name<span class="sc">:&lt;30}</span><span class="ss"> $</span><span class="sc">{</span>product<span class="sc">.</span>stock_value()<span class="sc">:&gt;10,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This module demonstrates every concept from Unit 3 working together: classes with typed <code>__init__</code>, methods with docstrings and type hints, comprehensions for filtering, <code>sorted()</code> with a <code>key</code> function, file I/O with context managers, error handling with <code>try</code>/<code>except</code>, and the <code>if __name__ == "__main__"</code> pattern for dual use as module and script.</p>
+</section>
+<section id="exercises-3" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises-3">Exercises</h2>
+<section id="object-exploration" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="object-exploration">Object Exploration</h3>
+<ol type="1">
+<li><p>Use <code>dir()</code> and <code>help()</code> in the REPL to explore <code>datetime.date</code> objects <em>without</em> looking at online documentation. Answer these questions: How do you get the day of the week? How do you format a date as a string? What is the earliest representable date?</p></li>
+<li><p>Use <code>dir()</code> on a list object and find three methods you haven’t used before. Read their <code>help()</code> text and write a short example for each.</p></li>
+<li><p>Explore the <code>pathlib.Path</code> class. What dunder methods does it implement? Can you explain why <code>Path("data") / "orders.csv"</code> works? (Hint: which dunder method does <code>/</code> correspond to?)</p></li>
+</ol>
+</section>
+<section id="type-hints-practice" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="type-hints-practice">Type Hints Practice</h3>
+<ol type="1">
+<li><p>Add type hints to every function in your <code>northwind_utils.py</code> module from <a href="15-functions.html" class="quarto-xref"><span>Chapter 15</span></a>. Include parameter types, return types, and type annotations for local variables where they improve clarity.</p></li>
+<li><p>Write a function <code>parse_product_row(row: dict[str, str]) -&gt; Product</code> that takes a raw CSV row (all string values) and returns a <code>Product</code> object with properly typed fields. Include type hints and a Google-style docstring.</p></li>
+</ol>
+</section>
+<section id="class-building" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="class-building">Class Building</h3>
+<ol type="1">
+<li><p>Write an <code>Order</code> class that contains a list of <code>OrderLine</code> objects and provides methods for <code>total_revenue()</code>, <code>line_count()</code>, and a <code>summary()</code> method that returns a formatted string. Include <code>__repr__</code> and <code>__str__</code> methods.</p></li>
+<li><p>Add a <code>__len__</code> method to your <code>Order</code> class so that <code>len(order)</code> returns the number of line items.</p></li>
+</ol>
+</section>
+<section id="documentation-scavenger-hunt" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="documentation-scavenger-hunt">Documentation Scavenger Hunt</h3>
+<p>Using only <code>dir()</code>, <code>help()</code>, and the official Python documentation, answer these questions:</p>
+<ol type="1">
+<li>What does <code>str.partition()</code> do? When would you use it instead of <code>str.split()</code>?</li>
+<li>What is <code>dict.setdefault()</code>? How could it simplify the aggregation loop in <code>revenue_by_category</code>?</li>
+<li>What is <code>collections.Counter</code>? How could it simplify counting operations?</li>
+</ol>
+</section>
+</section>
+<section id="summary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
+<p>This chapter revealed the unifying principle of Python: everything is an object. Integers, strings, lists, functions, modules, and even types themselves are objects with identities, types, attributes, and methods. This consistency is what makes <code>dir()</code> and <code>help()</code> work universally and what powers Zed’s editor intelligence.</p>
+<p>Dunder methods are the hidden protocols that translate Python syntax into method calls. When you write <code>a + b</code>, Python calls <code>a.__add__(b)</code>. When you write <code>for x in collection</code>, Python calls <code>collection.__iter__()</code> and <code>.__next__()</code>. Understanding these protocols lets you predict how any object will behave.</p>
+<p>Classes define blueprints for creating objects. You don’t need to become an object-oriented programming expert, but you do need to read class definitions fluently, because most libraries are built from them. The <code>__init__</code> method sets up new objects, <code>self</code> refers to the current instance, and methods operate on the instance’s data.</p>
+<p>Type hints annotate your code with the types you intend, enabling better documentation, stronger editor support, and static type checking. They’re the bridge to <a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>, where tools like basedpyright will enforce them and catch bugs before your code even runs.</p>
+<p>The most transferable skill from this chapter is the <code>type()</code> → <code>dir()</code> → <code>help()</code> exploration loop. Libraries change, tools evolve, and new technologies emerge constantly. The ability to sit down with an unfamiliar object and figure out what it does, without a tutorial, without a video, just by asking the object itself, is the skill that will serve you longest.</p>
+</section>
+<section id="glossary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="glossary">Glossary</h2>
+<dl>
+<dt>attribute</dt>
+<dd>
+Data attached to an object, accessed with dot notation. Example: <code>product.name</code>.
+</dd>
+<dt>class</dt>
+<dd>
+A blueprint for creating objects. Defines the attributes and methods that instances of the class will have.
+</dd>
+<dt>constructor</dt>
+<dd>
+The <code>__init__</code> method of a class, called automatically when a new instance is created.
+</dd>
+<dt><code>dir()</code></dt>
+<dd>
+A built-in function that returns a list of all attributes and methods on an object.
+</dd>
+<dt>dunder method</dt>
+<dd>
+A method with double underscores on both sides of its name (e.g., <code>__init__</code>, <code>__add__</code>, <code>__str__</code>). Dunder methods implement Python’s protocols for operators, iteration, string representation, and more.
+</dd>
+<dt><code>help()</code></dt>
+<dd>
+A built-in function that displays the docstring and signature of an object, function, or method.
+</dd>
+<dt>identity</dt>
+<dd>
+The unique identifier of an object, returned by <code>id()</code>. Two variables with the same identity point to the same object in memory.
+</dd>
+<dt>instance</dt>
+<dd>
+An individual object created from a class. <code>chai = Product("Chai", 18.00, 39)</code> creates an instance of the <code>Product</code> class.
+</dd>
+<dt>method</dt>
+<dd>
+A function attached to an object, called with dot notation. Methods receive the object as their first argument (<code>self</code>).
+</dd>
+<dt>object</dt>
+<dd>
+A value with an identity, a type, and attributes. In Python, every value is an object.
+</dd>
+<dt><code>self</code></dt>
+<dd>
+The conventional name for the first parameter of a method, referring to the instance the method was called on.
+</dd>
+<dt>static type checker</dt>
+<dd>
+A tool that analyzes type hints in source code without running it, reporting type mismatches as errors. Examples: basedpyright, mypy.
+</dd>
+<dt>type hint</dt>
+<dd>
+An annotation on a variable, parameter, or return value that specifies its expected type. Ignored by Python at runtime; used by editors and static analyzers.
+</dd>
+<dt>union type</dt>
+<dd>
+A type annotation indicating a value can be one of multiple types. Written with <code>|</code>: <code>str | None</code> means “a string or None.”
+</dd>
+</dl>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ozanozbeker\.com\/cw4e\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/16-file-io.html" class="pagination-link" aria-label="Working with Files">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Working with Files</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../unit-4-data-products.html" class="pagination-link" aria-label="Building Data Products">
+        <span class="nav-page-text">Building Data Products</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/17-objects.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>14&nbsp; Control Flow – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/15-functions.html" rel="next">
+<link href="../chapters/13-collections.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-3-python.html">Python</a></li><li class="breadcrumb-item"><a href="../chapters/14-control-flow.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequisites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-1-toolkit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Professional Toolkit</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Professional Documents with Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-2-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data with SQL</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-3-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-python-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Collections</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-control-flow.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-file-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Working with Files</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-4-data-products.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building Data Products</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-computational-documents.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-typer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">CLI Tools with Typer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Zed</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/northwind.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Northwind Dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/duckdb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">DuckDB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/ruff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Ruff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/basedpyright.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">K</span>&nbsp; <span class="chapter-title">basedpyright</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#conditionals" id="toc-conditionals" class="nav-link active" data-scroll-target="#conditionals"><span class="header-section-number">14.1</span> Conditionals</a>
+  <ul class="collapse">
+  <li><a href="#if-elif-else" id="toc-if-elif-else" class="nav-link" data-scroll-target="#if-elif-else"><span class="header-section-number">14.1.1</span> <code>if</code> / <code>elif</code> / <code>else</code></a></li>
+  <li><a href="#conditional-expressions-ternary" id="toc-conditional-expressions-ternary" class="nav-link" data-scroll-target="#conditional-expressions-ternary"><span class="header-section-number">14.1.2</span> Conditional Expressions (Ternary)</a></li>
+  <li><a href="#structural-pattern-matching" id="toc-structural-pattern-matching" class="nav-link" data-scroll-target="#structural-pattern-matching"><span class="header-section-number">14.1.3</span> Structural Pattern Matching</a></li>
+  </ul></li>
+  <li><a href="#loops" id="toc-loops" class="nav-link" data-scroll-target="#loops"><span class="header-section-number">14.2</span> Loops</a>
+  <ul class="collapse">
+  <li><a href="#for-loops" id="toc-for-loops" class="nav-link" data-scroll-target="#for-loops"><span class="header-section-number">14.2.1</span> <code>for</code> Loops</a></li>
+  <li><a href="#range-for-numeric-iteration" id="toc-range-for-numeric-iteration" class="nav-link" data-scroll-target="#range-for-numeric-iteration"><span class="header-section-number">14.2.2</span> <code>range()</code> for Numeric Iteration</a></li>
+  <li><a href="#enumerate-for-index-value" id="toc-enumerate-for-index-value" class="nav-link" data-scroll-target="#enumerate-for-index-value"><span class="header-section-number">14.2.3</span> <code>enumerate()</code> for Index + Value</a></li>
+  <li><a href="#zip-for-parallel-iteration" id="toc-zip-for-parallel-iteration" class="nav-link" data-scroll-target="#zip-for-parallel-iteration"><span class="header-section-number">14.2.4</span> <code>zip()</code> for Parallel Iteration</a></li>
+  <li><a href="#while-loops" id="toc-while-loops" class="nav-link" data-scroll-target="#while-loops"><span class="header-section-number">14.2.5</span> <code>while</code> Loops</a></li>
+  <li><a href="#break-and-continue" id="toc-break-and-continue" class="nav-link" data-scroll-target="#break-and-continue"><span class="header-section-number">14.2.6</span> <code>break</code> and <code>continue</code></a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">14.2.7</span> Exercises</a></li>
+  </ul></li>
+  <li><a href="#sec-comprehensions" id="toc-sec-comprehensions" class="nav-link" data-scroll-target="#sec-comprehensions"><span class="header-section-number">14.3</span> Comprehensions</a>
+  <ul class="collapse">
+  <li><a href="#from-loop-to-comprehension" id="toc-from-loop-to-comprehension" class="nav-link" data-scroll-target="#from-loop-to-comprehension"><span class="header-section-number">14.3.1</span> From Loop to Comprehension</a></li>
+  <li><a href="#adding-a-filter" id="toc-adding-a-filter" class="nav-link" data-scroll-target="#adding-a-filter"><span class="header-section-number">14.3.2</span> Adding a Filter</a></li>
+  <li><a href="#dictionary-and-set-comprehensions" id="toc-dictionary-and-set-comprehensions" class="nav-link" data-scroll-target="#dictionary-and-set-comprehensions"><span class="header-section-number">14.3.3</span> Dictionary and Set Comprehensions</a></li>
+  <li><a href="#a-practical-example" id="toc-a-practical-example" class="nav-link" data-scroll-target="#a-practical-example"><span class="header-section-number">14.3.4</span> A Practical Example</a></li>
+  <li><a href="#when-not-to-use-comprehensions" id="toc-when-not-to-use-comprehensions" class="nav-link" data-scroll-target="#when-not-to-use-comprehensions"><span class="header-section-number">14.3.5</span> When Not to Use Comprehensions</a></li>
+  </ul></li>
+  <li><a href="#putting-it-together-northwind-order-processing" id="toc-putting-it-together-northwind-order-processing" class="nav-link" data-scroll-target="#putting-it-together-northwind-order-processing"><span class="header-section-number">14.4</span> Putting It Together: Northwind Order Processing</a></li>
+  <li><a href="#exercises-1" id="toc-exercises-1" class="nav-link" data-scroll-target="#exercises-1">Exercises</a>
+  <ul class="collapse">
+  <li><a href="#collection-operations" id="toc-collection-operations" class="nav-link" data-scroll-target="#collection-operations">Collection Operations</a></li>
+  <li><a href="#loop-practice" id="toc-loop-practice" class="nav-link" data-scroll-target="#loop-practice">Loop Practice</a></li>
+  <li><a href="#comprehension-practice" id="toc-comprehension-practice" class="nav-link" data-scroll-target="#comprehension-practice">Comprehension Practice</a></li>
+  <li><a href="#northwind-category-analysis" id="toc-northwind-category-analysis" class="nav-link" data-scroll-target="#northwind-category-analysis">Northwind Category Analysis</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/14-control-flow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://ozanozbeker.com/cw4e/playground/"><i class="bi bi-play-circle"></i>SQL &amp; Python Playground</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-3-python.html">Python</a></li><li class="breadcrumb-item"><a href="../chapters/14-control-flow.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-control-flow" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In <a href="13-collections.html" class="quarto-xref"><span>Chapter 13</span></a>, you learned to store data in lists, dictionaries, and other structures. This chapter teaches you how to make decisions about that data and process it systematically. Control flow gives you two fundamental tools: conditionals (<code>if</code> statements) for making decisions, and loops (<code>for</code> and <code>while</code> loops) for repeating actions. Together, they let you write programs that respond to data and process collections efficiently.</p>
+<p>This chapter builds toward <em>comprehensions</em>, a distinctly Pythonic way of transforming collections that you’ll use constantly for the rest of the book.</p>
+<section id="conditionals" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="conditionals"><span class="header-section-number">14.1</span> Conditionals</h2>
+<p>Conditionals let your code make decisions. Python’s <code>if</code> statement evaluates a condition and executes a block of code only if the condition is truthy:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>if_statement.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="if_statement.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>units_in_stock <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>reorder_level <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> units_in_stock <span class="op">&lt;=</span> reorder_level:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Stock is low. Time to reorder."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that the block under <code>if</code> is indented. Python uses indentation to define code blocks, not braces or keywords like <code>end</code>. This means indentation isn’t just a style choice, it’s part of the language’s syntax. The standard is four spaces per level.</p>
+<section id="if-elif-else" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="if-elif-else"><span class="header-section-number">14.1.1</span> <code>if</code> / <code>elif</code> / <code>else</code></h3>
+<p>For multiple branches, use <code>elif</code> (short for “else if”) and <code>else</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>elif.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="elif.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> <span class="dv">78</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> score <span class="op">&gt;=</span> <span class="dv">90</span>:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    grade <span class="op">=</span> <span class="st">"A"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> score <span class="op">&gt;=</span> <span class="dv">80</span>:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    grade <span class="op">=</span> <span class="st">"B"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> score <span class="op">&gt;=</span> <span class="dv">70</span>:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    grade <span class="op">=</span> <span class="st">"C"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> score <span class="op">&gt;=</span> <span class="dv">60</span>:</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    grade <span class="op">=</span> <span class="st">"D"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    grade <span class="op">=</span> <span class="st">"F"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Score: </span><span class="sc">{</span>score<span class="sc">}</span><span class="ss">, Grade: </span><span class="sc">{</span>grade<span class="sc">}</span><span class="ss">"</span>)  <span class="co"># Score: 78, Grade: C</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Python evaluates conditions from top to bottom and executes only the first branch that matches. Once a branch is taken, the remaining <code>elif</code> and <code>else</code> blocks are skipped entirely.</p>
+</section>
+<section id="conditional-expressions-ternary" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="conditional-expressions-ternary"><span class="header-section-number">14.1.2</span> Conditional Expressions (Ternary)</h3>
+<p>For simple two-way decisions, Python supports a compact inline form:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>ternary.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="ternary.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"Active"</span> <span class="cf">if</span> <span class="kw">not</span> discontinued <span class="cf">else</span> <span class="st">"Discontinued"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is equivalent to:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>ternary_expanded.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="ternary_expanded.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> discontinued:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> <span class="st">"Active"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> <span class="st">"Discontinued"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The inline form reads like English: “<em>status</em> is <em>‘Active’</em> if <em>not discontinued</em>, else <em>‘Discontinued’</em>.” Use it for simple assignments. For anything more complex, the full <code>if</code>/<code>else</code> block is clearer.</p>
+</section>
+<section id="structural-pattern-matching" class="level3" data-number="14.1.3">
+<h3 data-number="14.1.3" class="anchored" data-anchor-id="structural-pattern-matching"><span class="header-section-number">14.1.3</span> Structural Pattern Matching</h3>
+<p>Python 3.10 introduced <code>match</code>/<code>case</code> for structural pattern matching. It’s useful when you’re checking a value against multiple specific options:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>match_case.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="match_case.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> describe_http_status(code: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">match</span> code:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">200</span>:</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">"OK"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">301</span>:</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">"Moved Permanently"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">404</span>:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">"Not Found"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">500</span>:</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">"Internal Server Error"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> _:</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="ss">f"Unknown status: </span><span class="sc">{</span>code<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(describe_http_status(<span class="dv">404</span>))  <span class="co"># "Not Found"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>_</code> in the last case is a wildcard that matches anything, like <code>else</code> in an <code>if</code> chain. Pattern matching is more powerful than this simple example suggests (it can destructure collections and objects), but for now, think of it as a cleaner alternative to long <code>if</code>/<code>elif</code> chains when you’re matching a value against known options.</p>
+</section>
+</section>
+<section id="loops" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="loops"><span class="header-section-number">14.2</span> Loops</h2>
+<p>Loops repeat a block of code. Python has two kinds: <code>for</code> loops that iterate over a collection, and <code>while</code> loops that repeat as long as a condition is true.</p>
+<section id="for-loops" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="for-loops"><span class="header-section-number">14.2.1</span> <code>for</code> Loops</h3>
+<p>A <code>for</code> loop visits each element in a sequence, one at a time:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>for_loop.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="for_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>, <span class="st">"Miso"</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Processing: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Processing: Chai
+Processing: Chang
+Processing: Tofu
+Processing: Miso</code></pre>
+</div>
+<p>The variable <code>product</code> takes on each value in the list, one per iteration. After the loop, <code>product</code> holds the last value, <code>"Miso"</code>.</p>
+</section>
+<section id="range-for-numeric-iteration" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="range-for-numeric-iteration"><span class="header-section-number">14.2.2</span> <code>range()</code> for Numeric Iteration</h3>
+<p>When you need to iterate over a sequence of numbers, use <code>range()</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>range.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="range.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i)    <span class="co"># Prints 0, 1, 2, 3, 4</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">8</span>):</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i)    <span class="co"># Prints 2, 3, 4, 5, 6, 7</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">5</span>):</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i)    <span class="co"># Prints 0, 5, 10, 15</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Like slicing, <code>range(start, stop)</code> includes <code>start</code> but excludes <code>stop</code>. The optional third argument is the step size.</p>
+</section>
+<section id="enumerate-for-index-value" class="level3" data-number="14.2.3">
+<h3 data-number="14.2.3" class="anchored" data-anchor-id="enumerate-for-index-value"><span class="header-section-number">14.2.3</span> <code>enumerate()</code> for Index + Value</h3>
+<p>When you need both the index and the value, use <code>enumerate()</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>enumerate.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="enumerate.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, product <span class="kw">in</span> products:  <span class="co"># This would fail! Can't unpack a string</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>index<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, product <span class="kw">in</span> <span class="bu">enumerate</span>(products):</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>index<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>0: Chai
+1: Chang
+2: Tofu</code></pre>
+</div>
+<p><code>enumerate()</code> returns pairs of <code>(index, value)</code>, which you unpack directly in the loop header. This is much cleaner than maintaining a separate counter variable.</p>
+</section>
+<section id="zip-for-parallel-iteration" class="level3" data-number="14.2.4">
+<h3 data-number="14.2.4" class="anchored" data-anchor-id="zip-for-parallel-iteration"><span class="header-section-number">14.2.4</span> <code>zip()</code> for Parallel Iteration</h3>
+<p>When you need to iterate over two (or more) sequences together, use <code>zip()</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>zip.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="zip.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">6.50</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices):</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Chai: $18.00
+Chang: $19.00
+Tofu: $6.50</code></pre>
+</div>
+<p><code>zip()</code> pairs elements by position: first with first, second with second, and so on. If the sequences have different lengths, <code>zip()</code> stops at the shortest one.</p>
+</section>
+<section id="while-loops" class="level3" data-number="14.2.5">
+<h3 data-number="14.2.5" class="anchored" data-anchor-id="while-loops"><span class="header-section-number">14.2.5</span> <code>while</code> Loops</h3>
+<p>A <code>while</code> loop repeats as long as its condition is truthy:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>while_loop.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="while_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>countdown <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> countdown <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"T-minus </span><span class="sc">{</span>countdown<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    countdown <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Launch!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Use <code>while</code> when you don’t know in advance how many iterations you need. Use <code>for</code> when you’re iterating over a known collection or range. In data processing, <code>for</code> loops are far more common.</p>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Infinite loops
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If a <code>while</code> condition never becomes falsy, the loop runs forever. Always make sure something inside the loop moves you toward the exit condition. If your program hangs, press <code>Ctrl+C</code> to interrupt it.</p>
+</div>
+</div>
+</section>
+<section id="break-and-continue" class="level3" data-number="14.2.6">
+<h3 data-number="14.2.6" class="anchored" data-anchor-id="break-and-continue"><span class="header-section-number">14.2.6</span> <code>break</code> and <code>continue</code></h3>
+<p><code>break</code> exits the loop entirely. <code>continue</code> skips the rest of the current iteration and moves to the next one:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>break_continue.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="break_continue.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the first discontinued product</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chef Anton's"</span>, <span class="st">"discontinued"</span>: <span class="va">True</span>},</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product[<span class="st">"discontinued"</span>]:</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Found discontinued: </span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>continue.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="continue.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print only active products</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product[<span class="st">"discontinued"</span>]:</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span>  <span class="co"># Skip this iteration</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(product[<span class="st">"name"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="exercises" class="level3" data-number="14.2.7">
+<h3 data-number="14.2.7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">14.2.7</span> Exercises</h3>
+<ol type="1">
+<li><p>Write an <code>if</code>/<code>elif</code>/<code>else</code> chain that classifies a <code>unit_price</code> into <code>"Budget"</code> (under $10), <code>"Mid-range"</code> ($10-$25), or <code>"Premium"</code> (over $25). Test it with prices 8.50, 18.00, and 45.00.</p></li>
+<li><p>Rewrite the classification from exercise 1 as a conditional expression (ternary). Is this a good use of the ternary form? Why or why not?</p></li>
+<li><p>Given the list of product dictionaries from the <code>break</code>/<code>continue</code> section, use a <code>for</code> loop with <code>enumerate()</code> to print each product’s index and name. Then use <code>zip()</code> with a separate <code>prices</code> list to pair each product with a price.</p></li>
+<li><p>Write a <code>for</code> loop that computes the running total of <code>prices = [18.00, 19.00, 10.00, 22.00, 23.25]</code>. After each iteration, print the current price and the running total so far.</p></li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_price(unit_price):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> unit_price <span class="op">&lt;</span> <span class="dv">10</span>:</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Budget"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> unit_price <span class="op">&lt;=</span> <span class="dv">25</span>:</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Mid-range"</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Premium"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">8.50</span>)   <span class="co"># "Budget"</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">18.00</span>)  <span class="co"># "Mid-range"</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">45.00</span>)  <span class="co"># "Premium"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>2.</strong> For two categories it’s fine: <code>"Premium" if unit_price &gt; 25 else "Other"</code>. But for three categories, nesting ternaries is hard to read: <code>"Budget" if unit_price &lt; 10 else "Mid-range" if unit_price &lt;= 25 else "Premium"</code>. The <code>if</code>/<code>elif</code>/<code>else</code> chain is clearer for three or more branches.</p>
+<p><strong>3.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, product <span class="kw">in</span> <span class="bu">enumerate</span>(products):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">22.00</span>, <span class="fl">6.50</span>]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices):</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>4.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">10.00</span>, <span class="fl">22.00</span>, <span class="fl">23.25</span>]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>running_total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> price <span class="kw">in</span> prices:</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    running_total <span class="op">+=</span> price</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Price: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">, Running total: $</span><span class="sc">{</span>running_total<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-comprehensions" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="sec-comprehensions"><span class="header-section-number">14.3</span> Comprehensions</h2>
+<p>Comprehensions are one of Python’s most distinctive features. A list comprehension creates a new list by transforming and/or filtering an existing iterable, all in a single expression.</p>
+<section id="from-loop-to-comprehension" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="from-loop-to-comprehension"><span class="header-section-number">14.3.1</span> From Loop to Comprehension</h3>
+<p>Consider this loop that computes the square of each number:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>loop_version.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="loop_version.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> []</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> numbers:</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    squares.append(n <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># squares = [1, 4, 9, 16, 25]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The equivalent list comprehension:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>comprehension_version.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="comprehension_version.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> [n <span class="op">**</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers]</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># squares = [1, 4, 9, 16, 25]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The comprehension reads as: “give me <code>n ** 2</code> for each <code>n</code> in <code>numbers</code>.” It’s more concise, and once you’re used to the pattern, it’s more readable too.</p>
+</section>
+<section id="adding-a-filter" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="adding-a-filter"><span class="header-section-number">14.3.2</span> Adding a Filter</h3>
+<p>You can add an <code>if</code> clause to filter which elements are included:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>filtered_comprehension.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="filtered_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>evens <span class="op">=</span> [n <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [2, 4, 6, 8, 10]</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>large_squares <span class="op">=</span> [n <span class="op">**</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">&gt;</span> <span class="dv">5</span>]</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># [36, 49, 64, 81, 100]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This reads as: “give me <code>n ** 2</code> for each <code>n</code> in <code>numbers</code>, but only if <code>n &gt; 5</code>.”</p>
+</section>
+<section id="dictionary-and-set-comprehensions" class="level3" data-number="14.3.3">
+<h3 data-number="14.3.3" class="anchored" data-anchor-id="dictionary-and-set-comprehensions"><span class="header-section-number">14.3.3</span> Dictionary and Set Comprehensions</h3>
+<p>The same pattern works for dictionaries and sets:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>dict_comprehension.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="dict_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">6.50</span>]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>price_lookup <span class="op">=</span> {name: price <span class="cf">for</span> name, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices)}</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># {"Chai": 18.0, "Chang": 19.0, "Tofu": 6.5}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>set_comprehension.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="set_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> [<span class="st">"hello"</span>, <span class="st">"world"</span>, <span class="st">"hello"</span>, <span class="st">"python"</span>]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>unique_lengths <span class="op">=</span> {<span class="bu">len</span>(word) <span class="cf">for</span> word <span class="kw">in</span> words}</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># {5, 6}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="a-practical-example" class="level3" data-number="14.3.4">
+<h3 data-number="14.3.4" class="anchored" data-anchor-id="a-practical-example"><span class="header-section-number">14.3.4</span> A Practical Example</h3>
+<p>Here’s a comprehension that processes Northwind product data, filtering to active products and computing stock values:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>northwind_comprehension.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="northwind_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"stock"</span>: <span class="dv">39</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"stock"</span>: <span class="dv">17</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chef Anton's"</span>, <span class="st">"price"</span>: <span class="fl">22.00</span>, <span class="st">"stock"</span>: <span class="dv">53</span>, <span class="st">"discontinued"</span>: <span class="va">True</span>},</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"stock"</span>: <span class="dv">35</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Stock values for active products only</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>stock_values <span class="op">=</span> [</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: p[<span class="st">"name"</span>], <span class="st">"value"</span>: p[<span class="st">"price"</span>] <span class="op">*</span> p[<span class="st">"stock"</span>]}</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> products</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> p[<span class="st">"discontinued"</span>]</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> stock_values:</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>item[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>item[<span class="st">'value'</span>]<span class="sc">:,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Chai: $702.00
+Chang: $323.00
+Tofu: $813.75</code></pre>
+</div>
+</section>
+<section id="when-not-to-use-comprehensions" class="level3" data-number="14.3.5">
+<h3 data-number="14.3.5" class="anchored" data-anchor-id="when-not-to-use-comprehensions"><span class="header-section-number">14.3.5</span> When Not to Use Comprehensions</h3>
+<p>Comprehensions are powerful, but they can become unreadable if you push too much logic into them. A good rule of thumb: if a comprehension doesn’t fit on one or two lines, or if it requires nested loops with complex conditions, use an explicit loop instead. Clarity beats cleverness.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>too_complex.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="too_complex.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is too complex for a comprehension. Use a loop.</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> [</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    (x, y, z)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">30</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> y <span class="kw">in</span> <span class="bu">range</span>(x, <span class="dv">30</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> <span class="bu">range</span>(y, <span class="dv">30</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> y <span class="op">**</span> <span class="dv">2</span> <span class="op">==</span> z <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="putting-it-together-northwind-order-processing" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="putting-it-together-northwind-order-processing"><span class="header-section-number">14.4</span> Putting It Together: Northwind Order Processing</h2>
+<p>Let’s combine collections and control flow to process Northwind data. Given a list of order detail records, we’ll compute revenue by category:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>order_processing.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="order_processing.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample order details (in later chapters, we'll read this from files)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>order_details <span class="op">=</span> [</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chai"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"quantity"</span>: <span class="dv">10</span>},</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chang"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"quantity"</span>: <span class="dv">5</span>},</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Aniseed Syrup"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">10.00</span>, <span class="st">"quantity"</span>: <span class="dv">20</span>},</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Tofu"</span>, <span class="st">"category"</span>: <span class="st">"Produce"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"quantity"</span>: <span class="dv">15</span>},</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Miso"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">13.00</span>, <span class="st">"quantity"</span>: <span class="dv">8</span>},</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute revenue per item</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>revenues <span class="op">=</span> [</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    {<span class="op">**</span>item, <span class="st">"revenue"</span>: item[<span class="st">"price"</span>] <span class="op">*</span> item[<span class="st">"quantity"</span>]}</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> order_details</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate revenue by category using a dictionary</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>category_totals <span class="op">=</span> {}</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> revenues:</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    category <span class="op">=</span> item[<span class="st">"category"</span>]</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    revenue <span class="op">=</span> item[<span class="st">"revenue"</span>]</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> category <span class="kw">in</span> category_totals:</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>        category_totals[category] <span class="op">+=</span> revenue</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>        category_totals[category] <span class="op">=</span> revenue</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by revenue (descending) and display</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>sorted_categories <span class="op">=</span> <span class="bu">sorted</span>(</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    category_totals.items(),</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    key<span class="op">=</span><span class="kw">lambda</span> pair: pair[<span class="dv">1</span>],</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    reverse<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Category'</span><span class="sc">:&lt;15}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Revenue'</span><span class="sc">:&gt;10}</span><span class="ss">"</span>)</span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">15</span><span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">10</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> category, total <span class="kw">in</span> sorted_categories:</span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>category<span class="sc">:&lt;15}</span><span class="ss"> $</span><span class="sc">{</span>total<span class="sc">:&gt;9,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>Category             Revenue
+--------------- ----------
+Produce         $   348.75
+Condiments      $   304.00
+Beverages       $   275.00</code></pre>
+</div>
+<p>This script uses lists of dictionaries, a <code>for</code> loop with an <code>if</code>/<code>else</code> branch to build an aggregation dictionary, <code>sorted()</code> with a <code>key</code> function, tuple unpacking, and f-strings with alignment. It’s a miniature version of what SQL’s <code>GROUP BY</code> does, implemented entirely in Python. In later chapters, you’ll read this data from actual CSV files instead of hardcoding it.</p>
+</section>
+<section id="exercises-1" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises-1">Exercises</h2>
+<section id="collection-operations" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="collection-operations">Collection Operations</h3>
+<ol type="1">
+<li><p>Create a list of 10 integers. Use slicing to extract the first three, the last three, and every other element. Use <code>sorted()</code> to get them in descending order.</p></li>
+<li><p>Given two lists of the same length, create a dictionary that maps elements from the first list (as keys) to elements of the second (as values). Use <code>zip()</code>.</p></li>
+<li><p>Given a list of product names that may contain duplicates, use a set to get the unique names, then convert back to a sorted list.</p></li>
+</ol>
+</section>
+<section id="loop-practice" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="loop-practice">Loop Practice</h3>
+<ol type="1">
+<li><p>Write a <code>for</code> loop that prints the first 20 numbers in the Fibonacci sequence (1, 1, 2, 3, 5, 8, …).</p></li>
+<li><p>Given a list of dictionaries representing products (with <code>"name"</code>, <code>"price"</code>, and <code>"stock"</code> keys), use a <code>for</code> loop to find and print the most expensive product.</p></li>
+<li><p>Use <code>enumerate()</code> to print a numbered list of products, starting from 1 instead of 0. (Hint: <code>enumerate()</code> accepts a <code>start</code> argument.)</p></li>
+</ol>
+</section>
+<section id="comprehension-practice" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="comprehension-practice">Comprehension Practice</h3>
+<ol type="1">
+<li><p>Rewrite each of these loops as a comprehension:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>to_comprehension.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="to_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 1</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> []</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> products:</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    names.append(p[<span class="st">"name"</span>].upper())</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 2</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>expensive <span class="op">=</span> []</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> products:</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p[<span class="st">"price"</span>] <span class="op">&gt;</span> <span class="dv">20</span>:</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>        expensive.append(p[<span class="st">"name"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Now go the other direction. Rewrite this comprehension as an explicit loop:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>to_loop.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="to_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> {p[<span class="st">"name"</span>]: p[<span class="st">"price"</span>] <span class="op">*</span> p[<span class="st">"stock"</span>] <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p[<span class="st">"stock"</span>] <span class="op">&gt;</span> <span class="dv">0</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Given the <code>order_details</code> list from the chapter example, write a comprehension that produces a list of product names where revenue exceeds $150.</p></li>
+</ol>
+</section>
+<section id="northwind-category-analysis" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="northwind-category-analysis">Northwind Category Analysis</h3>
+<p>Using the <code>order_details</code> list from the chapter, write a script that:</p>
+<ol type="1">
+<li>Groups items by category into a dictionary of lists (each category key maps to a list of its items).</li>
+<li>For each category, computes the average unit price and total quantity ordered.</li>
+<li>Prints a formatted summary table.</li>
+</ol>
+</section>
+</section>
+<section id="summary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
+<p>Conditionals and loops form the backbone of Python programming. The <code>if</code>/<code>elif</code>/<code>else</code> construct lets you direct program flow based on conditions, while <code>for</code> loops iterate over collections and <code>while</code> loops repeat until a condition changes. The <code>range()</code>, <code>enumerate()</code>, and <code>zip()</code> functions are essential companions to <code>for</code> loops that let you handle numeric sequences, track positions while iterating, and process multiple sequences in parallel.</p>
+<p>Comprehensions are one of Python’s most distinctive and powerful features. They condense the common pattern of “build a new collection by transforming and filtering an existing one” into a single, readable expression. They’re more efficient than loop-and-append code, and once you’re comfortable with the syntax, they’re more readable too. You’ll use comprehensions constantly throughout the rest of the book.</p>
+<p>In the next chapter, you’ll learn to organize your code into reusable functions and modules, the building blocks that turn scripts into maintainable software.</p>
+</section>
+<section id="glossary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="glossary">Glossary</h2>
+<dl>
+<dt>comprehension</dt>
+<dd>
+A concise syntax for creating lists, dictionaries, or sets by transforming and filtering an iterable. Example: <code>[x ** 2 for x in range(10)]</code>.
+</dd>
+<dt><code>enumerate()</code></dt>
+<dd>
+A built-in function that yields <code>(index, value)</code> pairs from an iterable.
+</dd>
+<dt>iterable</dt>
+<dd>
+Any object that can be looped over with a <code>for</code> statement. Lists, tuples, dictionaries, sets, strings, and ranges are all iterable.
+</dd>
+<dt>pattern matching</dt>
+<dd>
+Python’s <code>match</code>/<code>case</code> syntax for comparing a value against multiple patterns. Introduced in Python 3.10.
+</dd>
+<dt><code>zip()</code></dt>
+<dd>
+A built-in function that pairs elements from two or more iterables together.
+</dd>
+</dl>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ozanozbeker\.com\/cw4e\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/13-collections.html" class="pagination-link" aria-label="Collections">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Collections</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/15-functions.html" class="pagination-link" aria-label="Functions &amp; Modules">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/14-control-flow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

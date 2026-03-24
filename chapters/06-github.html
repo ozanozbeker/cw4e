@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>6&nbsp; Collaboration with GitHub – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../unit-2-sql.html" rel="next">
+<link href="../chapters/05-git.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-1-toolkit.html">The Professional Toolkit</a></li><li class="breadcrumb-item"><a href="../chapters/06-github.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequisites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-1-toolkit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Professional Toolkit</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Professional Documents with Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-github.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-2-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data with SQL</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-3-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-python-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Collections</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-control-flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-file-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Working with Files</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-4-data-products.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building Data Products</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-computational-documents.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-typer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">CLI Tools with Typer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Zed</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/northwind.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Northwind Dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/duckdb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">DuckDB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/ruff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Ruff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/basedpyright.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">K</span>&nbsp; <span class="chapter-title">basedpyright</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#git-is-distributed" id="toc-git-is-distributed" class="nav-link active" data-scroll-target="#git-is-distributed"><span class="header-section-number">6.1</span> Git is Distributed</a></li>
+  <li><a href="#remote-repositories" id="toc-remote-repositories" class="nav-link" data-scroll-target="#remote-repositories"><span class="header-section-number">6.2</span> Remote Repositories</a>
+  <ul class="collapse">
+  <li><a href="#cloning-an-existing-repository" id="toc-cloning-an-existing-repository" class="nav-link" data-scroll-target="#cloning-an-existing-repository"><span class="header-section-number">6.2.1</span> Cloning an Existing Repository</a></li>
+  <li><a href="#connecting-a-local-repository-to-github" id="toc-connecting-a-local-repository-to-github" class="nav-link" data-scroll-target="#connecting-a-local-repository-to-github"><span class="header-section-number">6.2.2</span> Connecting a Local Repository to GitHub</a></li>
+  </ul></li>
+  <li><a href="#pushing-and-pulling" id="toc-pushing-and-pulling" class="nav-link" data-scroll-target="#pushing-and-pulling"><span class="header-section-number">6.3</span> Pushing and Pulling</a>
+  <ul class="collapse">
+  <li><a href="#pushing-changes" id="toc-pushing-changes" class="nav-link" data-scroll-target="#pushing-changes"><span class="header-section-number">6.3.1</span> Pushing Changes</a></li>
+  <li><a href="#pulling-changes" id="toc-pulling-changes" class="nav-link" data-scroll-target="#pulling-changes"><span class="header-section-number">6.3.2</span> Pulling Changes</a></li>
+  <li><a href="#handling-conflicts" id="toc-handling-conflicts" class="nav-link" data-scroll-target="#handling-conflicts"><span class="header-section-number">6.3.3</span> Handling Conflicts</a></li>
+  </ul></li>
+  <li><a href="#the-collaborative-workflow" id="toc-the-collaborative-workflow" class="nav-link" data-scroll-target="#the-collaborative-workflow"><span class="header-section-number">6.4</span> The Collaborative Workflow</a>
+  <ul class="collapse">
+  <li><a href="#feature-branch-workflow" id="toc-feature-branch-workflow" class="nav-link" data-scroll-target="#feature-branch-workflow"><span class="header-section-number">6.4.1</span> Feature Branch Workflow</a></li>
+  <li><a href="#pull-requests" id="toc-pull-requests" class="nav-link" data-scroll-target="#pull-requests"><span class="header-section-number">6.4.2</span> Pull Requests</a></li>
+  <li><a href="#code-review" id="toc-code-review" class="nav-link" data-scroll-target="#code-review"><span class="header-section-number">6.4.3</span> Code Review</a></li>
+  <li><a href="#merging-pull-requests" id="toc-merging-pull-requests" class="nav-link" data-scroll-target="#merging-pull-requests"><span class="header-section-number">6.4.4</span> Merging Pull Requests</a></li>
+  </ul></li>
+  <li><a href="#project-management-on-github" id="toc-project-management-on-github" class="nav-link" data-scroll-target="#project-management-on-github"><span class="header-section-number">6.5</span> Project Management on GitHub</a>
+  <ul class="collapse">
+  <li><a href="#issues" id="toc-issues" class="nav-link" data-scroll-target="#issues"><span class="header-section-number">6.5.1</span> Issues</a></li>
+  <li><a href="#labels-and-milestones" id="toc-labels-and-milestones" class="nav-link" data-scroll-target="#labels-and-milestones"><span class="header-section-number">6.5.2</span> Labels and Milestones</a></li>
+  <li><a href="#github-projects" id="toc-github-projects" class="nav-link" data-scroll-target="#github-projects"><span class="header-section-number">6.5.3</span> GitHub Projects</a></li>
+  <li><a href="#discussions" id="toc-discussions" class="nav-link" data-scroll-target="#discussions"><span class="header-section-number">6.5.4</span> Discussions</a></li>
+  </ul></li>
+  <li><a href="#forking-contributing-to-others-projects" id="toc-forking-contributing-to-others-projects" class="nav-link" data-scroll-target="#forking-contributing-to-others-projects"><span class="header-section-number">6.6</span> Forking: Contributing to Others’ Projects</a></li>
+  <li><a href="#github-cli" id="toc-github-cli" class="nav-link" data-scroll-target="#github-cli"><span class="header-section-number">6.7</span> GitHub CLI</a></li>
+  <li><a href="#repository-organization" id="toc-repository-organization" class="nav-link" data-scroll-target="#repository-organization"><span class="header-section-number">6.8</span> Repository Organization</a>
+  <ul class="collapse">
+  <li><a href="#readme-files" id="toc-readme-files" class="nav-link" data-scroll-target="#readme-files"><span class="header-section-number">6.8.1</span> README Files</a></li>
+  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license"><span class="header-section-number">6.8.2</span> License</a></li>
+  <li><a href="#contributing-guidelines" id="toc-contributing-guidelines" class="nav-link" data-scroll-target="#contributing-guidelines"><span class="header-section-number">6.8.3</span> Contributing Guidelines</a></li>
+  <li><a href="#directory-structure" id="toc-directory-structure" class="nav-link" data-scroll-target="#directory-structure"><span class="header-section-number">6.8.4</span> Directory Structure</a></li>
+  </ul></li>
+  <li><a href="#security-considerations" id="toc-security-considerations" class="nav-link" data-scroll-target="#security-considerations"><span class="header-section-number">6.9</span> Security Considerations</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6.10</span> Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary"><span class="header-section-number">6.11</span> Glossary</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">6.12</span> Resources</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">6.13</span> Exercises</a>
+  <ul class="collapse">
+  <li><a href="#question-5.1" id="toc-question-5.1" class="nav-link" data-scroll-target="#question-5.1"><span class="header-section-number">6.13.1</span> Question 5.1</a></li>
+  <li><a href="#question-5.2" id="toc-question-5.2" class="nav-link" data-scroll-target="#question-5.2"><span class="header-section-number">6.13.2</span> Question 5.2</a></li>
+  <li><a href="#question-5.3" id="toc-question-5.3" class="nav-link" data-scroll-target="#question-5.3"><span class="header-section-number">6.13.3</span> Question 5.3</a></li>
+  <li><a href="#question-5.4" id="toc-question-5.4" class="nav-link" data-scroll-target="#question-5.4"><span class="header-section-number">6.13.4</span> Question 5.4</a></li>
+  <li><a href="#question-5.5" id="toc-question-5.5" class="nav-link" data-scroll-target="#question-5.5"><span class="header-section-number">6.13.5</span> Question 5.5</a></li>
+  <li><a href="#question-5.6" id="toc-question-5.6" class="nav-link" data-scroll-target="#question-5.6"><span class="header-section-number">6.13.6</span> Question 5.6</a></li>
+  <li><a href="#question-5.7" id="toc-question-5.7" class="nav-link" data-scroll-target="#question-5.7"><span class="header-section-number">6.13.7</span> Question 5.7</a></li>
+  <li><a href="#question-5.8" id="toc-question-5.8" class="nav-link" data-scroll-target="#question-5.8"><span class="header-section-number">6.13.8</span> Question 5.8</a></li>
+  <li><a href="#question-5.9" id="toc-question-5.9" class="nav-link" data-scroll-target="#question-5.9"><span class="header-section-number">6.13.9</span> Question 5.9</a></li>
+  <li><a href="#question-5.10" id="toc-question-5.10" class="nav-link" data-scroll-target="#question-5.10"><span class="header-section-number">6.13.10</span> Question 5.10</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/06-github.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://ozanozbeker.com/cw4e/playground/"><i class="bi bi-play-circle"></i>SQL &amp; Python Playground</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-1-toolkit.html">The Professional Toolkit</a></li><li class="breadcrumb-item"><a href="../chapters/06-github.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-github" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Git tracks your project’s history on your local machine. GitHub takes this further by hosting your repository in the cloud, enabling collaboration with teammates, providing tools for code review, and serving as a backup for your work. In professional environments, GitHub (or similar platforms) is where engineering teams coordinate their efforts.</p>
+<p>This chapter introduces GitHub as a collaboration platform. You’ll learn to synchronize local and remote repositories, contribute to team projects, and use GitHub’s project management features. By the end, you’ll have a complete workflow for contributing to collaborative engineering projects.</p>
+<section id="git-is-distributed" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="git-is-distributed"><span class="header-section-number">6.1</span> Git is Distributed</h2>
+<p>Before diving into GitHub, you need to understand a key concept: Git is a <em>distributed</em> version control system. Every person who clones a repository gets a complete copy, including the entire history. There is no single “master” copy that everyone depends on. Your local repository is just as complete as anyone else’s.</p>
+<p>This distributed nature provides resilience. If GitHub went offline tomorrow, every collaborator would still have the complete project history on their machine. Work can continue offline, and repositories can be synchronized when connectivity returns.</p>
+<p>However, distributed systems need a way to coordinate. If ten engineers each have complete repositories on their laptops, how do they share changes? This is where GitHub fits in. It hosts a <em>remote</em> repository that serves as a coordination point. Everyone pushes their changes to GitHub and pulls others’ changes from it. GitHub isn’t technically “the source of truth” in Git’s architecture, but teams treat it as a central hub where the official version lives.</p>
+</section>
+<section id="remote-repositories" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="remote-repositories"><span class="header-section-number">6.2</span> Remote Repositories</h2>
+<p>A <strong>remote</strong> is a Git repository hosted somewhere other than your local machine. You can have multiple remotes, but most workflows use a single remote called <code>origin</code> that points to GitHub.</p>
+<section id="cloning-an-existing-repository" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="cloning-an-existing-repository"><span class="header-section-number">6.2.1</span> Cloning an Existing Repository</h3>
+<p>The most common way to start working with a GitHub repository is to <em>clone</em> it. Cloning downloads the complete repository, including all files and history, to your local machine:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/username/project-name.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This creates a new directory called <code>project-name</code> containing the repository. Git automatically configures the remote <code>origin</code> to point back to GitHub.</p>
+<p>Move into the cloned directory:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> project-name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Verify the remote configuration:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote <span class="at">-v</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>origin  https://github.com/username/project-name.git (fetch)
+origin  https://github.com/username/project-name.git (push)</code></pre>
+</div>
+</section>
+<section id="connecting-a-local-repository-to-github" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="connecting-a-local-repository-to-github"><span class="header-section-number">6.2.2</span> Connecting a Local Repository to GitHub</h3>
+<p>If you have an existing local repository (created with <code>git init</code> as described in <a href="05-git.html" class="quarto-xref"><span>Chapter 5</span></a>) and want to push it to GitHub, first create a new repository on GitHub (without initializing it with any files). Then connect your local repository:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin https://github.com/username/your-repo.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Verify the connection:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote <span class="at">-v</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now your local repository knows where to push changes.</p>
+</section>
+</section>
+<section id="pushing-and-pulling" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="pushing-and-pulling"><span class="header-section-number">6.3</span> Pushing and Pulling</h2>
+<p>Synchronizing changes between your local repository and GitHub involves two operations: <strong>push</strong> sends your commits to GitHub, and <strong>pull</strong> downloads commits from GitHub to your machine.</p>
+<section id="pushing-changes" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="pushing-changes"><span class="header-section-number">6.3.1</span> Pushing Changes</h3>
+<p>After making commits locally, push them to GitHub:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This command says “push the commits from my local <code>main</code> branch to the <code>origin</code> remote’s <code>main</code> branch.”</p>
+<p>The first time you push a new branch, you may need to set up tracking:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>-u</code> flag establishes a tracking relationship. After this, you can simply use <code>git push</code> without specifying the remote and branch.</p>
+</section>
+<section id="pulling-changes" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="pulling-changes"><span class="header-section-number">6.3.2</span> Pulling Changes</h3>
+<p>When collaborators push their commits to GitHub, you need to pull those changes to stay synchronized:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull origin main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Or simply, if tracking is established:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>git pull</code> actually does two things: it <em>fetches</em> commits from the remote (downloads them without merging) and then <em>merges</em> them into your current branch. If you want to see what’s new on the remote without merging yet:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> fetch origin</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log origin/main <span class="at">--oneline</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This lets you review incoming changes before integrating them.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Understanding Push vs. Pull">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: Understanding Push vs.&nbsp;Pull
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You and a teammate are working on the same project with a GitHub remote. You both make commits locally. Your teammate pushes first. When you try to push, Git refuses and says your local branch is “behind” the remote. What does this mean, and what commands do you need to run to resolve it? In what order?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Your teammate’s commits are on GitHub, but your local repository doesn’t have them yet. Your local commits aren’t on GitHub. First, run <code>git pull origin main</code> to fetch their changes and merge them with your local work. Then run <code>git push origin main</code> to send your commits (and the merged state) to GitHub. Pull before push ensures you’re working with the latest version and reduces merge conflicts.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="handling-conflicts" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="handling-conflicts"><span class="header-section-number">6.3.3</span> Handling Conflicts</h3>
+<p>When you and a collaborator modify the same lines of a file, Git cannot automatically merge the changes. This is called a <strong>merge conflict</strong>. Git marks the conflicting sections in the file:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>analyze_sensors.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="analyze_sensors.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_reading(value):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value <span class="op">*</span> <span class="fl">1.05</span>  <span class="co"># Your change: 5% calibration factor</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">=======</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value <span class="op">*</span> <span class="fl">1.03</span>  <span class="co"># Their change: 3% calibration factor</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> origin<span class="op">/</span>main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To resolve the conflict, edit the file to keep the correct version (or combine both changes), remove the conflict markers, then stage and commit:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add analyze_sensors.py</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Resolve calibration factor conflict, use 5%"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Avoiding Conflicts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The best way to handle conflicts is to avoid them. Communicate with your team about who’s working on which files. Pull frequently so your local copy stays close to the remote. Make small, focused commits that are easier to merge.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="the-collaborative-workflow" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="the-collaborative-workflow"><span class="header-section-number">6.4</span> The Collaborative Workflow</h2>
+<p>Professional teams follow structured workflows to coordinate contributions. The most common pattern uses feature branches and pull requests.</p>
+<section id="feature-branch-workflow" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="feature-branch-workflow"><span class="header-section-number">6.4.1</span> Feature Branch Workflow</h3>
+<p>Instead of committing directly to <code>main</code>, you create a branch for each feature or fix:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch <span class="at">-c</span> feature/add-anomaly-detection</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Work on the branch, making commits as you go:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add anomaly.py</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Implement statistical anomaly detection"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add tests/test_anomaly.py</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add tests for anomaly detection"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Push the branch to GitHub:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin feature/add-anomaly-detection</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now your work is backed up on GitHub, but it hasn’t affected <code>main</code> yet. The next step is to propose merging your branch through a pull request.</p>
+</section>
+<section id="pull-requests" class="level3" data-number="6.4.2">
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="pull-requests"><span class="header-section-number">6.4.2</span> Pull Requests</h3>
+<p>A <strong>pull request</strong> (PR) is GitHub’s mechanism for proposing that changes from one branch be merged into another. Despite the confusing name (you’re <em>requesting</em> that someone <em>pull</em> your changes), pull requests are really about review and discussion.</p>
+<p>When you push a branch to GitHub, you’ll see a prompt to create a pull request. Click it, or navigate to the repository and click “New pull request.” Select your feature branch as the source and <code>main</code> as the destination.</p>
+<p>Write a clear title and description explaining what the PR accomplishes, why the changes are needed, and any context reviewers should know. Good PR descriptions save everyone time.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Pull Request Workflow Understanding">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: Pull Request Workflow Understanding
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You’ve pushed a feature branch called <code>feature/anomaly-detection</code> to GitHub. You create a pull request to merge it into <code>main</code>. A teammate reviews your code and requests changes. You make those changes locally, commit them, and push to your feature branch. What happens to your pull request? Do you need to create a new PR?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Your pull request automatically updates with the new commits you pushed. The PR doesn’t close; it shows all commits from your feature branch until it’s merged. GitHub shows the conversation history with your teammate’s feedback and your responses. You don’t need to create a new PR. When your teammate approves, you can merge directly from the existing PR.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="code-review" class="level3" data-number="6.4.3">
+<h3 data-number="6.4.3" class="anchored" data-anchor-id="code-review"><span class="header-section-number">6.4.3</span> Code Review</h3>
+<p>Pull requests enable code review, one of the most valuable practices in software engineering. Reviewers can comment on specific lines, suggest changes, ask questions, and ultimately approve or request changes to the PR.</p>
+<p>As a contributor, respond to feedback thoughtfully. If you need to make changes, commit them to your branch and push. The PR automatically updates with your new commits.</p>
+<p>As a reviewer, focus on correctness, clarity, and maintainability. Ask questions rather than making demands. Remember that code review is a learning opportunity for everyone involved.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Predicting Merge Outcomes">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: Predicting Merge Outcomes
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You have a feature branch that’s 5 commits ahead of <code>main</code>. You want to merge it via a pull request. GitHub shows “This branch can be automatically merged.” What does this mean? Under what circumstances would GitHub show “Merge conflict” instead? If a conflict appears, can you still merge, or is the PR blocked?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>“This branch can be automatically merged” means no conflicts exist; the same files weren’t changed differently on both branches. A merge conflict appears when you and someone else both modified the same lines of the same file. If conflicts exist, GitHub shows the PR as blocked and requires you to resolve conflicts locally, commit the resolution, and push before merging. Conflicts aren’t failures; they’re Git asking you to decide which version is correct when it can’t determine automatically.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="merging-pull-requests" class="level3" data-number="6.4.4">
+<h3 data-number="6.4.4" class="anchored" data-anchor-id="merging-pull-requests"><span class="header-section-number">6.4.4</span> Merging Pull Requests</h3>
+<p>Once the PR is approved and any automated checks pass, you can merge it. GitHub offers several merge strategies. For most workflows, a simple merge commit works well. Click “Merge pull request” on GitHub.</p>
+<p>After merging, delete the feature branch. It’s served its purpose, and keeping old branches around creates clutter:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch main</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-d</span> feature/add-anomaly-detection</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="project-management-on-github" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="project-management-on-github"><span class="header-section-number">6.5</span> Project Management on GitHub</h2>
+<p>GitHub provides tools beyond code hosting that help teams coordinate work. These features turn GitHub into a project management platform.</p>
+<section id="issues" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="issues"><span class="header-section-number">6.5.1</span> Issues</h3>
+<p><strong>Issues</strong> track tasks, bugs, feature requests, and discussions. Create an issue for anything that needs to be done or decided. Good issues include a clear title, a detailed description of the problem or desired feature, relevant context like error messages or specifications, and labels to categorize the issue.</p>
+<p>Reference issues in your commits and pull requests using the <code>#</code> notation:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Fix temperature sensor parsing, closes #42"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>GitHub automatically links the commit to issue #42 and closes the issue when the commit reaches <code>main</code>.</p>
+</section>
+<section id="labels-and-milestones" class="level3" data-number="6.5.2">
+<h3 data-number="6.5.2" class="anchored" data-anchor-id="labels-and-milestones"><span class="header-section-number">6.5.2</span> Labels and Milestones</h3>
+<p><strong>Labels</strong> categorize issues: <code>bug</code>, <code>enhancement</code>, <code>documentation</code>, <code>help wanted</code>. Create labels that match your team’s workflow.</p>
+<p><strong>Milestones</strong> group issues into releases or sprints. Assign issues to a milestone to track progress toward a goal, like “v1.0 Release” or “Sprint 3”.</p>
+</section>
+<section id="github-projects" class="level3" data-number="6.5.3">
+<h3 data-number="6.5.3" class="anchored" data-anchor-id="github-projects"><span class="header-section-number">6.5.3</span> GitHub Projects</h3>
+<p><strong>Projects</strong> provide Kanban-style boards for visualizing work. Create columns like “To Do,” “In Progress,” and “Done.” Add issues and pull requests to the board and move them between columns as work progresses.</p>
+<p>Projects help teams see the big picture: what’s being worked on, what’s blocked, and what’s completed.</p>
+</section>
+<section id="discussions" class="level3" data-number="6.5.4">
+<h3 data-number="6.5.4" class="anchored" data-anchor-id="discussions"><span class="header-section-number">6.5.4</span> Discussions</h3>
+<p><strong>Discussions</strong> provide a forum for conversations that aren’t tied to specific code changes. Use discussions for questions, ideas, announcements, and community engagement.</p>
+</section>
+</section>
+<section id="forking-contributing-to-others-projects" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="forking-contributing-to-others-projects"><span class="header-section-number">6.6</span> Forking: Contributing to Others’ Projects</h2>
+<p>When you want to contribute to a project you don’t have write access to (common with open-source projects), you use the <strong>fork</strong> workflow.</p>
+<p>A <strong>fork</strong> is your personal copy of someone else’s repository. You can freely experiment with changes without affecting the original project.</p>
+<p>The fork workflow is as follows. First, click “Fork” on the original repository’s GitHub page. This creates a copy under your account. Clone your fork locally:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/your-username/project-name.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Add the original repository as an “upstream” remote so you can pull in updates:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/original-owner/project-name.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Create a branch, make changes, and push to your fork:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch <span class="at">-c</span> fix/typo-in-readme</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-am</span> <span class="st">"Fix typo in README"</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin fix/typo-in-readme</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>On GitHub, create a pull request from your fork’s branch to the original repository’s main branch. The maintainers will review your contribution.</p>
+<p>To keep your fork synchronized with the original:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> fetch upstream</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch main</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge upstream/main</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="github-cli" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="github-cli"><span class="header-section-number">6.7</span> GitHub CLI</h2>
+<p>The GitHub CLI (<code>gh</code>) lets you interact with GitHub from your terminal. This is faster than switching to a browser for common operations.</p>
+<p>Check your authentication status:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> auth status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Create a new repository:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> repo create my-new-project <span class="at">--public</span> <span class="at">--source</span><span class="op">=</span>. <span class="at">--remote</span><span class="op">=</span>origin</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Create a pull request:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> pr create <span class="at">--title</span> <span class="st">"Add anomaly detection"</span> <span class="at">--body</span> <span class="st">"Implements statistical anomaly detection for sensor readings"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>List open pull requests:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> pr list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Check out a pull request locally for testing:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> pr checkout 123</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>View issues:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> issue list</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gh</span> issue view 42</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The CLI integrates Git and GitHub operations, reducing context switching between terminal and browser.</p>
+</section>
+<section id="repository-organization" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="repository-organization"><span class="header-section-number">6.8</span> Repository Organization</h2>
+<p>Well-organized repositories are easier to understand and contribute to. Follow these conventions to make your projects professional.</p>
+<section id="readme-files" class="level3" data-number="6.8.1">
+<h3 data-number="6.8.1" class="anchored" data-anchor-id="readme-files"><span class="header-section-number">6.8.1</span> README Files</h3>
+<p>Every repository should have a <code>README.md</code> file at the root. This is the first thing visitors see. Include the project name and brief description, installation instructions, usage examples, contribution guidelines, and license information.</p>
+</section>
+<section id="license" class="level3" data-number="6.8.2">
+<h3 data-number="6.8.2" class="anchored" data-anchor-id="license"><span class="header-section-number">6.8.2</span> License</h3>
+<p>Add a <code>LICENSE</code> file to clarify how others can use your code. For open-source projects, MIT and Apache 2.0 are common choices. For proprietary work, specify that all rights are reserved.</p>
+</section>
+<section id="contributing-guidelines" class="level3" data-number="6.8.3">
+<h3 data-number="6.8.3" class="anchored" data-anchor-id="contributing-guidelines"><span class="header-section-number">6.8.3</span> Contributing Guidelines</h3>
+<p>For collaborative projects, add a <code>CONTRIBUTING.md</code> file explaining how to set up a development environment, coding standards and style guidelines, how to run tests, and the pull request process.</p>
+</section>
+<section id="directory-structure" class="level3" data-number="6.8.4">
+<h3 data-number="6.8.4" class="anchored" data-anchor-id="directory-structure"><span class="header-section-number">6.8.4</span> Directory Structure</h3>
+<p>Organize code logically. A typical Python project structure might be:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>project-name/
+├── README.md
+├── LICENSE
+├── pyproject.toml
+├── src/
+│   └── project_name/
+│       ├── __init__.py
+│       └── main.py
+├── tests/
+│   └── test_main.py
+└── docs/
+    └── index.md</code></pre>
+</div>
+</section>
+</section>
+<section id="security-considerations" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="security-considerations"><span class="header-section-number">6.9</span> Security Considerations</h2>
+<p>Never commit secrets to Git. This includes API keys, passwords, database credentials, private keys, and tokens. Once a secret is in Git history, it’s extremely difficult to remove completely.</p>
+<p>Use environment variables or dedicated secret management tools for sensitive configuration. Add files containing secrets to <code>.gitignore</code> before you accidentally commit them.</p>
+<p>If you do accidentally commit a secret, immediately rotate it (generate a new key) rather than trying to remove it from history. Assume the secret is compromised.</p>
+<p>GitHub offers features to help with security. Enable Dependabot to receive alerts about vulnerabilities in your dependencies. Use branch protection rules to require reviews before merging. Consider signing your commits with GPG keys to verify authorship.</p>
+</section>
+<section id="summary" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="summary"><span class="header-section-number">6.10</span> Summary</h2>
+<p>In this chapter, you learned how GitHub enables collaborative development. You can now synchronize local and remote repositories using push and pull, collaborate using the feature branch workflow and pull requests, participate in code review, use GitHub’s project management features (issues, projects, milestones), contribute to projects you don’t own using forks, and work efficiently with the GitHub CLI.</p>
+<p>The combination of Git and GitHub forms the backbone of modern software development. These tools and workflows apply whether you’re working on a two-person team or contributing to projects with thousands of collaborators. Practice these patterns on every project, and they’ll become second nature.</p>
+</section>
+<section id="glossary" class="level2" data-number="6.11">
+<h2 data-number="6.11" class="anchored" data-anchor-id="glossary"><span class="header-section-number">6.11</span> Glossary</h2>
+<dl>
+<dt><strong>Clone</strong></dt>
+<dd>
+Creating a local copy of a remote repository, including all files and history.
+</dd>
+<dt><strong>Fork</strong></dt>
+<dd>
+A personal copy of someone else’s repository on GitHub. Allows you to experiment freely and propose changes via pull requests.
+</dd>
+<dt><strong>Merge Conflict</strong></dt>
+<dd>
+Occurs when Git cannot automatically combine changes because the same lines were modified differently. Requires manual resolution.
+</dd>
+<dt><strong>Origin</strong></dt>
+<dd>
+The conventional name for your primary remote repository, typically pointing to GitHub.
+</dd>
+<dt><strong>Pull</strong></dt>
+<dd>
+Downloading commits from a remote repository and merging them into your local branch.
+</dd>
+<dt><strong>Pull Request (PR)</strong></dt>
+<dd>
+A GitHub feature for proposing that changes from one branch be merged into another. Enables code review and discussion.
+</dd>
+<dt><strong>Push</strong></dt>
+<dd>
+Uploading your local commits to a remote repository.
+</dd>
+<dt><strong>Remote</strong></dt>
+<dd>
+A Git repository hosted somewhere other than your local machine, such as on GitHub.
+</dd>
+<dt><strong>Upstream</strong></dt>
+<dd>
+In the fork workflow, the original repository that you forked from.
+</dd>
+<dt><strong>Issue</strong></dt>
+<dd>
+A GitHub feature for tracking tasks, bugs, feature requests, and discussions related to a repository.
+</dd>
+<dt><strong>Code Review</strong></dt>
+<dd>
+The practice of examining code changes before they’re merged, checking for bugs, style, and clarity.
+</dd>
+</dl>
+</section>
+<section id="resources" class="level2" data-number="6.12">
+<h2 data-number="6.12" class="anchored" data-anchor-id="resources"><span class="header-section-number">6.12</span> Resources</h2>
+<ul>
+<li><a href="https://docs.github.com/">GitHub Documentation</a>: Official comprehensive documentation</li>
+<li><a href="https://skills.github.com/">GitHub Skills</a>: Interactive courses for learning GitHub</li>
+<li><a href="https://docs.github.com/en/get-started/using-github/github-flow">GitHub Flow Guide</a>: Explanation of the recommended workflow</li>
+<li><a href="https://guides.github.com/introduction/flow/">Understanding the GitHub Flow</a>: Visual guide to branches and pull requests</li>
+<li><a href="https://cli.github.com/manual/">GitHub CLI Manual</a>: Complete reference for the <code>gh</code> command</li>
+<li><a href="https://opensource.guide/">Open Source Guides</a>: Best practices for open source projects</li>
+</ul>
+</section>
+<section id="exercises" class="level2" data-number="6.13">
+<h2 data-number="6.13" class="anchored" data-anchor-id="exercises"><span class="header-section-number">6.13</span> Exercises</h2>
+<section id="question-5.1" class="level3" data-number="6.13.1">
+<h3 data-number="6.13.1" class="anchored" data-anchor-id="question-5.1"><span class="header-section-number">6.13.1</span> Question 5.1</h3>
+<p>What is the relationship between Git and GitHub?</p>
+<ol type="A">
+<li>They are the same software<br>
+</li>
+<li>Git is a version control system; GitHub is a hosting platform for Git repositories<br>
+</li>
+<li>GitHub is a version control system; Git is a hosting platform<br>
+</li>
+<li>Git only works when connected to GitHub</li>
+</ol>
+</section>
+<section id="question-5.2" class="level3" data-number="6.13.2">
+<h3 data-number="6.13.2" class="anchored" data-anchor-id="question-5.2"><span class="header-section-number">6.13.2</span> Question 5.2</h3>
+<p>What does <code>git clone</code> do?</p>
+<ol type="A">
+<li>Creates a new empty repository<br>
+</li>
+<li>Downloads a complete copy of a remote repository<br>
+</li>
+<li>Uploads local changes to GitHub<br>
+</li>
+<li>Creates a branch of the current repository</li>
+</ol>
+</section>
+<section id="question-5.3" class="level3" data-number="6.13.3">
+<h3 data-number="6.13.3" class="anchored" data-anchor-id="question-5.3"><span class="header-section-number">6.13.3</span> Question 5.3</h3>
+<p>What does <code>git push</code> do?</p>
+<ol type="A">
+<li>Downloads changes from a remote repository<br>
+</li>
+<li>Uploads local commits to a remote repository<br>
+</li>
+<li>Creates a new branch<br>
+</li>
+<li>Merges two branches together</li>
+</ol>
+</section>
+<section id="question-5.4" class="level3" data-number="6.13.4">
+<h3 data-number="6.13.4" class="anchored" data-anchor-id="question-5.4"><span class="header-section-number">6.13.4</span> Question 5.4</h3>
+<p>What does <code>git pull</code> do?</p>
+<ol type="A">
+<li>Uploads local commits to a remote repository<br>
+</li>
+<li>Downloads commits from a remote repository and merges them<br>
+</li>
+<li>Creates a pull request on GitHub<br>
+</li>
+<li>Deletes a remote branch</li>
+</ol>
+</section>
+<section id="question-5.5" class="level3" data-number="6.13.5">
+<h3 data-number="6.13.5" class="anchored" data-anchor-id="question-5.5"><span class="header-section-number">6.13.5</span> Question 5.5</h3>
+<p>What is a <strong>pull request</strong> on GitHub?</p>
+<ol type="A">
+<li>A request to download a repository<br>
+</li>
+<li>A proposal to merge changes from one branch into another<br>
+</li>
+<li>A request to delete a repository<br>
+</li>
+<li>A request for more storage space</li>
+</ol>
+</section>
+<section id="question-5.6" class="level3" data-number="6.13.6">
+<h3 data-number="6.13.6" class="anchored" data-anchor-id="question-5.6"><span class="header-section-number">6.13.6</span> Question 5.6</h3>
+<p>What is a <strong>merge conflict</strong>?</p>
+<ol type="A">
+<li>When two repositories cannot connect to each other<br>
+</li>
+<li>When Git cannot automatically combine changes because the same lines were modified differently<br>
+</li>
+<li>When a branch is deleted accidentally<br>
+</li>
+<li>When GitHub servers are down</li>
+</ol>
+</section>
+<section id="question-5.7" class="level3" data-number="6.13.7">
+<h3 data-number="6.13.7" class="anchored" data-anchor-id="question-5.7"><span class="header-section-number">6.13.7</span> Question 5.7</h3>
+<p>What is a <strong>fork</strong> on GitHub?</p>
+<ol type="A">
+<li>A tool for splitting large files<br>
+</li>
+<li>A personal copy of someone else’s repository under your account<br>
+</li>
+<li>A type of merge strategy<br>
+</li>
+<li>A way to delete repositories</li>
+</ol>
+</section>
+<section id="question-5.8" class="level3" data-number="6.13.8">
+<h3 data-number="6.13.8" class="anchored" data-anchor-id="question-5.8"><span class="header-section-number">6.13.8</span> Question 5.8</h3>
+<p>What is the conventional name for the primary remote repository?</p>
+<ol type="A">
+<li>main<br>
+</li>
+<li>master<br>
+</li>
+<li>origin<br>
+</li>
+<li>upstream</li>
+</ol>
+</section>
+<section id="question-5.9" class="level3" data-number="6.13.9">
+<h3 data-number="6.13.9" class="anchored" data-anchor-id="question-5.9"><span class="header-section-number">6.13.9</span> Question 5.9</h3>
+<p>Why should you NEVER commit secrets (like API keys or passwords) to Git?</p>
+<ol type="A">
+<li>Git cannot store special characters<br>
+</li>
+<li>Secrets make the repository too large<br>
+</li>
+<li>Once in Git history, secrets are extremely difficult to remove completely<br>
+</li>
+<li>GitHub automatically rejects commits with secrets</li>
+</ol>
+</section>
+<section id="question-5.10" class="level3" data-number="6.13.10">
+<h3 data-number="6.13.10" class="anchored" data-anchor-id="question-5.10"><span class="header-section-number">6.13.10</span> Question 5.10</h3>
+<p>What is the purpose of <strong>code review</strong> in the pull request workflow?</p>
+<ol type="A">
+<li>To automatically fix bugs in the code<br>
+</li>
+<li>To examine changes for bugs, style, and clarity before merging<br>
+</li>
+<li>To compress the code for faster performance<br>
+</li>
+<li>To convert code between programming languages</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ozanozbeker\.com\/cw4e\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/05-git.html" class="pagination-link" aria-label="Version Control with Git">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../unit-2-sql.html" class="pagination-link" aria-label="Data with SQL">
+        <span class="nav-page-text">Data with SQL</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/06-github.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
