@@ -105,7 +105,7 @@ A comprehensive reference documenting every field in the dataset, including tabl
 
 ## File Storage Recommendations
 
-Store the dataset files in a dedicated `data` directory within your course or project folder. This matches the relative paths used in code examples throughout the book:
+Store the dataset files in a dedicated `data` directory within your project folder. This matches the relative paths used in code examples throughout the book:
 
 ```{.text filename="project structure"}
 your-project/

@@ -1,0 +1,505 @@
+# Control Flow {#sec-control-flow}
+
+In @sec-collections, you learned to store data in lists, dictionaries, and other structures. This chapter teaches you how to make decisions about that data and process it systematically. Control flow gives you two fundamental tools: conditionals (`if` statements) for making decisions, and loops (`for` and `while` loops) for repeating actions. Together, they let you write programs that respond to data and process collections efficiently.
+
+This chapter builds toward *comprehensions*, a distinctly Pythonic way of transforming collections that you'll use constantly for the rest of the book.
+
+## Conditionals
+
+Conditionals let your code make decisions. Python's `if` statement evaluates a condition and executes a block of code only if the condition is truthy:
+
+```{.python filename="if_statement.py"}
+units_in_stock = 5
+reorder_level = 10
+
+if units_in_stock <= reorder_level:
+    print("Stock is low. Time to reorder.")
+```
+
+Notice that the block under `if` is indented. Python uses indentation to define code blocks, not braces or keywords like `end`. This means indentation isn't just a style choice, it's part of the language's syntax. The standard is four spaces per level.
+
+### `if` / `elif` / `else`
+
+For multiple branches, use `elif` (short for "else if") and `else`:
+
+```{.python filename="elif.py"}
+score = 78
+
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+elif score >= 60:
+    grade = "D"
+else:
+    grade = "F"
+
+print(f"Score: {score}, Grade: {grade}")  # Score: 78, Grade: C
+```
+
+Python evaluates conditions from top to bottom and executes only the first branch that matches. Once a branch is taken, the remaining `elif` and `else` blocks are skipped entirely.
+
+### Conditional Expressions (Ternary)
+
+For simple two-way decisions, Python supports a compact inline form:
+
+```{.python filename="ternary.py"}
+status = "Active" if not discontinued else "Discontinued"
+```
+
+This is equivalent to:
+
+```{.python filename="ternary_expanded.py"}
+if not discontinued:
+    status = "Active"
+else:
+    status = "Discontinued"
+```
+
+The inline form reads like English: "*status* is *'Active'* if *not discontinued*, else *'Discontinued'*." Use it for simple assignments. For anything more complex, the full `if`/`else` block is clearer.
+
+### Structural Pattern Matching
+
+Python 3.10 introduced `match`/`case` for structural pattern matching. It's useful when you're checking a value against multiple specific options:
+
+```{.python filename="match_case.py"}
+def describe_http_status(code: int) -> str:
+    match code:
+        case 200:
+            return "OK"
+        case 301:
+            return "Moved Permanently"
+        case 404:
+            return "Not Found"
+        case 500:
+            return "Internal Server Error"
+        case _:
+            return f"Unknown status: {code}"
+
+print(describe_http_status(404))  # "Not Found"
+```
+
+The `_` in the last case is a wildcard that matches anything, like `else` in an `if` chain. Pattern matching is more powerful than this simple example suggests (it can destructure collections and objects), but for now, think of it as a cleaner alternative to long `if`/`elif` chains when you're matching a value against known options.
+
+## Loops
+
+Loops repeat a block of code. Python has two kinds: `for` loops that iterate over a collection, and `while` loops that repeat as long as a condition is true.
+
+### `for` Loops
+
+A `for` loop visits each element in a sequence, one at a time:
+
+```{.python filename="for_loop.py"}
+products = ["Chai", "Chang", "Tofu", "Miso"]
+
+for product in products:
+    print(f"Processing: {product}")
+```
+
+```{.text filename="output"}
+Processing: Chai
+Processing: Chang
+Processing: Tofu
+Processing: Miso
+```
+
+The variable `product` takes on each value in the list, one per iteration. After the loop, `product` holds the last value, `"Miso"`.
+
+### `range()` for Numeric Iteration
+
+When you need to iterate over a sequence of numbers, use `range()`:
+
+```{.python filename="range.py"}
+for i in range(5):
+    print(i)    # Prints 0, 1, 2, 3, 4
+
+for i in range(2, 8):
+    print(i)    # Prints 2, 3, 4, 5, 6, 7
+
+for i in range(0, 20, 5):
+    print(i)    # Prints 0, 5, 10, 15
+```
+
+Like slicing, `range(start, stop)` includes `start` but excludes `stop`. The optional third argument is the step size.
+
+### `enumerate()` for Index + Value
+
+When you need both the index and the value, use `enumerate()`:
+
+```{.python filename="enumerate.py"}
+products = ["Chai", "Chang", "Tofu"]
+
+for index, product in products:  # This would fail! Can't unpack a string
+    print(f"{index}: {product}")
+
+for index, product in enumerate(products):
+    print(f"{index}: {product}")
+```
+
+```{.text filename="output"}
+0: Chai
+1: Chang
+2: Tofu
+```
+
+`enumerate()` returns pairs of `(index, value)`, which you unpack directly in the loop header. This is much cleaner than maintaining a separate counter variable.
+
+### `zip()` for Parallel Iteration
+
+When you need to iterate over two (or more) sequences together, use `zip()`:
+
+```{.python filename="zip.py"}
+products = ["Chai", "Chang", "Tofu"]
+prices = [18.00, 19.00, 6.50]
+
+for product, price in zip(products, prices):
+    print(f"{product}: ${price:.2f}")
+```
+
+```{.text filename="output"}
+Chai: $18.00
+Chang: $19.00
+Tofu: $6.50
+```
+
+`zip()` pairs elements by position: first with first, second with second, and so on. If the sequences have different lengths, `zip()` stops at the shortest one.
+
+### `while` Loops
+
+A `while` loop repeats as long as its condition is truthy:
+
+```{.python filename="while_loop.py"}
+countdown = 5
+
+while countdown > 0:
+    print(f"T-minus {countdown}")
+    countdown -= 1
+
+print("Launch!")
+```
+
+Use `while` when you don't know in advance how many iterations you need. Use `for` when you're iterating over a known collection or range. In data processing, `for` loops are far more common.
+
+::: {.callout-warning}
+## Infinite loops
+
+If a `while` condition never becomes falsy, the loop runs forever. Always make sure something inside the loop moves you toward the exit condition. If your program hangs, press `Ctrl+C` to interrupt it.
+:::
+
+### `break` and `continue`
+
+`break` exits the loop entirely. `continue` skips the rest of the current iteration and moves to the next one:
+
+```{.python filename="break_continue.py"}
+# Find the first discontinued product
+products = [
+    {"name": "Chai", "discontinued": False},
+    {"name": "Chang", "discontinued": False},
+    {"name": "Chef Anton's", "discontinued": True},
+    {"name": "Tofu", "discontinued": False},
+]
+
+for product in products:
+    if product["discontinued"]:
+        print(f"Found discontinued: {product['name']}")
+        break
+```
+
+```{.python filename="continue.py"}
+# Print only active products
+for product in products:
+    if product["discontinued"]:
+        continue  # Skip this iteration
+    print(product["name"])
+```
+
+### Exercises
+
+1. Write an `if`/`elif`/`else` chain that classifies a `unit_price` into `"Budget"` (under $10), `"Mid-range"` ($10-$25), or `"Premium"` (over $25). Test it with prices 8.50, 18.00, and 45.00.
+
+2. Rewrite the classification from exercise 1 as a conditional expression (ternary). Is this a good use of the ternary form? Why or why not?
+
+3. Given the list of product dictionaries from the `break`/`continue` section, use a `for` loop with `enumerate()` to print each product's index and name. Then use `zip()` with a separate `prices` list to pair each product with a price.
+
+4. Write a `for` loop that computes the running total of `prices = [18.00, 19.00, 10.00, 22.00, 23.25]`. After each iteration, print the current price and the running total so far.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.**
+```{.python filename="solution.py"}
+def classify_price(unit_price):
+    if unit_price < 10:
+        return "Budget"
+    elif unit_price <= 25:
+        return "Mid-range"
+    else:
+        return "Premium"
+
+classify_price(8.50)   # "Budget"
+classify_price(18.00)  # "Mid-range"
+classify_price(45.00)  # "Premium"
+```
+
+**2.** For two categories it's fine: `"Premium" if unit_price > 25 else "Other"`. But for three categories, nesting ternaries is hard to read: `"Budget" if unit_price < 10 else "Mid-range" if unit_price <= 25 else "Premium"`. The `if`/`elif`/`else` chain is clearer for three or more branches.
+
+**3.**
+```{.python filename="solution.py"}
+for i, product in enumerate(products):
+    print(f"{i}: {product['name']}")
+
+prices = [18.00, 19.00, 22.00, 6.50]
+for product, price in zip(products, prices):
+    print(f"{product['name']}: ${price:.2f}")
+```
+
+**4.**
+```{.python filename="solution.py"}
+prices = [18.00, 19.00, 10.00, 22.00, 23.25]
+running_total = 0
+
+for price in prices:
+    running_total += price
+    print(f"Price: ${price:.2f}, Running total: ${running_total:.2f}")
+```
+
+:::
+
+## Comprehensions {#sec-comprehensions}
+
+Comprehensions are one of Python's most distinctive features. A list comprehension creates a new list by transforming and/or filtering an existing iterable, all in a single expression.
+
+### From Loop to Comprehension
+
+Consider this loop that computes the square of each number:
+
+```{.python filename="loop_version.py"}
+numbers = [1, 2, 3, 4, 5]
+squares = []
+
+for n in numbers:
+    squares.append(n ** 2)
+
+# squares = [1, 4, 9, 16, 25]
+```
+
+The equivalent list comprehension:
+
+```{.python filename="comprehension_version.py"}
+numbers = [1, 2, 3, 4, 5]
+squares = [n ** 2 for n in numbers]
+
+# squares = [1, 4, 9, 16, 25]
+```
+
+The comprehension reads as: "give me `n ** 2` for each `n` in `numbers`." It's more concise, and once you're used to the pattern, it's more readable too.
+
+### Adding a Filter
+
+You can add an `if` clause to filter which elements are included:
+
+```{.python filename="filtered_comprehension.py"}
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+evens = [n for n in numbers if n % 2 == 0]
+# [2, 4, 6, 8, 10]
+
+large_squares = [n ** 2 for n in numbers if n > 5]
+# [36, 49, 64, 81, 100]
+```
+
+This reads as: "give me `n ** 2` for each `n` in `numbers`, but only if `n > 5`."
+
+### Dictionary and Set Comprehensions
+
+The same pattern works for dictionaries and sets:
+
+```{.python filename="dict_comprehension.py"}
+products = ["Chai", "Chang", "Tofu"]
+prices = [18.00, 19.00, 6.50]
+
+price_lookup = {name: price for name, price in zip(products, prices)}
+# {"Chai": 18.0, "Chang": 19.0, "Tofu": 6.5}
+```
+
+```{.python filename="set_comprehension.py"}
+words = ["hello", "world", "hello", "python"]
+unique_lengths = {len(word) for word in words}
+# {5, 6}
+```
+
+### A Practical Example
+
+Here's a comprehension that processes Northwind product data, filtering to active products and computing stock values:
+
+```{.python filename="northwind_comprehension.py"}
+products = [
+    {"name": "Chai", "price": 18.00, "stock": 39, "discontinued": False},
+    {"name": "Chang", "price": 19.00, "stock": 17, "discontinued": False},
+    {"name": "Chef Anton's", "price": 22.00, "stock": 53, "discontinued": True},
+    {"name": "Tofu", "price": 23.25, "stock": 35, "discontinued": False},
+]
+
+# Stock values for active products only
+stock_values = [
+    {"name": p["name"], "value": p["price"] * p["stock"]}
+    for p in products
+    if not p["discontinued"]
+]
+
+for item in stock_values:
+    print(f"{item['name']}: ${item['value']:,.2f}")
+```
+
+```{.text filename="output"}
+Chai: $702.00
+Chang: $323.00
+Tofu: $813.75
+```
+
+### When Not to Use Comprehensions
+
+Comprehensions are powerful, but they can become unreadable if you push too much logic into them. A good rule of thumb: if a comprehension doesn't fit on one or two lines, or if it requires nested loops with complex conditions, use an explicit loop instead. Clarity beats cleverness.
+
+```{.python filename="too_complex.py"}
+# This is too complex for a comprehension. Use a loop.
+result = [
+    (x, y, z)
+    for x in range(1, 30)
+    for y in range(x, 30)
+    for z in range(y, 30)
+    if x ** 2 + y ** 2 == z ** 2
+]
+```
+
+## Putting It Together: Northwind Order Processing
+
+Let's combine collections and control flow to process Northwind data. Given a list of order detail records, we'll compute revenue by category:
+
+```{.python filename="order_processing.py"}
+# Sample order details (in later chapters, we'll read this from files)
+order_details = [
+    {"product": "Chai", "category": "Beverages", "price": 18.00, "quantity": 10},
+    {"product": "Chang", "category": "Beverages", "price": 19.00, "quantity": 5},
+    {"product": "Aniseed Syrup", "category": "Condiments", "price": 10.00, "quantity": 20},
+    {"product": "Tofu", "category": "Produce", "price": 23.25, "quantity": 15},
+    {"product": "Miso", "category": "Condiments", "price": 13.00, "quantity": 8},
+]
+
+# Compute revenue per item
+revenues = [
+    {**item, "revenue": item["price"] * item["quantity"]}
+    for item in order_details
+]
+
+# Aggregate revenue by category using a dictionary
+category_totals = {}
+
+for item in revenues:
+    category = item["category"]
+    revenue = item["revenue"]
+
+    if category in category_totals:
+        category_totals[category] += revenue
+    else:
+        category_totals[category] = revenue
+
+# Sort by revenue (descending) and display
+sorted_categories = sorted(
+    category_totals.items(),
+    key=lambda pair: pair[1],
+    reverse=True,
+)
+
+print(f"{'Category':<15} {'Revenue':>10}")
+print(f"{'-' * 15} {'-' * 10}")
+for category, total in sorted_categories:
+    print(f"{category:<15} ${total:>9,.2f}")
+```
+
+```{.text filename="output"}
+Category             Revenue
+--------------- ----------
+Produce         $   348.75
+Condiments      $   304.00
+Beverages       $   275.00
+```
+
+This script uses lists of dictionaries, a `for` loop with an `if`/`else` branch to build an aggregation dictionary, `sorted()` with a `key` function, tuple unpacking, and f-strings with alignment. It's a miniature version of what SQL's `GROUP BY` does, implemented entirely in Python. In later chapters, you'll read this data from actual CSV files instead of hardcoding it.
+
+## Exercises {.unnumbered}
+
+### Collection Operations {.unnumbered}
+
+1. Create a list of 10 integers. Use slicing to extract the first three, the last three, and every other element. Use `sorted()` to get them in descending order.
+
+2. Given two lists of the same length, create a dictionary that maps elements from the first list (as keys) to elements of the second (as values). Use `zip()`.
+
+3. Given a list of product names that may contain duplicates, use a set to get the unique names, then convert back to a sorted list.
+
+### Loop Practice {.unnumbered}
+
+1. Write a `for` loop that prints the first 20 numbers in the Fibonacci sequence (1, 1, 2, 3, 5, 8, ...).
+
+2. Given a list of dictionaries representing products (with `"name"`, `"price"`, and `"stock"` keys), use a `for` loop to find and print the most expensive product.
+
+3. Use `enumerate()` to print a numbered list of products, starting from 1 instead of 0. (Hint: `enumerate()` accepts a `start` argument.)
+
+### Comprehension Practice {.unnumbered}
+
+1. Rewrite each of these loops as a comprehension:
+
+    ```{.python filename="to_comprehension.py"}
+    # Loop 1
+    names = []
+    for p in products:
+        names.append(p["name"].upper())
+
+    # Loop 2
+    expensive = []
+    for p in products:
+        if p["price"] > 20:
+            expensive.append(p["name"])
+    ```
+
+2. Now go the other direction. Rewrite this comprehension as an explicit loop:
+
+    ```{.python filename="to_loop.py"}
+    summary = {p["name"]: p["price"] * p["stock"] for p in products if p["stock"] > 0}
+    ```
+
+3. Given the `order_details` list from the chapter example, write a comprehension that produces a list of product names where revenue exceeds $150.
+
+### Northwind Category Analysis {.unnumbered}
+
+Using the `order_details` list from the chapter, write a script that:
+
+1. Groups items by category into a dictionary of lists (each category key maps to a list of its items).
+2. For each category, computes the average unit price and total quantity ordered.
+3. Prints a formatted summary table.
+
+## Summary {.unnumbered}
+
+Conditionals and loops form the backbone of Python programming. The `if`/`elif`/`else` construct lets you direct program flow based on conditions, while `for` loops iterate over collections and `while` loops repeat until a condition changes. The `range()`, `enumerate()`, and `zip()` functions are essential companions to `for` loops that let you handle numeric sequences, track positions while iterating, and process multiple sequences in parallel.
+
+Comprehensions are one of Python's most distinctive and powerful features. They condense the common pattern of "build a new collection by transforming and filtering an existing one" into a single, readable expression. They're more efficient than loop-and-append code, and once you're comfortable with the syntax, they're more readable too. You'll use comprehensions constantly throughout the rest of the book.
+
+In the next chapter, you'll learn to organize your code into reusable functions and modules, the building blocks that turn scripts into maintainable software.
+
+## Glossary {.unnumbered}
+
+comprehension
+: A concise syntax for creating lists, dictionaries, or sets by transforming and filtering an iterable. Example: `[x ** 2 for x in range(10)]`.
+
+`enumerate()`
+: A built-in function that yields `(index, value)` pairs from an iterable.
+
+iterable
+: Any object that can be looped over with a `for` statement. Lists, tuples, dictionaries, sets, strings, and ranges are all iterable.
+
+pattern matching
+: Python's `match`/`case` syntax for comparing a value against multiple patterns. Introduced in Python 3.10.
+
+`zip()`
+: A built-in function that pairs elements from two or more iterables together.

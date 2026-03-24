@@ -1,0 +1,1090 @@
+# Working with Files {#sec-file-io}
+
+Every data workflow touches files. Databases store data in files. CSV exports are files. JSON configuration is a file. The reports you generate are files. In Unit 1, you learned to navigate files through the command line. Now you'll learn to read, write, and manipulate them from Python.
+
+This chapter introduces five skills: reading and writing text files safely using context managers, navigating the file system with `pathlib`, parsing structured data formats (CSV and JSON), fetching data from web APIs with `httpx`, and handling errors that arise when working with external data. By the end, you'll write a complete pipeline that reads Northwind data from CSV files, processes it with the functions you built in @sec-functions, and writes a summary report.
+
+## Context Managers and `with` {#sec-context-managers}
+
+When you open a file, the operating system allocates resources to track that open file. When you're done, you need to close it to release those resources. Forgetting to close a file might seem harmless in a short script, but in long-running programs or programs that open many files, it leads to resource leaks, data corruption, and mysterious errors.
+
+Here's the problem:
+
+```{.python filename="no_close.py"}
+f = open("data.txt")
+content = f.read()
+# Imagine an error occurs here...
+f.close()  # This line might never run!
+```
+
+If an error occurs between `open()` and `close()`, the file stays open. Python's `with` statement solves this by guaranteeing that cleanup happens, even if something goes wrong:
+
+```{.python filename="with_statement.py"}
+with open("data.txt") as f:
+    content = f.read()
+# The file is automatically closed here, no matter what happened inside the block
+```
+
+The `with` statement is a *context manager*. It sets something up (opening the file), lets you work with it, and then tears it down (closing the file) when the block ends. The teardown happens even if your code raises an exception.
+
+::: {.callout-important}
+## Always use `with` for files
+
+Throughout this book and in professional Python code, you should *always* open files with `with`. Never call `open()` without it. This habit prevents an entire class of bugs and resource leaks.
+:::
+
+You can open multiple files in a single `with` statement:
+
+```{.python filename="multiple_files.py"}
+with open("input.csv") as infile, open("output.csv", "w") as outfile:
+    for line in infile:
+        outfile.write(line.upper())
+```
+
+Context managers aren't limited to files. You'll encounter them with database connections (@sec-python-sql), network requests, and many other resources that need setup and teardown. The `with` pattern is one of Python's most important idioms.
+
+## Reading and Writing Text Files
+
+### File Modes
+
+The `open()` function takes a file path and a *mode* that controls how the file is opened:
+
+| Mode | Description | If file exists | If file doesn't exist |
+|------|-------------|---------------|----------------------|
+| `"r"` | Read (default) | Opens for reading | `FileNotFoundError` |
+| `"w"` | Write | **Overwrites** contents | Creates new file |
+| `"a"` | Append | Adds to end | Creates new file |
+| `"x"` | Exclusive create | `FileExistsError` | Creates new file |
+
+: File open modes {#tbl-file-modes}
+
+::: {.callout-warning}
+## `"w"` destroys existing content
+
+Opening a file in `"w"` mode erases everything in it immediately. If you meant to add to the file rather than replace it, use `"a"` (append) instead. This is one of the most common and most painful mistakes in file handling.
+:::
+
+### Reading Files
+
+There are several ways to read a file's contents:
+
+```{.python filename="reading.py"}
+# Read the entire file as a single string
+with open("data.txt") as f:
+    content = f.read()
+
+# Read one line at a time
+with open("data.txt") as f:
+    first_line = f.readline()     # Reads one line (includes \n)
+    second_line = f.readline()    # Reads the next line
+
+# Read all lines into a list
+with open("data.txt") as f:
+    lines = f.readlines()         # ["line 1\n", "line 2\n", ...]
+```
+
+For large files, the most memory-efficient approach is to iterate over the file object directly:
+
+```{.python filename="iterate_file.py"}
+with open("large_data.csv") as f:
+    for line in f:
+        # Each line is read one at a time, not all at once
+        process(line.strip())
+```
+
+This uses the same lazy evaluation principle as generators (@sec-generators). The file is read line by line, and only one line occupies memory at a time.
+
+### Writing Files
+
+Writing works with `.write()` or `print()`:
+
+```{.python filename="writing.py"}
+with open("report.txt", "w") as f:
+    f.write("Revenue Report\n")
+    f.write("=" * 40 + "\n")
+    f.write(f"Total Revenue: ${12345.67:,.2f}\n")
+```
+
+Note that `.write()` doesn't add a newline automatically. You need to include `\n` yourself. Alternatively, you can use `print()` with the `file` parameter:
+
+```{.python filename="print_to_file.py"}
+with open("report.txt", "w") as f:
+    print("Revenue Report", file=f)
+    print("=" * 40, file=f)
+    print(f"Total Revenue: ${12345.67:,.2f}", file=f)
+```
+
+`print()` adds newlines automatically, so it's often more convenient for formatted output.
+
+### Encoding
+
+Text files are sequences of bytes that represent characters. The mapping from bytes to characters is called an *encoding*. Modern best practice is to always use UTF-8:
+
+```{.python filename="encoding.py"}
+with open("data.txt", encoding="utf-8") as f:
+    content = f.read()
+```
+
+If you encounter a `UnicodeDecodeError`, the file was probably saved in a different encoding. This is common with files exported from older Windows applications, which often use `"cp1252"` or `"latin-1"` instead of UTF-8.
+
+::: {.callout-note}
+## Saving to disk
+
+When you're working in a text editor or Google Docs, changes are saved automatically (or with `Ctrl+S`). In Python, data lives in memory (in variables) until you explicitly write it to a file. The `with open(..., "w") as f:` pattern followed by `f.write()` is the Python equivalent of "Save As." Nothing is saved to disk until you write it.
+:::
+
+## Pathlib for File System Navigation {#sec-pathlib}
+
+In the CLI chapter, you navigated the file system with `cd`, `ls`, and `pwd`. Python's `pathlib` module provides the same capabilities programmatically. Instead of string manipulation to build file paths, you use `Path` objects:
+
+```{.python filename="pathlib_basics.py"}
+from pathlib import Path
+
+# Create a Path object
+data_dir = Path("data")
+orders_file = data_dir / "orders.csv"     # Use / to join paths
+details_file = data_dir / "details.csv"
+
+print(orders_file)  # data/orders.csv
+```
+
+The `/` operator joins path segments, replacing the error-prone string concatenation (`"data" + "/" + "orders.csv"`) and the cross-platform issues that come with hardcoding path separators.
+
+### Inspecting Paths
+
+Path objects provide methods to query file system properties:
+
+```{.python filename="path_inspection.py"}
+from pathlib import Path
+
+p = Path("data/orders.csv")
+
+print(p.exists())      # True/False: does this path exist?
+print(p.is_file())     # True/False: is it a file?
+print(p.is_dir())      # True/False: is it a directory?
+print(p.name)          # "orders.csv" (filename with extension)
+print(p.stem)          # "orders" (filename without extension)
+print(p.suffix)        # ".csv" (file extension)
+print(p.parent)        # Path("data") (the containing directory)
+print(p.resolve())     # Absolute path: /home/user/project/data/orders.csv
+```
+
+### Listing Directory Contents
+
+To see what's in a directory:
+
+```{.python filename="listing.py"}
+from pathlib import Path
+
+data_dir = Path("data")
+
+# List all files and directories
+for item in data_dir.iterdir():
+    print(item)
+
+# List only CSV files
+for csv_file in data_dir.glob("*.csv"):
+    print(csv_file)
+
+# Recursively find all CSV files in subdirectories
+for csv_file in data_dir.rglob("*.csv"):
+    print(csv_file)
+```
+
+The `glob()` method supports wildcard patterns: `*` matches any sequence of characters, `?` matches a single character, and `**` matches any number of nested directories.
+
+### Creating Directories
+
+```{.python filename="mkdir.py"}
+from pathlib import Path
+
+output_dir = Path("output") / "reports" / "2025"
+output_dir.mkdir(parents=True, exist_ok=True)
+```
+
+The `parents=True` argument creates all intermediate directories (like `mkdir -p` in the terminal). The `exist_ok=True` argument prevents an error if the directory already exists.
+
+### Pathlib with `open()`
+
+Path objects work directly with `open()`:
+
+```{.python filename="pathlib_open.py"}
+from pathlib import Path
+
+filepath = Path("data") / "orders.csv"
+
+with open(filepath) as f:
+    content = f.read()
+
+# Or use the Path object's own open method:
+with filepath.open() as f:
+    content = f.read()
+```
+
+Both forms are equivalent. Use whichever feels more natural.
+
+### Exercises
+
+1. What is wrong with this code? Rewrite it using a context manager.
+```{.python filename="solution.py"}
+f = open("data.txt")
+content = f.read()
+# ... some processing that might raise an error ...
+f.close()
+```
+
+2. Given `filepath = Path("output") / "reports" / "2025" / "q1_summary.csv"`, write expressions to extract: the file name (`q1_summary.csv`), the file extension (`.csv`), the stem without extension (`q1_summary`), and the parent directory (`output/reports/2025`).
+
+3. Write code that uses `pathlib` to create the directory `output/reports/2025` if it doesn't exist, then checks whether a file called `summary.csv` exists inside it.
+
+4. What is the difference between `"w"` and `"a"` mode when opening a file? If you open an existing file with `"w"` mode, what happens to its contents?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** If an error occurs between `open()` and `close()`, the file stays open. Fix:
+```{.python filename="solution.py"}
+with open("data.txt") as f:
+    content = f.read()
+    # ... processing ...
+# File is automatically closed, even if an error occurred
+```
+
+**2.** Show the code:
+```{.python filename="solution.py"}
+from pathlib import Path
+
+filepath = Path("output") / "reports" / "2025" / "q1_summary.csv"
+filepath.name      # "q1_summary.csv"
+filepath.suffix    # ".csv"
+filepath.stem      # "q1_summary"
+filepath.parent    # Path("output/reports/2025")
+```
+
+**3.** Show the code:
+```{.python filename="solution.py"}
+from pathlib import Path
+
+report_dir = Path("output") / "reports" / "2025"
+report_dir.mkdir(parents=True, exist_ok=True)
+
+summary_file = report_dir / "summary.csv"
+summary_file.exists()  # True or False
+```
+
+**4.** `"w"` (write) mode erases all existing content immediately upon opening. `"a"` (append) mode preserves existing content and adds new content to the end. If you accidentally open a file with `"w"` when you meant `"a"`, you lose everything.
+
+:::
+
+## Working with CSV {#sec-csv}
+
+CSV (Comma-Separated Values) is the most common format for tabular data exchange. If you've exported data from a database, a spreadsheet, or almost any other tool, you've probably worked with CSV files.
+
+A CSV file looks like this:
+
+```{.csv filename="products.csv"}
+productID,productName,quantityPerUnit,unitPrice,discontinued,categoryID,supplierID,unitsInStock,reorderLevel,weight_kg
+1,Chai,10 boxes x 20 bags,18.0,0,1,47,29,48,22.13
+2,Chang,24 - 12 oz bottles,19.0,0,1,44,68,46,14.87
+3,Aniseed Syrup,12 - 550 ml bottles,10.0,0,2,22,79,40,28.72
+```
+
+The first row contains column names (headers), and each subsequent row is a record. Values are separated by commas.
+
+### Reading CSV with `csv.DictReader`
+
+Python's `csv` module provides `csv.DictReader`, which reads each row as a dictionary with column names as keys:
+
+```{.python filename="csv_dictreader.py"}
+import csv
+from pathlib import Path
+
+filepath = Path("data") / "products.csv"
+
+with open(filepath) as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row)
+```
+
+Each `row` is a dictionary like:
+
+```{.python filename="output"}
+{"productID": "1", "productName": "Chai", "unitPrice": "18.0", "categoryID": "1", ...}
+```
+
+::: {.callout-warning}
+## CSV values are always strings
+
+Notice that `"18.0"` is a string, not a float. CSV files don't carry type information, so `csv.DictReader` gives you strings for everything. You must convert values to the appropriate types yourself:
+
+```{.python filename="csv_types.py"}
+price = float(row["unitPrice"])
+stock = int(row["unitsInStock"])
+discontinued = bool(int(row["discontinued"]))
+```
+:::
+
+For a cleaner approach, process the conversions as you read:
+
+```{.python filename="csv_processing.py"}
+import csv
+from pathlib import Path
+
+def load_products(filepath):
+    """Load product data from a CSV file.
+
+    Args:
+        filepath: Path to the CSV file.
+
+    Returns:
+        A list of product dictionaries with properly typed values.
+    """
+    products = []
+    with open(filepath) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            products.append({
+                "productID": int(row["productID"]),
+                "productName": row["productName"],
+                "categoryID": int(row["categoryID"]),
+                "unitPrice": float(row["unitPrice"]),
+                "unitsInStock": int(row["unitsInStock"]),
+                "discontinued": bool(int(row["discontinued"])),
+            })
+    return products
+
+products = load_products(Path("data") / "products.csv")
+```
+
+### Writing CSV with `csv.DictWriter`
+
+To write CSV files, use `csv.DictWriter`:
+
+```{.python filename="csv_write.py"}
+import csv
+from pathlib import Path
+
+results = [
+    {"category": "Beverages", "revenue": 12345.67, "order_count": 42},
+    {"category": "Condiments", "revenue": 8901.23, "order_count": 31},
+    {"category": "Produce", "revenue": 5678.90, "order_count": 18},
+]
+
+filepath = Path("output") / "revenue_summary.csv"
+filepath.parent.mkdir(parents=True, exist_ok=True)
+
+with open(filepath, "w", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=["category", "revenue", "order_count"])
+    writer.writeheader()
+    writer.writerows(results)
+```
+
+The `newline=""` argument prevents double-spaced output on Windows. The `fieldnames` argument specifies the column order. `writeheader()` writes the header row, and `writerows()` writes all the data rows.
+
+### `csv.reader` vs. `csv.DictReader`
+
+Python's `csv` module also provides `csv.reader`, which returns each row as a list instead of a dictionary:
+
+```{.python filename="csv_reader.py"}
+import csv
+
+with open("products.csv") as f:
+    reader = csv.reader(f)
+    headers = next(reader)  # First row is headers
+    for row in reader:
+        print(row)  # ["1", "Chai", "10 boxes x 20 bags", "18.0", "0", "1", ...]
+```
+
+`csv.DictReader` is almost always the better choice because accessing `row["productName"]` is clearer and more robust than `row[1]`. If a column's position changes, dictionary access still works; list access breaks.
+
+### Exercises
+
+1. Given a CSV file where all values are strings (as `csv.DictReader` returns), write expressions to convert: `row["unitPrice"]` to a float, `row["quantity"]` to an integer, and `row["discontinued"]` (which is `"0"` or `"1"`) to a boolean. What happens if `row["unitPrice"]` contains the string `"N/A"`?
+
+2. Write a function `load_products(filepath)` that reads a CSV file and returns a list of dictionaries with properly typed values for `productName` (str), `unitPrice` (float), and `unitsInStock` (int). Use `csv.DictReader`.
+
+3. Why does `csv.DictWriter` require a `fieldnames` argument, while `csv.DictReader` does not? What happens if you pass a dictionary to `writerow()` that has a key not in `fieldnames`?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Show the code:
+```{.python filename="solution.py"}
+price = float(row["unitPrice"])          # "18.0" → 18.0
+quantity = int(row["quantity"])            # "10" → 10
+discontinued = bool(int(row["discontinued"]))  # "0" → False, "1" → True
+```
+If `row["unitPrice"]` is `"N/A"`, `float("N/A")` raises a `ValueError`.
+
+**2.** Show the code:
+```{.python filename="solution.py"}
+import csv
+from pathlib import Path
+
+def load_products(filepath):
+    """Load products from a CSV file with typed values.
+
+    Args:
+        filepath: Path to the CSV file.
+
+    Returns:
+        List of product dictionaries with typed values.
+    """
+    products = []
+    with open(filepath) as f:
+        for row in csv.DictReader(f):
+            products.append({
+                "productName": row["productName"],
+                "unitPrice": float(row["unitPrice"]),
+                "unitsInStock": int(row["unitsInStock"]),
+            })
+    return products
+```
+
+**3.** `DictReader` reads column names from the first row of the CSV file automatically. `DictWriter` needs `fieldnames` to know the column order for the header and to ensure consistent row output. If a dictionary has an extra key, `DictWriter` raises `ValueError` by default (unless you set `extrasaction="ignore"`).
+
+:::
+
+## Working with JSON {#sec-json}
+
+JSON (JavaScript Object Notation) is the standard format for structured data exchange on the web and in configuration files. If you've worked with APIs, configuration files, or NoSQL databases, you've encountered JSON.
+
+A JSON file looks like this:
+
+```{.json filename="config.json"}
+{
+    "database": {
+        "path": "data/northwind.duckdb",
+        "read_only": true
+    },
+    "output": {
+        "directory": "reports",
+        "format": "csv",
+        "include_headers": true
+    },
+    "categories": ["Beverages", "Condiments", "Produce"]
+}
+```
+
+If this looks familiar, it should. JSON maps directly to Python's built-in types:
+
+| JSON | Python |
+|------|--------|
+| Object `{}` | Dictionary `dict` |
+| Array `[]` | List `list` |
+| String `"hello"` | String `str` |
+| Number `42`, `3.14` | `int` or `float` |
+| `true` / `false` | `True` / `False` |
+| `null` | `None` |
+
+: JSON to Python type mapping {#tbl-json-python}
+
+### Reading JSON
+
+Python's `json` module reads JSON from files and strings:
+
+```{.python filename="json_read.py"}
+import json
+from pathlib import Path
+
+# Read from a file
+with open(Path("config.json")) as f:
+    config = json.load(f)
+
+# Access nested values (it's just a dictionary now)
+db_path = config["database"]["path"]
+categories = config["categories"]
+print(categories)  # ["Beverages", "Condiments", "Produce"]
+```
+
+After `json.load()`, you have a regular Python dictionary (or list, depending on the JSON structure). All the dictionary operations you learned in @sec-collections apply.
+
+To parse a JSON string instead of a file, use `json.loads()` (note the `s` for "string"):
+
+```{.python filename="json_loads.py"}
+import json
+
+json_text = '{"name": "Chai", "price": 18.00}'
+product = json.loads(json_text)
+print(product["name"])  # "Chai"
+```
+
+### Writing JSON
+
+To write Python data to a JSON file:
+
+```{.python filename="json_write.py"}
+import json
+from pathlib import Path
+
+results = {
+    "report_date": "2025-03-12",
+    "total_revenue": 27925.80,
+    "categories": [
+        {"name": "Beverages", "revenue": 12345.67},
+        {"name": "Condiments", "revenue": 8901.23},
+    ],
+}
+
+filepath = Path("output") / "results.json"
+filepath.parent.mkdir(parents=True, exist_ok=True)
+
+with open(filepath, "w") as f:
+    json.dump(results, f, indent=2)
+```
+
+The `indent=2` parameter makes the output human-readable with two-space indentation. Without it, the entire JSON is written on a single line.
+
+To convert to a JSON string without writing a file, use `json.dumps()`:
+
+```{.python filename="json_dumps.py"}
+import json
+
+json_text = json.dumps(results, indent=2)
+print(json_text)
+```
+
+## Fetching Data from Web APIs {#sec-httpx}
+
+So far, every data source in this chapter has been a file on your computer. But much of the data you'll work with in practice lives somewhere else: on a server, behind an API, accessible over HTTP. A **web API** (Application Programming Interface) is a URL that returns structured data, usually JSON, instead of a web page. You make a request, the server processes it, and you get data back. The same request-response pattern powers every website you've ever visited, the only difference is that APIs return data for programs to consume, not HTML for browsers to render.
+
+Python's standard library includes `urllib`, but its interface is verbose and dated. The `httpx` library provides a modern, clean API for HTTP requests that reads the way you'd expect Python code to read. Install it in your project:
+
+```{.bash filename="terminal"}
+uv add httpx
+```
+
+### Your First API Request
+
+The Open-Meteo API provides free weather data without requiring an API key, which makes it ideal for learning. Let's fetch the current temperature for Morgantown, WV:
+
+```{.python filename="weather_api.py"}
+"""Fetch current weather data from the Open-Meteo API."""
+
+import httpx
+
+response = httpx.get(
+    "https://api.open-meteo.com/v1/forecast",
+    params={
+        "latitude": 39.6295,
+        "longitude": -79.9559,
+        "current": "temperature_2m,wind_speed_10m",
+        "temperature_unit": "fahrenheit",
+    },
+)
+
+data = response.json()  # Parse the JSON response into a dictionary
+current = data["current"]
+print(f"Temperature: {current['temperature_2m']}°F")
+print(f"Wind speed: {current['wind_speed_10m']} mph")
+```
+
+The pattern is straightforward. `httpx.get()` sends an HTTP GET request to the URL. The `params` dictionary becomes query parameters in the URL (the `?key=value&key=value` part you see in browser address bars). The server returns a response, and `response.json()` parses the JSON body into a Python dictionary, exactly like `json.loads()` from the previous section.
+
+### Checking the Response
+
+Not every request succeeds. The server might be down, the URL might be wrong, or the API might reject your parameters. The response object carries a status code that tells you what happened:
+
+```{.python filename="check_response.py"}
+import httpx
+
+response = httpx.get("https://api.open-meteo.com/v1/forecast", params={"latitude": 39.63})
+
+print(response.status_code)  # 200 means success, 400 means bad request, etc.
+
+# Raise an exception if the request failed
+response.raise_for_status()
+
+data = response.json()
+```
+
+The `raise_for_status()` method raises an `httpx.HTTPStatusError` if the status code indicates failure (anything in the 400 or 500 range). This integrates cleanly with the error handling you'll learn in the next section: wrap the request in a `try`/`except` block to handle failures gracefully.
+
+### Enriching Northwind Data with Weather
+
+APIs become genuinely useful when you combine external data with data you already have. Let's fetch historical weather for Northwind order dates, a plausible analysis for understanding whether weather affected shipping delays:
+
+```{.python filename="weather_enrichment.py"}
+"""Enrich Northwind order data with historical weather."""
+
+import csv
+import json
+from pathlib import Path
+
+import httpx
+
+# Simplified: fetch weather for a single date and location
+def get_weather(date: str, latitude: float, longitude: float) -> dict[str, float]:
+    """Fetch historical weather for a date and location.
+
+    Args:
+        date: Date in YYYY-MM-DD format.
+        latitude: Location latitude.
+        longitude: Location longitude.
+
+    Returns:
+        Dictionary with temperature and precipitation.
+    """
+    response = httpx.get(
+        "https://api.open-meteo.com/v1/forecast",
+        params={
+            "latitude": latitude,
+            "longitude": longitude,
+            "daily": "temperature_2m_max,precipitation_sum",
+            "temperature_unit": "fahrenheit",
+            "start_date": date,
+            "end_date": date,
+        },
+    )
+    response.raise_for_status()
+    daily = response.json()["daily"]
+    return {
+        "max_temp_f": daily["temperature_2m_max"][0],
+        "precipitation_in": daily["precipitation_sum"][0],
+    }
+
+
+# Example: enrich a few orders
+weather = get_weather("1997-03-15", latitude=47.61, longitude=-122.33)
+print(f"Max temp: {weather['max_temp_f']}°F, Precipitation: {weather['precipitation_in']}\"")
+```
+
+The function wraps the API call behind a clean interface. The caller provides a date and coordinates, the function handles the HTTP details, and returns a simple dictionary. This is the same separation of concerns you practiced in @sec-functions: the API logic lives in one place, and the rest of your pipeline doesn't need to know how the data arrived.
+
+::: {.callout-note}
+## APIs have rate limits
+
+Most APIs limit how many requests you can make per minute or per day. Open-Meteo allows 10,000 requests per day for free, which is generous, but if you're enriching thousands of orders, you should add a small delay between requests (using `time.sleep()`) and cache results to avoid re-fetching data you've already retrieved. Respecting rate limits is a professional practice, not just a technical constraint.
+:::
+
+### Why httpx over requests?
+
+If you search for "Python HTTP requests," most results will mention the `requests` library. It's older, widely used, and works fine. We use `httpx` because it has a nearly identical API but adds modern features: full type hint coverage (which means basedpyright can verify your code), HTTP/2 support, and an async interface for when you need to make many requests concurrently. The switch from `requests` to `httpx` is almost mechanical, the function names and parameters are the same, so anything you read about `requests` online transfers directly.
+
+## Error Handling {#sec-errors}
+
+When your code interacts with the outside world, reading files, parsing data, connecting to networks, things go wrong. Files don't exist. Data is malformed. Permissions are denied. Python handles these situations with *exceptions*: objects that represent errors.
+
+### `try` / `except`
+
+The `try`/`except` block catches exceptions and lets you handle them gracefully:
+
+```{.python filename="try_except.py"}
+from pathlib import Path
+
+filepath = Path("data") / "orders.csv"
+
+try:
+    with open(filepath) as f:
+        content = f.read()
+    print(f"Read {len(content)} characters")
+except FileNotFoundError:
+    print(f"Error: {filepath} does not exist")
+```
+
+If the file exists, the code in the `try` block runs normally. If the file doesn't exist, Python raises a `FileNotFoundError`, the `try` block stops, and the `except` block runs instead of crashing the program.
+
+### Catching Specific Exceptions
+
+Always catch specific exceptions, not all of them:
+
+```{.python filename="specific_except.py"}
+# Good: catches only the specific error you expect
+try:
+    price = float(row["unitPrice"])
+except ValueError:
+    print(f"Invalid price: {row['unitPrice']}")
+
+# Bad: catches EVERYTHING, including bugs you need to see
+try:
+    price = float(row["unitPrice"])
+except Exception:
+    print("Something went wrong")  # Hides real bugs!
+```
+
+A bare `except:` or `except Exception:` catches every error, including typos, logic bugs, and `KeyboardInterrupt` (which is how you stop a running program with `Ctrl+C`). Catching specific exceptions means you handle the expected problems while letting unexpected ones surface immediately so you can fix them.
+
+### Common Exceptions
+
+| Exception | When it occurs | Example |
+|-----------|---------------|---------|
+| `FileNotFoundError` | File or directory doesn't exist | `open("nonexistent.csv")` |
+| `ValueError` | Wrong type of value | `int("hello")` |
+| `KeyError` | Dictionary key doesn't exist | `d["missing_key"]` |
+| `TypeError` | Wrong type for operation | `"hello" + 5` |
+| `IndexError` | List index out of range | `[1, 2, 3][99]` |
+| `ZeroDivisionError` | Division by zero | `1 / 0` |
+| `PermissionError` | Insufficient file permissions | Writing to a read-only file |
+
+: Common Python exceptions {#tbl-exceptions}
+
+### `else` and `finally`
+
+The full `try` structure has two optional clauses:
+
+```{.python filename="try_full.py"}
+try:
+    f = open("data.csv")
+    content = f.read()
+except FileNotFoundError:
+    print("File not found")
+    content = ""
+else:
+    # Runs ONLY if no exception occurred
+    print(f"Successfully read {len(content)} characters")
+finally:
+    # Runs ALWAYS, whether or not an exception occurred
+    print("Done with file operation")
+```
+
+The `else` block runs when the `try` block completes without raising an exception. The `finally` block runs no matter what, which makes it useful for cleanup operations. (Though for files, the `with` statement already handles cleanup.)
+
+### Raising Your Own Exceptions
+
+When writing functions, you can signal errors to the caller with `raise`:
+
+```{.python filename="raise.py"}
+def compute_revenue(orders):
+    """Compute total revenue from a list of orders.
+
+    Args:
+        orders: List of order dictionaries.
+
+    Returns:
+        Total revenue as a float.
+
+    Raises:
+        ValueError: If the orders list is empty.
+    """
+    if not orders:
+        raise ValueError("Cannot compute revenue from an empty list")
+    return sum(o["unit_price"] * o["quantity"] for o in orders)
+```
+
+The caller can then decide how to handle the error:
+
+```{.python filename="handle_raise.py"}
+try:
+    revenue = compute_revenue([])
+except ValueError as e:
+    print(f"Warning: {e}")
+    revenue = 0.0
+```
+
+### When to Handle Errors vs. Let Them Propagate
+
+Not every potential error needs a `try`/`except`. The general principle: handle errors when you can do something useful about them, and let them propagate when you can't.
+
+Handle when you can recover (use a default value, skip a bad record, try an alternative file). Let propagate when the error means the program truly can't continue (missing required configuration, corrupted data that invalidates the entire analysis). Catching and silencing an error you don't understand is worse than letting the program crash with a clear traceback.
+
+### Exercises
+
+1. Write a `try`/`except` block that attempts to convert a string to a float. If the conversion fails, print a warning and assign a default value of `0.0`. Test it with both `"18.50"` and `"N/A"`.
+
+2. Predict what this code prints:
+```{.python filename="solution.py"}
+try:
+    x = int("hello")
+    print("Success")
+except ValueError:
+    print("Bad value")
+except TypeError:
+    print("Bad type")
+else:
+    print("No error")
+finally:
+    print("Done")
+```
+
+3. Write a function `safe_divide(a, b)` that returns `a / b` but raises a `ValueError` with a descriptive message if `b` is zero. Then write calling code that catches the exception and prints the error message.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Show the code:
+```{.python filename="solution.py"}
+raw_price = "N/A"
+try:
+    price = float(raw_price)
+except ValueError:
+    print(f"Warning: could not convert '{raw_price}' to float, using 0.0")
+    price = 0.0
+```
+
+**2.** Output:
+```
+Bad value
+Done
+```
+`int("hello")` raises `ValueError`, so `"Bad value"` prints. The `else` block is skipped (it only runs if no exception occurred). The `finally` block always runs.
+
+**3.** Show the code:
+```{.python filename="solution.py"}
+def safe_divide(a, b):
+    """Divide a by b, raising ValueError if b is zero.
+
+    Args:
+        a: The numerator.
+        b: The denominator.
+
+    Returns:
+        The result of a / b.
+
+    Raises:
+        ValueError: If b is zero.
+    """
+    if b == 0:
+        raise ValueError(f"Cannot divide {a} by zero")
+    return a / b
+
+try:
+    result = safe_divide(100, 0)
+except ValueError as e:
+    print(f"Error: {e}")  # "Error: Cannot divide 100 by zero"
+```
+
+:::
+
+## Putting It Together: Northwind Revenue Pipeline
+
+Let's build a complete script that reads Northwind order data from CSV files, joins the data using dictionaries, computes revenue by category, and writes a summary report. This is the Python equivalent of the SQL joins and aggregations you wrote in the Databases module:
+
+```{.python filename="revenue_pipeline.py"}
+"""Compute Northwind revenue by category from CSV files.
+
+Reads order details, products, and categories from CSV, joins
+them using dictionary lookups, computes revenue by category,
+and writes a summary report.
+"""
+
+import csv
+from pathlib import Path
+
+
+def load_csv(filepath):
+    """Load a CSV file into a list of dictionaries.
+
+    Args:
+        filepath: Path to the CSV file.
+
+    Returns:
+        A list of dictionaries, one per row.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+    """
+    with open(filepath) as f:
+        return list(csv.DictReader(f))
+
+
+def build_lookup(records, key_field):
+    """Create a lookup dictionary from a list of records.
+
+    This is the Python equivalent of indexing a database table
+    by its primary key, enabling O(1) lookups by key value.
+
+    Args:
+        records: List of dictionaries.
+        key_field: The field to use as the dictionary key.
+
+    Returns:
+        A dictionary mapping key values to their full records.
+    """
+    return {record[key_field]: record for record in records}
+
+
+def join_order_details(order_details, products_lookup, categories_lookup):
+    """Enrich order details with product and category information.
+
+    This is the Python equivalent of a SQL JOIN across
+    order_details, products, and categories.
+
+    Args:
+        order_details: List of order detail dictionaries.
+        products_lookup: Dictionary mapping productID to product info.
+        categories_lookup: Dictionary mapping categoryID to category info.
+
+    Returns:
+        A list of enriched order detail dictionaries with
+        categoryName and productName added.
+    """
+    enriched = []
+    for detail in order_details:
+        product = products_lookup.get(detail["productID"])
+        if product is None:
+            continue  # Skip details with no matching product
+        category = categories_lookup.get(product["categoryID"])
+        category_name = category["categoryName"] if category else "Unknown"
+        enriched.append({
+            "productID": detail["productID"],
+            "productName": product["productName"],
+            "categoryName": category_name,
+            "unitPrice": float(detail["unitPrice"]),
+            "quantity": int(detail["quantity"]),
+        })
+    return enriched
+
+
+def revenue_by_category(enriched_details):
+    """Compute total revenue grouped by category.
+
+    This is the Python equivalent of:
+    SELECT categoryName, SUM(unitPrice * quantity) AS revenue
+    FROM enriched_details
+    GROUP BY categoryName
+
+    Args:
+        enriched_details: List of order detail dicts with
+            'categoryName', 'unitPrice', and 'quantity' keys.
+
+    Returns:
+        Dictionary mapping category names to total revenue.
+    """
+    totals = {}
+    for detail in enriched_details:
+        category = detail["categoryName"]
+        revenue = detail["unitPrice"] * detail["quantity"]
+        totals[category] = totals.get(category, 0) + revenue
+    return totals
+
+
+def write_report(category_totals, filepath):
+    """Write a revenue summary report to CSV.
+
+    Args:
+        category_totals: Dictionary mapping category names to revenue.
+        filepath: Output path for the CSV report.
+    """
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+
+    sorted_categories = sorted(
+        category_totals.items(),
+        key=lambda pair: pair[1],
+        reverse=True,
+    )
+
+    with open(filepath, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["category", "revenue"])
+        writer.writeheader()
+        for category, revenue in sorted_categories:
+            writer.writerow({
+                "category": category,
+                "revenue": round(revenue, 2),
+            })
+
+
+if __name__ == "__main__":
+    data_dir = Path("data")
+
+    # Load data from CSV files
+    products = load_csv(data_dir / "products.csv")
+    order_details = load_csv(data_dir / "order_details.csv")
+    categories = load_csv(data_dir / "categories.csv")
+
+    # Build lookup tables (like indexing by primary key)
+    products_by_id = build_lookup(products, "productID")
+    categories_by_id = build_lookup(categories, "categoryID")
+
+    # Join order details with products and categories (like SQL JOINs)
+    enriched = join_order_details(order_details, products_by_id, categories_by_id)
+
+    # Aggregate revenue by category (like SQL GROUP BY)
+    totals = revenue_by_category(enriched)
+
+    # Write the report
+    output_path = Path("output") / "revenue_summary.csv"
+    write_report(totals, output_path)
+
+    # Print a summary
+    print(f"Processed {len(enriched)} order details")
+    print(f"Revenue by category written to {output_path}")
+
+    for category, revenue in sorted(totals.items(), key=lambda x: x[1], reverse=True):
+        print(f"  {category:<20} ${revenue:>12,.2f}")
+```
+
+This script demonstrates every concept from this chapter: `pathlib` for file paths, `csv.DictReader` and `csv.DictWriter` for structured I/O, `with` statements for safe file handling, and functions with proper docstrings for each logical step. Notice that because our CSV files use separate tables (products store a `categoryID` rather than a category name), we need to load `categories.csv` and build a second lookup table, just like a SQL query would join three tables. The comments explicitly call out the SQL equivalents, reinforcing the connection between what you learned in the Databases module and what you're doing here.
+
+## Exercises {.unnumbered}
+
+### File Reading {.unnumbered}
+
+1. Write a script that reads a text file and prints the number of lines, words, and characters. (This is the Python equivalent of the `wc` command from the CLI chapter.)
+
+2. Write a function `read_csv_safe` that attempts to load a CSV file and returns an empty list if the file doesn't exist, printing a warning message. Use `try`/`except` with `FileNotFoundError`.
+
+### Pathlib Practice {.unnumbered}
+
+1. Write a script that uses `pathlib` to list all files in a directory, grouped by file extension. For each extension, print the count of files and their total size. Use `Path.stat().st_size` to get file sizes.
+
+2. Given a directory with nested subdirectories, use `rglob()` to find all `.csv` files and print their paths relative to the starting directory.
+
+### Data Processing {.unnumbered}
+
+1. Create a JSON configuration file called `pipeline_config.json` with the following structure, then modify the revenue pipeline to read it and use its values:
+
+    ```{.json filename="pipeline_config.json"}
+    {
+        "input_dir": "data",
+        "output_file": "output/filtered_revenue.csv",
+        "categories": ["Beverages", "Condiments", "Produce"]
+    }
+    ```
+
+    Your modified pipeline should read this config with `json.load()`, use `input_dir` to find the CSV files, filter the enriched order details to include only the categories listed in `categories`, and write the results to `output_file`.
+
+2. Modify the revenue pipeline to be robust against malformed data: rows with missing fields, non-numeric prices, and negative quantities should be skipped with a warning printed to the console.
+
+### Northwind Pipeline {.unnumbered}
+
+Write the complete Northwind revenue pipeline described in this chapter. Using the CSV files from the `data/` directory (`products.csv`, `order_details.csv`, and `categories.csv`), verify that your script produces revenue totals by category. Compare your results with the SQL query `SELECT c.categoryName, SUM(od.unitPrice * od.quantity) AS revenue FROM order_details od JOIN products p ON od.productID = p.productID JOIN categories c ON p.categoryID = c.categoryID GROUP BY c.categoryName ORDER BY revenue DESC` from the Databases module.
+
+## Summary {.unnumbered}
+
+This chapter taught you to bridge the gap between Python's in-memory data structures and the external world. Context managers with `with` ensure that files are always properly closed, even when errors occur. `pathlib` provides a clean, cross-platform interface for navigating the file system. The `csv` and `json` modules parse the two most common data interchange formats, turning file contents into the lists and dictionaries you already know how to process. And `httpx` extends your reach beyond local files to web APIs, letting you fetch data from any server that speaks HTTP.
+
+Error handling with `try`/`except` makes your code robust against the real-world messiness of external data: missing files, malformed records, network failures, and unexpected values. The principle of catching specific exceptions keeps your error handling precise and your bugs visible.
+
+The Northwind revenue pipeline brought everything together: reading CSV data, building dictionary-based lookup tables (analogous to database indices), joining datasets (analogous to SQL JOINs), aggregating results (analogous to GROUP BY), and writing structured output. This is the "whole game" of data processing in Python, and every subsequent chapter builds on these fundamentals.
+
+## Glossary {.unnumbered}
+
+append mode
+: Opening a file with `"a"`, which adds new content to the end of the file without erasing existing content.
+
+context manager
+: An object that defines setup and teardown actions, used with the `with` statement. File objects are the most common context manager.
+
+CSV
+: Comma-Separated Values. A plain-text format for tabular data where fields are separated by commas and records by newlines.
+
+`csv.DictReader`
+: A CSV reader that returns each row as a dictionary mapping column names to values.
+
+encoding
+: The mapping between bytes and characters in a text file. UTF-8 is the modern standard.
+
+exception
+: An object that represents an error condition. Exceptions interrupt normal program flow and can be caught with `try`/`except`.
+
+`FileNotFoundError`
+: An exception raised when attempting to open a file that doesn't exist.
+
+`httpx`
+: A modern Python library for making HTTP requests. Provides `httpx.get()` for fetching data from web APIs and `response.json()` for parsing JSON responses.
+
+JSON
+: JavaScript Object Notation. A text format for structured data that maps directly to Python dictionaries, lists, strings, numbers, booleans, and `None`.
+
+`pathlib`
+: Python's standard library module for file system path manipulation. Provides the `Path` class.
+
+`raise`
+: A keyword that creates and throws an exception, signaling an error to the calling code.
+
+`try` / `except`
+: A statement for catching and handling exceptions. Code in the `try` block is monitored for errors; code in the `except` block runs if a matching exception occurs.
+
+web API
+: A URL that returns structured data (usually JSON) for programs to consume. You interact with a web API by making HTTP requests and parsing the responses.
+
+write mode
+: Opening a file with `"w"`, which creates the file if it doesn't exist or **erases all existing content** if it does.

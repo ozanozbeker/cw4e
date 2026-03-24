@@ -1,0 +1,605 @@
+# Professional Documents with Quarto {#sec-quarto}
+
+Engineers write reports constantly. Design reports, project proposals, laboratory analyses, process improvements, feasibility studies. A typical report contains headings, paragraphs, numbered lists, images, tables, and links. You've probably drafted these in Microsoft Word or Google Docs, formatting each element by hand: clicking buttons to make text bold, inserting images through menus, adjusting table layouts by dragging cells.
+
+Quarto offers a different approach. Instead of clicking buttons in a word processor, you write your report as a plain text file using a simple markup format called Markdown. You specify the document structure (headings, bold text, lists) using plain text syntax, and Quarto converts that text into a professional HTML, PDF, or Word document automatically. No formatting buttons. No mouse clicks. Just text.
+
+This might sound abstract, so let's start with why this matters. A Word document is a binary file. It's hard to track changes in version control (you can't easily see what changed by reading a diff). It's difficult to automate. And if you want to include an image, a table, or a result that might need to change, you're copy-pasting and re-formatting by hand. With Quarto, your report is a plain text file—the same kind of file you'll use for code, configuration, and documentation throughout this book. The structure is explicit, changes are trackable, and later in the book you'll learn to embed live data and code that updates automatically.
+
+For right now—your second week—Quarto is your introduction to professional technical writing. You'll learn to write reports without ever opening a word processor.
+
+## What is Quarto?
+
+Quarto is a command-line tool that converts plain text files into beautifully formatted documents. You write a `.qmd` file (Quarto Markdown), which is just a text file with a structure on top of Markdown. Quarto reads that file and produces HTML, PDF, Word, or presentation output. The workflow looks like this:
+
+1. Create a `.qmd` file in your text editor (e.g., a file named `report.qmd`).
+2. Write your narrative using Markdown syntax (headings, bold, lists, links, images).
+3. Add a YAML header at the top that specifies the title, author, and output format.
+4. Run `quarto render report.qmd` from the command line.
+5. Quarto produces a finished document (e.g., `report.html`).
+
+The output is professional-grade—the kind of document you'd deliver to a client, a team lead, or a colleague—produced from plain text without touching a graphical word processor.
+
+## Markdown Basics
+
+Markdown is a lightweight syntax for formatting text. It's readable as plain text but converts cleanly to HTML. You've already seen Markdown in README files and GitHub commit messages. Here's what you need to know to write a technical report.
+
+### Headings
+
+Headings are created with hash symbols (`#`). The number of hashes determines the level:
+
+```{.markdown filename="report.qmd"}
+# Main Title (Heading 1)
+
+## Section Heading (Heading 2)
+
+### Subsection Heading (Heading 3)
+
+#### Further Detail (Heading 4)
+```
+
+Heading 1 is typically reserved for the document title. Heading 2 creates new sections. Heading 3 creates subsections within a section. Quarto (and most documentation systems) uses this hierarchy to build your table of contents automatically.
+
+### Bold and Italic
+
+Wrap text with asterisks or underscores to add emphasis:
+
+```{.markdown filename="report.qmd"}
+This word is **bold** and this word is *italic*.
+
+You can also use __bold__ and _italic_ with underscores.
+```
+
+### Lists
+
+Unordered lists use dashes, asterisks, or plus signs:
+
+```{.markdown filename="report.qmd"}
+- First item
+- Second item
+- Third item
+```
+
+Ordered lists use numbers:
+
+```{.markdown filename="report.qmd"}
+1. First step
+2. Second step
+3. Third step
+```
+
+Indent to create nested lists:
+
+```{.markdown filename="report.qmd"}
+1. Main task
+   - Subtask one
+   - Subtask two
+2. Another main task
+   - Its subtasks
+```
+
+### Links and Images
+
+Create a link by wrapping text in square brackets and the URL in parentheses:
+
+```{.markdown filename="report.qmd"}
+Visit [the Quarto website](https://quarto.org) for documentation.
+
+For more on Markdown, see [this guide](https://daringfireball.net/projects/markdown/).
+```
+
+Embed an image with an exclamation mark, square brackets, and parentheses:
+
+```{.markdown filename="report.qmd"}
+![Alt text describing the image](path/to/image.png)
+
+![A sample engineering diagram](images/flow_diagram.png)
+```
+
+The alt text (inside the square brackets) is important for accessibility and appears if the image fails to load.
+
+### Code Blocks
+
+To show code without executing it, use triple backticks:
+
+```{.markdown filename="report.qmd"}
+Here's a SQL query example:
+
+```sql
+SELECT customer_id, COUNT(*) as order_count
+FROM orders
+GROUP BY customer_id;
+```
+
+Here's Python code:
+
+```python
+total_cost = unit_price * quantity
+```
+```
+
+The word after the opening backticks (`sql`, `python`, `bash`) is the language identifier. It tells Quarto how to syntax-highlight the code (it won't execute; it's just for display).
+
+### Blockquotes
+
+Quotations or important statements use a greater-than symbol:
+
+```{.markdown filename="report.qmd"}
+> This is a blockquote. It stands out visually in the rendered document.
+>
+> Multi-line blockquotes continue with `>` on each line.
+```
+
+### Paragraphs and Line Breaks
+
+A blank line creates a new paragraph. A hard line break (two spaces at the end of a line) forces a line break without starting a new paragraph:
+
+```{.markdown filename="report.qmd"}
+This is paragraph one.
+
+This is paragraph two. Markdown treats single line breaks as part of the same paragraph.
+
+To force a line break without a new paragraph,
+end the line with two spaces.
+```
+
+Now that you know the basics, let's put them together into a structured document.
+
+## YAML Front Matter
+
+Every Quarto document starts with a YAML front matter block. YAML is a plain text format for specifying configuration. It uses key-value pairs (key followed by a colon and value) and is designed to be human-readable.
+
+The front matter goes at the very top of your `.qmd` file, surrounded by three dashes:
+
+```{.yaml filename="report.qmd"}
+---
+title: "Bridge Load Analysis Report"
+author: "Sarah Chen"
+date: 2024-03-24
+format: html
+---
+```
+
+The most important fields are:
+
+**title** — The document title. Quarto displays this prominently at the top of the output.
+
+**author** — Your name or team name.
+
+**date** — The date the document was created. You can write a specific date like `2024-03-24` or use the special value `today` to automatically insert the current date.
+
+**format** — The output format. Common values are:
+- `html` — A standalone HTML file (clickable in any browser)
+- `pdf` — A PDF file (requires a LaTeX installation)
+- `docx` — A Microsoft Word document (`.docx`)
+
+Here's a complete minimal example:
+
+```{.yaml filename="report.qmd"}
+---
+title: "Steel Beam Stress Analysis"
+author: "Engineering Team"
+date: today
+format: html
+---
+
+# Introduction
+
+This report analyzes stress distribution in structural steel beams...
+```
+
+Save this as `report.qmd`, then run `quarto render report.qmd` and Quarto will produce `report.html`.
+
+### Common YAML Options
+
+Beyond the basic four, Quarto supports many optional settings:
+
+```{.yaml filename="report.qmd"}
+---
+title: "Water Treatment System Feasibility Study"
+author: "Jordan Davis"
+date: today
+format: html
+toc: true                      # Add table of contents
+number-sections: true          # Number section headings
+theme: cosmo                   # Visual theme (cosmo, journal, etc.)
+---
+```
+
+**toc: true** — Generates a table of contents based on your headings.
+
+**number-sections: true** — Automatically numbers your sections (1, 2, 2.1, 2.2, 3, etc.).
+
+**theme** — Applies a visual design. Options include `cosmo`, `journal`, `dark`, and others. Try different themes to see which you prefer.
+
+These options control how the document looks when rendered, but they don't change the content. The same `.qmd` file can be rendered with different themes, different formats, and different options.
+
+## Callout Boxes
+
+Reports often need to highlight important information: warnings, tips, notes, or important definitions. Quarto callout boxes make this easy:
+
+```{.markdown filename="report.qmd"}
+::: {.callout-note}
+This is a note. Use it for supplementary information that isn't essential to the main narrative.
+:::
+
+::: {.callout-warning}
+This is a warning. Use it for critical information or things to avoid.
+:::
+
+::: {.callout-tip}
+This is a tip. Use it for helpful advice or best practices.
+:::
+
+::: {.callout-important}
+This is important information that readers should not miss.
+:::
+```
+
+In the rendered document, each callout appears in a colored box. This visual hierarchy helps readers quickly identify different types of information.
+
+You can also add a title to a callout:
+
+```{.markdown filename="report.qmd"}
+::: {.callout-warning title="Safety Constraint"}
+The system pressure must not exceed 200 PSI under normal operating conditions.
+:::
+```
+
+Callout boxes are useful in technical reports to separate assumptions, safety notes, or key definitions from the main text.
+
+## Cross-References
+
+In a long report, you might write "see Figure 3 below" or "according to Table 2". If you later add a new figure and everything shifts, those references become wrong. Quarto cross-references solve this: you label a section or figure, and Quarto automatically numbers it and creates a clickable link.
+
+### Labeling Sections
+
+Add a label to a heading using the syntax `{#sec-labelname}`:
+
+```{.markdown filename="report.qmd"}
+## Methodology {#sec-methodology}
+
+Our testing approach includes three phases...
+
+## Results {#sec-results}
+
+As described in @sec-methodology, we observed the following...
+```
+
+The label `#sec-methodology` lets you reference that section later with `@sec-methodology`. In the rendered document, `@sec-methodology` becomes a clickable link like "Section 2".
+
+### Labeling Figures and Tables
+
+When you later learn to embed images, charts, or data tables in Quarto, you'll label them similarly:
+
+```{.markdown filename="report.qmd"}
+![Stress distribution in the beam](images/stress_diagram.png){#fig-stress}
+
+According to @fig-stress, the maximum stress occurs at the midspan...
+```
+
+The `{#fig-stress}` syntax creates a label, and `@fig-stress` references it. Quarto automatically numbers figures ("Figure 1", "Figure 2") and makes the references clickable.
+
+This is especially powerful later in the book when you embed live data and code. For now, just remember that you can label sections and images, and refer to them by their labels rather than hardcoding numbers.
+
+## Rendering Your Document
+
+Once you've written a `.qmd` file with Markdown, YAML front matter, and content, you render it to produce output.
+
+```{.bash filename="terminal"}
+quarto render report.qmd
+```
+
+This command reads `report.qmd`, processes the Markdown, applies the YAML settings, and produces `report.html` (if `format: html` is set). If you specify a different format in the YAML, it renders to that format instead.
+
+You can also override the format from the command line:
+
+```{.bash filename="terminal"}
+quarto render report.qmd --to html
+quarto render report.qmd --to docx
+quarto render report.qmd --to pdf
+```
+
+These commands render the same source file to different formats without changing the `.qmd` file itself.
+
+### Preview Mode
+
+Quarto has a preview mode that opens your document in a browser and re-renders it whenever you save the file. This tight feedback loop is useful when drafting:
+
+```{.bash filename="terminal"}
+quarto preview report.qmd
+```
+
+Run this command, and Quarto opens your document in your default browser. Edit your `.qmd` file in your text editor, save it, and the browser automatically refreshes to show the updated version. No need to manually run `quarto render` each time.
+
+## Multiple Output Formats
+
+One of Quarto's powerful features is that the same `.qmd` source can produce multiple formats. The content doesn't change; only the output format changes.
+
+### From HTML to Word
+
+Suppose you've written a report as HTML:
+
+```{.yaml filename="report.qmd"}
+---
+title: "Bridge Load Analysis"
+author: "Sarah Chen"
+date: today
+format: html
+---
+```
+
+You can render it as Word without changing the `.qmd`:
+
+```{.bash filename="terminal"}
+quarto render report.qmd --to docx
+```
+
+This produces `report.docx`, which your colleagues can open in Microsoft Word, make comments in, and send back. The structure (headings, lists, callout boxes) translates cleanly to Word.
+
+### Single Command, Multiple Formats
+
+You can also specify multiple formats in the YAML:
+
+```{.yaml filename="report.qmd"}
+---
+title: "Bridge Load Analysis"
+author: "Sarah Chen"
+date: today
+format: [html, docx, pdf]
+---
+```
+
+Now `quarto render report.qmd` produces three files: `report.html`, `report.docx`, and `report.pdf`. This is useful when different stakeholders need different formats (stakeholders might want Word, your archive might prefer PDF, and your website might display HTML).
+
+## A Complete Example
+
+Let's build a small but complete report to show how the pieces fit together. Imagine you're writing a brief analysis of a manufacturing process.
+
+```{.markdown filename="manufacturing_report.qmd"}
+---
+title: "Production Line Downtime Analysis"
+author: "Manufacturing Engineering Team"
+date: today
+format: html
+toc: true
+number-sections: true
+---
+
+## Executive Summary
+
+This report examines downtime across three production lines during Q1 2024.
+Our analysis identifies the primary failure modes and recommends preventive
+maintenance schedules.
+
+## Methodology {#sec-methodology}
+
+We collected maintenance logs for lines A, B, and C from January through March.
+For each outage, we recorded:
+
+- Start and end time
+- Root cause (mechanical, electrical, or operator error)
+- Duration of downtime
+- Cost of repair
+
+## Key Findings {#sec-findings}
+
+::: {.callout-important}
+Line B experienced 40% more downtime than Line A, primarily due to
+bearing failures in the finishing equipment.
+:::
+
+As detailed in @sec-methodology, we observed three main failure patterns:
+
+1. Bearing wear (35% of outages)
+2. Hydraulic system leaks (28% of outages)
+3. Electrical switch failures (19% of outages)
+
+The remaining 18% involved miscellaneous issues.
+
+## Recommendations {#sec-recommendations}
+
+Based on @sec-findings, we recommend:
+
+::: {.callout-tip}
+**Preventive Maintenance Schedule**
+- Replace bearings every 6 months (currently 12-month cycle)
+- Inspect hydraulic seals quarterly
+- Service electrical switches annually
+:::
+
+Implementation of this schedule should reduce unplanned downtime by an estimated
+25-30% in the next quarter.
+
+## Conclusion
+
+Regular preventive maintenance, particularly bearing replacement and hydraulic
+inspection, will reduce downtime and improve overall equipment effectiveness.
+We recommend piloting the new schedule on Line B in April.
+
+## References
+
+For more information on bearing maintenance standards, see the equipment
+manufacturer's documentation or contact the maintenance supervisor.
+```
+
+This example demonstrates:
+- YAML front matter with title, author, date, format, and options
+- Section headings with labels (`{#sec-methodology}`)
+- Paragraphs and lists
+- Cross-references (`@sec-findings`, `@sec-recommendations`)
+- Callout boxes to highlight important information
+- Professional structure suitable for sharing
+
+Render this file with `quarto render manufacturing_report.qmd` to produce a polished HTML document.
+
+## Later in the Book
+
+This chapter introduces Quarto as a professional writing tool. It uses Markdown for narrative structure and YAML for configuration. Later in the book—after you've learned Python, SQL, and data analysis—you'll return to Quarto to embed live code. You'll write queries and Python scripts inside your `.qmd` files, and Quarto will execute them when you render, including results, tables, and charts directly in your document. The Markdown and YAML skills you learn now form the foundation for that more advanced workflow.
+
+For right now, focus on writing clear, well-structured reports in plain text. Get comfortable with Markdown syntax, YAML configuration, and the rendering workflow. Once those skills are automatic, adding code and data later will feel natural.
+
+## Exercises
+
+### Exercise 1: Your First Report
+
+Create a Quarto document (`engineering_report.qmd`) with the following structure:
+
+- YAML front matter with title "Analysis of a Recent Project", your name as author, today's date, and HTML format
+- A brief introduction paragraph (3-4 sentences)
+- A section titled "Methodology" with a numbered list of 3-4 steps you took
+- A section titled "Key Findings" with:
+  - At least one callout box (note, tip, or warning) with important information
+  - A short paragraph referencing that section using cross-reference syntax (`@sec-findings`)
+- A section titled "Conclusion" with 2-3 sentences
+
+Render it to HTML and check that the output looks professional. Verify that the cross-reference works (clicking it should jump to the section).
+
+::: {.callout-tip title="Solution" collapse="true"}
+
+Here's a complete example:
+
+```markdown
+---
+title: "Analysis of a Recent Project"
+author: "Your Name"
+date: today
+format: html
+toc: true
+number-sections: true
+---
+
+## Introduction
+
+This report examines the outcomes of the bridge inspection project completed in February 2024.
+The project aimed to assess structural integrity and identify needed repairs.
+We inspected four spans and documented findings in detail.
+
+## Methodology {#sec-methodology}
+
+Our inspection process followed these steps:
+
+1. Visual inspection of all visible structural elements
+2. Measurement of crack widths and rust extent using calibrated tools
+3. Ultrasonic testing of concrete strength at five locations per span
+4. Documentation of findings in standardized forms
+
+## Key Findings {#sec-findings}
+
+::: {.callout-warning title="Critical Finding"}
+Span 2 shows active corrosion of the main steel reinforcement,
+requiring repair within 6 months to prevent structural compromise.
+:::
+
+As described in @sec-methodology, our testing revealed three categories of defects:
+
+- Minor surface scaling (all spans)
+- Moderate reinforcement corrosion (Span 2)
+- Expansion joint deterioration (Span 3)
+
+## Conclusion
+
+The structure is safe for continued use with planned maintenance.
+Priority should be given to Span 2 corrosion repair as detailed in @sec-findings.
+```
+
+Key points in the solution:
+- The YAML front matter includes all required fields
+- Sections are clearly labeled with headings and labels
+- Cross-references use the `@sec-` syntax
+- A callout box draws attention to critical information
+- The numbered list in Methodology is clearly formatted
+- The cross-reference in the conclusion refers to the findings section
+
+:::
+
+### Exercise 2: Multiple Formats
+
+Take the report from Exercise 1 and render it to multiple formats:
+
+```bash
+quarto render engineering_report.qmd --to html
+quarto render engineering_report.qmd --to docx
+quarto render engineering_report.qmd --to pdf
+```
+
+Open each file (`.html` in a browser, `.docx` in Word, `.pdf` in a PDF reader). What looks different? What looks the same? Which format is easiest to read on your screen? Which would you send to a client?
+
+::: {.callout-tip title="Solution" collapse="true"}
+
+Running these three commands produces three different output files from the same source. Observations:
+
+- **HTML**: Interactive, compact on screen, easiest to read on a computer. Tables and links are clickable. No installation required.
+- **DOCX**: Opens in Word. You can edit it further, add comments, or send it to colleagues who use Word. Formatting is clean but may differ slightly from HTML.
+- **PDF**: Printable. Looks the same on any device. Professional for archiving or formal distribution, but harder to edit.
+
+Choice depends on audience:
+- Send **HTML** to a technical audience or for web publication
+- Send **DOCX** to collaborators who need to edit or comment
+- Send **PDF** to clients or for formal reports that shouldn't be modified
+
+The power of Quarto is that you write once and choose the format based on where the document is going.
+
+:::
+
+### Exercise 3: Styling with Options
+
+Take your report and add YAML options to improve the visual presentation:
+
+```yaml
+---
+title: "Your Project Name"
+author: "Your Name"
+date: today
+format: html
+toc: true
+number-sections: true
+theme: cosmo
+---
+```
+
+Render it with this new theme. Try other themes (e.g., `journal`, `dark`, `flatly`) by changing the `theme:` line. Which theme do you prefer for a technical report?
+
+::: {.callout-tip title="Solution" collapse="true"}
+
+Adding theme options changes the visual appearance without touching your content. Try these themes and see which suits your taste:
+
+- `cosmo` — Modern, colorful, clean
+- `journal` — Academic, minimal, serif fonts
+- `dark` — Dark background, good for presentations
+- `flatly` — Flat design, muted colors
+- `sandstone` — Warm, earthy tones
+
+There's no "right" answer. Pick a theme that matches your professional context. For internal reports, a clean theme like `cosmo` or `journal` works well. For presentations, `dark` or `sandstone` often look better.
+
+The point is that appearance and content are separate. You write the report once, and changing `theme:` line instantly changes how it looks.
+
+:::
+
+## Summary
+
+Quarto transforms plain text into professional documents. Instead of formatting text by hand in a word processor, you write Markdown (simple, human-readable plain text) and specify document metadata in YAML (a simple configuration format). Quarto then renders your source into beautifully formatted HTML, PDF, Word, or presentation output.
+
+The Markdown syntax is straightforward: hashes for headings, asterisks for bold and italic, dashes for lists, square brackets for links, and triple backticks for code blocks. YAML front matter at the top of your file specifies the title, author, date, output format, and optional styling.
+
+Rendering is a single command: `quarto render document.qmd`. The same source file can be rendered to multiple formats by changing the YAML or using command-line flags. This is powerful: you maintain a single source of truth, and different audiences get the format they need.
+
+You'll use Quarto throughout your career as an engineer. It's the tool professionals use for reports, documentation, and presentations. The skills you build now—writing clear Markdown, organizing with headings, using cross-references—transfer to larger documents and more complex tasks. Later in this book, you'll add live code to your Quarto documents. For now, master the fundamentals: plain text, clear structure, and professional output.
+
+## Glossary
+
+**callout box** — A colored, highlighted box in a rendered document used to emphasize notes, warnings, tips, or important information. Created with `::: {.callout-type}` syntax.
+
+**cross-reference** — A link to a labeled section, figure, or table within the same document. Created by labeling with `{#label-name}` and referencing with `@label-name`. Quarto automatically numbers and creates clickable links.
+
+**format** — The output type that Quarto produces. Common formats include `html`, `pdf`, `docx` (Word), and `revealjs` (presentations).
+
+**Markdown** — A lightweight plain-text syntax for formatting documents. Uses symbols like `#` for headings, `*` for bold, and `-` for lists. Renders cleanly to HTML and other formats.
+
+**YAML** — A plain-text configuration format using key-value pairs (key: value). Used in Quarto for front matter to specify document title, author, date, format, and options.
+
+**Quarto** — A publishing system that converts `.qmd` (Quarto Markdown) files into professional documents in HTML, PDF, Word, or presentation formats. Combines narrative text and code in a single source file.
+
+**quarto render** — Command-line command that converts a `.qmd` file into the specified output format (HTML, PDF, Word, etc.).
+
+**quarto preview** — Command-line command that opens a `.qmd` file in your browser and automatically re-renders it whenever you save changes to the source file.

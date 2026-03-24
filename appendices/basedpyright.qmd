@@ -8,7 +8,7 @@ Type hints (introduced in @sec-objects) let you annotate what types your functio
 
 **basedpyright is a static type checker that reads your type hints and verifies them before you run your code.** It catches type mismatches, missing return statements, incorrect attribute access, and unhandled `None` values, all while you're still editing. In Zed, this shows up as red squiggles under problems, hover information showing the type of any expression, and autocomplete suggestions based on what methods and attributes a type actually has.
 
-## Why basedpyright for This Course?
+## Why basedpyright?
 
 basedpyright is a fork of Microsoft's Pyright, the type checker used inside VS Code's Python extension. The "based" variant adds stricter defaults and additional checks that catch more bugs out of the box. It's the most actively maintained and fastest Python type checker available, analyzing your entire project in seconds.
 
@@ -42,13 +42,13 @@ uv run basedpyright
 uv run basedpyright src/northwind_analysis/revenue.py
 ```
 
-This is the version you'll add in the Production module (@sec-code-quality). Just like with Ruff, having basedpyright in the terminal is essential for AI-assisted workflows: a coding agent can run `uv run basedpyright`, read the error output, and fix type issues autonomously. It's also what you'd use in a CI pipeline.
+This is the version you'll add in @sec-code-quality. Just like with Ruff, having basedpyright in the terminal is essential for AI-assisted workflows: a coding agent can run `uv run basedpyright`, read the error output, and fix type issues autonomously. It's also what you'd use in a CI pipeline.
 
 Because basedpyright is declared in your `pyproject.toml`, anyone who clones your project and runs `uv sync` gets the same version automatically. Zed will also detect and prefer the project-local version over its bundled one, so the entire team stays on the same type-checking configuration.
 
 ### Standalone Tool: `uv tool install basedpyright`
 
-For completeness: `uv tool install basedpyright` installs it into its own isolated environment outside any project. As with Ruff, this course keeps everything inside the project's virtual environment for reproducibility.
+For completeness: `uv tool install basedpyright` installs it into its own isolated environment outside any project. As with Ruff, this book keeps everything inside the project's virtual environment for reproducibility.
 
 ## Configuration
 

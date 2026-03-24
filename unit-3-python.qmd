@@ -1,0 +1,39 @@
+# Python {.unnumbered}
+
+In the Professional Toolkit, you learned to navigate your computer through the command line, author documents with Quarto, manage files, and track your work with Git. In Data with SQL, you learned to think in sets, writing SQL queries that let the database do the heavy lifting of filtering, joining, and aggregating data. Now you'll add a third tool to your workflow: Python.
+
+Python is a general-purpose programming language, which means it isn't designed for any single task. SQL excels at retrieving and transforming data inside a database. Matlab excels at numerical computation and matrix operations. R excels at statistical analysis. Python does none of these things *best*, but it does all of them *well enough*, and it does something none of the others can: it orchestrates everything else. Python reads files, calls APIs, connects to databases, generates reports, automates repetitive tasks, and glues specialized tools together into complete workflows. That orchestration role is why Python has become the common language of data engineering, and it's why you're learning it here.
+
+## What You'll Learn
+
+**Python Fundamentals** (@sec-python-fundamentals) sets up your Python environment with `uv` and covers the building blocks: variables, types, operators, expressions, and Python's boolean system. You'll also get your first taste of connecting Python to DuckDB, previewing the integration that becomes central in the capstone unit.
+
+**Collections** (@sec-collections) introduces the data structures that make Python powerful for data work: lists, tuples, dictionaries, and sets. You'll learn how Python stores, accesses, and organizes groups of values, and discover the tradeoffs between each collection type.
+
+**Control Flow** (@sec-control-flow) teaches you to direct program execution with conditionals and loops, and introduces comprehensions, Python's concise syntax for transforming collections. Combined with the data structures from the previous chapter, these tools let you write programs that make decisions and process data.
+
+**Functions** (@sec-functions) teaches you to organize code into reusable, documented units. You'll write functions with type-annotated signatures and Google-style docstrings, then package them into modules that can be imported across your project.
+
+**Working with Files** (@sec-file-io) bridges Python and the outside world. You'll read and write text, CSV, and JSON files, fetch data from web APIs with `httpx`, navigate the file system with `pathlib`, and handle the errors that inevitably arise when working with external data.
+
+**The Python Object Model** (@sec-objects) reveals that everything in Python, from integers to functions to modules themselves, is an object. Understanding the object model is what separates someone who can write Python scripts from someone who can read and understand any Python library. You'll also learn to use type hints as both documentation and a verification tool. This chapter serves as the capstone for the Python unit, tying together everything you've learned about the language.
+
+## Why This Order?
+
+Each chapter builds on the previous one. Fundamentals gives you the vocabulary of expressions and types. Collections gives you data structures to hold and organize data. Control flow teaches you to write programs that make decisions and repeat actions. Functions let you package logic into reusable units. File I/O connects your code to external data sources. And the object model ties it all together, revealing the unified design that underlies everything you've been using.
+
+This progression mirrors how you'll actually work. A typical Python data script reads files (File I/O), stores the data in collections (Collections), processes it through functions (Functions) using conditionals and loops (Control Flow), and uses the object model to interact with libraries like DuckDB and Polars. By the end of this unit, you'll have the language skills to build complete data workflows.
+
+## The Primary Workflow
+
+The primary workflow for this unit is writing `.py` files in Zed and running them from the terminal with `uv run`. The REPL (Python's interactive prompt) appears in @sec-python-fundamentals as an exploration tool, and you should reach for it whenever you want to test a quick expression. But the real work happens in scripts: files you can save, version with Git, and share with others.
+
+If you have prior programming experience in Matlab or another language, you'll find many familiar concepts here: variables, loops, functions, and conditionals all work roughly the way you'd expect. The chapters move quickly through shared territory and spend their time on what makes Python different: its dynamic type system, its expressive collection types, its module system, and especially its object model.
+
+## How to Learn This Material
+
+Type the code. Don't copy and paste, don't just read. Programming is a physical skill as much as a mental one, and typing builds muscle memory for syntax patterns that reading alone never will. When an example doesn't work the way you expected, resist the urge to move on. Stop and figure out why. That moment of confusion, followed by understanding, is where the real learning happens.
+
+The exercises at the end of each chapter connect back to the Northwind database you know from the previous unit. You'll work with the same data, but now exported as CSV and JSON files that you process with Python scripts. By the end of the unit, you'll have built a complete, well-organized, documented, and typed Python module.
+
+Let's begin.

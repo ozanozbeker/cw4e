@@ -1,0 +1,791 @@
+# Computational Documents {#sec-computational-documents}
+
+You've built your analytical pipeline: SQL queries, Polars transformations, Altair visualizations, Excel exports. Now comes the final step, and it's the one that matters most to the people who use your work, communication. You learned Quarto as a writing tool in @sec-quarto. You learned about Marimo notebooks as interactive exploration environments. Now you'll make your documents come alive with embedded computation. Instead of copying results from a Python script into your report, your report *is* the script. Instead of running a notebook for yourself and then writing a separate document, your document executes live code during rendering or during interactive use.
+
+In this chapter, you'll master two complementary approaches to computational documents. Quarto documents execute code *during rendering*, producing polished, reproducible reports that can be shared as standalone HTML, PDF, or Word files. Marimo notebooks execute code *during exploration*, providing a reactive environment where you and your stakeholders can adjust parameters and see results update instantly. Both tools eliminate the gap between analysis and communication, turning your technical work into something others can understand and act on.
+
+## Part 1: Quarto Code Cells
+
+You already know that Quarto documents are Markdown files with a YAML header and optional code blocks. What you'll now focus on is the computational aspect: how code blocks work, how they integrate with your SQL and Python workflow, and how to control what appears in your rendered output.
+
+### The Anatomy of a Code Cell
+
+A code cell in Quarto is a Markdown code block with an executable language specified:
+
+````{.markdown filename="document.qmd"}
+```{python}
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+```
+````
+
+When you render this document, Quarto executes the Python code in your project's virtual environment, captures any output, and includes it in the rendered document. This is different from a static code block (which Quarto treats as syntax-highlighted text): an executable code block actually *runs*.
+
+To make a code block executable, specify the language in curly braces. Quarto supports Python, SQL, R, and others. For non-executable blocks (when you want to show code without running it), omit the language specification and use a dot prefix:
+
+````{.markdown filename="document.qmd"}
+```python
+# This is a non-executable code block (shown as plain text)
+print("Hello, world")
+```
+
+```{python}
+# This is executable (Python runs it)
+print("Hello, world")
+```
+````
+
+### Cell-Level Options
+
+Every code cell can have options that control its behavior. These are specified using YAML comments at the top of the block, with the `#|` prefix:
+
+````{.markdown filename="document.qmd"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+#| warning: false
+
+import polars as pl
+data = pl.DataFrame({"x": [1, 2, 3], "y": [4, 5, 6]})
+data
+```
+````
+
+The most commonly used options are:
+
+| Option | Default | Effect |
+|--------|---------|--------|
+| `echo` | `true` | Show the source code in the output |
+| `eval` | `true` | Execute the code |
+| `output` | `true` | Show the code's output |
+| `warning` | `true` | Show warning messages |
+| `label` | (none) | An identifier for cross-referencing |
+| `fig-cap` | (none) | Caption for a figure |
+| `tbl-cap` | (none) | Caption for a table |
+
+: Quarto code cell options {#tbl-quarto-cell-options}
+
+#### Using `echo` to Control Code Visibility
+
+`echo` controls whether the source code appears in the rendered document. This is your main tool for adapting documents to different audiences.
+
+For a technical report read by engineers and data scientists, you might show the code:
+
+````{.markdown filename="technical_report.qmd"}
+```{python}
+#| echo: true
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+products = conn.sql("SELECT * FROM products WHERE unit_price > 50").pl()
+products.head()
+```
+````
+
+For a stakeholder presentation, you might hide the code and show only the output:
+
+````{.markdown filename="stakeholder_report.qmd"}
+```{python}
+#| echo: false
+#| output: true
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+products = conn.sql("SELECT * FROM products WHERE unit_price > 50").pl()
+products.head()
+```
+````
+
+Both blocks run the same code and produce the same output table. The only difference is what the *reader* sees. Non-technical audiences are distracted by code; technical audiences want to verify the methodology. One code cell, two different purposes.
+
+#### Using `eval` and `output` for Setup Code
+
+Some code should run during rendering but not appear in the output. A typical use case is initial setup: connecting to a database, importing libraries, or loading configuration. You want this code to execute (so downstream cells can use the connection), but you don't want the reader to see it.
+
+````{.markdown filename="document.qmd"}
+```{python}
+#| eval: true
+#| output: false
+#| echo: false
+import duckdb
+import polars as pl
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+```
+
+# Analysis Section
+
+```{python}
+#| echo: false
+revenue = conn.sql("""
+    SELECT c.category_name, SUM(od.unit_price * od.quantity) AS revenue
+    FROM order_details AS od
+    JOIN products AS p ON od.product_id = p.product_id
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY c.category_name
+    ORDER BY revenue DESC
+""").pl()
+revenue
+```
+````
+
+The first cell (`eval: true, output: false, echo: false`) runs silently: the connection is established, but no code or output appears in the document. The second cell uses that connection to retrieve data.
+
+#### Using `warning: false` to Clean Up Output
+
+Some operations produce harmless warnings. When rendering a report for stakeholders, these warnings distract from the findings. The `warning: false` option suppresses them:
+
+````{.markdown filename="document.qmd"}
+```{python}
+#| warning: false
+import polars as pl
+# Polars may emit warnings about deprecated syntax; suppress them
+revenue = pl.read_csv("data.csv")
+revenue
+```
+````
+
+### Inline Code
+
+In addition to code blocks, Quarto supports *inline code* that executes within narrative text. This is useful for embedding computed values in prose:
+
+````{.markdown filename="document.qmd"}
+The total revenue across all categories is `{python} revenue['revenue'].sum()`.
+
+According to our analysis of Northwind data,
+Beverages category leads with $`{python} int(revenue.filter(revenue['category_name'] == 'Beverages')['revenue'][0])` in annual revenue.
+````
+
+When rendered, the expressions evaluate and appear inline:
+
+> The total revenue across all categories is $2,545,100.
+>
+> According to our analysis of Northwind data, Beverages category leads with $267,868 in annual revenue.
+
+Inline code is most useful for summary statistics: totals, counts, percentages, or key findings. It keeps your narrative precise and eliminates the possibility of manually typing a number that might become stale if the data changes.
+
+::: {.callout-tip}
+## Inline code keeps reports current
+
+If you hard-code a number ("Beverages generated $267,868 in revenue") and later the data updates, you have to manually find and correct the number. With inline code, the number updates automatically. This is a small but important advantage: your report stays accurate without manual maintenance.
+:::
+
+### A Complete Quarto Example: Revenue Report
+
+Let's build a realistic Quarto document that queries the Northwind database, computes summaries, and displays them alongside narrative and charts.
+
+````{.markdown filename="northwind_revenue_report.qmd"}
+---
+title: "Northwind Revenue Analysis"
+author: "Your Name"
+date: today
+format: html
+toc: true
+number-sections: true
+code-fold: true
+---
+
+## Overview
+
+This report analyzes revenue patterns across product categories
+in the Northwind database. We'll examine total revenue by category,
+identify top-performing categories, and investigate seasonal trends.
+
+## Setup
+
+```{python}
+#| eval: true
+#| echo: false
+#| output: false
+import duckdb
+import polars as pl
+import altair as alt
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+```
+
+## Revenue by Category
+
+```{python}
+#| echo: false
+#| label: fig-category-revenue
+#| fig-cap: "Total revenue by product category"
+
+category_revenue = conn.sql("""
+    SELECT
+        c.category_name,
+        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+        COUNT(DISTINCT o.order_id) AS orders
+    FROM order_details AS od
+    JOIN orders AS o ON od.order_id = o.order_id
+    JOIN products AS p ON od.product_id = p.product_id
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY c.category_name
+    ORDER BY revenue DESC
+""").pl()
+
+chart = alt.Chart(category_revenue).mark_bar().encode(
+    x=alt.X("revenue:Q", title="Revenue ($)"),
+    y=alt.Y("category_name:N", sort="-x", title="Category"),
+).properties(width=600, height=300)
+
+chart
+```
+
+As shown in @fig-category-revenue, Beverages leads with
+`{python} f"${category_revenue[0, 'revenue']:,.2f}"` in total revenue,
+followed by Dairy Products and Confections. Together, these three categories
+represent `{python} f"{(category_revenue['revenue'].sum() / category_revenue['revenue'].sum() * 100):.1f}%"` of all revenue.
+
+## Category Summary Table
+
+```{python}
+#| echo: false
+#| label: tbl-summary
+#| tbl-cap: "Revenue summary by category"
+
+summary = category_revenue.select(
+    pl.col("category_name").alias("Category"),
+    (pl.col("revenue") / 1000).round(1).alias("Revenue ($K)"),
+    pl.col("orders").alias("Orders")
+)
+summary
+```
+
+## Monthly Trends
+
+```{python}
+#| echo: false
+#| label: fig-monthly
+#| fig-cap: "Monthly revenue trends by category (top 3 categories)"
+
+monthly = conn.sql("""
+    SELECT
+        DATE_TRUNC('month', o.order_date) AS month,
+        c.category_name,
+        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue
+    FROM order_details AS od
+    JOIN orders AS o ON od.order_id = o.order_id
+    JOIN products AS p ON od.product_id = p.product_id
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY DATE_TRUNC('month', o.order_date), c.category_name
+    ORDER BY month, revenue DESC
+""").pl()
+
+# Filter to top 3 categories for readability
+top_3 = category_revenue.head(3)["category_name"].to_list()
+monthly_filtered = monthly.filter(pl.col("category_name").is_in(top_3))
+
+line_chart = alt.Chart(monthly_filtered).mark_line().encode(
+    x=alt.X("month:T", title="Month"),
+    y=alt.Y("revenue:Q", title="Revenue ($)"),
+    color="category_name:N",
+).properties(width=700, height=350)
+
+line_chart
+```
+
+The monthly trends in @fig-monthly reveal clear seasonal patterns.
+All three leading categories show peaks in Q4, consistent with holiday purchasing behavior.
+
+## Conclusion
+
+Beverages and Dairy Products are the revenue engines of Northwind's business.
+Strategic focus on inventory management and marketing for these categories
+during Q4 is critical for maximizing annual revenue.
+````
+
+This document demonstrates the complete workflow: setup code that runs silently, queries that produce tables, inline code that embeds summaries in narrative, and charts with captions and cross-references. When you render it with `uv run quarto render northwind_revenue_report.qmd`, Quarto executes all the Python code, embeds the outputs, and produces a polished HTML report that's ready to share.
+
+### Exercises
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+**1.** Example setup for a stakeholder report:
+
+```yaml
+---
+title: "Q4 Revenue Analysis"
+author: "Analytics Team"
+format: html
+code-fold: true      # Readers can expand code if curious, but it's hidden by default
+---
+```
+
+Then use `echo: false` for all data cells and `echo: true` only for the final chart and summary. This gives stakeholders results without code distraction.
+
+**2.** A setup cell with `eval: true, output: false, echo: false`:
+
+````markdown
+```{python}
+#| eval: true
+#| output: false
+#| echo: false
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+```
+````
+
+Then downstream cells use the connection. Rendering the document will execute this setup cell (the connection is established), but no code or output appears in the report.
+
+**3.** Inline code example:
+
+```markdown
+The Beverages category generated
+`{python} f"${category_revenue.filter(pl.col('category_name') == 'Beverages')['revenue'][0]:,.2f}"`
+in total revenue.
+```
+
+This embeds the exact value from the data, so if the data updates, the number updates automatically.
+
+**4.** A report with multiple outputs:
+
+```yaml
+---
+title: "Analysis"
+format: [html, docx, pdf]
+---
+```
+
+Rendering with `uv run quarto render report.qmd` produces HTML, Word, and PDF versions from the same source. Alternatively, use the command line to override: `uv run quarto render report.qmd --to docx`.
+
+:::
+
+1. You're writing a Quarto report for non-technical stakeholders. You have four code cells: a database connection, a SQL query, a Polars transformation, and an Altair chart. For each cell, decide which options (`echo`, `eval`, `output`) you'd set and explain why.
+
+2. Create a setup cell in Quarto that loads your DuckDB connection using `eval: true, output: false, echo: false`. Explain why this combination is useful.
+
+3. Write an inline code expression that embeds the total revenue from the Northwind Beverages category in a sentence. Make sure it formats the number as currency with commas.
+
+4. If you want to render a single `.qmd` file to both HTML and Word formats, how would you structure the YAML header?
+
+## Part 2: SQL Cells in Quarto
+
+Quarto supports dedicated SQL code cells that execute against a database connection. This is particularly useful when your analysis is SQL-heavy and you want clean, readable queries inline with your narrative.
+
+A SQL cell looks similar to a Python cell, but the code block is marked `{sql}`:
+
+````{.markdown filename="document.qmd"}
+```{sql}
+#| output:
+#|   max-items: 10
+SELECT
+    c.category_name,
+    COUNT(*) AS product_count,
+    ROUND(AVG(p.unit_price), 2) AS avg_price
+FROM products AS p
+JOIN categories AS c ON p.category_id = c.category_id
+GROUP BY c.category_name
+ORDER BY product_count DESC
+```
+````
+
+By default, Quarto renders SQL output as a formatted table. The `output: max-items: 10` option limits the display to the first 10 rows (useful for large result sets).
+
+### Connecting SQL to Your Database
+
+For SQL cells to execute, Quarto needs access to a database connection. In Python, you establish this connection in a Python cell:
+
+````{.markdown filename="document.qmd"}
+```{python}
+#| eval: true
+#| output: false
+#| echo: false
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+```
+
+## Product Categories
+
+```{sql}
+#| connection: conn
+
+SELECT
+    c.category_name,
+    COUNT(*) AS product_count,
+    ROUND(AVG(p.unit_price), 2) AS avg_price
+FROM products AS p
+JOIN categories AS c ON p.category_id = c.category_id
+GROUP BY c.category_name
+ORDER BY product_count DESC
+```
+````
+
+The `connection: conn` option tells Quarto's SQL cell to use the `conn` variable from the Python environment. This is the same connection you established in Python.
+
+### Exercises
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+**1.** Example document with SQL cells:
+
+````markdown
+---
+title: "Northwind Product Analysis"
+format: html
+---
+
+```{python}
+#| eval: true
+#| output: false
+#| echo: false
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+```
+
+## Top Products by Revenue
+
+```{sql}
+#| connection: conn
+#| output: max-items: 15
+
+SELECT
+    p.product_name,
+    ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+    COUNT(DISTINCT od.order_id) AS orders
+FROM order_details AS od
+JOIN products AS p ON od.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY revenue DESC
+```
+````
+
+**2.** The SQL cell executes in Quarto's computational context. The `connection: conn` option passes the DuckDB connection from the Python environment. Behind the scenes, Quarto executes the SQL query and renders the result as a table.
+
+**3.** SQL cells can read from Python variables using parameter binding. If you define `min_price = 50` in a Python cell, you can reference it in a SQL cell using the `params` option or string formatting.
+
+:::
+
+1. Create a Quarto document with a Python cell that establishes a DuckDB connection to the Northwind database. Then add a SQL cell that queries the `products` table and displays the first 10 products sorted by `unit_price` descending. Use `connection: conn` in the SQL cell.
+
+2. In a SQL cell, where does the data come from? How does Quarto know how to execute the SQL?
+
+3. You want to create a SQL cell that only displays the top 20 rows of results. What option would you use?
+
+## Part 3: Marimo Notebooks
+
+Quarto documents execute code *during rendering*, producing static output. Marimo notebooks execute code *during interaction*, providing a reactive environment for exploration and visualization.
+
+You already learned the fundamentals of Marimo in the previous content: reactive execution, the one-definition rule, cell dependencies, and SQL cells. This section builds on those foundations to show how Marimo fits into your computational workflow.
+
+### When to Use Marimo vs. Quarto
+
+Both Quarto and Marimo are computational documents, but they serve different purposes:
+
+| Aspect | Quarto | Marimo |
+|--------|--------|--------|
+| When | Rendering reports for external audiences | Exploring data, building dashboards |
+| Output | Static HTML, PDF, Word, slides | Interactive web app (or export to HTML) |
+| Code execution | During `quarto render` | During `marimo edit` or `marimo run` |
+| Updates | Reader can't change; requires re-render | User can adjust parameters and see instant results |
+| Distribution | Email as HTML file | Share link, deploy to web server, or export |
+| Git | Clean diffs (Markdown) | Clean diffs (.py file) |
+| Best for | Polished deliverables, reports, presentations | Exploration, dashboards, internal tools |
+
+: Quarto vs. Marimo {#tbl-quarto-vs-marimo}
+
+Use Quarto when your goal is a finished deliverable. Use Marimo when your goal is exploration or interactive analysis.
+
+### Reactivity as a Superpower
+
+The defining feature of Marimo is *reactive execution*. When you change a cell, all downstream cells automatically re-execute. This tight feedback loop makes Marimo ideal for iterative analysis.
+
+Imagine you're exploring Northwind data and you want to find all products above a certain price threshold. In a Quarto document, you'd edit the code, run `quarto render`, wait for the full document to re-render, and then view the output. In Marimo, you adjust the threshold, press Enter, and the result updates instantly.
+
+This difference becomes dramatic when you add interactive elements. A Marimo notebook can have a slider that controls the threshold. Move the slider, and dependent cells re-execute in milliseconds. No button clicks, no terminal commands, no waiting. This is exploration at the speed of thought.
+
+### Building an Interactive Northwind Explorer
+
+Here's a realistic Marimo notebook that explores Northwind data with interactive controls:
+
+````{.python filename="northwind_explorer.py"}
+import marimo as mo
+import duckdb
+import polars as pl
+import altair as alt
+
+# ===== Setup (hidden, silent) =====
+
+_ = mo.md("""
+# Northwind Product Explorer
+
+Explore Northwind products and their pricing patterns.
+""")
+
+# Database connection
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# Load all product data
+all_products = conn.sql("""
+    SELECT
+        p.product_id,
+        p.product_name,
+        c.category_name,
+        p.unit_price,
+        p.units_in_stock,
+        p.reorder_level
+    FROM products AS p
+    JOIN categories AS c ON p.category_id = c.category_id
+    ORDER BY p.product_name
+""").pl()
+
+# ===== Interactive Controls =====
+
+min_price_slider = mo.ui.slider(
+    start=0,
+    stop=100,
+    step=5,
+    label="Minimum price",
+    value=20
+)
+
+mo.md(f"### Price Filter\n\n{min_price_slider}")
+
+category_dropdown = mo.ui.dropdown(
+    options=all_products["category_name"].unique().to_list(),
+    label="Filter by category",
+    value=None
+)
+
+mo.md(f"### Category Filter\n\n{category_dropdown}")
+
+# ===== Filtered Data =====
+
+min_price = min_price_slider.value
+selected_category = category_dropdown.value
+
+filtered_products = all_products.filter(
+    (pl.col("unit_price") >= min_price) &
+    (
+        (pl.col("category_name") == selected_category)
+        if selected_category
+        else True
+    )
+)
+
+# ===== Summary Statistics =====
+
+summary = mo.md(f"""
+### Results
+
+**Products matching filters:** {len(filtered_products)}
+
+**Price range:** ${filtered_products['unit_price'].min():.2f} - ${filtered_products['unit_price'].max():.2f}
+
+**Average price:** ${filtered_products['unit_price'].mean():.2f}
+
+**Total stock value:** ${(filtered_products['unit_price'] * filtered_products['units_in_stock']).sum():,.2f}
+""")
+
+summary
+
+# ===== Data Table =====
+
+display_table = filtered_products.select(
+    pl.col("product_name").alias("Product"),
+    pl.col("category_name").alias("Category"),
+    (pl.col("unit_price")).alias("Price"),
+    pl.col("units_in_stock").alias("Stock"),
+)
+
+display_table
+
+# ===== Chart =====
+
+if len(filtered_products) > 0:
+    chart = alt.Chart(filtered_products).mark_circle().encode(
+        x=alt.X("unit_price:Q", title="Unit Price ($)"),
+        y=alt.Y("units_in_stock:Q", title="Units in Stock"),
+        color="category_name:N",
+        tooltip=["product_name", "unit_price", "units_in_stock"]
+    ).properties(
+        width=600,
+        height=400,
+        title="Price vs. Stock for Filtered Products"
+    ).interactive()
+
+    chart
+else:
+    mo.md("_No products match the selected filters._")
+````
+
+This notebook has three key features:
+
+1. **Setup cells** that load data (hidden from view with `mo.md()` for narrative).
+2. **Interactive controls** (slider and dropdown) that users can adjust.
+3. **Reactive cells** that depend on the controls and update automatically.
+
+When a user adjusts the slider or selects a category, the notebook re-executes only the cells that depend on those changes. The filtered data, summary statistics, table, and chart all update instantly.
+
+### SQL Cells in Marimo
+
+Marimo has native SQL cells that execute directly against a database. This is useful when your analysis is SQL-heavy:
+
+````{.python filename="northwind_sql.py"}
+import marimo as mo
+import duckdb
+
+# Setup: establish connection
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# SQL cell equivalent (as a Python cell with SQL string)
+revenue_by_category = conn.sql("""
+    SELECT
+        c.category_name,
+        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+        COUNT(DISTINCT o.order_id) AS order_count
+    FROM order_details AS od
+    JOIN orders AS o ON od.order_id = o.order_id
+    JOIN products AS p ON od.product_id = p.product_id
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY c.category_name
+    ORDER BY revenue DESC
+""").pl()
+
+# Display results
+mo.md(f"## Revenue by Category")
+revenue_by_category
+````
+
+When using Marimo's graphical interface (`marimo edit`), you can actually create a dedicated SQL cell by clicking the cell type dropdown. In a `.py` file, you write SQL as a string inside a Python cell.
+
+### Exercises
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+**1.** Example Marimo notebook structure:
+
+```python
+import marimo as mo
+import duckdb
+
+# Setup
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# Interactive control
+year_slider = mo.ui.slider(start=2010, stop=2014, label="Year")
+mo.md(f"### Filter by Year\n\n{year_slider}")
+
+# Query using the slider value
+year = year_slider.value
+orders = conn.sql(f"SELECT * FROM orders WHERE YEAR(order_date) = {year}").pl()
+
+# Display results
+mo.md(f"Orders in {year}: {len(orders)}")
+orders.head()
+```
+
+The dependency graph has: slider → year → orders → display. When the slider changes, all downstream cells re-execute.
+
+**2.** Use `mo.md()` to create narrative cells and `mo.ui.*` for interactive controls. Keep data loading and transformations in regular Python cells.
+
+**3.** Marimo automatically detects dependencies by analyzing which variables each cell reads and writes. You can view the dependency graph in the notebook interface (usually a graph icon or sidebar). This graph determines execution order and reactive updates.
+
+:::
+
+1. Create a Marimo notebook with an interactive slider that controls a minimum revenue threshold. Use this slider to filter products from the Northwind database and display the filtered results in a table.
+
+2. In Marimo, how do you create narrative text (markdown) alongside code cells?
+
+3. How does Marimo know which cells depend on a slider's value? How would you view the dependency graph?
+
+## Part 4: When to Use What
+
+The three computational tools you've mastered each have a role:
+
+**Quarto** is for polished deliverables that you share with others:
+- A report emailed to stakeholders
+- A presentation to leadership
+- A technical document for a team
+- An assignment or deliverable
+- A blog post or article
+
+Quarto produces *static* output that's the same every time someone views it. This is appropriate for reports: the reader wants the finished analysis, not to fiddle with sliders.
+
+**Marimo** is for interactive exploration and dashboards:
+- Investigating a dataset with multiple hypotheses
+- Building a tool for colleagues to explore data themselves
+- Prototyping an analysis before formalizing it in a report
+- Creating a dashboard that updates as you adjust parameters
+- An internal tool that your team uses repeatedly
+
+Marimo produces *interactive* output where the user can change parameters and see results update. This is appropriate for exploration: the analyst wants fast feedback.
+
+**Scripts** (plain `.py` files) are for automation and reusable components:
+- Running the same analysis on new data weekly or monthly
+- Building functions that other code imports and uses
+- Processing data pipelines that run on a schedule
+- Any code that needs to run without human interaction
+
+Scripts execute top-to-bottom, produce output (files, databases, logs), and are reproducible. This is appropriate for production: the system runs automatically.
+
+In a real data engineering workflow, these three tools work together. You *script* your data pipeline (SQL queries, data cleaning). You *explore* the results in a *Marimo notebook*, trying different visualizations and aggregations. You *publish* your findings in a *Quarto report* that your stakeholders read. Each tool serves its purpose.
+
+### A Complete Workflow Example
+
+Here's how the three tools might work together on a Northwind analysis:
+
+1. **Script** (`etl.py`): Extract monthly revenue data from the database, clean it, and save to a CSV file. Run this weekly on a schedule.
+
+2. **Marimo notebook** (`explore.py`): Load the CSV file. Create interactive controls to filter by category, date range, and metric (revenue vs. order count). Explore different charts and summaries. This is where you figure out *what questions to ask*.
+
+3. **Quarto document** (`report.qmd`): Based on findings from the notebook, write a polished report with fixed parameters. Show the top three findings with charts, tables, and narrative. This is where you *communicate what you learned*.
+
+The script ensures data freshness. The notebook enables fast exploration. The report communicates the findings. All three are necessary.
+
+## Capstone: Building a Complete Computational Analysis
+
+Throughout this book, we've used the Northwind dataset. For your own projects, you'll apply these same patterns to whatever dataset your work requires.
+
+Here's a capstone project that brings everything together:
+
+### Project Brief
+
+You're given a CSV file with historical sales data for your organization (or a public dataset of your choice). Your task is to:
+
+1. **Explore the data** using a Marimo notebook. Create interactive controls to filter by date range, product category, or other relevant dimensions. Build visualizations that help you understand the data's structure and patterns.
+
+2. **Develop hypotheses** about what drives revenue or customer behavior. Use SQL to answer specific questions (Which categories are growing? Which customers contribute the most? Are there seasonal patterns?).
+
+3. **Create a polished report** using Quarto. Document your three key findings with charts, tables, and narrative explanation. Show the code (so a technical reader can verify your methodology) but make the findings clear to any audience.
+
+4. **Deploy the analysis** as a Marimo dashboard. Create a tool that your stakeholders can use to explore the data themselves. Include sliders or dropdowns for the most important dimensions.
+
+### Success Criteria
+
+- Your Marimo notebook demonstrates reactive execution: when you change a control, dependent cells update.
+- Your Quarto report renders without errors and can be exported to multiple formats.
+- Your code follows the patterns from this book: SQL for data retrieval, Polars for transformation, Altair for visualization.
+- Your analysis answers a genuine business question, not just summarizes data.
+- Your narrative explains *why* the findings matter, not just *what* the data shows.
+
+## Summary
+
+Quarto documents and Marimo notebooks are complementary tools for computational communication. Quarto renders code into static documents, making it ideal for polished reports that you share with others. Marimo creates interactive notebooks, making it ideal for exploration and dashboards where users need to adjust parameters and see results update instantly.
+
+Code cells in Quarto execute during rendering. Cell options like `echo`, `eval`, and `output` let you control what appears in the finished document. Inline code embeds computed values in narrative. This separation between code and output enables you to write documents for different audiences: show code to engineers, hide code from stakeholders.
+
+Marimo notebooks execute during interaction. The reactive model ensures that changing a cell automatically updates all dependent cells. Interactive UI elements turn analyses into explorable tools. The one-definition rule prevents hidden state bugs that plague traditional notebooks.
+
+Together, Quarto and Marimo transform your analytical work into products that inform decision-making, not just papers that document what you did.
+
+## Glossary
+
+cell
+: A unit of code in Quarto or Marimo. In Quarto, a cell is a code block that executes during rendering. In Marimo, a cell executes during interaction and can depend on other cells.
+
+code cell
+: An executable code block (Python, SQL, R, etc.) in a Quarto document or Marimo notebook.
+
+code folding
+: A Quarto feature that hides code by default but lets readers expand it to see the source. Controlled by the `code-fold` YAML option.
+
+computational document
+: A document that interleaves code, output, and narrative. Includes Quarto documents and Marimo notebooks.
+
+inline code
+: Code that executes within a paragraph of narrative text, not in a separate block. In Quarto, written as `` `{python} expression` ``.
+
+reactive execution
+: Marimo's model where changing a cell automatically re-executes all cells that depend on it.
+
+rendering
+: The process of executing code blocks in a Quarto document and converting the `.qmd` file to output (HTML, PDF, Word, slides).

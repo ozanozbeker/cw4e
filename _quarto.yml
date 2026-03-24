@@ -23,41 +23,40 @@ book:
     - introduction.qmd
     - prerequisites.qmd
 
-    - part: foundations.qmd
+    - part: unit-1-toolkit.qmd
       chapters:
         - chapters/01-computers.qmd
         - chapters/02-filesystem.qmd
-        - chapters/03-cli.qmd
-        - chapters/04-git.qmd
-        - chapters/05-github.qmd
-    - part: databases.qmd
+        - chapters/03-quarto.qmd
+        - chapters/04-cli.qmd
+        - chapters/05-git.qmd
+        - chapters/06-github.qmd
+    - part: unit-2-sql.qmd
       chapters:
-        - chapters/06-databases.qmd
-        - chapters/07-querying.qmd
-        - chapters/08-joins.qmd
-        - chapters/09-analytics.qmd
-        - chapters/10-modeling.qmd
-    - part: programming.qmd
+        - chapters/07-databases.qmd
+        - chapters/08-querying.qmd
+        - chapters/09-joins.qmd
+        - chapters/10-analytics.qmd
+        - chapters/11-modeling.qmd
+    - part: unit-3-python.qmd
       chapters:
-        - chapters/11-python-fundamentals.qmd
-        - chapters/12-collections.qmd
-        - chapters/13-functions.qmd
-        - chapters/14-file-io.qmd
-        - chapters/15-objects.qmd
-    - part: integration.qmd
+        - chapters/12-python-fundamentals.qmd
+        - chapters/13-collections.qmd
+        - chapters/14-control-flow.qmd
+        - chapters/15-functions.qmd
+        - chapters/16-file-io.qmd
+        - chapters/17-objects.qmd
+    - part: unit-4-data-products.qmd
       chapters:
-        - chapters/16-python-sql.qmd
-        - chapters/17-marimo.qmd
-        - chapters/18-polars.qmd
-        - chapters/19-altair.qmd
-        - chapters/20-excel.qmd
-    - part: production.qmd
-      chapters:
-        - chapters/21-python-projects.qmd
-        - chapters/22-quarto.qmd
+        - chapters/18-python-sql.qmd
+        - chapters/19-polars.qmd
+        - chapters/20-altair.qmd
+        - chapters/21-excel.qmd
+        - chapters/22-python-projects.qmd
         - chapters/23-code-quality.qmd
-        - chapters/24-arrow.qmd
-        - chapters/25-typer.qmd
+        - chapters/24-computational-documents.qmd
+        - chapters/25-arrow.qmd
+        - chapters/26-typer.qmd
 
   appendices:
     - appendices/brew.qmd
@@ -71,6 +70,9 @@ book:
     - appendices/marimo.qmd
     - appendices/ruff.qmd
     - appendices/basedpyright.qmd
+
+execute:
+  enabled: false
 
 format:
   html:

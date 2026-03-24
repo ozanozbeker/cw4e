@@ -44,7 +44,7 @@ In practice, this means we won't spend weeks on Python syntax before writing use
 
 This approach requires a different relationship with confusion. When you're playing the whole game, you'll encounter concepts before you fully understand them. You'll use tools before you've mastered them. This is intentional. Understanding often follows use, not the other way around. Trust the process, and return to earlier material as later chapters illuminate what you learned before.
 
-The alternative, mastering each component in isolation before combining them, produces a different kind of confusion: the confusion of not knowing why any of this matters. Students who learn syntax without context struggle to apply their knowledge to real problems. Students who build complete projects, even imperfect ones, develop intuition that transfers.
+The alternative, mastering each component in isolation before combining them, produces a different kind of confusion: the confusion of not knowing why any of this matters. Learners who study syntax without context struggle to apply their knowledge to real problems. Learners who build complete projects, even imperfect ones, develop intuition that transfers.
 
 ## The Passenger and the Driver
 

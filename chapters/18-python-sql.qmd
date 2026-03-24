@@ -1,0 +1,821 @@
+# Python Meets SQL {#sec-python-sql}
+
+You've now completed three units: Unit 1: The Professional Toolkit (CLI, Git, file systems), Unit 2: Data with SQL (SQL and DuckDB), and Unit 3: Python (fundamentals and the object model). This unit, Unit 4: Building Data Products, is where those skills converge. In Unit 2, you wrote SQL queries in the DuckDB CLI. In Unit 3, you wrote Python scripts that processed CSV files. Now you'll connect the two: running SQL queries from Python, passing results between languages, and using each language for what it does best.
+
+This chapter establishes the data access layer that every subsequent chapter builds on. By the end, you'll write Python scripts that connect to the Northwind database, execute parameterized SQL queries, and process the results with the Python skills you already have. The same queries you wrote in @sec-querying and @sec-joins come back here, but now they're embedded in Python programs that can do things SQL alone cannot: loop over results, generate reports, write to different file formats, and respond to dynamic input.
+
+## Why Combine Python and SQL?
+
+You've now spent time with both languages, and you know their strengths. SQL excels at filtering, joining, aggregating, and working with set operations inside a database. Python excels at control flow, file I/O, orchestration, and custom logic. Neither language replaces the other. The most effective data workflows use both.
+
+Consider a realistic task: generate a monthly sales report for each product category, flag categories where revenue dropped more than 10% compared to the previous month, and write the results to a CSV file. SQL handles the joins and aggregations efficiently. Python handles the month-over-month comparison logic, the conditional flagging, and the file output. Trying to do the whole thing in pure SQL is possible but awkward. Trying to do it in pure Python means reimplementing joins and aggregations that the database does faster. The combination is cleaner and faster than either language alone.
+
+This is the pattern in industry: SQL retrieves and shapes the data, Python orchestrates the workflow around it. Learning to use both together is what makes you effective as an engineer working with data.
+
+## Connecting to DuckDB from Python
+
+DuckDB provides a Python package that lets you execute SQL queries directly from Python scripts. First, add it to your project:
+
+```{.bash filename="terminal"}
+uv add duckdb
+```
+
+### In-Memory vs. Persistent Connections
+
+DuckDB supports two connection modes. An *in-memory* connection creates a temporary database that exists only while your script runs:
+
+```{.python filename="in_memory.py"}
+import duckdb
+
+# In-memory: no file, data disappears when the script ends
+conn = duckdb.connect()
+conn.sql("CREATE TABLE test (id INTEGER, name VARCHAR)")
+conn.sql("INSERT INTO test VALUES (1, 'Alice'), (2, 'Bob')")
+result = conn.sql("SELECT * FROM test")
+print(result)
+```
+
+A *persistent* connection opens a DuckDB database file, the same `.duckdb` files you used in the Databases module:
+
+```{.python filename="persistent.py"}
+import duckdb
+
+# Persistent: opens the Northwind database file
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+result = conn.sql("SELECT product_name, unit_price FROM products LIMIT 5")
+print(result)
+```
+
+The `read_only=True` flag is a good habit for analytical work. It prevents accidental modifications to the database and allows multiple processes to read the file simultaneously.
+
+::: {.callout-important}
+## Column Names: camelCase to snake_case
+
+You may notice that column names look different here than they did in the Databases module. In the CLI chapters, you queried CSV files directly and used the original Northwind column names: `productName`, `unitPrice`, `supplierID` (camelCase). The persistent DuckDB file used in this module was built by importing those CSVs with a column-rename step that converts names to `product_name`, `unit_price`, `supplier_id` (snake_case).
+
+This follows Python's naming convention (PEP 8), where snake_case is standard for variables, functions, and, by extension, column names in data workflows. The rename step is itself a common ETL pattern: source data arrives in whatever format the source system uses, and you normalize it during loading. If you carry over SQL from the Databases module, update the column names accordingly.
+:::
+
+::: {.callout-note}
+## `duckdb.connect()` vs. `duckdb.sql()`
+
+DuckDB also provides a module-level `duckdb.sql()` function that uses a shared, in-memory default connection. This is convenient for quick experiments, but for anything beyond a one-off query, create an explicit connection with `duckdb.connect()`. Explicit connections make your code clearer about which database you're talking to, and they're essential when working with persistent database files.
+:::
+
+### Running Your First Query from Python
+
+Let's connect to the Northwind database and run a familiar query:
+
+```{.python filename="first_query.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+result = conn.sql("""
+    SELECT
+        c.category_name,
+        COUNT(*) AS product_count,
+        ROUND(AVG(p.unit_price), 2) AS avg_price
+    FROM products AS p
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY c.category_name
+    ORDER BY product_count DESC
+""")
+
+print(result)
+```
+
+The `conn.sql()` method executes a SQL query and returns a *relation object*, DuckDB's representation of a result set. When you print it, DuckDB displays a formatted table in your terminal, just like the CLI did in the Databases module.
+
+## From SQL Results to Python Data
+
+The relation object that `conn.sql()` returns is useful for display, but to work with the data in Python, you need to convert it to Python data structures.
+
+### Fetching Results
+
+DuckDB provides several methods for extracting data from a relation:
+
+```{.python filename="fetch_methods.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+result = conn.sql("""
+    SELECT product_name, unit_price, units_in_stock
+    FROM products
+    WHERE category_id = 1
+    ORDER BY unit_price DESC
+""")
+
+# As a list of tuples
+rows = result.fetchall()
+print(rows[0])  # ('Côte de Blaye', 263.5, 17)
+
+# One row at a time
+result = conn.sql("SELECT product_name FROM products LIMIT 3")
+print(result.fetchone())  # ('Chai',)
+print(result.fetchone())  # ('Chang',)
+print(result.fetchone())  # ('Guaraná Fantástica',)
+```
+
+### Working with Column Names
+
+The `fetchall()` method returns tuples without column names. To get dictionaries (like `csv.DictReader` from @sec-csv), you can combine the results with the column descriptions:
+
+```{.python filename="dict_results.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+result = conn.sql("""
+    SELECT product_name, unit_price, units_in_stock
+    FROM products
+    WHERE category_id = 1
+""")
+
+# Get column names from the result description
+columns = result.columns
+rows = result.fetchall()
+
+# Build list of dictionaries
+products = [dict(zip(columns, row)) for row in rows]
+
+for p in products[:3]:
+    print(f"{p['product_name']}: ${p['unit_price']:.2f}")
+```
+
+This pattern, `dict(zip(columns, row))`, converts each tuple into a dictionary using the column names as keys. It's the same `zip()` technique from @sec-collections, applied to database results.
+
+### Converting to Polars DataFrames
+
+The most convenient conversion method is `.pl()`, which returns a Polars DataFrame directly:
+
+```{.python filename="to_polars.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+df = conn.sql("""
+    SELECT product_name, unit_price, units_in_stock
+    FROM products
+    ORDER BY unit_price DESC
+""").pl()
+
+print(df.head())
+print(df.schema)
+```
+
+You'll use this extensively starting in @sec-polars. For now, know that the conversion is essentially free in terms of performance because DuckDB and Polars share the same underlying data format (Apache Arrow, which you'll learn about in @sec-arrow).
+
+### Exercises
+
+1. Write a script that connects to the Northwind database and executes a query to fetch all products in the "Beverages" category. Use `fetchall()` to get the results as tuples, then iterate through the first three rows and print the product name and unit price in a human-readable format.
+
+2. Modify the script from question 1 to use the `columns` attribute and `dict(zip())` pattern to convert the results to dictionaries instead of tuples. Then print the same information using the dictionary keys to access the values.
+
+3. Write a function called `products_in_category()` that accepts a category ID as a parameter and returns a Polars DataFrame containing all products in that category, ordered by unit price descending. Use the `.pl()` method to convert the result. Call your function for category ID 2 (Condiments) and print the schema to verify the data types.
+
+4. Explain the difference between `.fetchall()`, `.fetchone()`, and `.pl()` in a comment block in your script. When would you use each method? (Hint: think about whether you need the entire result set at once, whether you need column names, and whether you're doing further analysis.)
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Write a script that connects and fetches tuples:
+
+```{.python filename="fetch_tuples.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+result = conn.sql("""
+    SELECT product_name, unit_price
+    FROM products
+    WHERE category_id = 1
+    ORDER BY unit_price DESC
+""")
+
+rows = result.fetchall()
+print("First 3 products (as tuples):")
+for i, row in enumerate(rows[:3], start=1):
+    print(f"  {i}. {row[0]}: ${row[1]:.2f}")
+```
+
+**2.** Convert tuples to dictionaries using `columns` and `dict(zip())`:
+
+```{.python filename="fetch_dicts.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+result = conn.sql("""
+    SELECT product_name, unit_price
+    FROM products
+    WHERE category_id = 1
+    ORDER BY unit_price DESC
+""")
+
+columns = result.columns
+rows = result.fetchall()
+products = [dict(zip(columns, row)) for row in rows]
+
+print("First 3 products (as dictionaries):")
+for i, product in enumerate(products[:3], start=1):
+    print(f"  {i}. {product['product_name']}: ${product['unit_price']:.2f}")
+```
+
+**3.** Write a function that returns a Polars DataFrame:
+
+```{.python filename="products_in_category.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+def products_in_category(category_id):
+    """Fetch products in a category as a Polars DataFrame.
+
+    Args:
+        category_id: The category ID to filter by.
+
+    Returns:
+        A Polars DataFrame with product details ordered by price descending.
+    """
+    return conn.sql("""
+        SELECT product_name, unit_price, units_in_stock
+        FROM products
+        WHERE category_id = $1
+        ORDER BY unit_price DESC
+    """, params=[category_id]).pl()
+
+df = products_in_category(2)
+print("Condiments products:")
+print(df)
+print("\nSchema:")
+print(df.schema)
+```
+
+**4.** Comparison of fetch methods:
+
+```{.python filename="fetch_methods_explained.py"}
+"""
+Differences between result fetch methods:
+
+- fetchall(): Returns the entire result set as a list of tuples. Use this when
+  you need all rows and don't require column names. Good for iteration when
+  working with positional indexing.
+
+- fetchone(): Returns one row at a time as a tuple. Use this when you want to
+  process results one row at a time without loading everything into memory, or
+  when you only need the first row. Each call advances to the next row.
+
+- .pl(): Converts the entire result to a Polars DataFrame. Use this when you
+  plan to do further analysis, filtering, or transformation with Polars methods.
+  The conversion is fast because both DuckDB and Polars use Apache Arrow internally.
+
+For a small dataset with a few rows, the choice is less important. For large
+datasets, fetchone() saves memory if you only need to process one row at a time.
+For analysis and reporting, .pl() is convenient because DataFrames have useful
+methods for grouping, filtering, and computation.
+"""
+```
+
+:::
+
+## Parameterized Queries {#sec-parameterized}
+
+Suppose you want to write a function that queries revenue for a specific product category. Your first instinct might be to use an f-string:
+
+```{.python filename="bad_fstring.py"}
+# DON'T DO THIS
+def get_category_revenue(conn, category_name):
+    return conn.sql(f"""
+        SELECT SUM(od.unit_price * od.quantity) AS revenue
+        FROM order_details AS od
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+        WHERE c.category_name = '{category_name}'
+    """).fetchone()[0]
+```
+
+This works, but it has two serious problems. First, if `category_name` contains a single quote (like `"Chef's Special"`), the SQL breaks because the quote terminates the string literal prematurely. Second, and more importantly, building SQL from user input opens the door to *SQL injection*, a class of security vulnerabilities where malicious input manipulates the query itself.
+
+::: {.callout-warning}
+## SQL injection
+
+SQL injection is one of the oldest and most common security vulnerabilities in software. If a user provides the input `'; DROP TABLE products; --`, your f-string query becomes:
+
+```sql
+WHERE c.category_name = ''; DROP TABLE products; --'
+```
+
+This would delete your entire products table. SQL injection attacks have caused real-world data breaches affecting millions of people. Never build SQL from user input with string formatting.
+:::
+
+The correct approach is *parameterized queries*. You write the SQL with placeholder tokens and pass the values separately:
+
+```{.python filename="parameterized.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+def get_category_revenue(conn, category_name):
+    """Query total revenue for a specific product category.
+
+    Args:
+        conn: DuckDB connection object.
+        category_name: The category to filter by.
+
+    Returns:
+        Total revenue as a float.
+    """
+    result = conn.sql("""
+        SELECT SUM(od.unit_price * od.quantity) AS revenue
+        FROM order_details AS od
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+        WHERE c.category_name = $1
+    """, params=[category_name])
+
+    row = result.fetchone()
+    return row[0] if row else 0.0
+
+revenue = get_category_revenue(conn, "Beverages")
+print(f"Beverages revenue: ${revenue:,.2f}")
+```
+
+The `$1` in the SQL is a positional parameter placeholder. DuckDB replaces it with the value from the `params` list, handling quoting and escaping automatically. For multiple parameters, use `$1`, `$2`, `$3`, and so on:
+
+```{.python filename="multi_params.py"}
+result = conn.sql("""
+    SELECT product_name, unit_price
+    FROM products AS p
+    JOIN categories AS c ON p.category_id = c.category_id
+    WHERE c.category_name = $1
+      AND p.unit_price > $2
+    ORDER BY p.unit_price DESC
+""", params=["Beverages", 15.00])
+```
+
+You can also use named parameters with `$name` syntax by passing a dictionary:
+
+```{.python filename="named_params.py"}
+result = conn.sql("""
+    SELECT product_name, unit_price
+    FROM products AS p
+    JOIN categories AS c ON p.category_id = c.category_id
+    WHERE c.category_name = $category
+      AND p.unit_price > $min_price
+""", params={"category": "Beverages", "min_price": 15.00})
+```
+
+Named parameters make your queries self-documenting when there are more than two or three values to bind.
+
+### Exercises
+
+1. Explain why the f-string version in `bad_fstring.py` is dangerous. Write a brief comment describing what would happen if a user provided the input `"Beverages' OR '1'='1"` as the `category_name` parameter. Then rewrite the function using parameterized queries with `$1` instead.
+
+2. Write a function called `products_by_price_range()` that accepts two parameters: `min_price` and `max_price`. Use named parameters (`$min_price` and `$max_price`) to query products within that price range. Your query should return product name, category name, and unit price, joined from the `products` and `categories` tables, ordered by price ascending. Test your function by calling it with `min_price=10.00` and `max_price=25.00`.
+
+3. Write a Python script that queries the Northwind database using DuckDB to find all orders placed by a specific customer. Accept the customer ID as a parameter (`$customer_id`) and return a list of dictionaries with order_id, order_date, and total order value (calculated as `SUM(unit_price * quantity * (1 - discount))` from `order_details`). Use `params=[...]` to pass the parameter safely.
+
+4. Query the CSV file `data/products.csv` directly using a parameterized query to find all products with unit_price greater than a parameter value (use `$min_price`). Why is direct file querying useful in a Python workflow? Write your answer as a comment in your script. What advantage does it have over loading the CSV into a Polars DataFrame first?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Explain the danger and rewrite with parameterized queries:
+
+```{.python filename="parameterized_danger.py"}
+import duckdb
+
+# The f-string version is DANGEROUS:
+def bad_get_category_revenue(conn, category_name):
+    # If category_name = "Beverages' OR '1'='1"
+    # The query becomes:
+    # WHERE c.category_name = 'Beverages' OR '1'='1'
+    # This evaluates to TRUE for ALL rows, defeating the filter!
+    # Even worse, malicious input like "'; DROP TABLE products; --"
+    # could delete tables.
+    return conn.sql(f"""
+        SELECT SUM(od.unit_price * od.quantity) AS revenue
+        FROM order_details AS od
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+        WHERE c.category_name = '{category_name}'
+    """).fetchone()[0]
+
+# Correct version with parameterized query:
+def get_category_revenue(conn, category_name):
+    """Query revenue for a category safely."""
+    result = conn.sql("""
+        SELECT SUM(od.unit_price * od.quantity) AS revenue
+        FROM order_details AS od
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+        WHERE c.category_name = $1
+    """, params=[category_name])
+    row = result.fetchone()
+    return row[0] if row else 0.0
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+revenue = get_category_revenue(conn, "Beverages")
+print(f"Revenue: ${revenue:,.2f}")
+```
+
+**2.** Use named parameters with a price range query:
+
+```{.python filename="price_range.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+def products_by_price_range(conn, min_price, max_price):
+    """Find products within a price range.
+
+    Args:
+        conn: DuckDB connection.
+        min_price: Minimum price (inclusive).
+        max_price: Maximum price (inclusive).
+
+    Returns:
+        List of dicts with product_name, category_name, and unit_price.
+    """
+    result = conn.sql("""
+        SELECT
+            p.product_name,
+            c.category_name,
+            p.unit_price
+        FROM products AS p
+        JOIN categories AS c ON p.category_id = c.category_id
+        WHERE p.unit_price >= $min_price
+          AND p.unit_price <= $max_price
+        ORDER BY p.unit_price ASC
+    """, params={"min_price": min_price, "max_price": max_price})
+
+    columns = result.columns
+    rows = result.fetchall()
+    return [dict(zip(columns, row)) for row in rows]
+
+products = products_by_price_range(conn, min_price=10.00, max_price=25.00)
+print(f"Found {len(products)} products between $10 and $25:")
+for p in products:
+    print(f"  {p['product_name']:<30} {p['category_name']:<15} ${p['unit_price']:.2f}")
+```
+
+**3.** Query orders for a specific customer:
+
+```{.python filename="customer_orders.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+result = conn.sql("""
+    SELECT
+        o.order_id,
+        o.order_date,
+        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS total_value
+    FROM orders AS o
+    JOIN order_details AS od ON o.order_id = od.order_id
+    WHERE o.customer_id = $customer_id
+    GROUP BY o.order_id, o.order_date
+    ORDER BY o.order_date DESC
+""", params={"customer_id": "ALFKI"})
+
+columns = result.columns
+rows = result.fetchall()
+orders = [dict(zip(columns, row)) for row in rows]
+
+print(f"Orders for customer ALFKI:")
+for order in orders:
+    print(f"  Order {order['order_id']}: {order['order_date']} - ${order['total_value']:,.2f}")
+```
+
+**4.** Query CSV file directly with parameterized query:
+
+```{.python filename="query_csv_param.py"}
+import duckdb
+
+conn = duckdb.connect()
+
+result = conn.sql("""
+    SELECT product_name, unit_price
+    FROM 'data/products.csv'
+    WHERE unit_price > $min_price
+    ORDER BY unit_price DESC
+""", params={"min_price": 50.00})
+
+print(result)
+
+"""
+Why direct file querying is useful:
+
+- You don't need to load the entire CSV into memory with Polars or pandas.
+  DuckDB handles the parsing and filtering efficiently.
+
+- The query is expressed in SQL, which is often simpler than equivalent
+  Python code using DataFrames.
+
+- You can combine file queries with database tables in a single query,
+  useful when some data lives in files and some in a database.
+
+- For one-off exploratory analysis, it's faster to write than converting
+  to a DataFrame and then filtering.
+
+Advantage over DataFrame: You avoid the memory overhead of loading the entire
+file, especially useful for large CSV files. DuckDB's columnar query engine
+applies filters during parsing, so only relevant data is loaded into memory.
+"""
+```
+
+:::
+
+## Querying Files Directly
+
+One of DuckDB's most powerful features is its ability to query files directly, without loading them into a database first. You saw this briefly in the Databases module, and it becomes especially useful from Python where you can dynamically construct file paths.
+
+### CSV Files
+
+```{.python filename="query_csv.py"}
+import duckdb
+
+conn = duckdb.connect()
+
+# Query a CSV file as if it were a table
+result = conn.sql("""
+    SELECT *
+    FROM 'data/products.csv'
+    WHERE unit_price > 20
+    ORDER BY unit_price DESC
+""")
+
+print(result)
+```
+
+DuckDB automatically detects the CSV format, infers column names from the header row, and guesses data types from the content. This is the DuckDB equivalent of the `csv.DictReader` workflow from @sec-csv, but the database handles the parsing, filtering, and sorting for you.
+
+### Parquet Files
+
+Parquet is a columnar file format designed for analytical workloads. It stores data more efficiently than CSV and preserves type information:
+
+```{.python filename="query_parquet.py"}
+import duckdb
+
+conn = duckdb.connect()
+
+# Query a Parquet file directly
+result = conn.sql("""
+    SELECT
+        category_name,
+        COUNT(*) AS order_count,
+        ROUND(SUM(unit_price * quantity), 2) AS total_revenue
+    FROM 'data/northwind_flat.parquet'
+    GROUP BY category_name
+    ORDER BY total_revenue DESC
+""")
+
+print(result)
+```
+
+::: {.callout-tip}
+## The denormalized flat file
+
+The Northwind dataset includes a denormalized Parquet file, `northwind_flat.parquet`, that joins orders, order details, products, categories, customers, and other tables into a single wide table. This is useful for quick exploration because you can run aggregations without writing joins. The normalized database is better for production queries because it avoids data redundancy and maintains referential integrity, but the flat file is convenient for prototyping.
+:::
+
+### Combining Files and Database Tables
+
+DuckDB lets you mix file queries with database tables in the same query:
+
+```{.python filename="mixed_sources.py"}
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# Join a database table with a CSV file
+result = conn.sql("""
+    SELECT
+        p.product_name,
+        p.unit_price,
+        ext.warehouse_location
+    FROM products AS p
+    JOIN 'data/product_locations.csv' AS ext
+        ON p.product_id = ext.product_id
+""")
+```
+
+This is useful in real-world scenarios where some data lives in a database and other data arrives as files from external sources.
+
+## Workflow Building Block: The Data Access Layer
+
+Let's put everything together into a complete script that serves as the data access layer for our Northwind analytical workflow. This script connects to the database, runs parameterized queries, processes the results, and writes output, the foundation that every subsequent chapter builds on:
+
+```{.python filename="northwind_data.py"}
+"""Data access layer for Northwind analytical workflows.
+
+Connects to the Northwind DuckDB database and provides functions
+for querying revenue, product, and order data. Results are returned
+as lists of dictionaries for downstream processing.
+"""
+
+import csv
+import duckdb
+from pathlib import Path
+
+
+def get_connection(db_path: str = "data/northwind.duckdb") -> duckdb.DuckDBPyConnection:
+    """Open a read-only connection to the Northwind database.
+
+    Args:
+        db_path: Path to the DuckDB database file.
+
+    Returns:
+        A DuckDB connection object.
+
+    Raises:
+        FileNotFoundError: If the database file does not exist.
+    """
+    path = Path(db_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Database not found: {path}")
+    return duckdb.connect(str(path), read_only=True)
+
+
+def query_to_dicts(conn: duckdb.DuckDBPyConnection, sql: str, params=None) -> list[dict]:
+    """Execute a SQL query and return results as dictionaries.
+
+    Args:
+        conn: DuckDB connection object.
+        sql: SQL query string, optionally with parameter placeholders.
+        params: Parameter values for the query.
+
+    Returns:
+        A list of dictionaries, one per row.
+    """
+    result = conn.sql(sql, params=params) if params else conn.sql(sql)
+    columns = result.columns
+    rows = result.fetchall()
+    return [dict(zip(columns, row)) for row in rows]
+
+
+def revenue_by_category(
+    conn: duckdb.DuckDBPyConnection,
+    category: str | None = None,
+) -> list[dict]:
+    """Query revenue aggregated by product category.
+
+    Args:
+        conn: DuckDB connection object.
+        category: If provided, filter to this category only.
+
+    Returns:
+        List of dicts with 'category_name' and 'revenue' keys,
+        sorted by revenue descending.
+    """
+    base_query = """
+        SELECT
+            c.category_name,
+            ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+            COUNT(DISTINCT o.order_id) AS order_count
+        FROM order_details AS od
+        JOIN orders AS o ON od.order_id = o.order_id
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+    """
+
+    if category is not None:
+        base_query += "WHERE c.category_name = $1\n"
+        params = [category]
+    else:
+        params = None
+
+    base_query += """
+        GROUP BY c.category_name
+        ORDER BY revenue DESC
+    """
+
+    return query_to_dicts(conn, base_query, params)
+
+
+def top_products(
+    conn: duckdb.DuckDBPyConnection,
+    n: int = 10,
+) -> list[dict]:
+    """Query the top N products by total revenue.
+
+    Args:
+        conn: DuckDB connection object.
+        n: Number of products to return.
+
+    Returns:
+        List of dicts with product details and revenue.
+    """
+    return query_to_dicts(conn, """
+        SELECT
+            p.product_name,
+            c.category_name,
+            ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+            SUM(od.quantity) AS total_quantity
+        FROM order_details AS od
+        JOIN products AS p ON od.product_id = p.product_id
+        JOIN categories AS c ON p.category_id = c.category_id
+        GROUP BY p.product_name, c.category_name
+        ORDER BY revenue DESC
+        LIMIT $1
+    """, params=[n])
+
+
+def write_report_csv(data: list[dict], filepath: Path) -> None:
+    """Write a list of dictionaries to a CSV file.
+
+    Args:
+        data: List of dictionaries with consistent keys.
+        filepath: Output file path.
+    """
+    if not data:
+        return
+
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(filepath, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=data[0].keys())
+        writer.writeheader()
+        writer.writerows(data)
+
+
+if __name__ == "__main__":
+    conn = get_connection()
+
+    # Revenue by category
+    categories = revenue_by_category(conn)
+    print("Revenue by Category")
+    print("=" * 50)
+    for cat in categories:
+        print(f"  {cat['category_name']:<20} ${cat['revenue']:>12,.2f}  ({cat['order_count']} orders)")
+
+    print()
+
+    # Top 5 products
+    top = top_products(conn, n=5)
+    print("Top 5 Products by Revenue")
+    print("=" * 50)
+    for p in top:
+        print(f"  {p['product_name']:<35} ${p['revenue']:>10,.2f}")
+
+    # Write CSV reports
+    output_dir = Path("output")
+    write_report_csv(categories, output_dir / "category_revenue.csv")
+    write_report_csv(top, output_dir / "top_products.csv")
+    print(f"\nReports written to {output_dir}/")
+
+    conn.close()
+```
+
+### The Right Tool for the Job
+
+This script demonstrates the principle of using each language for what it does best. The SQL handles all the joins and aggregations, work that would be tedious and slower in pure Python. Python handles the dynamic query construction, the conditional filtering, the file I/O, and the formatted console output, work that would be awkward or impossible in pure SQL.
+
+Compare this approach with the pure-Python pipeline from @sec-file-io, where you loaded CSV files, built dictionary lookup tables, and looped through records to compute joins and aggregations manually. Both produce the same results, but the SQL version is more concise, runs faster on large datasets, and leverages the query optimizer that DuckDB provides. The Python CSV approach still has its place, especially when you're working with files outside a database, but when your data is in a database, use SQL to retrieve it.
+
+## Exercises {.unnumbered}
+
+### From CSV to SQL {.unnumbered}
+
+Take the `revenue_pipeline.py` script from @sec-file-io that reads CSV files, joins them manually with dictionaries, and computes revenue by category. Rewrite it to use DuckDB SQL queries instead. Compare the two versions: which is shorter? Which is easier to modify if you need to add a new filter?
+
+### Parameterized Report Script {.unnumbered}
+
+Write a script called `category_report.py` that accepts a category name as input (hardcoded for now, you'll learn to accept command-line arguments in @sec-typer) and generates a complete sales summary for that category. The report should include: total revenue (computed as `SUM(unit_price * quantity * (1 - discount))` from `order_details`), number of distinct orders, average order value (total category revenue divided by the number of distinct orders containing products in that category), the top 5 products by revenue within that category, and the number of unique customers who placed those orders. Use parameterized queries for all category-specific filtering.
+
+### Flat File vs. Normalized Database {.unnumbered}
+
+Write two versions of the same query, computing monthly revenue by category (where revenue is `SUM(unit_price * quantity * (1 - discount))`). One version should query the denormalized Parquet flat file (`data/northwind_flat.parquet`) and the other should query the normalized database with joins across `order_details`, `orders`, `products`, and `categories`. Compare the SQL for each approach. Which is simpler? Which would you use for exploratory analysis? Which would you use for a production report? Write your answers as comments in the script.
+
+### Building a Data Access Module {.unnumbered}
+
+Extend the `northwind_data.py` module with three additional functions: `monthly_revenue` (revenue, computed as `SUM(unit_price * quantity * (1 - discount))`, grouped by year and month), `customer_summary` (total distinct orders and total revenue per customer), and `product_inventory` (each product's name, category, units in stock, reorder level, and a boolean indicating whether the product needs reordering, that is, whether `units_in_stock` is at or below `reorder_level`). Each function should use parameterized queries, return lists of dictionaries, and include a Google-style docstring.
+
+## Summary {.unnumbered}
+
+This chapter connected two tools you already know: SQL for data retrieval and Python for orchestration. DuckDB's Python API lets you run the same queries you wrote in the Databases module from within Python scripts, and parameterized queries keep those queries safe and flexible. The `conn.sql()` method returns result objects that you can convert to lists of tuples, dictionaries, or Polars DataFrames depending on what you need downstream.
+
+The data access layer pattern, functions that encapsulate SQL queries behind a Python interface, is the foundation for everything that follows. In the next chapter, you'll move this work into Marimo notebooks, where SQL and Python live side by side in a reactive environment designed for interactive exploration.
+
+## Glossary {.unnumbered}
+
+connection
+: An object representing an open link to a database. Created with `duckdb.connect()` and used to execute queries.
+
+in-memory database
+: A database that exists only in RAM, with no file on disk. Created with `duckdb.connect()` (no arguments). Useful for temporary work and file queries.
+
+parameterized query
+: A SQL query that uses placeholder tokens (`$1`, `$2`, or `$name`) for values, with actual values passed separately. Prevents SQL injection and handles quoting automatically.
+
+Parquet
+: A columnar file format designed for analytical workloads. More efficient than CSV for storage and query performance, and preserves data types.
+
+persistent database
+: A database stored as a file on disk. Created with `duckdb.connect("path/to/file.duckdb")`. Data persists across script runs.
+
+relation
+: DuckDB's representation of a query result set. Can be printed, fetched as tuples or dictionaries, or converted to a Polars DataFrame.
+
+SQL injection
+: A security vulnerability where malicious user input manipulates a SQL query. Prevented by using parameterized queries instead of string formatting.

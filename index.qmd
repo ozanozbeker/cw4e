@@ -8,23 +8,21 @@ This book exists because there's a gap between "knowing how to code" and "knowin
 
 ## Who This Book Is For
 
-This book is designed for engineering students and professionals who need to work with data but aren't pursuing careers as software developers. You might be an industrial engineer optimizing manufacturing processes, a civil engineer analyzing infrastructure data, a mechanical engineer processing sensor readings, or any engineer whose work increasingly involves computational analysis.
+This book is designed for engineers who need to work with data but aren't pursuing careers as software developers. You might be an industrial engineer optimizing manufacturing processes, a civil engineer analyzing infrastructure data, a mechanical engineer processing sensor readings, or any engineer whose work increasingly involves computational analysis.
 
 The book assumes no prior programming experience. If you've never opened a terminal or written a line of code, you'll find everything you need here. If you have some programming background, you'll likely discover gaps in your workflow knowledge, the professional practices that experienced engineers take for granted but tutorials rarely teach.
 
 ## How This Book Is Organized
 
-The book progresses through five modules, each building on the previous:
+The book progresses through three units and a capstone, each building on the previous:
 
-**Foundations** covers the computational environment: how computers store and process data, how to navigate using the command line, and how to track your work with Git and GitHub. These skills underpin everything else.
+**The Professional Toolkit** covers the computational environment: how computers store and process data, authoring documents with Quarto, navigating the command line, and tracking your work with Git and GitHub. These skills underpin everything else.
 
-**Databases** introduces databases and the query language that powers analytical work. You'll learn to think in sets rather than loops, and to let the database do the heavy lifting.
+**Data with SQL** introduces databases and the query language that powers analytical work. You'll learn to think in sets rather than loops, and to let the database do the heavy lifting.
 
-**Programming** teaches programming as a tool for orchestrating workflows. Rather than treating Python as a general-purpose language, we focus on the patterns most useful for data work: reading files, fetching data from web APIs, transforming data, and generating outputs.
+**Python** teaches programming as a tool for orchestrating workflows. Rather than treating Python as a general-purpose language, we focus on the patterns most useful for data work: collections, control flow, functions, file I/O, and the object model that ties everything together.
 
-**Integration** brings SQL and Python together. You'll work in reactive notebooks, transform data with DataFrames, visualize findings with charts, and deliver results as formatted Excel reports.
-
-**Production** covers the skills that turn projects into products: project structure, documentation, code quality, distribution as installable command-line tools, and automating workflows with scheduling.
+**Building Data Products** brings SQL and Python together and takes your work to a professional level. You'll connect Python to databases, transform data with DataFrames, visualize findings with charts, deliver results as Excel reports, structure projects for reproducibility, ensure code quality with automated tools, author computational documents, and build command-line tools that anyone can install.
 
 ## What You Won't Find Here
 

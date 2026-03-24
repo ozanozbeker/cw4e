@@ -12,7 +12,7 @@ Now imagine you need to install a programming tool that doesn't exist in the App
 
 Throughout this book, you'll need various tools installed on your computer: version control systems, programming language runtimes, database utilities, and more. Without Homebrew, each installation becomes its own adventure of Googling instructions and hoping nothing breaks. With Homebrew, installing new tools becomes predictable and consistent.
 
-Homebrew also makes your setup *reproducible*. If you get a new computer or need to help a classmate configure their machine, you can simply share a list of packages rather than walking through dozens of manual installation steps.
+Homebrew also makes your setup *reproducible*. If you get a new computer or need to help a colleague configure their machine, you can simply share a list of packages rather than walking through dozens of manual installation steps.
 
 ## Installation Instructions
 

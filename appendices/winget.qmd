@@ -12,7 +12,7 @@ Now imagine you need to install a programming tool that doesn't exist in the Mic
 
 Throughout this book, you'll need various tools installed on your computer: version control systems, programming language runtimes, database utilities, and more. Without WinGet, each installation becomes its own adventure of Googling instructions and navigating different installer interfaces. With WinGet, installing new tools becomes predictable and consistent.
 
-WinGet also makes your setup *reproducible*. If you get a new computer or need to help a classmate configure their machine, you can share a list of packages rather than walking through dozens of manual installation steps.
+WinGet also makes your setup *reproducible*. If you get a new computer or need to help a colleague configure their machine, you can share a list of packages rather than walking through dozens of manual installation steps.
 
 ## Checking If WinGet Is Already Installed
 

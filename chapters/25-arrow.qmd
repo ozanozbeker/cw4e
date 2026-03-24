@@ -1,0 +1,328 @@
+# Arrow, ADBC, & Database Connectivity {#sec-arrow}
+
+You've built a complete data product: queries run fast, transformations are seamless, visualizations render instantly, and exports work without a hitch. Throughout this entire journey, something remarkable has been happening beneath the surface, and you've been taking it for granted.
+
+You converted a DuckDB query result to a Polars DataFrame with `.pl()`, and it was essentially instant. You passed a Polars DataFrame into a DuckDB SQL query as a table name, and it just worked. Altair accepted Polars DataFrames directly without any conversion step. A 200,000-row dataset flowed between three different tools with no perceptible delay.
+
+*How?*
+
+The answer is Apache Arrow, a shared in-memory data format that all three tools speak natively. This chapter lifts the hood to reveal the hidden infrastructure that made your data product fast and seamless. You don't need to understand Arrow to use these tools effectively, but understanding it explains *why* your workflows are fast, how they avoid expensive data copying, and what happens under the hood when tools integrate. The chapter then broadens the picture to explain how Python connects to databases beyond DuckDB, tracing the evolution from ODBC in the 1990s to ADBC (Arrow Database Connectivity), the modern standard that brings Arrow's performance to any database connection.
+
+## The Hidden Infrastructure
+
+When you wrote this code in @sec-polars:
+
+```{.python filename="interop.py"}
+import duckdb
+import polars as pl
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+df = conn.sql("SELECT * FROM products").pl()
+```
+
+The `.pl()` call didn't copy 77 product records from DuckDB's memory into Polars' memory. Instead, DuckDB handed Polars a pointer to the data it already had, because both tools store data in the same format: Apache Arrow. The data existed once in memory, and both tools read it directly.
+
+The same principle applied when you passed a Polars DataFrame to DuckDB:
+
+```{.python filename="zero_copy.py"}
+products = pl.read_parquet("data/northwind_flat.parquet")
+
+# DuckDB reads the Polars DataFrame's Arrow buffers directly
+result = duckdb.sql("""
+    SELECT category_name, AVG(unit_price) AS avg_price
+    FROM products
+    GROUP BY category_name
+""")
+```
+
+And when Altair received a Polars DataFrame in @sec-altair, the Narwhals library translated via Arrow's format with minimal overhead.
+
+This is the "USB-C of data": a universal connector that lets different tools share data without conversion.
+
+::: {.callout-note collapse="true" title="Exercise: Columnar vs. Row-Oriented"}
+Consider two ways to store a table of 100,000 products in memory:
+
+**Row-oriented:** `["Widget A", 19.99, 45, "Widget B", 24.50, 12, "Widget C", 29.99, 33, ...]`
+
+**Columnar (Arrow):** `["Widget A", "Widget B", "Widget C", ...], [19.99, 24.50, 29.99, ...], [45, 12, 33, ...]`
+
+If you need to compute the total inventory (sum of the third column), which layout is more efficient? Why?
+
+::: {.callout-tip collapse="true" title="Solution"}
+Columnar is much more efficient. With row-oriented storage, the CPU has to skip over product names and prices to find each quantity. With columnar storage, all quantities are stored contiguously in memory, so the CPU can load large chunks into its cache and process them with vectorized instructions.
+
+Additionally, Arrow's columnar layout enables the CPU to process multiple quantities simultaneously (using SIMD, Single Instruction Multiple Data), making the operation 10-100x faster. This is why DuckDB and Polars are so fast for analytical work on large datasets.
+:::
+:::
+
+## What Is Apache Arrow?
+
+Apache Arrow is a specification for how tabular data should be laid out in memory. It's not a library or a tool; it's a standard that many tools implement. When two tools both use Arrow as their internal format, they can share data with *zero-copy* interchange: no serialization, no parsing, no duplication.
+
+### Columnar vs. Row-Oriented Storage
+
+To understand why Arrow matters, you need to understand two ways of organizing tabular data in memory.
+
+**Row-oriented** storage keeps each record together. If you have a table with columns `name`, `price`, and `stock`, a row-oriented layout stores `("Chai", 18.00, 39)` followed by `("Chang", 19.00, 17)` followed by `("Tofu", 23.25, 35)`. This is how traditional databases (PostgreSQL, MySQL, SQL Server) store data, and it's efficient for transactional workloads where you frequently read or write entire records.
+
+**Columnar** storage keeps each column together. The same table is stored as `["Chai", "Chang", "Tofu"]` followed by `[18.00, 19.00, 23.25]` followed by `[39, 17, 35]`. This is how analytical tools (DuckDB, Polars, Parquet files) store data, and it's efficient for analytical workloads where you frequently scan entire columns to compute aggregations.
+
+Arrow specifies a columnar format. This is why DuckDB and Polars interoperate so smoothly: they both store data column-by-column in Arrow's layout, so sharing data is just sharing pointers to the same memory.
+
+::: {.callout-note}
+## Connecting to the Databases module
+
+You may recall from the Databases module that OLTP (transactional) workloads and OLAP (analytical) workloads have different performance characteristics. Row-oriented storage is efficient for OLTP because transactions read and write whole records. Columnar storage is efficient for OLAP because analytical queries scan whole columns. Arrow is the in-memory standard for the columnar (OLAP) world.
+:::
+
+### Why Columnar Matters for Performance
+
+When you compute `SUM(unit_price)` on a column of a million prices, the CPU reads those prices from memory. In a columnar layout, all the prices are stored contiguously: `[18.00, 19.00, 23.25, 13.00, ...]`. The CPU can load these values into its cache in large, efficient batches and process them with *vectorized instructions*, hardware operations that compute on multiple values simultaneously.
+
+In a row-oriented layout, the prices are scattered: `("Chai", 18.00, 39, ..., "Chang", 19.00, 17, ...)`. The CPU has to skip over the names and stock values to find each price, wasting cache space on data it doesn't need.
+
+This is why Polars and DuckDB are so fast for analytical work. They're columnar, and they leverage Arrow's layout to maximize CPU cache efficiency and vectorization.
+
+### Arrow as an Ecosystem Standard
+
+Arrow isn't just used by Polars and DuckDB. It's a standard adopted across the data industry:
+
+| Tool | Relationship to Arrow |
+|------|----------------------|
+| Polars | Uses Arrow as its internal memory format |
+| DuckDB | Reads and writes Arrow format natively |
+| Pandas | Can convert to/from Arrow (via PyArrow) |
+| Apache Spark | Uses Arrow for Python interop |
+| Parquet | Arrow's on-disk counterpart (same columnar philosophy) |
+| Flight | Arrow-based network protocol for data transfer |
+
+: Arrow ecosystem {#tbl-arrow-ecosystem}
+
+Parquet, which you've used throughout this book for the Northwind flat file, is essentially Arrow's on-disk cousin. Parquet stores data in a columnar format on disk; Arrow stores it in a columnar format in memory. Reading a Parquet file into Polars is efficient because the formats are closely aligned.
+
+### Zero-Copy in Practice
+
+To make the zero-copy concept concrete, consider the difference between Arrow interchange and CSV-based interchange:
+
+```{.python filename="comparison.py"}
+import time
+import duckdb
+import polars as pl
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# Arrow interchange: near-instant
+start = time.perf_counter()
+df = conn.sql("SELECT * FROM order_details").pl()
+arrow_time = time.perf_counter() - start
+
+# CSV round-trip: much slower
+start = time.perf_counter()
+conn.sql("COPY (SELECT * FROM order_details) TO 'temp.csv' (HEADER)")
+df_csv = pl.read_csv("temp.csv")
+csv_time = time.perf_counter() - start
+
+print(f"Arrow interchange: {arrow_time:.4f}s")
+print(f"CSV round-trip:    {csv_time:.4f}s")
+```
+
+On a 200,000-row dataset, the Arrow path is typically 10 to 100 times faster than the CSV path, because Arrow avoids serialization (converting data to text), parsing (converting text back to data), and copying (duplicating the data in a new memory location).
+
+## The Database Connectivity Landscape
+
+Everything you've done so far uses DuckDB, an *embedded* database that runs inside your Python process. But the world is full of databases that run as separate *servers*: PostgreSQL, MySQL, SQL Server, Oracle, Snowflake. To query those databases from Python, you need a *driver*, software that handles the network protocol, authentication, and data transfer between your code and the database server.
+
+The history of database connectivity is a progression from painful to seamless, and understanding that history helps you appreciate the modern tools.
+
+### ODBC: The Original Universal Standard
+
+ODBC (Open Database Connectivity) was created in the 1990s as a universal standard for connecting to any database. The architecture uses a *driver manager* on your machine that routes queries to database-specific *drivers*. In theory, you write code once against the ODBC API, and it works with any database.
+
+In practice, ODBC has friction. Installing drivers is platform-specific and often painful, especially on macOS and Linux. The driver manager adds overhead. And most importantly, ODBC is *row-oriented*: it transfers data one row at a time, which is slow for analytical workloads that need to transfer thousands or millions of rows.
+
+If you work with R, the `odbc` and `DBI` packages use ODBC under the hood. If you've ever struggled with "driver not found" errors in R or had to install FreeTDS or unixODBC, you've experienced ODBC's pain firsthand.
+
+### Library-Specific Drivers
+
+Because ODBC is cumbersome, the Python ecosystem developed library-specific drivers: one per database, each with its own API.
+
+| Library | Database | Notes |
+|---------|----------|-------|
+| `psycopg` | PostgreSQL | The most popular PostgreSQL adapter |
+| `pyodbc` | SQL Server, others | Python wrapper around ODBC |
+| `pymysql` | MySQL | Pure Python, no C dependencies |
+| `sqlite3` | SQLite | Built into Python's standard library |
+
+: Common Python database drivers {#tbl-python-drivers}
+
+These libraries work well for their specific databases, but they have a shared problem: each one has its own API. Connecting, executing queries, fetching results, and handling transactions all look different in `psycopg` vs. `pymysql` vs. `sqlite3`. Learn one, switch databases, and you need to learn a new library.
+
+They also share ODBC's fundamental limitation: they transfer data row by row. For analytical workloads, you pay a performance tax every time data moves from the database into Python.
+
+### SQLAlchemy: The Abstraction Layer
+
+SQLAlchemy addresses the "different API per database" problem by providing a unified interface across databases. It's an ORM (Object-Relational Mapper) that maps Python objects to database tables, and it's the most common database interface in the Python ecosystem.
+
+You'll see SQLAlchemy everywhere: in Flask and Django web applications, in FastAPI backends, in data pipeline tools, and in database migration systems. Its signature patterns are recognizable:
+
+```{.python filename="sqlalchemy_patterns.py"}
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+
+# The engine connects to a database (any database)
+engine = create_engine("postgresql://user:pass@host/dbname")
+
+# A session manages transactions
+with Session(engine) as session:
+    result = session.execute(text("SELECT * FROM products"))
+```
+
+This book doesn't teach SQLAlchemy in depth for two reasons. First, it's a large library that solves problems in web application development, a domain different from analytical data engineering. Second, it abstracts away the SQL you just spent a module learning. But you should recognize it when you encounter it, because you will.
+
+### ADBC: Arrow Database Connectivity
+
+ADBC is the modern solution to database connectivity for analytical workloads. It's a database driver standard that speaks Arrow natively: queries return Arrow-format data directly, with no row-by-row conversion.
+
+The insight is simple. ODBC and library-specific drivers were designed when data analysis happened row by row. Today's analytical tools (Polars, DuckDB, Pandas) work with columns. ADBC bridges that gap: it fetches data from any database in columnar Arrow format, ready for zero-copy use in any Arrow-based tool.
+
+Install an ADBC driver for SQLite:
+
+```{.bash filename="terminal"}
+uv add adbc-driver-sqlite
+```
+
+Connect and query:
+
+```{.python filename="adbc_sqlite.py"}
+import adbc_driver_sqlite.dbapi as sqlite_dbapi
+import polars as pl
+
+with sqlite_dbapi.connect("data/northwind.sqlite") as conn:
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT * FROM products")
+
+        # Fetch as an Arrow table (zero-copy)
+        arrow_table = cursor.fetch_arrow_table()
+
+        # Convert to a Polars DataFrame (zero-copy)
+        df = pl.from_arrow(arrow_table)
+
+print(df.head())
+```
+
+ADBC drivers are available for several databases: `adbc-driver-sqlite`, `adbc-driver-postgresql`, `adbc-driver-duckdb`, and `adbc-driver-snowflake`. The API is the same regardless of the database. Write code once with ADBC, and it works with any supported database, with Arrow-native performance.
+
+### When to Use What
+
+| Need | Tool | Why |
+|------|------|-----|
+| Query local files or embedded database | DuckDB | In-process, no server, reads files directly |
+| Transform data in Python | Polars | Expression API, lazy evaluation, Arrow-native |
+| Connect to external databases with Arrow performance | ADBC | Universal API, zero-copy Arrow results |
+| Web application database layer | SQLAlchemy | ORM, framework integration, migrations |
+| Legacy or niche database connections | psycopg / pyodbc | When ADBC doesn't have a driver yet |
+
+: Choosing a database connectivity tool {#tbl-db-connectivity}
+
+For the analytical work you're doing in this book, DuckDB handles most needs. ADBC becomes relevant when you need to connect to a PostgreSQL or Snowflake server to pull data for analysis. SQLAlchemy is for a different world (web applications), but you should recognize it.
+
+::: {.callout-note collapse="true" title="Exercise: Choose the Right Tool"}
+You have three different tasks. For each one, choose the tool (DuckDB, ADBC, or SQLAlchemy) that's most appropriate and explain why:
+
+1. **Analyze Northwind data** that's stored in a local `.duckdb` file, transform it with Polars, and create a report.
+2. **Build a web application** that reads and writes orders to a PostgreSQL database, with user authentication and transaction support.
+3. **Pull data from a company's Snowflake data warehouse** into a Python script for analysis with Polars.
+
+::: {.callout-tip collapse="true" title="Solution"}
+1. **DuckDB.** It reads the local file directly, speaks Arrow natively (zero-copy with Polars), and is purpose-built for analytical work.
+
+2. **SQLAlchemy.** It provides an ORM, database abstraction, transaction management, and integration with frameworks like FastAPI and Django. It's designed for application-level database interaction.
+
+3. **ADBC with `adbc-driver-snowflake`.** ADBC connects to Snowflake and returns results in Arrow format, ready for zero-copy use in Polars. This gives you the performance benefits of Arrow without being tied to a specific database.
+:::
+:::
+
+## The Bigger Picture
+
+The data industry is converging on Apache Arrow as the standard for in-memory data interchange. Tools that speak Arrow can share data with zero overhead. Databases that support ADBC can send data to Python in columnar format with zero conversion. The Parquet file format stores Arrow-compatible data on disk. And the ecosystem keeps growing: new tools are built with Arrow support from the start.
+
+Understanding Arrow puts you ahead. When you evaluate a new data tool, one of the first questions to ask is "does it support Arrow?" If the answer is yes, it will integrate seamlessly with the rest of your workflow. If the answer is no, you'll pay a performance tax every time data moves between that tool and the rest of your stack.
+
+::: {.callout-note collapse="true" title="Exercise: Zero-Copy Concept"}
+You need to transfer 500,000 order records from a SQL database to Python, transform them with Polars, and visualize them with Altair. The records are returned as a list of Python dictionaries (a non-Arrow format):
+
+```{.python filename="example.py"}
+orders = [{"order_id": 1, "amount": 156.50}, ...]  # 500K rows
+df = pl.DataFrame(orders)  # Polars must copy this data
+chart = alt.Chart(df).mark_bar()...
+```
+
+In this pipeline, where does data copying happen, and what would change if the database spoke Arrow natively?
+
+::: {.callout-tip collapse="true" title="Solution"}
+With dictionaries, Polars must **copy and convert** the Python objects into its internal columnar format. This is slow for large datasets because the CPU has to parse each dictionary, extract values, and reorganize them.
+
+With Arrow: The database would return an Arrow table. Polars would read it via a pointer to the same memory (zero-copy). Altair would also read the Arrow data without copying. The data exists once in memory and is shared among all three tools.
+
+The difference on 500K rows is substantial: 50-500ms for zero-copy Arrow, versus 2-5 seconds for copying from Python dictionaries. Multiply that across many queries in a day, and Arrow adoption saves significant time and CPU usage.
+
+The principle: shared data formats (`Arrow`) enable zero-copy interchange. When tools speak different languages, you pay the cost of translation every time data moves between them.
+:::
+:::
+
+The tools change. Arrow doesn't know what DuckDB or Polars is. DuckDB doesn't know what Polars is. But they all know what Arrow is, and that shared standard is what makes the modern data stack work.
+
+## Exercises {.unnumbered}
+
+### Trace the Arrow Path {.unnumbered}
+
+Take a complete Northwind analysis pipeline (SQL query → Polars transformation → Altair chart) and write a commentary explaining where Arrow format is used at each step. Identify every point where data is shared between tools and note whether the transfer is zero-copy or involves a conversion.
+
+### ADBC vs. DuckDB API {.unnumbered}
+
+Connect to the SQLite version of the Northwind database (`data/northwind.sqlite`) using `adbc-driver-sqlite`. Run the same query (for example, total revenue by category) through both ADBC and DuckDB's `sqlite_scanner` extension. Compare the code, the results, and the experience. Write a brief note about when you'd prefer each approach.
+
+### Zero-Copy Demonstration {.unnumbered}
+
+Build a Marimo notebook that demonstrates zero-copy interchange by timing data transfer between Polars and DuckDB compared to CSV round-tripping (write to CSV then read back). Use the full 200K+ order Northwind dataset to make the performance difference visible. Display the results as a bar chart.
+
+### SQLAlchemy Recognition {.unnumbered}
+
+Find a short SQLAlchemy tutorial online and read through it. Identify the `create_engine()`, `Session`, and `text()` patterns. You don't need to run the code; the goal is to recognize these patterns when you encounter them in other projects, documentation, or job listings.
+
+## Summary {.unnumbered}
+
+Apache Arrow is the in-memory columnar data format that powers the seamless interoperability between Polars, DuckDB, and Altair that you experienced in earlier chapters. When two tools both use Arrow as their internal format, they can share data through zero-copy interchange: no serialization, no parsing, no duplication. Arrow's columnar layout also enables the vectorized operations that make analytical tools fast.
+
+The database connectivity landscape has evolved from ODBC (row-oriented, painful driver installation) through library-specific drivers (each with its own API) and SQLAlchemy (a unified abstraction layer) to ADBC (Arrow-native, zero-copy, universal). For analytical work, ADBC represents the modern standard: query any supported database and receive results in Arrow format, ready for immediate use in Polars or DuckDB.
+
+The broader lesson is about standards. Arrow succeeds because it's a specification, not a product. Any tool can implement it. When tools agree on a shared data format, they interoperate automatically. This principle, shared standards enabling interoperability, applies far beyond data formats. It's the same reason USB-C works with any device, the same reason SQL works with any relational database, and the same reason the Language Server Protocol (@sec-code-quality) works with any editor.
+
+## Glossary {.unnumbered}
+
+ADBC
+: Arrow Database Connectivity, a database driver standard that returns query results in Apache Arrow format for zero-copy interchange with analytical tools.
+
+Apache Arrow
+: A specification for columnar in-memory data storage. Defines how tabular data is laid out in memory for efficient analytical operations and tool interoperability.
+
+columnar storage
+: Storing data by column rather than by row. Efficient for analytical queries that scan entire columns.
+
+ODBC
+: Open Database Connectivity, a universal database driver standard from the 1990s. Row-oriented and widely supported but cumbersome to configure.
+
+ORM
+: Object-Relational Mapper, a tool that maps Python objects to database tables. SQLAlchemy is the most common ORM in the Python ecosystem.
+
+Parquet
+: A columnar file format for storing tabular data on disk. Often described as "Arrow on disk" because of the shared columnar philosophy.
+
+row-oriented storage
+: Storing data by row rather than by column. Efficient for transactional workloads that read and write entire records.
+
+SQLAlchemy
+: A Python library providing a unified database interface and ORM. Common in web applications and data pipelines.
+
+zero-copy
+: Sharing data between tools by passing pointers to the same memory, rather than duplicating the data. Made possible by a shared in-memory format like Arrow.

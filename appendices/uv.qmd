@@ -6,13 +6,13 @@ Python's packaging ecosystem has a reputation problem, and it's earned. To start
 
 **uv replaces all of them with a single tool.** It installs Python versions, creates virtual environments, resolves and installs dependencies, manages lock files, runs scripts, and builds packages. One tool, one set of commands, one configuration file (`pyproject.toml`). If Homebrew and WinGet solved the "how do I install software?" problem for your operating system, uv solves the same problem for your Python projects.
 
-## Why uv for This Course?
+## Why uv?
 
 Speed is the most immediately noticeable difference. uv is written in Rust and resolves dependencies 10-100x faster than pip. But speed is a secondary benefit. The real value is *reliability*.
 
-When you run `uv init`, uv creates a `pyproject.toml` (your project's configuration), a `.python-version` file (pinning which Python version to use), and a `uv.lock` file (recording the exact versions of every dependency and sub-dependency). When a classmate clones your project and runs `uv sync`, they get *exactly* the same environment you have. Not "probably compatible versions," but byte-for-byte identical dependencies. The "it works on my machine" class of bugs simply disappears.
+When you run `uv init`, uv creates a `pyproject.toml` (your project's configuration), a `.python-version` file (pinning which Python version to use), and a `uv.lock` file (recording the exact versions of every dependency and sub-dependency). When a colleague clones your project and runs `uv sync`, they get *exactly* the same environment you have. Not "probably compatible versions," but byte-for-byte identical dependencies. The "it works on my machine" class of bugs simply disappears.
 
-uv also manages Python itself. Instead of downloading Python from python.org and wrestling with PATH configuration, you run `uv python install 3.13` and uv handles the rest. This means Python installation is the same on Windows, macOS, and Linux, which matters in a class where students use all three.
+uv also manages Python itself. Instead of downloading Python from python.org and wrestling with PATH configuration, you run `uv python install 3.13` and uv handles the rest. This means Python installation is the same on Windows, macOS, and Linux, which matters when readers use all three.
 
 Beyond project management, uv can run one-off scripts with inline dependency declarations using `uv run`. And it integrates with the broader Python packaging ecosystem: anything you learn about uv transfers to working with PyPI, pip, and `pyproject.toml` in the real world.
 
@@ -38,7 +38,7 @@ uv --version
 
 You should see a version number. If you get a "command not found" error, revisit the installation steps.
 
-Then install the Python version used throughout this course:
+Then install the Python version used throughout this book:
 
 ```{.bash filename="terminal"}
 uv python install 3.13

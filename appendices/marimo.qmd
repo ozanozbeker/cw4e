@@ -8,9 +8,9 @@ The most popular notebook tool is Jupyter, but it has a fundamental reliability 
 
 **Marimo is a modern notebook tool that eliminates hidden state by design.** When you change a cell, Marimo automatically re-runs every cell that depends on it. Each variable can only be defined in one cell. And Marimo notebooks are stored as `.py` files, not JSON, so they produce clean diffs in Git and can be run as scripts from the terminal. These constraints might sound limiting, but they're the same principles behind reliable software: clear dependencies, no ambiguity, and reproducible behavior.
 
-## Why Marimo for This Course?
+## Why Marimo?
 
-Marimo fits naturally into the workflow this course builds. It has **native SQL cells** that connect directly to DuckDB, so you can write SQL queries alongside Python code without any boilerplate connection logic. It integrates with uv for dependency management. And because notebooks are `.py` files, they work seamlessly with Git, Ruff, and the rest of your quality tooling.
+Marimo fits naturally into the workflow this book builds. It has **native SQL cells** that connect directly to DuckDB, so you can write SQL queries alongside Python code without any boilerplate connection logic. It integrates with uv for dependency management. And because notebooks are `.py` files, they work seamlessly with Git, Ruff, and the rest of your quality tooling.
 
 Marimo also bridges the gap between exploration and production. You start by exploring data interactively in a notebook. When you're ready to automate, the notebook is already a valid Python script. There's no "export to .py" step, no translation layer, no risk of the exported code diverging from what you tested in the notebook.
 
@@ -38,7 +38,7 @@ Marimo opens in your default web browser. To open an existing notebook, pass its
 
 ## What Happens Next
 
-Marimo is introduced in @sec-marimo, where you'll use its reactive cells, native SQL integration with DuckDB, and Python cells to build interactive data explorations. The notebook workflow continues through the integration module as you combine SQL, Python, Polars, and Altair in a single environment.
+Marimo is introduced in @sec-marimo-config, where you'll use its reactive cells, native SQL integration with DuckDB, and Python cells to build interactive data explorations. The notebook workflow continues through the integration module as you combine SQL, Python, Polars, and Altair in a single environment.
 
 ## Glossary
 

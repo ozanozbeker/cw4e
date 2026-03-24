@@ -93,7 +93,7 @@ Understanding the text/binary distinction has practical implications:
 
 4. **Size vs. readability tradeoff**: Binary formats like Parquet are more compact and faster to process at scale, but text formats are easier to inspect and share.
 
-For this course, we'll primarily work with text-based formats (CSV, JSON, SQL) and occasionally encounter binary formats when using specialized tools.
+In this book, we'll primarily work with text-based formats (CSV, JSON, SQL) and occasionally encounter binary formats when using specialized tools.
 
 ::: {.callout-note collapse="true" title="Exercise: Choosing the Right Format"}
 Your engineering team needs to exchange analysis results. The lead engineer suggests storing the output in an Excel file (.xlsx) because "that's what managers prefer." You need to version control it, integrate it with a Python data pipeline, and share it with colleagues on different operating systems. What problems might arise from using Excel, and what text-based format would you recommend instead?
@@ -387,7 +387,7 @@ Key principles:
 
 - **Put outputs in their own directory**. Generated files (reports, figures, exports) should be clearly distinguished from source materials.
 
-We'll revisit project organization throughout this course, especially when we learn Git for version control in @sec-git.
+We'll revisit project organization throughout this book, especially when we learn Git for version control in @sec-git.
 
 ## Summary
 

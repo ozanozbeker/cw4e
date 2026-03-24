@@ -1,0 +1,888 @@
+# Objects & Type Hints {#sec-objects}
+
+This chapter reveals the principle that unifies everything you've learned about Python. Every value you've worked with, every string, list, dictionary, function, and even `None`, is an *object*. Understanding what that means unlocks the ability to explore any Python library on your own, read unfamiliar code with confidence, and write code that communicates its intent clearly through type hints.
+
+We begin with the object model, the foundation beneath all of Python. We then introduce the tools for exploration: `dir()` and `help()`, which let you interrogate any object to learn what it can do. We look at dunder methods, the hidden protocols that power Python's syntax. We cover just enough about classes to read library code that uses them. We end with type hints, which bridge from this module into Production by making your code self-documenting and enabling the editor intelligence you've been using in Zed all along.
+
+## Everything Is an Object {#sec-everything-is-an-object}
+
+In Python, every value has three properties: an *identity* (where it lives in memory), a *type* (what kind of thing it is), and a *value* (the data it holds). These three properties together make it an object.
+
+You've already seen `type()` for checking what kind of value something is. Python also provides `id()` for checking identity:
+
+```{.python filename="object_properties.py"}
+x = 42
+print(type(x))  # <class 'int'>
+print(id(x))    # A memory address like 140234866221896
+
+name = "Chai"
+print(type(name))  # <class 'str'>
+print(id(name))    # A different memory address
+```
+
+Notice that `type()` returns a *class*. In Python, types and classes are the same thing. `int` is a class. `str` is a class. `list` is a class. When you write `42`, Python creates an instance of the `int` class. When you write `"Chai"`, Python creates an instance of the `str` class.
+
+### Methods and Attributes
+
+Objects have *attributes* (data attached to them) and *methods* (functions attached to them). You access both with dot notation:
+
+```{.python filename="methods_attributes.py"}
+name = "Chai"
+
+# Methods: actions the object can perform
+print(name.upper())        # "CHAI"
+print(name.lower())        # "chai"
+print(name.startswith("C"))  # True
+print(name.replace("C", "T"))  # "Thai"
+
+# Even integers have methods
+x = 42
+print(x.bit_length())      # 6 (number of bits needed to represent 42)
+
+# Lists have methods you already know
+products = ["Chai", "Chang"]
+products.append("Tofu")  # This is a method call on a list object
+```
+
+This isn't new. You've been calling methods since @sec-collections. What's new is the realization that this is the *same mechanism* for every type. Strings have string methods, lists have list methods, and every type has its own set of methods because every type is a class.
+
+### Functions Are Objects Too
+
+Here's where it gets interesting. Functions, the ones you define with `def`, are also objects:
+
+```{.python filename="function_objects.py"}
+def calculate_revenue(price, quantity):
+    """Calculate line item revenue."""
+    return price * quantity
+
+# Functions have attributes
+print(calculate_revenue.__name__)   # "calculate_revenue"
+print(calculate_revenue.__doc__)    # "Calculate line item revenue."
+
+# Functions can be assigned to variables (you saw this in @sec-functions)
+calc = calculate_revenue
+print(calc(18.00, 10))  # 180.0
+
+# Functions can be stored in collections
+operations = {"revenue": calculate_revenue}
+print(operations["revenue"](18.00, 10))  # 180.0
+```
+
+The `__name__` and `__doc__` attributes are how `help()` knows what to display. They're just data attached to the function object.
+
+### Even Types Are Objects
+
+The final layer: types themselves (like `int`, `str`, `list`) are objects of type `type`:
+
+```{.python filename="types_are_objects.py"}
+print(type(42))        # <class 'int'>
+print(type(int))       # <class 'type'>
+print(type(type))      # <class 'type'>
+```
+
+You don't need to understand the full implications of this right now. The practical takeaway is that Python has a single, consistent model: everything is an object with a type, attributes, and methods. There are no "primitive" types hiding behind a different mechanism. This consistency is what makes Python's tooling, `dir()`, `help()`, hover documentation in Zed, possible. They all work because every value follows the same protocol.
+
+## Exploring with `dir()` and `help()` {#sec-dir-help}
+
+When you encounter an unfamiliar object, two built-in functions tell you everything you need to know.
+
+### `dir()`: What Can This Object Do?
+
+`dir()` returns a list of all attributes and methods on an object:
+
+```{.python filename="Python REPL"}
+>>> dir("hello")
+['__add__', '__class__', '__contains__', ..., 'capitalize', 'casefold',
+ 'center', 'count', 'encode', 'endswith', 'expandtabs', 'find', 'format',
+ 'format_map', 'index', 'isalnum', 'isalpha', ...]
+```
+
+The output includes both *dunder methods* (names surrounded by double underscores, like `__add__`) and regular methods. The dunder methods are Python's internal protocols; you'll learn about them shortly. The regular methods are the ones you'll call directly.
+
+To filter out the dunder methods and see only the "public" interface:
+
+```{.python filename="Python REPL"}
+>>> [m for m in dir("hello") if not m.startswith("_")]
+['capitalize', 'casefold', 'center', 'count', 'encode', 'endswith',
+ 'expandtabs', 'find', 'format', 'format_map', 'index', 'isalnum',
+ 'isalpha', 'isascii', 'isdecimal', 'isdigit', 'isidentifier',
+ 'islower', 'isnumeric', 'isprintable', 'isspace', 'istitle',
+ 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'maketrans',
+ 'partition', 'removeprefix', 'removesuffix', 'replace', 'rfind',
+ 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split',
+ 'splitlines', 'startswith', 'strip', 'swapcase', 'title',
+ 'translate', 'upper', 'zfill']
+```
+
+That comprehension is from @sec-comprehensions. It gives you a concise view of everything a string can do.
+
+### `help()`: How Does This Work?
+
+`help()` displays the docstring and signature for any object:
+
+```{.python filename="Python REPL"}
+>>> help(str.replace)
+Help on method_descriptor:
+
+replace(self, old, new, count=-1, /)
+    Return a copy with all occurrences of substring old replaced by new.
+
+      count
+        Maximum number of occurrences to replace.
+        -1 (the default value) means replace all occurrences.
+    ...
+```
+
+You can call `help()` on a module, a class, a function, or even a specific method. It pulls information from docstrings, which is why writing good docstrings (@sec-docstrings) matters.
+
+### The Exploration Workflow
+
+When you encounter an unfamiliar object or library, use this three-step workflow:
+
+1. **`type(obj)`** to understand what kind of thing you're looking at.
+2. **`dir(obj)`** (filtered) to see what methods are available.
+3. **`help(obj.method)`** to learn how a specific method works.
+
+```{.python filename="Python REPL"}
+>>> from datetime import date
+>>> today = date.today()
+
+>>> type(today)
+<class 'datetime.date'>
+
+>>> [m for m in dir(today) if not m.startswith("_")]
+['ctime', 'day', 'fromisocalendar', 'fromisoformat', 'fromordinal',
+ 'fromtimestamp', 'isocalendar', 'isoformat', 'isoweekday', 'max',
+ 'min', 'month', 'replace', 'resolution', 'strftime', 'timetuple',
+ 'today', 'toordinal', 'weekday', 'year']
+
+>>> today.year
+2025
+>>> today.isoformat()
+'2025-03-24'
+>>> help(today.strftime)
+```
+
+This workflow lets you learn any library, any class, any object, without ever leaving the REPL. It's the most transferable skill in this entire module, because it works with every Python object ever created and every one that will ever be created.
+
+::: {.callout-tip}
+## Zed does this for you
+
+When you hover over a function call or object in Zed, the editor shows you type information and docstrings. When you use dot notation, Zed's autocomplete shows available methods. This is the *same information* that `dir()` and `help()` provide, surfaced in a graphical interface. Understanding the underlying mechanism helps you trust the editor's suggestions and recognize when it's showing you something useful.
+:::
+
+### Exercises
+
+1. In the REPL, use `dir()` on a list to find all methods that do NOT start with an underscore. How many are there? Pick one you haven't used before and use `help()` to learn what it does.
+
+2. Given `price = 18.99`, what does `type(price)` return? Use `dir(price)` to find a method that checks whether the float is a whole number. Test it with `18.99` and `19.0`.
+
+3. Explain why `"hello".__add__(" world")` produces the same result as `"hello" + " world"`. What does this tell you about how Python's `+` operator works?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Show the code:
+```{.python filename="solution.py"}
+public_methods = [m for m in dir([]) if not m.startswith("_")]
+len(public_methods)  # 11 methods
+# Example: help(list.copy) → "Return a shallow copy of the list."
+```
+
+**2.** `type(price)` → `<class 'float'>`. The method is `.is_integer()`:
+```{.python filename="solution.py"}
+price = 18.99
+price.is_integer()  # False
+
+whole = 19.0
+whole.is_integer()  # True
+```
+
+**3.** Python's `+` operator calls the `__add__` dunder method on the left operand. So `"hello" + " world"` is syntactic sugar for `"hello".__add__(" world")`. Every operator in Python maps to a dunder method call.
+
+:::
+
+## Dunder Methods {#sec-dunders}
+
+The names surrounded by double underscores, `__init__`, `__str__`, `__add__`, and so on, are called *dunder methods* (short for "double underscore") or *magic methods*. They're the protocols that make Python's syntax work.
+
+### How Operators Become Method Calls
+
+When you write `2 + 3`, Python doesn't have a built-in "add" instruction. Instead, it calls `(2).__add__(3)`:
+
+```{.python filename="dunder_add.py"}
+# These are equivalent:
+print(2 + 3)              # 5
+print((2).__add__(3))     # 5
+
+# Same for strings:
+print("hello" + " world")          # "hello world"
+print("hello".__add__(" world"))   # "hello world"
+```
+
+Every operator in Python maps to a dunder method:
+
+| Operator | Dunder method | Example |
+|----------|---------------|---------|
+| `+` | `__add__` | `a + b` → `a.__add__(b)` |
+| `-` | `__sub__` | `a - b` → `a.__sub__(b)` |
+| `*` | `__mul__` | `a * b` → `a.__mul__(b)` |
+| `==` | `__eq__` | `a == b` → `a.__eq__(b)` |
+| `<` | `__lt__` | `a < b` → `a.__lt__(b)` |
+| `len()` | `__len__` | `len(a)` → `a.__len__()` |
+| `str()` | `__str__` | `str(a)` → `a.__str__()` |
+| `a[i]` | `__getitem__` | `a[0]` → `a.__getitem__(0)` |
+| `in` | `__contains__` | `x in a` → `a.__contains__(x)` |
+
+: Operators and their dunder methods {#tbl-dunders}
+
+### The Iteration Protocol
+
+When you write a `for` loop, Python calls two dunder methods behind the scenes:
+
+```{.python filename="iteration_protocol.py"}
+products = ["Chai", "Chang", "Tofu"]
+
+# This for loop:
+for product in products:
+    print(product)
+
+# Is equivalent to:
+iterator = products.__iter__()     # Get an iterator from the list
+while True:
+    try:
+        product = iterator.__next__()  # Get the next item
+        print(product)
+    except StopIteration:
+        break                          # No more items
+```
+
+`__iter__` returns an iterator object, and `__next__` produces the next value. When there are no more values, `__next__` raises `StopIteration`, and the loop ends. This is the same mechanism that generators (@sec-generators) use: `yield` implements `__next__`, pausing the function between calls.
+
+### Why Dunders Matter
+
+You rarely need to call dunder methods directly. Their value is *conceptual*: understanding them lets you predict how any object will behave with Python's syntax. When you see a new class in a library, you can check its dunder methods to understand what operators it supports, whether it's iterable, how it prints, and whether it can be compared.
+
+### Exercises
+
+1. Predict what each of these dunder method calls returns, then verify:
+```{.python filename="solution.py"}
+(10).__add__(5)
+"hello".__len__()
+[1, 2, 3].__contains__(2)
+"Chai".__eq__("Chang")
+```
+
+2. Given a list `products = ["Chai", "Chang", "Tofu"]`, what happens when you call `products.__getitem__(1)`? What about `products.__getitem__(-1)`? How does this relate to `products[1]` and `products[-1]`?
+
+3. The `for` loop uses `__iter__` and `__next__` behind the scenes. Use these methods manually to get the first two elements from the list `["Chai", "Chang", "Tofu"]` without using a `for` loop or indexing.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** `(10).__add__(5)` → `15`, `"hello".__len__()` → `5`, `[1, 2, 3].__contains__(2)` → `True`, `"Chai".__eq__("Chang")` → `False`.
+
+**2.** `products.__getitem__(1)` → `"Chang"`, `products.__getitem__(-1)` → `"Tofu"`. These are exactly equivalent to `products[1]` and `products[-1]`. Square-bracket indexing is syntactic sugar for calling `__getitem__`.
+
+**3.** Show the code:
+```{.python filename="solution.py"}
+products = ["Chai", "Chang", "Tofu"]
+iterator = products.__iter__()
+first = iterator.__next__()   # "Chai"
+second = iterator.__next__()  # "Chang"
+```
+
+:::
+
+## Classes: Just Enough {#sec-classes}
+
+A class is a blueprint for creating objects. When you write `int(42)`, Python uses the `int` class to create an integer object. When a library creates a `DataFrame` or a `Connection`, it uses a class definition to produce an object with specific attributes and methods.
+
+The goal here is not to make you an object-oriented programming expert. It's to give you enough understanding to *read* code that uses classes, which is most library code you'll encounter.
+
+### Defining a Simple Class
+
+```{.python filename="product_class.py"}
+class Product:
+    """A product from the Northwind catalog."""
+
+    def __init__(self, name, unit_price, units_in_stock, discontinued=False):
+        """Initialize a Product.
+
+        Args:
+            name: The product name.
+            unit_price: Price per unit in dollars.
+            units_in_stock: Current inventory count.
+            discontinued: Whether the product is no longer sold.
+        """
+        self.name = name
+        self.unit_price = unit_price
+        self.units_in_stock = units_in_stock
+        self.discontinued = discontinued
+
+    def stock_value(self):
+        """Compute the total value of current inventory."""
+        return self.unit_price * self.units_in_stock
+
+    def needs_reorder(self, reorder_level=10):
+        """Check whether stock is at or below the reorder level.
+
+        Args:
+            reorder_level: The threshold below which to reorder.
+
+        Returns:
+            True if stock is low and the product is not discontinued.
+        """
+        return self.units_in_stock <= reorder_level and not self.discontinued
+
+    def __repr__(self):
+        """Return a developer-friendly string representation."""
+        return f"Product('{self.name}', ${self.unit_price:.2f}, stock={self.units_in_stock})"
+
+    def __str__(self):
+        """Return a human-friendly string representation."""
+        status = "DISCONTINUED" if self.discontinued else "Active"
+        return f"{self.name} ({status}) - ${self.unit_price:.2f}"
+```
+
+Let's break this down:
+
+**`__init__`** is the constructor. It runs when you create a new `Product` object and sets up the instance's attributes. The `self` parameter refers to the object being created. `self.name = name` stores the `name` argument as an attribute on the new object.
+
+**`self`** appears as the first parameter of every method. When you call `chai.stock_value()`, Python passes `chai` as `self` automatically. It's how the method knows which object it's operating on.
+
+**`__repr__`** and **`__str__`** control how the object displays. `__repr__` is the developer-facing representation (shown in the REPL), and `__str__` is the user-facing representation (shown by `print()`).
+
+### Using the Class
+
+```{.python filename="using_product.py"}
+chai = Product("Chai", 18.00, 39)
+chang = Product("Chang", 19.00, 17)
+cajun = Product("Chef Anton's Cajun Seasoning", 22.00, 53, discontinued=True)
+
+# Attribute access
+print(chai.name)              # "Chai"
+print(chai.unit_price)        # 18.0
+
+# Method calls
+print(chai.stock_value())     # 702.0
+print(chang.needs_reorder())  # False (17 > 10)
+print(chang.needs_reorder(reorder_level=20))  # True (17 <= 20)
+
+# __str__ is called by print()
+print(cajun)  # "Chef Anton's Cajun Seasoning (DISCONTINUED) - $22.00"
+
+# __repr__ is shown in the REPL
+chai  # Product('Chai', $18.00, stock=39)
+```
+
+### Reading, Not Architecting
+
+The purpose of this section is recognition, not mastery. When you open a library's source code or documentation and see a class definition with `__init__`, `self`, and methods, you now understand the structure. You can see that `__init__` sets up the object, methods operate on `self`, and dunder methods control how the object interacts with Python's syntax.
+
+In this book, you'll mostly *use* classes that other people wrote (like `Path`, `DictReader`, and later `DataFrame` and `Chart`) rather than writing your own. When you do write a class, it's usually a simple data container like the `Product` example above.
+
+## Type Hints {#sec-type-hints}
+
+Type hints are annotations that describe what types a function expects and returns. Python itself ignores them at runtime, meaning they don't affect how your code executes. Their purpose is threefold: documenting intent, enabling editor intelligence, and catching bugs with static analysis tools.
+
+### Basic Annotations
+
+You annotate function parameters with `: type` and return values with `-> type`:
+
+```{.python filename="basic_hints.py"}
+def calculate_revenue(unit_price: float, quantity: int) -> float:
+    """Calculate line item revenue."""
+    return unit_price * quantity
+
+def greet(name: str) -> str:
+    """Create a greeting message."""
+    return f"Hello, {name}!"
+
+def is_discontinued(product: dict) -> bool:
+    """Check whether a product is discontinued."""
+    return product.get("discontinued", False)
+```
+
+These annotations communicate *intent*. When you see `quantity: int`, you know the function expects a whole number. When you see `-> float`, you know it returns a decimal number. This is the same information that a good docstring conveys, but type hints provide it in a form that editors and tools can process automatically.
+
+### Common Types
+
+Python's built-in types cover most situations:
+
+```{.python filename="common_types.py"}
+def process_order(
+    order_id: int,
+    customer_name: str,
+    total: float,
+    is_shipped: bool,
+) -> None:
+    """Process a single order. Returns nothing."""
+    ...
+```
+
+### Collection Types
+
+For collections, specify the type of their contents using square brackets:
+
+```{.python filename="collection_types.py"}
+def compute_average(values: list[float]) -> float:
+    """Compute the mean of a list of floats."""
+    return sum(values) / len(values)
+
+def get_category_counts(orders: list[dict]) -> dict[str, int]:
+    """Count orders per category."""
+    counts: dict[str, int] = {}
+    for order in orders:
+        category = order["category"]
+        counts[category] = counts.get(category, 0) + 1
+    return counts
+```
+
+`list[float]` means "a list whose elements are floats." `dict[str, int]` means "a dictionary with string keys and integer values." Tuples can specify the type of each position: `tuple[str, float, int]` means "a three-element tuple of string, float, and int."
+
+### Optional Values with `None`
+
+When a value might be `None`, use the union syntax with `|`:
+
+```{.python filename="optional_types.py"}
+def find_product(products: list[dict], name: str) -> dict | None:
+    """Find a product by name, or return None if not found.
+
+    Args:
+        products: List of product dictionaries.
+        name: The product name to search for.
+
+    Returns:
+        The matching product dictionary, or None if no match.
+    """
+    for product in products:
+        if product["name"] == name:
+            return product
+    return None
+```
+
+`dict | None` means the function returns either a dictionary or `None`. This is equivalent to the older `Optional[dict]` syntax from the `typing` module, but the pipe syntax (available since Python 3.10) is cleaner.
+
+The `| None` pattern is important because it forces both you and your editor to think about the `None` case. If `find_product` might return `None`, the caller needs to handle that possibility:
+
+```{.python filename="handling_none.py"}
+result = find_product(products, "Chai")
+
+# Without checking, this might fail at runtime:
+print(result["price"])  # TypeError if result is None!
+
+# Check first:
+if result is not None:
+    print(result["price"])  # Safe
+```
+
+### How Zed Uses Type Hints
+
+Type hints power the editor features you've been using throughout this module. When you hover over a variable in Zed, the type information comes from type hints (and type inference). When you type a dot after a variable, the autocomplete suggestions come from knowing the variable's type. When Zed draws a red squiggle under a line, it's often because a type checker detected a mismatch.
+
+All of this happens through a *language server* running in the background, a topic we'll explore fully in @sec-code-quality. For now, the practical lesson is: adding type hints to your functions makes your editor significantly more helpful.
+
+### Type Hints Are Hints, Not Enforcement
+
+Python ignores type hints at runtime. This code runs without error:
+
+```{.python filename="runtime_ignored.py"}
+def add(a: int, b: int) -> int:
+    return a + b
+
+# Python doesn't care that we're passing strings:
+print(add("hello", " world"))  # "hello world"
+```
+
+To actually *enforce* type hints, you need a static type checker like basedpyright, which analyzes your code without running it and reports type mismatches as errors. You'll set this up in @sec-code-quality. For now, write type hints as documentation and let Zed's built-in type checking give you early warnings.
+
+### Exercises
+
+1. Add type hints to this function signature:
+```{.python filename="solution.py"}
+def find_expensive(products, threshold):
+    return [p for p in products if p["price"] > threshold]
+```
+The function takes a list of dictionaries and a float, and returns a list of dictionaries.
+
+2. What does `dict | None` mean as a return type? Write a function `get_product(name: str, products: list[dict]) -> dict | None` that searches for a product by name and returns `None` if not found.
+
+3. Explain why `def add(a: int, b: int) -> int` followed by `add("hello", " world")` runs without error. How would you catch this mistake before runtime?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Show the code:
+```{.python filename="solution.py"}
+def find_expensive(products: list[dict], threshold: float) -> list[dict]:
+    return [p for p in products if p["price"] > threshold]
+```
+
+**2.** `dict | None` means the function returns either a dictionary or `None`.
+```{.python filename="solution.py"}
+def get_product(name: str, products: list[dict]) -> dict | None:
+    """Find a product by name.
+
+    Args:
+        name: The product name to search for.
+        products: List of product dictionaries.
+
+    Returns:
+        The matching product, or None if not found.
+    """
+    for p in products:
+        if p["name"] == name:
+            return p
+    return None
+```
+
+**3.** Python ignores type hints at runtime, so passing strings to a function annotated with `int` produces no error. To catch the mismatch, use a static type checker like basedpyright, which analyzes your code without running it and reports type errors in your editor.
+
+:::
+
+### Adding Type Hints to Existing Code
+
+The best place to start adding type hints is function signatures. They provide the most value for the least effort, because they document the contract between a function and its callers:
+
+```{.python filename="typed_northwind_utils.py"}
+"""Utility functions for Northwind order processing."""
+
+
+def filter_by_category(
+    orders: list[dict],
+    category: str,
+) -> list[dict]:
+    """Filter orders to a specific category."""
+    return [o for o in orders if o["category"] == category]
+
+
+def compute_revenue(orders: list[dict]) -> float:
+    """Compute total revenue from a list of orders."""
+    return sum(o["unit_price"] * o["quantity"] for o in orders)
+
+
+def format_currency(amount: float, symbol: str = "$") -> str:
+    """Format a number as currency."""
+    return f"{symbol}{amount:,.2f}"
+
+
+def revenue_by_category(orders: list[dict]) -> dict[str, float]:
+    """Compute revenue grouped by category."""
+    totals: dict[str, float] = {}
+    for order in orders:
+        category: str = order["category"]
+        revenue: float = order["unit_price"] * order["quantity"]
+        totals[category] = totals.get(category, 0.0) + revenue
+    return totals
+```
+
+Notice that the type hints match the Google-style docstrings you wrote in @sec-docstrings. They're complementary: the docstring explains *what* and *why*, while the type hint specifies the *exact types* in a machine-readable format.
+
+## Reading Documentation Like a Professional
+
+The skills from this chapter, understanding the object model, using `dir()` and `help()`, and reading type hints, combine into a professional superpower: the ability to learn any Python library independently.
+
+### Anatomy of Library Documentation
+
+Most Python libraries structure their documentation with these sections:
+
+**Getting Started / Quickstart** shows you how to install the library and run a basic example. Start here.
+
+**Tutorials / How-To Guides** walk through common tasks step by step. Read these when you have a specific goal.
+
+**API Reference** lists every class, function, and method with its signature, parameters, and return type. Read this when you need precise details about a specific feature.
+
+**Conceptual / Explanation** covers the design philosophy and architecture. Read this when you want to understand *why* the library works the way it does.
+
+### Reading a Function Signature
+
+When you encounter a function in documentation, you can now read its full signature:
+
+```{.python filename="reading_signature.py"}
+def read_csv(
+    filepath: str | Path,
+    delimiter: str = ",",
+    has_header: bool = True,
+    encoding: str = "utf-8",
+    skip_rows: int = 0,
+) -> list[dict[str, str]]:
+    ...
+```
+
+From this signature alone, you know: the function takes a file path (string or `Path` object), several optional parameters with sensible defaults, and returns a list of dictionaries mapping string keys to string values. You can use it with just the file path and let the defaults handle everything else, or override specific options as needed.
+
+### Practice: The Exploration Loop
+
+The next time you encounter an unfamiliar library, practice this cycle:
+
+1. Read the quickstart to get a working example.
+2. Use `type()` on the objects it creates.
+3. Use `dir()` to see what methods are available.
+4. Use `help()` on the methods that look relevant.
+5. Experiment in the REPL.
+6. Return to the documentation for deeper understanding.
+
+This cycle, not memorizing APIs, is how professional developers learn new tools. Libraries change, APIs evolve, new tools emerge. The ability to explore and learn independently is the skill that outlasts any specific technology.
+
+## Putting It Together: A Typed Northwind Module
+
+Let's build a complete module that uses classes, type hints, and proper documentation to model Northwind data:
+
+```{.python filename="northwind.py"}
+"""Typed data models and utilities for Northwind order processing.
+
+This module defines Product and Order classes for representing
+Northwind catalog and order data, along with utility functions
+for loading data from CSV files and computing business metrics.
+"""
+
+import csv
+from pathlib import Path
+
+
+class Product:
+    """A product from the Northwind catalog."""
+
+    def __init__(
+        self,
+        product_id: int,
+        name: str,
+        category: str,
+        unit_price: float,
+        units_in_stock: int,
+        discontinued: bool = False,
+    ) -> None:
+        self.product_id = product_id
+        self.name = name
+        self.category = category
+        self.unit_price = unit_price
+        self.units_in_stock = units_in_stock
+        self.discontinued = discontinued
+
+    def stock_value(self) -> float:
+        """Compute the total value of current inventory."""
+        return self.unit_price * self.units_in_stock
+
+    def is_available(self) -> bool:
+        """Check whether the product can be ordered."""
+        return not self.discontinued and self.units_in_stock > 0
+
+    def __repr__(self) -> str:
+        return (
+            f"Product({self.product_id}, '{self.name}', "
+            f"${self.unit_price:.2f}, stock={self.units_in_stock})"
+        )
+
+    def __str__(self) -> str:
+        status = "DISCONTINUED" if self.discontinued else "Active"
+        return f"{self.name} ({status}) - ${self.unit_price:.2f}"
+
+
+class OrderLine:
+    """A single line item within an order."""
+
+    def __init__(
+        self,
+        product: Product,
+        quantity: int,
+        unit_price: float,
+        discount: float = 0.0,
+    ) -> None:
+        self.product = product
+        self.quantity = quantity
+        self.unit_price = unit_price
+        self.discount = discount
+
+    def revenue(self) -> float:
+        """Compute the revenue for this line item after discount."""
+        return self.unit_price * self.quantity * (1 - self.discount)
+
+    def __repr__(self) -> str:
+        return (
+            f"OrderLine('{self.product.name}', "
+            f"qty={self.quantity}, ${self.unit_price:.2f})"
+        )
+
+
+def load_categories(filepath: Path) -> dict[str, str]:
+    """Load a categoryID-to-name lookup from a CSV file.
+
+    Args:
+        filepath: Path to the categories CSV file.
+
+    Returns:
+        A dictionary mapping categoryID strings to category names.
+    """
+    with open(filepath) as f:
+        return {row["categoryID"]: row["categoryName"] for row in csv.DictReader(f)}
+
+
+def load_products(filepath: Path, categories: dict[str, str]) -> list[Product]:
+    """Load products from a CSV file.
+
+    Args:
+        filepath: Path to the products CSV file.
+        categories: Dictionary mapping categoryID to category name,
+            as returned by load_categories().
+
+    Returns:
+        A list of Product objects.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+    """
+    products: list[Product] = []
+    with open(filepath) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            products.append(
+                Product(
+                    product_id=int(row["productID"]),
+                    name=row["productName"],
+                    category=categories.get(row["categoryID"], "Unknown"),
+                    unit_price=float(row["unitPrice"]),
+                    units_in_stock=int(row["unitsInStock"]),
+                    discontinued=bool(int(row["discontinued"])),
+                )
+            )
+    return products
+
+
+def filter_available(products: list[Product]) -> list[Product]:
+    """Return only products that are available for ordering.
+
+    Args:
+        products: List of Product objects to filter.
+
+    Returns:
+        A new list containing only available products.
+    """
+    return [p for p in products if p.is_available()]
+
+
+def top_by_stock_value(
+    products: list[Product],
+    n: int = 5,
+) -> list[Product]:
+    """Return the top N products by inventory value.
+
+    Args:
+        products: List of Product objects.
+        n: Number of products to return. Defaults to 5.
+
+    Returns:
+        A list of the top N products, sorted by stock value descending.
+    """
+    return sorted(products, key=lambda p: p.stock_value(), reverse=True)[:n]
+
+
+if __name__ == "__main__":
+    # Demo: load and analyze products
+    data_dir = Path("data")
+
+    try:
+        categories = load_categories(data_dir / "categories.csv")
+        products = load_products(data_dir / "products.csv", categories)
+    except FileNotFoundError as e:
+        print(f"Error: {e}. Using sample data.")
+        products = [
+            Product(1, "Chai", "Beverages", 18.00, 29),
+            Product(2, "Chang", "Beverages", 19.00, 68),
+            Product(3, "Aniseed Syrup", "Condiments", 10.00, 79),
+            Product(5, "Chef Anton's Gumbo Mix", "Condiments", 21.35, 45, True),
+            Product(14, "Tofu", "Produce", 23.25, 77),
+        ]
+
+    available = filter_available(products)
+    print(f"Available products: {len(available)} of {len(products)}")
+
+    print("\nTop 3 by stock value:")
+    for product in top_by_stock_value(available, n=3):
+        print(f"  {product.name:<30} ${product.stock_value():>10,.2f}")
+```
+
+This module demonstrates every concept from Unit 3 working together: classes with typed `__init__`, methods with docstrings and type hints, comprehensions for filtering, `sorted()` with a `key` function, file I/O with context managers, error handling with `try`/`except`, and the `if __name__ == "__main__"` pattern for dual use as module and script.
+
+## Exercises {.unnumbered}
+
+### Object Exploration {.unnumbered}
+
+1. Use `dir()` and `help()` in the REPL to explore `datetime.date` objects *without* looking at online documentation. Answer these questions: How do you get the day of the week? How do you format a date as a string? What is the earliest representable date?
+
+2. Use `dir()` on a list object and find three methods you haven't used before. Read their `help()` text and write a short example for each.
+
+3. Explore the `pathlib.Path` class. What dunder methods does it implement? Can you explain why `Path("data") / "orders.csv"` works? (Hint: which dunder method does `/` correspond to?)
+
+### Type Hints Practice {.unnumbered}
+
+1. Add type hints to every function in your `northwind_utils.py` module from @sec-functions. Include parameter types, return types, and type annotations for local variables where they improve clarity.
+
+2. Write a function `parse_product_row(row: dict[str, str]) -> Product` that takes a raw CSV row (all string values) and returns a `Product` object with properly typed fields. Include type hints and a Google-style docstring.
+
+### Class Building {.unnumbered}
+
+1. Write an `Order` class that contains a list of `OrderLine` objects and provides methods for `total_revenue()`, `line_count()`, and a `summary()` method that returns a formatted string. Include `__repr__` and `__str__` methods.
+
+2. Add a `__len__` method to your `Order` class so that `len(order)` returns the number of line items.
+
+### Documentation Scavenger Hunt {.unnumbered}
+
+Using only `dir()`, `help()`, and the official Python documentation, answer these questions:
+
+1. What does `str.partition()` do? When would you use it instead of `str.split()`?
+2. What is `dict.setdefault()`? How could it simplify the aggregation loop in `revenue_by_category`?
+3. What is `collections.Counter`? How could it simplify counting operations?
+
+## Summary {.unnumbered}
+
+This chapter revealed the unifying principle of Python: everything is an object. Integers, strings, lists, functions, modules, and even types themselves are objects with identities, types, attributes, and methods. This consistency is what makes `dir()` and `help()` work universally and what powers Zed's editor intelligence.
+
+Dunder methods are the hidden protocols that translate Python syntax into method calls. When you write `a + b`, Python calls `a.__add__(b)`. When you write `for x in collection`, Python calls `collection.__iter__()` and `.__next__()`. Understanding these protocols lets you predict how any object will behave.
+
+Classes define blueprints for creating objects. You don't need to become an object-oriented programming expert, but you do need to read class definitions fluently, because most libraries are built from them. The `__init__` method sets up new objects, `self` refers to the current instance, and methods operate on the instance's data.
+
+Type hints annotate your code with the types you intend, enabling better documentation, stronger editor support, and static type checking. They're the bridge to @sec-code-quality, where tools like basedpyright will enforce them and catch bugs before your code even runs.
+
+The most transferable skill from this chapter is the `type()` → `dir()` → `help()` exploration loop. Libraries change, tools evolve, and new technologies emerge constantly. The ability to sit down with an unfamiliar object and figure out what it does, without a tutorial, without a video, just by asking the object itself, is the skill that will serve you longest.
+
+## Glossary {.unnumbered}
+
+attribute
+: Data attached to an object, accessed with dot notation. Example: `product.name`.
+
+class
+: A blueprint for creating objects. Defines the attributes and methods that instances of the class will have.
+
+constructor
+: The `__init__` method of a class, called automatically when a new instance is created.
+
+`dir()`
+: A built-in function that returns a list of all attributes and methods on an object.
+
+dunder method
+: A method with double underscores on both sides of its name (e.g., `__init__`, `__add__`, `__str__`). Dunder methods implement Python's protocols for operators, iteration, string representation, and more.
+
+`help()`
+: A built-in function that displays the docstring and signature of an object, function, or method.
+
+identity
+: The unique identifier of an object, returned by `id()`. Two variables with the same identity point to the same object in memory.
+
+instance
+: An individual object created from a class. `chai = Product("Chai", 18.00, 39)` creates an instance of the `Product` class.
+
+method
+: A function attached to an object, called with dot notation. Methods receive the object as their first argument (`self`).
+
+object
+: A value with an identity, a type, and attributes. In Python, every value is an object.
+
+`self`
+: The conventional name for the first parameter of a method, referring to the instance the method was called on.
+
+static type checker
+: A tool that analyzes type hints in source code without running it, reporting type mismatches as errors. Examples: basedpyright, mypy.
+
+type hint
+: An annotation on a variable, parameter, or return value that specifies its expected type. Ignored by Python at runtime; used by editors and static analyzers.
+
+union type
+: A type annotation indicating a value can be one of multiple types. Written with `|`: `str | None` means "a string or None."

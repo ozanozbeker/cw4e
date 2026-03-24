@@ -22,13 +22,13 @@ The features that separate a code editor from a generic text editor include synt
 
 **Zed is a modern code editor built for speed.** It starts instantly, handles large files without lag, and runs language servers (the tools behind autocomplete and diagnostics) efficiently. It's open-source, cross-platform, and designed with a clean interface that doesn't overwhelm you with menus and panels.
 
-## Why Zed for This Course?
+## Why Zed?
 
-The principles you learn in this course apply to any editor: VS Code, Neovim, Sublime Text, or anything else that supports the Language Server Protocol. The book uses Zed because it offers an excellent experience out of the box with minimal configuration, and its interface is clean enough that screenshots and instructions stay readable.
+The principles you learn in this book apply to any editor: VS Code, Neovim, Sublime Text, or anything else that supports the Language Server Protocol. The book uses Zed because it offers an excellent experience out of the box with minimal configuration, and its interface is clean enough that screenshots and instructions stay readable.
 
-Zed's key advantages for this course are its first-class support for language servers (Ruff and basedpyright run seamlessly in the background), its built-in terminal (you can edit code and run commands in the same window), its native Git panel (you can stage, commit, and view diffs without leaving the editor), and its speed (it never gets in the way of your thinking).
+Zed's key advantages for this book are its first-class support for language servers (Ruff and basedpyright run seamlessly in the background), its built-in terminal (you can edit code and run commands in the same window), its native Git panel (you can stage, commit, and view diffs without leaving the editor), and its speed (it never gets in the way of your thinking).
 
-If you have a strong preference for another editor, that's fine. The concepts transfer. Just make sure your editor supports the Language Server Protocol so you get the Ruff and basedpyright integration that the course relies on.
+If you have a strong preference for another editor, that's fine. The concepts transfer. Just make sure your editor supports the Language Server Protocol so you get the Ruff and basedpyright integration that the book relies on.
 
 ## Installation
 
@@ -58,7 +58,7 @@ On macOS, if `zed` isn't recognized, open the Zed application, then go to the me
 
 Zed is configured through a JSON settings file. Open it from within Zed using `Cmd+,` (macOS) or `Ctrl+,` (Windows/Linux), or from the command palette (`Cmd+Shift+P` / `Ctrl+Shift+P`) by searching for "Open Settings."
 
-The settings file controls everything from appearance (themes, font size, line height) to editor behavior (tab size, format on save) to language-specific options (Python line length, Markdown whitespace handling). Two reference configuration files are linked at the top of this page: one for the Foundations module (basic editor setup) and one for the Production module (with language server configuration for Ruff and basedpyright).
+The settings file controls everything from appearance (themes, font size, line height) to editor behavior (tab size, format on save) to language-specific options (Python line length, Markdown whitespace handling). Two reference configuration files are linked at the top of this page: one for Unit 1 (basic editor setup) and one for Unit 4 (with language server configuration for Ruff and basedpyright).
 
 A few settings worth understanding early:
 
@@ -100,7 +100,7 @@ The **command palette** (`Cmd+Shift+P`) is the most important one to remember. I
 
 ## What Happens Next
 
-Zed is used from the very first chapter as your primary code editor. The language server integration with Ruff and basedpyright, which runs silently in the background throughout the course, is explained in @sec-code-quality.
+Zed is used from the very first chapter as your primary code editor. The language server integration with Ruff and basedpyright, which runs silently in the background throughout the book, is explained in @sec-code-quality.
 
 ## Glossary
 

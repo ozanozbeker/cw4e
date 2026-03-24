@@ -1,8 +1,8 @@
 # Code Quality: Ruff, basedpyright, & Language Servers {#sec-code-quality}
 
-This chapter has a confession to make. Every time you saved a Python file in Zed this semester, a tool called Ruff automatically reformatted your code: fixing indentation, adjusting whitespace, sorting imports, and standardizing quote styles. Every time Zed showed a red squiggle under a variable or displayed type information when you hovered over a function, a tool called basedpyright was analyzing your code in real time. And every time you got autocomplete suggestions or jumped to a function definition with a keyboard shortcut, both tools were communicating with Zed through a protocol called the Language Server Protocol.
+This chapter reveals infrastructure that's been working invisibly throughout this book. Every time you saved a Python file in Zed, a tool called Ruff automatically reformatted your code: fixing indentation, adjusting whitespace, sorting imports, and standardizing quote styles. Every time Zed showed a red squiggle under a variable or displayed type information when you hovered over a function, a tool called basedpyright was analyzing your code in real time. And every time you got autocomplete suggestions or jumped to a function definition with a keyboard shortcut, both tools were communicating with Zed through a protocol called the Language Server Protocol.
 
-You've been using professional code quality tools all semester. Now you'll learn what they are, how they work, and how to configure them yourself.
+Professional data products don't just work, they're built with intention. You've been using Ruff and basedpyright as development dependencies in your `pyproject.toml` (@sec-python-projects) since you started building Python projects. Now you'll understand what these tools are, how they work, and how to configure them to enforce the standards your projects should meet. Before you package your work as a CLI tool or share your analysis notebook, this chapter shows you how to ensure your code is clean, readable, and maintainable.
 
 ## The Triple Reveal
 
@@ -97,7 +97,7 @@ Ruff is a Python linter and formatter written in Rust. It replaces a constellati
 
 ### The Case for Consistent Code
 
-Code is read far more often than it is written. Every time you revisit a script, every time a classmate reviews your notebook, every time you debug a colleague's function, you're *reading* code. Consistent formatting makes reading easier because your brain doesn't have to parse style variations. It can focus on logic.
+Code is read far more often than it is written. Every time you revisit a script, every time a colleague reviews your notebook, every time you debug a colleague's function, you're *reading* code. Consistent formatting makes reading easier because your brain doesn't have to parse style variations. It can focus on logic.
 
 Formatting debates (tabs vs. spaces, single quotes vs. double quotes, trailing commas or not) are a waste of time because they don't affect how the code runs. An autoformatter ends these debates permanently: the tool decides, everyone uses it, and the discussion is over. PEP 8, Python's official style guide, provides the baseline principles, and Ruff implements them.
 
@@ -120,7 +120,7 @@ What the formatter changes: indentation (4 spaces), line length (wraps long line
 
 What the formatter does *not* change: variable names, logic, structure, comments, or docstrings. Formatting is purely cosmetic. Your code's behavior is identical before and after formatting.
 
-In Zed, Ruff formats your file every time you save. You've been benefiting from this all semester without thinking about it.
+In Zed, Ruff formats your file every time you save. You've been benefiting from this throughout this book without thinking about it.
 
 ### Ruff as a Linter
 
@@ -228,7 +228,7 @@ The `select` field enables entire rule categories. The `ignore` field turns off 
 ::: {.callout-tip}
 ## Start strict, relax as needed
 
-It's easier to start with many rules enabled and ignore the ones that don't fit your project than to start with few rules and gradually add them. The configuration above is a good starting point for this course.
+It's easier to start with many rules enabled and ignore the ones that don't fit your project than to start with few rules and gradually add them. The configuration above is a good starting point for this book.
 :::
 
 ## basedpyright: Type Checking {#sec-basedpyright}
@@ -346,7 +346,7 @@ The `if row is None:` check is called *type narrowing*. After the check, basedpy
 ::: {.callout-note collapse="true" title="Exercise: Type Narrowing"}
 You're writing a function that retrieves a product's price from the database. DuckDB's `fetchone()` returns either a tuple with the data or `None` if no row is found. Here's an untyped version:
 
-```python
+```{.python filename="solution.py"}
 def get_product_price(product_id):
     result = conn.sql("SELECT unit_price FROM products WHERE product_id = $1", params=[product_id])
     row = result.fetchone()
@@ -359,7 +359,7 @@ Rewrite the function with:
 3. A Google-style docstring
 
 ::: {.callout-tip collapse="true" title="Solution"}
-```python
+```{.python filename="solution.py"}
 def get_product_price(conn: duckdb.DuckDBPyConnection, product_id: int) -> float:
     """Get the unit price for a product.
 
@@ -423,14 +423,14 @@ The first two pass cleanly, but `basedpyright` reports a `reportOptionalMemberAc
 ::: {.callout-tip collapse="true" title="Solution"}
 The error means you're trying to access an attribute on a value that could be `None`. For example:
 
-```python
+```{.python filename="solution.py"}
 result = fetch_data()  # Returns Data | None
 print(result.name)     # Error: result might be None
 ```
 
 The fix is type narrowing, the same pattern from the previous exercise:
 
-```python
+```{.python filename="solution.py"}
 result = fetch_data()
 if result is None:
     raise ValueError("No data found")
@@ -439,7 +439,7 @@ print(result.name)  # Now safe; basedpyright knows result is not None
 
 Or more idiomatically:
 
-```python
+```{.python filename="solution.py"}
 result = fetch_data()
 if result is not None:
     print(result.name)
@@ -494,7 +494,7 @@ Intentionally introduce a type error into one of your functions (for example, pa
 
 ## Summary {.unnumbered}
 
-Three tools form the invisible quality infrastructure of professional Python development. Ruff formats your code for consistency and lints it for bugs, style issues, and best practices. basedpyright checks your type hints and catches errors that would otherwise surface only at runtime. The Language Server Protocol connects both tools to Zed, providing the real-time diagnostics, hover information, and autocomplete you've been using all semester.
+Three tools form the invisible quality infrastructure of professional Python development. Ruff formats your code for consistency and lints it for bugs, style issues, and best practices. basedpyright checks your type hints and catches errors that would otherwise surface only at runtime. The Language Server Protocol connects both tools to Zed, providing the real-time diagnostics, hover information, and autocomplete you've been using throughout this book.
 
 These tools are configured in project-level files (`ruff.toml` and `pyrightconfig.json`) and declared as development dependencies in `pyproject.toml`, making them part of the reproducible project environment. The quality workflow, format, lint, type-check, commit, ensures that every piece of code entering your Git history meets a consistent standard.
 

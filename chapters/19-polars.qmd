@@ -1,0 +1,676 @@
+# DataFrames with Polars {#sec-polars}
+
+You've established the first bridge between SQL and Python. In the previous chapter, you connected Python to DuckDB and moved your work into Marimo notebooks. SQL handles the joins and aggregations inside the database, and Python handles everything around it. But there's a gap: once SQL results arrive in Python, you need a way to transform them further, to compute derived columns, reshape data, and prepare it for visualization or export.
+
+That's what DataFrames are for. A DataFrame is a table that lives in Python's memory: rows and columns, just like a database table or a spreadsheet, but accessible to all the tools in the Python ecosystem. In this chapter, you'll learn Polars, a modern DataFrame library designed for speed, expressiveness, and correctness. If you've been using Marimo SQL cells, you've already been working with Polars DataFrames without knowing it, because that's exactly what SQL cell results are.
+
+## What Is a DataFrame?
+
+A DataFrame is, at its core, a table. It has named columns, each with a consistent data type, and rows of data. If you've used SQL, the connection is immediate:
+
+| SQL Concept | DataFrame Equivalent |
+|-------------|---------------------|
+| Table | DataFrame |
+| Column | Series (a single column) |
+| `SELECT` | `.select()` |
+| `WHERE` | `.filter()` |
+| `GROUP BY` | `.group_by()` |
+| `ORDER BY` | `.sort()` |
+| `AS` (alias) | `.alias()` |
+
+: SQL to Polars mapping {#tbl-sql-polars-map}
+
+The difference is context. SQL operates inside a database engine. DataFrames operate inside Python. When you need to pass data to a Python visualization library, export it to Excel, or apply custom transformation logic that's awkward to express in SQL, DataFrames are the tool.
+
+You already know how to get data out of a database and into Python as lists of dictionaries (@sec-python-sql). DataFrames are a more structured, more efficient representation for the same data. They preserve column types, support vectorized operations (operations applied to an entire column at once, rather than row by row in a loop), and integrate with the rest of the Python data ecosystem.
+
+## Why Polars?
+
+If you've encountered Python DataFrames before, it was probably through Pandas, the library that defined the concept for Python. Pandas is widely used and has an enormous ecosystem, but it has design decisions from 2008 that create real problems: silent type coercion (integers silently become floats when `NaN` appears), confusing index behavior, and inconsistent APIs.
+
+Polars is a modern alternative, built from scratch with the benefit of hindsight. It uses Apache Arrow as its memory format (the same format DuckDB uses, which is why conversion between them is nearly free), supports lazy evaluation for query optimization, runs operations in parallel automatically, and never silently changes your data types.
+
+For this book, Polars is the right choice for several reasons. It integrates seamlessly with DuckDB, it's the default DataFrame library in Marimo SQL cells, and its expression API maps naturally to the SQL concepts you already know. When you encounter Pandas in the wild, the concepts transfer directly, even though the syntax differs.
+
+Install Polars in your project:
+
+```{.bash filename="terminal"}
+uv add polars
+```
+
+## Polars Fundamentals
+
+### Creating DataFrames
+
+You can create a Polars DataFrame from a Python dictionary, a CSV file, a Parquet file, or a DuckDB query result:
+
+```{.python filename="creating_dataframes.py"}
+import polars as pl
+
+# From a dictionary
+df = pl.DataFrame({
+    "product": ["Chai", "Chang", "Tofu", "Miso"],
+    "category": ["Beverages", "Beverages", "Produce", "Condiments"],
+    "price": [18.00, 19.00, 23.25, 13.00],
+    "stock": [39, 17, 35, 29],
+})
+
+# From a CSV file
+df_csv = pl.read_csv("data/products.csv")
+
+# From a Parquet file
+df_parquet = pl.read_parquet("data/northwind_flat.parquet")
+
+# From a DuckDB query result
+import duckdb
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+df_db = conn.sql("SELECT * FROM products").pl()
+```
+
+### Viewing Data
+
+Once you have a DataFrame, several methods let you understand its structure and contents:
+
+```{.python filename="viewing.py"}
+import polars as pl
+
+df = pl.read_parquet("data/northwind_flat.parquet")
+
+print(df.head())       # First 5 rows
+print(df.head(10))     # First 10 rows
+print(df.tail(3))      # Last 3 rows
+print(df.shape)        # (num_rows, num_columns) as a tuple
+print(df.columns)      # List of column names
+print(df.schema)       # Dictionary of column names to data types
+print(df.describe())   # Summary statistics for each column
+```
+
+The `.schema` property is especially useful. It tells you the exact data type of each column, with no ambiguity:
+
+```{.python filename="schema.py"}
+print(df.schema)
+# {'order_id': Int64, 'product_name': Utf8, 'unit_price': Float64, ...}
+```
+
+Compare this to CSV files (@sec-csv), where everything arrives as strings and you have to convert manually. DataFrames carry type information with them.
+
+### Selecting Columns
+
+The `.select()` method chooses which columns to keep, analogous to SQL's `SELECT`:
+
+```{.python filename="select.py"}
+import polars as pl
+
+df = pl.DataFrame({
+    "product": ["Chai", "Chang", "Tofu"],
+    "category": ["Beverages", "Beverages", "Produce"],
+    "price": [18.00, 19.00, 23.25],
+    "stock": [39, 17, 35],
+})
+
+# Select specific columns
+print(df.select("product", "price"))
+
+# Select using pl.col() for expressions
+print(df.select(
+    pl.col("product"),
+    pl.col("price"),
+    (pl.col("price") * pl.col("stock")).alias("stock_value"),
+))
+```
+
+The `pl.col()` function creates a *column expression*, a reference to a column that can be transformed, computed, or combined with other expressions. The `.alias()` method renames the resulting column, like `AS` in SQL.
+
+### Filtering Rows
+
+The `.filter()` method keeps only rows that match a condition, analogous to SQL's `WHERE`:
+
+```{.python filename="filter.py"}
+import polars as pl
+
+df = pl.DataFrame({
+    "product": ["Chai", "Chang", "Tofu", "Miso"],
+    "price": [18.00, 19.00, 23.25, 13.00],
+    "discontinued": [False, False, False, True],
+})
+
+# Simple filter
+print(df.filter(pl.col("price") > 15))
+
+# Multiple conditions with & (and) and | (or)
+print(df.filter(
+    (pl.col("price") > 15) & (~pl.col("discontinued"))
+))
+
+# String filter
+print(df.filter(pl.col("product").str.starts_with("Ch")))
+```
+
+::: {.callout-warning}
+## Parentheses matter in Polars filters
+
+When combining conditions with `&` (and) or `|` (or), each condition must be wrapped in parentheses. This is because Python's operator precedence rules treat `&` and `|` as bitwise operators, which bind tighter than comparison operators. `pl.col("price") > 15 & ~pl.col("discontinued")` would be parsed incorrectly. Always use `(pl.col("price") > 15) & (~pl.col("discontinued"))`.
+:::
+
+### Sorting
+
+The `.sort()` method orders rows, analogous to SQL's `ORDER BY`:
+
+```{.python filename="sort.py"}
+import polars as pl
+
+print(df.sort("price"))                            # Ascending (default)
+print(df.sort("price", descending=True))           # Descending
+print(df.sort("category", "price", descending=[False, True]))  # Mixed
+```
+
+### Adding and Modifying Columns
+
+The `.with_columns()` method adds new columns or modifies existing ones, while keeping all other columns:
+
+```{.python filename="with_columns.py"}
+import polars as pl
+
+df = pl.DataFrame({
+    "product": ["Chai", "Chang", "Tofu"],
+    "price": [18.00, 19.00, 23.25],
+    "stock": [39, 17, 35],
+})
+
+result = df.with_columns(
+    stock_value=pl.col("price") * pl.col("stock"),
+    price_category=pl.when(pl.col("price") > 20)
+        .then(pl.lit("Premium"))
+        .otherwise(pl.lit("Standard")),
+)
+print(result)
+```
+
+The `.with_columns()` call returns a new DataFrame with the additional columns. The original `df` is unchanged, because Polars DataFrames are immutable. This is the same principle as string operations in Python (@sec-python-fundamentals): operations return new values rather than modifying in place.
+
+### Exercises
+
+1. Create a Polars DataFrame from the Northwind products data by reading `data/products.csv`. Use `.schema` to examine the column names and data types. Which columns contain categorical data (text), and which contain numeric data? Then use `.select()` to choose only the `product_name`, `category_id`, and `unit_price` columns, and `.filter()` to keep only products with a `unit_price` greater than 20. How many products pass the filter?
+
+2. Load the denormalized Northwind Parquet file (`data/northwind_flat.parquet`) into a DataFrame. The file is the result of joining multiple normalized tables. Use `.columns` to see all 46 column names. How many rows does it contain? What is the difference between using `.select("category_name", "product_name")` and `.with_columns()` to keep only those columns?
+
+3. Using the flat file, create a new DataFrame that adds a computed column called `revenue` (calculated as `unit_price * quantity * (1 - discount)`). Use `.select()` to include only `order_id`, `category_name`, `product_name`, `unit_price`, `quantity`, `discount`, and your new `revenue` column. Then filter to show only orders from the "Beverages" category with `revenue` greater than 100. Sort the results by `revenue` in descending order.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Reading the CSV and examining schema:
+
+```{.python filename="products_schema.py"}
+import polars as pl
+
+df = pl.read_csv("data/products.csv")
+print(df.schema)
+```
+
+Categorical columns include `product_name` (string), `category_id` (integer category reference), and `discontinued` (boolean). Numeric columns include `unit_price` (float), `units_in_stock` (integer), `units_on_order` (integer), `reorder_level` (integer). Filtering:
+
+```{.python filename="products_filter.py"}
+import polars as pl
+
+df = pl.read_csv("data/products.csv")
+filtered = df.select("product_name", "category_id", "unit_price").filter(
+    pl.col("unit_price") > 20
+)
+print(f"Products with price > $20: {len(filtered)}")
+```
+
+**2.** Loading the flat file and exploring structure:
+
+```{.python filename="flat_file_explore.py"}
+import polars as pl
+
+df = pl.read_parquet("data/northwind_flat.parquet")
+print(f"Rows: {df.shape[0]}")
+print(f"Columns: {df.shape[1]}")
+print(df.columns)
+```
+
+The flat file typically contains over 400,000 rows (denormalized order detail lines with product and category information joined). The key difference: `.select()` immediately discards columns and returns a new DataFrame with only those columns, equivalent to `SELECT category_name, product_name FROM ...` in SQL. `.with_columns()` adds new columns while keeping existing ones; the two approaches produce different results if you're also trying to remove columns. Use `.select()` when you only want specific columns; use `.with_columns()` when you're adding computed columns to existing data.
+
+**3.** Adding a revenue column and filtering:
+
+```{.python filename="beverages_revenue.py"}
+import polars as pl
+
+df = pl.read_parquet("data/northwind_flat.parquet")
+
+result = df.with_columns(
+    revenue=pl.col("unit_price") * pl.col("quantity") * (1 - pl.col("discount"))
+).select(
+    "order_id",
+    "category_name",
+    "product_name",
+    "unit_price",
+    "quantity",
+    "discount",
+    "revenue",
+).filter(
+    (pl.col("category_name") == "Beverages") & (pl.col("revenue") > 100)
+).sort("revenue", descending=True)
+
+print(result)
+```
+
+This chains three operations: add the `revenue` computed column, select only the desired columns, filter on category and revenue threshold, and sort descending. The parentheses around each filter condition are critical in Polars.
+
+:::
+
+## Polars Expressions {#sec-polars-expressions}
+
+The core idea in Polars is the *expression*. An expression is a declarative description of a computation on columns. Instead of writing imperative code that loops through rows, you describe *what* you want computed, and Polars figures out *how* to do it efficiently.
+
+### Column Expressions
+
+The simplest expression is a column reference:
+
+```{.python filename="col_expression.py"}
+import polars as pl
+
+print(pl.col("price"))                     # Reference to the "price" column
+print(pl.col("price") * pl.col("stock"))  # Element-wise multiplication
+print(pl.col("price") * 1.06)             # Scalar multiplication (tax)
+```
+
+These expressions don't do anything on their own. They describe computations that execute when passed to `.select()`, `.filter()`, `.with_columns()`, or `.agg()`.
+
+### String Operations
+
+Polars provides string operations through the `.str` namespace:
+
+```{.python filename="string_ops.py"}
+import polars as pl
+
+print(pl.col("product_name").str.to_lowercase())
+print(pl.col("product_name").str.starts_with("Ch"))
+print(pl.col("product_name").str.contains("sauce", literal=True))
+print(pl.col("product_name").str.len_chars())
+```
+
+These correspond to SQL string functions like `LOWER()`, `STARTS_WITH()`, and `CONTAINS()` that you used in the Databases module.
+
+### Conditional Expressions
+
+Polars' `when/then/otherwise` is the equivalent of SQL's `CASE WHEN`:
+
+```{.python filename="conditional.py"}
+import polars as pl
+
+# SQL: CASE WHEN price > 50 THEN 'Expensive'
+#           WHEN price > 20 THEN 'Moderate'
+#           ELSE 'Budget' END
+
+price_tier = (
+    pl.when(pl.col("price") > 50).then(pl.lit("Expensive"))
+    .when(pl.col("price") > 20).then(pl.lit("Moderate"))
+    .otherwise(pl.lit("Budget"))
+)
+print(price_tier)
+```
+
+The `pl.lit()` function wraps a literal value into an expression. It's needed because the `.then()` and `.otherwise()` methods expect expressions, not bare Python values.
+
+### Why Expressions Compose
+
+Expressions chain naturally, just like method calls on strings in Python or function composition in SQL:
+
+```{.python filename="chaining.py"}
+import polars as pl
+
+df = pl.DataFrame({
+    "product": ["Chai", "Chang", "Tofu"],
+    "price": [18.00, 19.00, 23.25],
+    "stock": [39, 17, 35],
+})
+
+result = df.select(
+    pl.col("product"),
+    revenue=pl.col("price") * pl.col("stock"),
+    price_rank=pl.col("price").rank(descending=True).cast(pl.Int32),
+    is_premium=pl.col("price") > 20,
+)
+print(result)
+```
+
+Each expression describes a column in the output. Polars evaluates all of them in parallel where possible, which is one reason it's fast.
+
+### Exercises
+
+1. Load the Northwind flat file and use `.select()` with `pl.col()` expressions to compute: the `product_name` from the original data, the `unit_price`, a new column `price_with_tax` (price multiplied by 1.08 for 8 percent sales tax using `pl.lit(1.08)`), and a column called `price_category` that is "Premium" if `unit_price > 50`, "Mid-range" if `unit_price > 20`, and "Budget" otherwise. Sort the result by `unit_price` descending. Show the first 5 rows.
+
+2. Using the flat file, create a new column called `order_value` (calculated as `unit_price * quantity`). Then use `.select()` to add a column `order_value_rank` that ranks products within each category by their order value (highest to lowest). Hint: use `.rank(descending=True)` on the expression. Select only `category_name`, `product_name`, `order_value`, and `order_value_rank`, sorted by category and rank. Compare this to the SQL window function approach from @sec-analytics, where you'd need `RANK() OVER (PARTITION BY ... ORDER BY ...)`. Polars handles the same logic with `.rank()` on an expression, no `OVER` clause needed.
+
+3. Take the flat file and build a Polars expression chain that: (a) filters to orders placed in 2023 or later, (b) adds a column `discount_amount` (`unit_price * quantity * discount`), (c) adds a column `net_revenue` (`unit_price * quantity * (1 - discount)`), (d) sorts by `order_date` descending, and (e) selects only `order_date`, `product_name`, `quantity`, `discount_amount`, and `net_revenue`. Write this as a single chain of method calls (like the example in @sec-polars-expressions). How many rows result from the 2023+ filter?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Creating computed columns with conditional logic:
+
+```{.python filename="price_categories.py"}
+import polars as pl
+
+df = pl.read_parquet("data/northwind_flat.parquet")
+
+result = df.select(
+    "product_name",
+    "unit_price",
+    price_with_tax=pl.col("unit_price") * pl.lit(1.08),
+    price_category=pl.when(pl.col("unit_price") > 50).then(pl.lit("Premium"))
+        .when(pl.col("unit_price") > 20).then(pl.lit("Mid-range"))
+        .otherwise(pl.lit("Budget")),
+).sort("unit_price", descending=True)
+
+print(result.head(5))
+```
+
+Notice the `pl.when().then().otherwise()` syntax, which maps to SQL's `CASE WHEN`. Each branch wraps values in `pl.lit()` because the branches expect expressions, not bare Python literals.
+
+**2.** Ranking within groups using expressions:
+
+```{.python filename="category_ranking.py"}
+import polars as pl
+
+df = pl.read_parquet("data/northwind_flat.parquet")
+
+result = df.with_columns(
+    order_value=pl.col("unit_price") * pl.col("quantity"),
+).with_columns(
+    order_value_rank=pl.col("order_value").rank(descending=True).over("category_name")
+).select(
+    "category_name",
+    "product_name",
+    "order_value",
+    "order_value_rank",
+).sort("category_name", "order_value_rank")
+
+print(result)
+```
+
+The `.over("category_name")` modifier tells Polars to rank within each category separately. In SQL, this would require a window function: `RANK() OVER (PARTITION BY category_name ORDER BY order_value DESC)`.
+
+**3.** Chaining multiple transformations:
+
+```{.python filename="2023_chain.py"}
+import polars as pl
+
+df = pl.read_parquet("data/northwind_flat.parquet")
+
+result = (
+    df
+    .filter(pl.col("order_date") >= pl.lit("2023-01-01").cast(pl.Date))
+    .with_columns(
+        discount_amount=pl.col("unit_price") * pl.col("quantity") * pl.col("discount"),
+        net_revenue=pl.col("unit_price") * pl.col("quantity") * (1 - pl.col("discount")),
+    )
+    .sort("order_date", descending=True)
+    .select("order_date", "product_name", "quantity", "discount_amount", "net_revenue")
+)
+
+print(f"Rows from 2023 onwards: {len(result)}")
+print(result.head())
+```
+
+This demonstrates method chaining, where each operation returns a new DataFrame that the next operation works on. The parentheses around the entire chain improve readability for multi-line operations. Note that the date comparison requires converting the string literal to a `pl.Date` type for the comparison to work correctly.
+
+:::
+
+## Aggregation and Grouping {#sec-polars-groupby}
+
+The `.group_by().agg()` pattern is Polars' equivalent of SQL's `GROUP BY`:
+
+```{.python filename="group_by.py"}
+import polars as pl
+
+df = pl.read_parquet("data/northwind_flat.parquet")
+
+category_summary = df.group_by("category_name").agg(
+    pl.col("unit_price").mean().alias("avg_price"),
+    pl.col("order_id").n_unique().alias("order_count"),
+    (pl.col("unit_price") * pl.col("quantity")).sum().alias("total_revenue"),
+)
+
+print(category_summary.sort("total_revenue", descending=True))
+```
+
+Compare this with the equivalent SQL, which you already know:
+
+```{.sql filename="equivalent.sql"}
+SELECT
+    category_name,
+    AVG(unit_price) AS avg_price,
+    COUNT(DISTINCT order_id) AS order_count,
+    SUM(unit_price * quantity) AS total_revenue
+FROM northwind_flat
+GROUP BY category_name
+ORDER BY total_revenue DESC
+```
+
+The operations are identical: group the data by category, compute aggregations within each group, and sort the results. The syntax differs, but the mental model is the same. If you can write the SQL, you can write the Polars, and vice versa.
+
+### Multiple Aggregations
+
+You can compute as many aggregations as you need in a single `.agg()` call:
+
+```{.python filename="multi_agg.py"}
+import polars as pl
+
+result = df.group_by("category_name").agg(
+    pl.col("unit_price").min().alias("min_price"),
+    pl.col("unit_price").max().alias("max_price"),
+    pl.col("unit_price").mean().alias("avg_price"),
+    pl.col("unit_price").std().alias("std_price"),
+    pl.len().alias("row_count"),
+)
+print(result)
+```
+
+The `pl.len()` expression counts rows in each group, equivalent to SQL's `COUNT(*)`.
+
+### When to Aggregate in SQL vs. Polars
+
+Both DuckDB and Polars can perform aggregations efficiently. Here are guidelines for choosing:
+
+Use **SQL** when the aggregation involves joins across multiple tables. SQL's join syntax is more concise and the database can optimize the join order. Also use SQL when you want to aggregate before pulling data into Python, reducing the amount of data transferred.
+
+Use **Polars** when you're building on top of data already in a DataFrame, when you need Python-specific logic in the aggregation (custom functions, conditional computations), or when you're chaining multiple transformations that are natural in Polars' expression API.
+
+## Polars and DuckDB: Best Friends {#sec-polars-duckdb}
+
+Polars and DuckDB integrate so tightly that you can use either tool to query the other's data with essentially zero cost.
+
+### DuckDB Querying Polars DataFrames
+
+DuckDB can query a Polars DataFrame directly, as if it were a table:
+
+```{.python filename="duckdb_queries_polars.py"}
+import duckdb
+import polars as pl
+
+# Create a Polars DataFrame
+products = pl.DataFrame({
+    "name": ["Chai", "Chang", "Tofu", "Miso"],
+    "category": ["Beverages", "Beverages", "Produce", "Condiments"],
+    "price": [18.00, 19.00, 23.25, 13.00],
+})
+
+# Query the DataFrame with SQL (note: use the variable name as the table name)
+result = duckdb.sql("""
+    SELECT category, AVG(price) AS avg_price
+    FROM products
+    GROUP BY category
+    ORDER BY avg_price DESC
+""")
+
+print(result)
+```
+
+DuckDB recognizes the Python variable `products` as a DataFrame and queries it directly. There's no data copying because DuckDB and Polars share the same underlying memory format (Apache Arrow). You'll learn more about why this works in @sec-arrow.
+
+### Polars DataFrames from DuckDB Results
+
+Going the other direction, the `.pl()` method converts a DuckDB result to a Polars DataFrame:
+
+```{.python filename="duckdb_to_polars.py"}
+import duckdb
+import polars as pl
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# DuckDB handles the join, Polars gets the result
+df = conn.sql("""
+    SELECT
+        p.product_name,
+        c.category_name,
+        p.unit_price,
+        p.units_in_stock
+    FROM products AS p
+    JOIN categories AS c ON p.category_id = c.category_id
+""").pl()
+
+# Now use Polars for further transformations
+enriched = df.with_columns(
+    stock_value=pl.col("unit_price") * pl.col("units_in_stock"),
+    price_tier=pl.when(pl.col("unit_price") > 50).then(pl.lit("Premium"))
+        .when(pl.col("unit_price") > 20).then(pl.lit("Mid-range"))
+        .otherwise(pl.lit("Budget")),
+)
+print(enriched)
+```
+
+This pattern, SQL for joins, Polars for transformations, is the recommended workflow for this book. It uses each tool for what it does best.
+
+## The Honest Comparison: Polars vs. SQL
+
+Now that you've seen both tools, let's be direct about the trade-offs.
+
+For analytical workloads, DuckDB's SQL and Polars are roughly equivalent in performance. Both are columnar, both are vectorized, and both optimize query execution. The choice often comes down to preference and context.
+
+**Arguments for SQL.** SQL is universal. It works with any database, not just DuckDB. If your future job involves PostgreSQL, SQL Server, or Snowflake, the SQL you learned in the Databases module transfers directly. Polars expressions don't. SQL is also more concise for complex joins: a five-table join in SQL is a few lines, while the equivalent Polars code is longer and harder to read. And everyone in the data industry knows SQL. It's the common language.
+
+**Arguments for Polars.** Polars code lives in Python, which means your editor can lint it, type-check it, and provide autocomplete. If you make a typo in a SQL string, you don't find out until runtime. If you make a typo in a Polars expression, your editor highlights it immediately. Polars also composes naturally with the rest of your Python code: conditionals, loops, functions, and modules all work normally around Polars operations. And Polars' lazy evaluation lets you build complex pipelines that the optimizer can rearrange for efficiency.
+
+**The pragmatic answer.** Use SQL for data retrieval and joins, because SQL was designed for exactly this. Use Polars when you need Python-native transformations, derived columns, or integration with Python libraries. In a Marimo notebook, the natural split is SQL cells for pulling and shaping data, and Python cells for further transformation, visualization, and export. Don't spend time arguing about which is "better." The best tool is the one that makes your code readable and your workflow efficient.
+
+## Putting It Together: Northwind Analysis
+
+Here's a complete analysis that uses SQL for data retrieval and Polars for transformation:
+
+```{.python filename="northwind_analysis.py"}
+"""Northwind category analysis using SQL + Polars."""
+
+import duckdb
+import polars as pl
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# Step 1: SQL handles the joins and initial aggregation
+monthly_revenue = conn.sql("""
+    SELECT
+        c.category_name,
+        DATE_TRUNC('month', o.order_date) AS order_month,
+        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue,
+        COUNT(DISTINCT o.order_id) AS order_count
+    FROM order_details AS od
+    JOIN orders AS o ON od.order_id = o.order_id
+    JOIN products AS p ON od.product_id = p.product_id
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY c.category_name, DATE_TRUNC('month', o.order_date)
+    ORDER BY c.category_name, order_month
+""").pl()
+
+# Step 2: Polars handles derived computations
+enriched = monthly_revenue.with_columns(
+    avg_order_value=pl.col("revenue") / pl.col("order_count"),
+).with_columns(
+    # Month-over-month growth rate within each category
+    revenue_growth=pl.col("revenue").pct_change().over("category_name"),
+)
+
+# Step 3: Polars handles filtering and final summary
+latest_month = enriched["order_month"].max()
+latest_data = enriched.filter(pl.col("order_month") == latest_month)
+
+print(f"Latest month: {latest_month}")
+print(latest_data.select(
+    "category_name",
+    "revenue",
+    "order_count",
+    "avg_order_value",
+    "revenue_growth",
+).sort("revenue", descending=True))
+
+conn.close()
+```
+
+This script demonstrates the complete pattern: SQL retrieves and joins the data, Polars computes derived columns (average order value, month-over-month growth), and the results are ready for visualization (@sec-altair) or export (@sec-excel).
+
+## Exercises {.unnumbered}
+
+### Exploring the Flat File {.unnumbered}
+
+Load the Northwind denormalized Parquet file (`data/northwind_flat.parquet`) into a Polars DataFrame. Use `.shape`, `.schema`, `.describe()`, and `.head()` to understand its structure. The file has 46 columns, so focus your summary on the key dimension columns (categories, customers, products) and metric columns (prices, quantities, discounts). Compare this structure with the normalized database schema you learned in the Databases module, noting which tables were joined to produce this flat file.
+
+### SQL to Polars Translation {.unnumbered}
+
+Rewrite these three queries as Polars expressions, using the denormalized flat file (`data/northwind_flat.parquet`) as the data source:
+
+1. All products in the "Beverages" category with price above $15, sorted by price descending. (Hint: filter on `category_name` and `unit_price`.)
+2. The number of distinct products per category.
+3. The top 5 customers by total revenue, where revenue is `SUM(unit_price * quantity * (1 - discount))`, grouped by `company_name`.
+
+For each, write both a SQL version (using `conn.sql()` against the DuckDB database) and a Polars version (using the DataFrame API on the flat file). Note which approach feels more natural for each task.
+
+### Mixed Workflow Notebook {.unnumbered}
+
+Build a Marimo notebook that uses SQL cells for the joins and initial data retrieval, and Polars cells for transformations. The notebook should answer: "Which product categories had declining revenue in the most recent quarter compared to the previous quarter?" Start by determining the date range of orders in the database (inspect `MIN(order_date)` and `MAX(order_date)`) so you know which is the most recent *complete* quarter and the one before it. Then use SQL to compute quarterly revenue (as `SUM(unit_price * quantity * (1 - discount))`) by category for those two quarters, Polars to compute the quarter-over-quarter change, and Polars filtering to identify declining categories.
+
+### Performance Comparison {.unnumbered}
+
+Using the Northwind dataset (200,000 orders, 631,000 order detail lines), time these operations in both Polars and DuckDB SQL: count of distinct orders by category, average `unit_price` by category, and total revenue (`SUM(unit_price * quantity * (1 - discount))`) by month. For the DuckDB SQL versions, these require joins across `order_details`, `products`, `categories`, and `orders`. For the Polars versions, load the flat file. Use Python's `time` module to measure execution time. Write your findings as comments: are the performance differences meaningful for this dataset size?
+
+## Summary {.unnumbered}
+
+DataFrames are tables that live in Python's memory, bridging the gap between SQL query results and Python computation. Polars provides a modern, fast, and expressive API for working with DataFrames, with an expression system that maps naturally to the SQL concepts you already know: `.select()` is `SELECT`, `.filter()` is `WHERE`, `.group_by().agg()` is `GROUP BY`, and `.sort()` is `ORDER BY`.
+
+The integration between Polars and DuckDB is seamless. DuckDB results convert to Polars DataFrames with `.pl()` at effectively zero cost, and DuckDB can query Polars DataFrames as if they were database tables. This interoperability lets you use SQL for what it does best (joins, aggregations, data retrieval) and Polars for what it does best (derived computations, Python integration, pipeline composition).
+
+In the next chapter, you'll add visualization to this workflow. The DataFrames you build with SQL and Polars will become the data source for Altair charts that communicate your findings visually.
+
+## Glossary {.unnumbered}
+
+aggregation
+: Computing a summary value from multiple rows: sum, mean, count, min, max. In Polars, performed with `.agg()` after `.group_by()`.
+
+alias
+: Renaming a column in the output. In Polars, `.alias("new_name")`. In SQL, `AS new_name`.
+
+column expression
+: A Polars expression that references or transforms a column. Created with `pl.col("name")` and chainable with operations like `.mean()`, `.sum()`, `.alias()`.
+
+DataFrame
+: A two-dimensional data structure with named columns and typed values. The Python equivalent of a database table or spreadsheet.
+
+eager evaluation
+: Executing each operation immediately as it's called. The default mode for most Polars operations.
+
+expression
+: A declarative description of a computation in Polars. Expressions describe *what* to compute; Polars determines *how* to compute it efficiently.
+
+lazy evaluation
+: Deferring execution until results are explicitly requested with `.collect()`. Allows Polars to optimize the entire computation plan.
+
+Polars
+: A modern DataFrame library for Python, built on Apache Arrow. Designed for speed, correctness, and expressiveness.
+
+Series
+: A single column of a Polars DataFrame. Has a name and a consistent data type.
+
+vectorized operation
+: An operation applied to an entire column at once, rather than element by element in a loop. Vectorized operations are significantly faster than loops.
+
+zero-copy
+: Sharing data between tools without duplicating it in memory. DuckDB and Polars achieve zero-copy interchange through their shared Apache Arrow format.

@@ -1,19 +1,19 @@
 # Prerequisites {.unnumbered}
 
-This chapter lists the tools you'll need throughout the book. Rather than installing everything at once, you'll set up each tool as it becomes relevant. This approach lets you start quickly and spreads the installation work across the course.
+This chapter lists the tools you'll need throughout the book. Rather than installing everything at once, you'll set up each tool as it becomes relevant. This approach lets you start quickly and spreads the installation work across the book.
 
 Here's the full toolchain in the order you'll install each one:
 
 - **Homebrew** (macOS) or **WinGet** (Windows): Package managers that automate installing everything else. See @sec-brew-config or @sec-winget-config.
 - **Zed**: A modern code editor with syntax highlighting, autocomplete, and an integrated terminal. See @sec-zed-config.
+- **Quarto**: A publishing system that renders Markdown documents into HTML, PDF, and presentations. Installed via package manager.
 - **Git**: A version control system that tracks changes to files and enables collaboration. See @sec-git-config.
 - **GitHub**: A platform for hosting Git repositories and collaborating on projects (free account). See @sec-github-config.
 - **DuckDB**: An embedded analytical database that runs SQL queries on local files without server setup. Installed as a CLI tool first, then as a Python library later. See @sec-duckdb-config.
 - **uv**: A Python project manager that handles Python installation, virtual environments, and dependencies in a single tool. See @sec-uv-config.
 - **Marimo**: A reactive notebook tool for interactive data exploration with native SQL support. See @sec-marimo-config.
-- **Quarto**: A publishing system that renders Markdown documents into HTML, PDF, and presentations. No appendix, installed via package manager.
-- **Ruff**: A Python linter and formatter that enforces code style and catches bugs automatically. Zed runs it out of the box; added as a project dependency in the Production module. See @sec-ruff-config.
-- **basedpyright**: A static type checker that verifies your type hints before you run your code. Zed runs it out of the box; added as a project dependency in the Production module. See @sec-basedpyright-config.
+- **Ruff**: A Python linter and formatter that enforces code style and catches bugs automatically. Zed runs it out of the box; added as a project dependency in @sec-code-quality. See @sec-ruff-config.
+- **basedpyright**: A static type checker that verifies your type hints before you run your code. Zed runs it out of the box; added as a project dependency in @sec-code-quality. See @sec-basedpyright-config.
 
 Each tool listing below includes what it does, when you'll need it, and a reference to installation instructions. If you encounter problems during installation, check the corresponding appendix for troubleshooting steps specific to your operating system.
 
@@ -25,7 +25,7 @@ You should have administrator access to install software. If you're using a mana
 
 A stable internet connection is required for downloading tools and, later, for pushing code to GitHub and accessing online data sources.
 
-## Foundations Module
+## Unit 1: The Professional Toolkit
 
 These tools should be installed before or during the first week of work.
 
@@ -37,7 +37,7 @@ These tools should be installed before or during the first week of work.
 
 **How to get it:** Visit [github.com](https://github.com) and sign up with your email address. Choose a professional username since this account may become part of your portfolio. Enable two-factor authentication for security.
 
-**Notes:** Use your personal email rather than a school email, so you retain access after graduation. GitHub offers free features that are sufficient for this course; you don't need a paid plan.
+**Notes:** Use your personal email rather than an institutional email, so you retain access if you change organizations. GitHub's free tier is sufficient for everything in this book; you don't need a paid plan.
 
 ### Package Manager (Homebrew or WinGet)
 
@@ -95,9 +95,22 @@ Alternatively, download from [zed.dev](https://zed.dev).
 
 **How to get it:** Install from the [Microsoft Store](https://aka.ms/terminal) or via `winget install Microsoft.WindowsTerminal`.
 
-**Notes:** Windows Terminal should be your default terminal application for this course. Avoid using the legacy Command Prompt or standalone PowerShell applications.
+**Notes:** Windows Terminal should be your default terminal application while working through this book. Avoid using the legacy Command Prompt or standalone PowerShell applications.
 
-## Database Module
+### Quarto
+
+**What it is:** A publishing system that renders Markdown documents into HTML, PDF, presentations, and other formats.
+
+**When you need it:** @sec-quarto (Writing with Quarto), and again in @sec-computational-documents for executable code cells.
+
+**How to get it:**
+
+- **Windows:** `winget install Posit.Quarto`
+- **macOS:** `brew install --cask quarto`
+
+**Notes:** Quarto is what renders this book. You'll start using it as a Markdown writing tool in Unit 1, then return to it for computational documents in the capstone unit.
+
+## Unit 2: Data with SQL
 
 These tools support the SQL and database chapters.
 
@@ -112,9 +125,9 @@ These tools support the SQL and database chapters.
 - **Windows:** `winget install DuckDB.cli`
 - **macOS:** `brew install duckdb`
 
-**Notes:** DuckDB can query CSV, Parquet, and JSON files directly, making it ideal for learning SQL without database administration overhead. You'll later add `duckdb` as a Python library (`uv add duckdb`) when connecting SQL to Python in the Integration module. See @sec-duckdb-config for the distinction between the CLI tool and the Python library.
+**Notes:** DuckDB can query CSV, Parquet, and JSON files directly, making it ideal for learning SQL without database administration overhead. You'll later add `duckdb` as a Python library (`uv add duckdb`) when connecting SQL to Python in @sec-python-sql. See @sec-duckdb-config for the distinction between the CLI tool and the Python library.
 
-## Programming Module
+## Unit 3: Python
 
 These tools support the Python chapters.
 
@@ -122,7 +135,7 @@ These tools support the Python chapters.
 
 **What it is:** The Python programming language, installed and managed through the `uv` tool for reliable dependency management.
 
-**When you need it:** @sec-python-fundamentals (Python Fundamentals) through @sec-objects (Objects & Type Hints).
+**When you need it:** @sec-python-fundamentals (Python Fundamentals) through @sec-objects (The Python Object Model).
 
 **How to get it:**
 
@@ -133,36 +146,19 @@ Then install Python: `uv python install 3.13`
 
 **Notes:** We use `uv` rather than installing Python directly because `uv` handles virtual environments and dependencies more reliably. This avoids the "it works on my machine" problems that plague Python development.
 
-## Integration Module
+## Unit 4: Building Data Products
 
-These tools support the chapters on combining SQL, Python, and notebooks.
+These tools support the capstone chapters on combining SQL, Python, notebooks, and professional tooling.
 
 ### Marimo
 
 **What it is:** A reactive notebook tool for interactive data exploration, with native SQL cells that connect directly to DuckDB.
 
-**When you need it:** @sec-marimo (Notebooks with Marimo).
+**When you need it:** @sec-computational-documents (Computational Documents).
 
 **How to get it:** `uv tool install marimo` initially, then `uv add marimo` as a project dependency later.
 
 **Notes:** Marimo notebooks are stored as `.py` files, so they produce clean diffs in Git and can be run as scripts. See @sec-marimo-config for details.
-
-## Production Module
-
-These tools support the chapters on project structure, documentation, and code quality.
-
-### Quarto
-
-**What it is:** A publishing system that renders Markdown documents into HTML, PDF, presentations, and other formats.
-
-**When you need it:** @sec-quarto (Documents & Presentations with Quarto).
-
-**How to get it:**
-
-- **Windows:** `winget install Posit.Quarto`
-- **macOS:** `brew install --cask quarto`
-
-**Notes:** Quarto is what renders this book. Learning it gives you the ability to create professional documentation for your own projects.
 
 ### Ruff
 
@@ -186,38 +182,33 @@ These tools support the chapters on project structure, documentation, and code q
 
 ## Verification Checklist
 
-After installing tools for each module, verify they're working:
+After installing tools for each unit, verify they're working:
 
-### Foundations Module
+### Unit 1: The Professional Toolkit
 
 ```{.bash filename="terminal"}
 git --version        # Should print version number
 zed --version        # Should print version number (or open Zed)
+quarto --version     # Should print version number
 ```
 
-### Database Module
+### Unit 2: Data with SQL
 
 ```{.bash filename="terminal"}
 duckdb --version     # Should print version number
 ```
 
-### Python Module
+### Unit 3: Python
 
 ```{.bash filename="terminal"}
 uv --version         # Should print version number
 python --version     # Should print Python 3.13.x (after uv python install)
 ```
 
-### Integration Module
+### Unit 4: Building Data Products
 
 ```{.bash filename="terminal"}
-uv run marimo --version  # Should print version number
-```
-
-### Production Module
-
-```{.bash filename="terminal"}
-quarto --version              # Should print version number
+uv run marimo --version       # Should print version number
 uv run ruff --version         # Should print version number (after uv add --dev ruff)
 uv run basedpyright --version # Should print version number (after uv add --dev basedpyright)
 ```
@@ -231,6 +222,6 @@ Installation problems are common and usually solvable. If you encounter issues:
 1. Read the error message carefully. It often contains clues about what went wrong.
 2. Search the error message online. Someone has likely encountered the same problem.
 3. Check the tool's official documentation for platform-specific instructions.
-4. Ask for help in class or office hours, bringing the exact error message.
+4. If you're working through this book with others, ask for help and bring the exact error message.
 
-Don't let installation friction discourage you. Setting up a development environment is genuinely tricky, even for experienced developers. Once configured, these tools will serve you throughout the course and beyond.
+Don't let installation friction discourage you. Setting up a development environment is genuinely tricky, even for experienced developers. Once configured, these tools will serve you throughout this book and beyond.

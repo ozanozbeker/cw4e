@@ -1,0 +1,760 @@
+# Data Visualization with Altair {#sec-altair}
+
+Numbers in a table answer questions. Charts answer them *faster*. When you scan a table of twelve monthly revenue figures, it takes effort to spot the trend. When you see a line chart of the same data, the trend is immediate: rising, falling, seasonal, flat. Visualization doesn't replace analysis; it makes analysis visible.
+
+This chapter adds visualization to the analytical workflow you've been building. SQL pulls data from the Northwind database. Polars transforms it into the shape you need. Now Altair turns that data into charts that communicate your findings. The approach is grounded in the *grammar of graphics*, a systematic framework for thinking about charts. Rather than memorizing a gallery of chart types, you'll learn the components that all charts share: data, marks, and encodings. Once you understand these components, you can construct any chart by combining them.
+
+::: {.callout-note}
+## Book Examples and Personal Projects
+
+This chapter uses Northwind for all examples, the consistent dataset throughout this book. The visualization patterns you'll learn here apply directly to any dataset, any size, any structure. Once you understand how to map data columns to visual properties with Altair's grammar, you can apply the same techniques to your project data with minimal adjustment. The Northwind examples are here to teach concepts clearly; the real learning happens when you apply them to your own work.
+:::
+
+## Why Visualize Data?
+
+In 1973, the statistician Francis Anscombe constructed four datasets that are now known as *Anscombe's Quartet*. All four datasets have nearly identical statistical summaries: the same mean, variance, correlation, and regression line. Yet when plotted, they look completely different. One is a clear linear relationship. Another is a curve. A third has a single extreme outlier that skews the regression. The fourth has all points stacked at one x-value except for one outlier.
+
+The lesson: summary statistics can hide the true nature of your data. Visualization reveals patterns, outliers, and relationships that numbers alone might miss. In engineering work, where decisions depend on correctly understanding data, visualization isn't decoration. It's due diligence.
+
+Within the workflow you're building, visualization serves two purposes. During *exploration*, charts help you understand your data and notice things that warrant further investigation. During *communication*, charts convey your findings to stakeholders who don't want to read tables. Both uses matter, and the same grammar of graphics powers both.
+
+## The Grammar of Graphics
+
+The grammar of graphics is a framework that describes any chart as a mapping from data to visual properties. Instead of thinking "I need a bar chart," you think "I need to map a categorical variable to the x-axis and a quantitative variable to the y-axis, using rectangular marks." This shift in thinking is powerful because it gives you a *system* for building any visualization, not a recipe book for specific chart types.
+
+The core components are:
+
+**Data.** The table or DataFrame that contains the values you want to visualize.
+
+**Marks.** The visual elements that represent data points: points (dots), bars (rectangles), lines, areas, or other geometric shapes.
+
+**Encodings.** The rules that map data columns to visual properties: which column controls the x-position, which controls the y-position, which controls color, size, shape, or opacity.
+
+A chart is fully specified by these three components. A scatter plot is data mapped to point marks with x and y encodings. A bar chart is data mapped to bar marks with a categorical x encoding and a quantitative y encoding. A line chart is data mapped to line marks with a temporal x encoding. Every chart is a specific configuration of the same grammar.
+
+Altair implements this grammar in Python. The library is built on Vega-Lite, a declarative visualization specification. If you later work with ggplot2 in R, Observable Plot in JavaScript, or any other grammar-of-graphics library, the same concepts apply.
+
+## Altair Fundamentals
+
+Install Altair in your project:
+
+```{.bash filename="terminal"}
+uv add altair
+```
+
+### The Chart Pattern
+
+Every Altair chart follows the same pattern:
+
+```{.python filename="chart_pattern.py"}
+import altair as alt
+import polars as pl
+
+df = pl.DataFrame({
+    "product": ["Chai", "Chang", "Tofu", "Miso"],
+    "price": [18.00, 19.00, 23.25, 13.00],
+})
+
+chart = alt.Chart(df).mark_point().encode(
+    x="product",
+    y="price",
+)
+
+chart.save("chart.html")
+```
+
+`alt.Chart(df)` binds the data. `.mark_point()` specifies the mark type (dots). `.encode(x=..., y=...)` maps columns to visual properties. That's the entire grammar in three method calls.
+
+Altair accepts Polars DataFrames directly. Behind the scenes, a library called Narwhals handles the translation, so you can pass the DataFrames you've been building with Polars and DuckDB straight into Altair without any conversion step.
+
+In a Marimo notebook, the chart renders automatically as the cell output. In a script, you can save it to an HTML file with `chart.save("chart.html")`.
+
+### Marks
+
+Marks are the visual shapes that represent data. Altair provides several mark types:
+
+```{.python filename="marks.py"}
+import altair as alt
+
+alt.Chart(df).mark_point()     # Dots (scatter plots)
+alt.Chart(df).mark_bar()       # Rectangles (bar charts)
+alt.Chart(df).mark_line()      # Connected lines (line charts)
+alt.Chart(df).mark_area()      # Filled areas (area charts)
+alt.Chart(df).mark_rect()      # Rectangles positioned by both x and y (heatmaps)
+alt.Chart(df).mark_circle()    # Circles (like point but always circular)
+alt.Chart(df).mark_tick()      # Short lines (strip plots)
+```
+
+Each mark type produces a different visual representation of the same data. The choice of mark depends on what you're trying to communicate: relationships (points), comparisons (bars), trends over time (lines), or distributions (areas).
+
+### Encodings
+
+Encodings map data columns to visual channels. The most common channels are:
+
+```{.python filename="encodings.py"}
+import altair as alt
+import polars as pl
+
+df = pl.DataFrame({
+    "product": ["Chai", "Chang", "Tofu", "Miso"],
+    "category": ["Beverages", "Beverages", "Produce", "Condiments"],
+    "price": [18.00, 19.00, 23.25, 13.00],
+    "stock": [39, 17, 35, 29],
+})
+
+chart = alt.Chart(df).mark_circle().encode(
+    x="price",           # Horizontal position
+    y="stock",           # Vertical position
+    color="category",    # Color by category
+    size="price",        # Size proportional to price
+    tooltip=["product", "price", "stock"],  # Hover information
+)
+
+chart.save("chart.html")
+```
+
+The `tooltip` encoding is especially useful in Marimo notebooks: hovering over a data point reveals the specified column values.
+
+### Data Types
+
+Altair needs to know whether each column is quantitative (a number), nominal (a category), ordinal (an ordered category), or temporal (a date). It usually infers the correct type from the data, but you can be explicit using shorthand suffixes:
+
+```{.python filename="data_types.py"}
+import altair as alt
+
+chart = alt.Chart(df).mark_bar().encode(
+    x="category:N",        # N = Nominal (categorical, no order)
+    y="price:Q",           # Q = Quantitative (numeric)
+)
+
+chart.save("chart.html")
+```
+
+| Suffix | Type | Use for |
+|--------|------|---------|
+| `:Q` | Quantitative | Numeric measurements (price, count, temperature) |
+| `:N` | Nominal | Unordered categories (product name, country) |
+| `:O` | Ordinal | Ordered categories (rating, size: S/M/L) |
+| `:T` | Temporal | Dates and times |
+
+: Altair data type codes {#tbl-altair-types}
+
+Getting the data type right matters. A bar chart of revenue by category needs `category:N` (nominal) on the x-axis. A line chart of revenue over time needs `order_month:T` (temporal) on the x-axis. Using the wrong type produces a chart that looks wrong or misleading.
+
+### Exercises
+
+1. Load the Northwind dataset as a Polars DataFrame. Create a basic scatter plot using `alt.Chart()`, `.mark_point()`, and `.encode()` that maps unit price to the x-axis and units in stock to the y-axis. Add a meaningful title using `.properties()`. What do you observe about the relationship between price and inventory levels?
+
+2. Using the same DataFrame, create three separate charts: one with `mark_point()`, one with `mark_bar()`, and one with `mark_line()`. Keep the same x and y encodings. In a sentence or two, explain which mark type best communicates the price-vs-stock relationship and why.
+
+3. Create a scatter plot that uses color encoding to distinguish product categories and includes tooltip information showing product name, category, price, and stock level. Explicitly specify data types using the shorthand notation (`:N`, `:Q`) for at least three of your encodings.
+
+4. Given a DataFrame of monthly order totals, create a line chart with orders on the y-axis and month on the x-axis. Use `alt.X()` and `alt.Y()` objects to add axis titles. Then create a second version where you set `scale=alt.Scale(zero=False)` on the y-axis. Save both to HTML files and compare: does removing the zero baseline change how the trend appears visually?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Load the Northwind dataset and create a scatter plot:
+
+```{.python filename="scatter_basic.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+scatter = alt.Chart(products).mark_point().encode(
+    x="unit_price",
+    y="units_in_stock",
+).properties(
+    title="Product Price vs. Stock Level"
+)
+
+scatter.save("scatter.html")
+```
+
+The relationship is weak or absent, suggesting that price and inventory level are not strongly correlated. Some low-priced items have high stock, others have low stock. The same is true for high-priced items.
+
+**2.** Here are three versions of the same data with different mark types:
+
+```{.python filename="marks_comparison.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+scatter = alt.Chart(products).mark_point().encode(
+    x="unit_price:Q",
+    y="units_in_stock:Q",
+).properties(title="Point Mark")
+
+bar = alt.Chart(products).mark_bar().encode(
+    x="unit_price:Q",
+    y="units_in_stock:Q",
+).properties(title="Bar Mark")
+
+line = alt.Chart(products).mark_line().encode(
+    x="unit_price:Q",
+    y="units_in_stock:Q",
+).properties(title="Line Mark")
+
+scatter.save("scatter.html")
+bar.save("bar.html")
+line.save("line.html")
+```
+
+The point mark (scatter plot) best communicates this relationship because it shows individual products as independent observations. The bar and line marks suggest an ordered or sequential relationship that doesn't exist.
+
+**3.** Scatter plot with color encoding and tooltips:
+
+```{.python filename="scatter_colored.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+scatter = alt.Chart(products).mark_point().encode(
+    x="unit_price:Q",
+    y="units_in_stock:Q",
+    color="category_name:N",
+    tooltip=["product_name:N", "category_name:N", "unit_price:Q", "units_in_stock:Q"],
+).properties(
+    title="Products by Price and Stock, Colored by Category"
+)
+
+scatter.save("scatter.html")
+```
+
+The `:N` suffix on `category_name` and `product_name` indicates nominal (categorical) data. The `:Q` suffix on price and stock indicates quantitative (numeric) data.
+
+**4.** Creating line charts with and without zero baseline:
+
+```{.python filename="baseline_comparison.py"}
+import altair as alt
+import polars as pl
+
+monthly = pl.DataFrame({
+    "month": ["2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06"],
+    "orders": [120, 135, 148, 142, 160, 175],
+})
+
+# Version 1: Default (zero baseline)
+line_with_zero = alt.Chart(monthly).mark_line(point=True).encode(
+    x=alt.X("month:T", title="Month"),
+    y=alt.Y("orders:Q", title="Order Count"),
+).properties(title="With Zero Baseline")
+
+# Version 2: No zero baseline
+line_no_zero = alt.Chart(monthly).mark_line(point=True).encode(
+    x=alt.X("month:T", title="Month"),
+    y=alt.Y("orders:Q", title="Order Count", scale=alt.Scale(zero=False)),
+).properties(title="Without Zero Baseline")
+
+line_with_zero.save("with_zero.html")
+line_no_zero.save("no_zero.html")
+```
+
+The version without the zero baseline exaggerates the trend, making a 55-order increase over 6 months look like a dramatic change. The version with the zero baseline shows the same trend more honestly: growth, but within a context where the y-axis covers the full range from 0 to 175. Be cautious when removing the zero baseline, even though it can highlight variation that matters.
+
+:::
+
+## Common Chart Types Through the Grammar
+
+Rather than treating chart types as separate recipes, let's build each one from the grammar components.
+
+### Scatter Plot
+
+A scatter plot maps two quantitative variables to x and y positions using point marks. Each point represents one observation:
+
+```{.python filename="scatter.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+scatter = alt.Chart(products).mark_circle(opacity=0.7).encode(
+    x=alt.X("unit_price:Q", title="Unit Price ($)"),
+    y=alt.Y("units_in_stock:Q", title="Units in Stock"),
+    color="category_name:N",
+    tooltip=["product_name", "unit_price", "units_in_stock"],
+).properties(
+    title="Product Price vs. Stock Level",
+    width=500,
+    height=350,
+)
+
+scatter.save("scatter.html")
+```
+
+The `alt.X()` and `alt.Y()` objects let you customize axis properties like titles, scales, and formatting. The `.properties()` method sets chart-level attributes.
+
+### Bar Chart
+
+A bar chart maps a categorical variable to one axis and a quantitative variable to the other, using bar marks:
+
+```{.python filename="bar.py"}
+import altair as alt
+import polars as pl
+
+category_revenue = pl.DataFrame({
+    "category": ["Beverages", "Dairy", "Confections", "Meat", "Seafood"],
+    "revenue": [267868, 234507, 167357, 163022, 131261],
+})
+
+bars = alt.Chart(category_revenue).mark_bar().encode(
+    x=alt.X("revenue:Q", title="Total Revenue ($)"),
+    y=alt.Y("category:N", sort="-x", title=None),
+    color=alt.value("#4C78A8"),
+).properties(
+    title="Revenue by Category",
+    width=450,
+    height=250,
+)
+
+bars.save("bars.html")
+```
+
+The `sort="-x"` on the y-axis sorts categories by the x-value in descending order, putting the highest revenue at the top. The `alt.value("#4C78A8")` sets a fixed color for all bars rather than mapping a data column.
+
+### Line Chart
+
+A line chart maps a temporal variable to x and a quantitative variable to y, using line marks to show trends:
+
+```{.python filename="line.py"}
+import altair as alt
+import polars as pl
+
+monthly = pl.DataFrame({
+    "month": ["2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06"],
+    "orders": [120, 135, 148, 142, 160, 175],
+})
+
+line = alt.Chart(monthly).mark_line(point=True).encode(
+    x=alt.X("month:T", title="Month"),
+    y=alt.Y("orders:Q", title="Order Count", scale=alt.Scale(zero=False)),
+).properties(
+    title="Monthly Order Counts",
+    width=500,
+    height=300,
+)
+
+line.save("line.html")
+```
+
+The `point=True` argument in `mark_line()` adds dots at each data point, making individual values easier to identify. The `scale=alt.Scale(zero=False)` allows the y-axis to start at a value other than zero, which emphasizes the variation in the data. Use this carefully: starting the y-axis above zero can exaggerate small differences.
+
+### Histogram
+
+A histogram shows the distribution of a single quantitative variable. It's a bar chart where the x-axis is divided into bins:
+
+```{.python filename="histogram.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+histogram = alt.Chart(products).mark_bar().encode(
+    x=alt.X("unit_price:Q", bin=True, title="Unit Price ($)"),
+    y=alt.Y("count()", title="Number of Products"),
+).properties(
+    title="Distribution of Product Prices",
+    width=450,
+    height=300,
+)
+
+histogram.save("histogram.html")
+```
+
+The `bin=True` on the x encoding tells Altair to group prices into bins automatically. The `count()` aggregation on y counts the number of products in each bin.
+
+### Heatmap
+
+A heatmap uses color to encode a quantitative variable on a grid of two categorical or ordinal variables:
+
+```{.python filename="heatmap.py"}
+import altair as alt
+import polars as pl
+
+# Assume we have monthly revenue by category
+heatmap = alt.Chart(monthly_by_category).mark_rect().encode(
+    x="month:O",
+    y="category_name:N",
+    color=alt.Color("revenue:Q", scale=alt.Scale(scheme="blues")),
+    tooltip=["category_name", "month", "revenue"],
+).properties(
+    title="Revenue Heatmap: Category × Month",
+    width=500,
+    height=300,
+)
+
+heatmap.save("heatmap.html")
+```
+
+The `mark_rect()` mark fills each cell with a color proportional to the value. Heatmaps are useful for spotting patterns in two-dimensional data, like seasonal trends across categories.
+
+### Exercises
+
+1. Using the Northwind products table, create a bar chart of the average unit price per category. Your y-axis should be the category name, and your x-axis should be the mean price. Sort the bars in descending order by price. Add a meaningful title and axis labels using the `alt.X()` and `alt.Y()` objects.
+
+2. Create a histogram showing the distribution of product prices across all Northwind products. Use `bin=True` on the x-axis to group prices into automatic bins, and `count()` on the y-axis to count how many products fall into each bin. What price range contains the most products?
+
+3. Using a small multiples approach (faceting), create line charts of monthly revenue for each product category. Your data should have columns for `month`, `category_name`, and `revenue`. Apply `.facet(facet="category_name:N", columns=3)` to arrange the charts. Each mini-chart should have its own y-axis. What patterns do you notice that differ across categories?
+
+4. Build a scatter plot of product price vs. units in stock, with unit cost category shown through color encoding. Add an interactive selection that highlights all products in a clicked category and grays out the rest. Include tooltip information. (Hint: use `alt.selection_point()`, `alt.condition()`, and `.add_params()`.)
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Bar chart of average price by category:
+
+```{.python filename="avg_price_by_category.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+avg_by_category = products.group_by("category_name").agg(
+    pl.col("unit_price").mean().alias("avg_price")
+)
+
+bars = alt.Chart(avg_by_category).mark_bar().encode(
+    x=alt.X("avg_price:Q", title="Average Unit Price ($)"),
+    y=alt.Y("category_name:N", sort="-x", title="Category"),
+).properties(
+    title="Average Product Price by Category",
+    width=450,
+    height=250,
+)
+```
+
+The `sort="-x"` argument on the y-axis sorts categories by their x-value in descending order, placing the highest average price at the top.
+
+**2.** Histogram of product price distribution:
+
+```{.python filename="price_histogram.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+histogram = alt.Chart(products).mark_bar().encode(
+    x=alt.X("unit_price:Q", bin=True, title="Unit Price ($)"),
+    y=alt.Y("count()", title="Number of Products"),
+).properties(
+    title="Distribution of Product Prices",
+    width=450,
+    height=300,
+)
+```
+
+Most products cluster in the lower price range. Altair's automatic binning creates bins of equal width, making it easy to see that the majority of Northwind products cost between $10 and $50.
+
+**3.** Faceted line charts of monthly revenue by category:
+
+```{.python filename="faceted_revenue.py"}
+import altair as alt
+import polars as pl
+import duckdb
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+monthly_revenue = conn.sql("""
+    SELECT
+        c.category_name,
+        DATE_TRUNC('month', o.order_date) AS month,
+        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue
+    FROM order_details AS od
+    JOIN orders AS o ON od.order_id = o.order_id
+    JOIN products AS p ON od.product_id = p.product_id
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY c.category_name, DATE_TRUNC('month', o.order_date)
+    ORDER BY c.category_name, month
+""").pl()
+
+faceted = alt.Chart(monthly_revenue).mark_line(point=True).encode(
+    x=alt.X("month:T", title="Month"),
+    y=alt.Y("revenue:Q", title="Monthly Revenue ($)"),
+).facet(
+    facet="category_name:N",
+    columns=3,
+).properties(
+    title="Monthly Revenue by Category",
+)
+
+conn.close()
+```
+
+Different categories show different patterns. Some are relatively stable; others show growth or seasonality. Beverages may show more volatility than dairy products, for example.
+
+**4.** Scatter plot with interactive category selection:
+
+```{.python filename="interactive_scatter.py"}
+import altair as alt
+import polars as pl
+
+products = pl.read_parquet("data/northwind_flat.parquet").unique("product_name")
+
+selection = alt.selection_point(fields=["category_name"])
+
+scatter = alt.Chart(products).mark_circle(size=80).encode(
+    x=alt.X("unit_price:Q", title="Unit Price ($)"),
+    y=alt.Y("units_in_stock:Q", title="Units in Stock"),
+    color=alt.condition(
+        selection,
+        "category_name:N",
+        alt.value("lightgray"),
+    ),
+    tooltip=["product_name:N", "category_name:N", "unit_price:Q", "units_in_stock:Q"],
+).properties(
+    title="Product Price vs. Stock (Click Category to Highlight)",
+    width=500,
+    height=350,
+).add_params(selection)
+```
+
+Clicking on a data point highlights all products in that category with their assigned color. All other products turn light gray. This interaction makes it easy to visually filter the chart without adding a separate UI element.
+
+:::
+
+## Transformations and Aggregations
+
+Altair can perform simple aggregations and transformations inside the chart specification, without needing Polars to pre-process the data.
+
+### Built-In Aggregations
+
+```{.python filename="altair_agg.py"}
+import altair as alt
+
+# Altair computes the aggregation internally
+chart = alt.Chart(df).mark_bar().encode(
+    x="category_name:N",
+    y="count()",          # Count of rows per category
+)
+
+chart = alt.Chart(df).mark_bar().encode(
+    x="category_name:N",
+    y="mean(unit_price):Q",  # Average price per category
+)
+```
+
+Available aggregations include `count()`, `sum()`, `mean()`, `median()`, `min()`, `max()`, and `distinct()`.
+
+### When to Aggregate in Altair vs. SQL/Polars
+
+Altair's built-in aggregations are convenient for simple cases, but for complex aggregations, multi-table joins, or any transformation that involves window functions, do the work in SQL or Polars first. Pass Altair a pre-aggregated DataFrame and let it focus on the visual mapping.
+
+A good rule: if you can describe the aggregation in a single `y="sum(revenue):Q"`, let Altair handle it. If you need joins, derived columns, or multi-step computations, do those upstream and give Altair the final result.
+
+## Layering and Composition
+
+### Layering
+
+You can combine multiple chart layers with the `+` operator:
+
+```{.python filename="layering.py"}
+import altair as alt
+import polars as pl
+
+base = alt.Chart(monthly_data)
+
+line = base.mark_line().encode(
+    x="month:T",
+    y="revenue:Q",
+)
+
+points = base.mark_circle(size=50).encode(
+    x="month:T",
+    y="revenue:Q",
+)
+
+combined = line + points
+
+combined.save("combined.html")
+```
+
+This overlays dots on a line chart, making individual data points visible while showing the overall trend.
+
+### Faceting
+
+Faceting creates *small multiples*, the same chart repeated for each value of a categorical variable:
+
+```{.python filename="faceting.py"}
+import altair as alt
+
+chart = alt.Chart(monthly_by_category).mark_line().encode(
+    x="month:T",
+    y="revenue:Q",
+).facet(
+    facet="category_name:N",
+    columns=3,
+).properties(
+    title="Monthly Revenue by Category",
+)
+
+chart.save("chart.html")
+```
+
+Faceting is one of the most powerful techniques in data visualization. It lets you compare patterns across categories without overloading a single chart with too many lines or colors.
+
+### Concatenation
+
+You can arrange multiple charts side by side or vertically:
+
+```{.python filename="concatenation.py"}
+import altair as alt
+
+# Horizontal: chart1 | chart2
+dashboard = bar_chart | line_chart
+
+# Vertical: chart1 & chart2
+stacked = bar_chart & line_chart
+
+dashboard.save("dashboard.html")
+stacked.save("stacked.html")
+```
+
+This is useful for building dashboard-style layouts in a notebook, where different charts answer different aspects of the same question.
+
+### Interactive Selections
+
+Altair supports interactive selections that let users click or brush data points to filter or highlight:
+
+```{.python filename="selection.py"}
+import altair as alt
+
+selection = alt.selection_point(fields=["category_name"])
+
+chart = alt.Chart(df).mark_circle().encode(
+    x="unit_price:Q",
+    y="units_in_stock:Q",
+    color=alt.condition(
+        selection,
+        "category_name:N",
+        alt.value("lightgray"),
+    ),
+    tooltip=["product_name", "category_name"],
+).add_params(selection)
+
+chart.save("chart.html")
+```
+
+Clicking a data point highlights all points in the same category. This kind of interactivity is especially powerful in Marimo notebooks, where users can explore data without touching code.
+
+## Putting It Together: Northwind Visual Analysis
+
+Here's a complete Marimo notebook workflow that uses SQL, Polars, and Altair together:
+
+```{.python filename="visual_analysis.py"}
+"""Northwind visual analysis: SQL → Polars → Altair."""
+
+import altair as alt
+import duckdb
+import polars as pl
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+
+# Step 1: SQL retrieves and joins the data
+monthly_revenue = conn.sql("""
+    SELECT
+        c.category_name,
+        DATE_TRUNC('month', o.order_date) AS order_month,
+        ROUND(SUM(od.unit_price * od.quantity * (1 - od.discount)), 2) AS revenue
+    FROM order_details AS od
+    JOIN orders AS o ON od.order_id = o.order_id
+    JOIN products AS p ON od.product_id = p.product_id
+    JOIN categories AS c ON p.category_id = c.category_id
+    GROUP BY c.category_name, DATE_TRUNC('month', o.order_date)
+""").pl()
+
+# Step 2: Polars computes the total per category for the bar chart
+category_totals = monthly_revenue.group_by("category_name").agg(
+    pl.col("revenue").sum().alias("total_revenue"),
+).sort("total_revenue", descending=True)
+
+# Step 3: Altair visualizes the results
+
+# Bar chart: revenue by category
+bar_chart = alt.Chart(category_totals).mark_bar().encode(
+    x=alt.X("total_revenue:Q", title="Total Revenue ($)"),
+    y=alt.Y("category_name:N", sort="-x", title=None),
+    tooltip=["category_name", "total_revenue"],
+).properties(
+    title="Revenue by Category",
+    width=400,
+    height=250,
+)
+
+# Line chart: monthly revenue trends by category
+line_chart = alt.Chart(monthly_revenue).mark_line().encode(
+    x=alt.X("order_month:T", title="Month"),
+    y=alt.Y("revenue:Q", title="Monthly Revenue ($)"),
+    color=alt.Color("category_name:N", title="Category"),
+    tooltip=["category_name", "order_month", "revenue"],
+).properties(
+    title="Monthly Revenue Trends",
+    width=600,
+    height=350,
+)
+
+# Dashboard layout: bar chart on top, line chart below
+dashboard = bar_chart & line_chart
+
+dashboard.save("dashboard.html")
+
+conn.close()
+```
+
+This script, or its equivalent as a Marimo notebook, produces a two-panel dashboard: a bar chart showing total revenue by category and a line chart showing monthly trends. The SQL handled all the joins and aggregations. Polars computed the category totals. Altair turned the numbers into visual insights.
+
+## Exercises {.unnumbered}
+
+### Product Scatter Plot {.unnumbered}
+
+Build a scatter plot of Northwind product prices vs. units in stock, colored by category. Add tooltip information showing the product name, category, and exact values. Include a meaningful title and axis labels.
+
+### Revenue Bar Chart Pipeline {.unnumbered}
+
+Create a bar chart of revenue by category using the full workflow: a SQL query that joins `orders`, `order_details`, `products`, and `categories` to compute revenue (as `SUM(unit_price * quantity * (1 - discount))`), a Polars transformation to sort the results, and an Altair bar chart to display them. The bars should be sorted by revenue in descending order.
+
+### Monthly Trends Line Chart {.unnumbered}
+
+Build a line chart of monthly order counts over time. Use SQL to compute the monthly counts, and Altair to visualize the trend. Add points on the line to highlight individual months. If you see a seasonal pattern, add a Markdown cell in your Marimo notebook explaining what you observe.
+
+### Dashboard Layout {.unnumbered}
+
+Reproduce a "dashboard-style" layout with four charts arranged in a 2×2 grid: a bar chart of revenue by category, a line chart of monthly order counts, a scatter plot of product price vs. units in stock, and a histogram showing the distribution of line-item quantities from `order_details` (how many line items have quantity 1, 2, 3, etc.). Use Altair's concatenation operators (`|` and `&`) to arrange the charts.
+
+## Summary {.unnumbered}
+
+Data visualization turns numbers into understanding. The grammar of graphics provides a systematic framework: every chart is a mapping from data (a DataFrame) to marks (points, bars, lines) through encodings (x, y, color, size). Altair implements this grammar in Python, accepting the Polars DataFrames you've been building and producing interactive charts that render beautifully in Marimo notebooks.
+
+The analytical workflow now has four layers: SQL retrieves and joins data from the Northwind database, Polars transforms and enriches it, Altair visualizes the results, and the Marimo notebook weaves all three into a coherent analytical document. In the next chapter, you'll add the final layer: delivering results as formatted Excel files that stakeholders can open, review, and share.
+
+## Glossary {.unnumbered}
+
+encoding
+: A rule that maps a data column to a visual property (position, color, size, shape) of a mark. The core concept of the grammar of graphics.
+
+faceting
+: Creating small multiples by repeating a chart for each value of a categorical variable. Useful for comparing patterns across groups.
+
+grammar of graphics
+: A framework that describes any chart as a composition of data, marks, and encodings. Implemented by Altair (Python), ggplot2 (R), Vega-Lite (JavaScript), and others.
+
+mark
+: A visual element in a chart that represents data. Common marks include points, bars, lines, areas, and rectangles.
+
+nominal
+: A data type for unordered categories. In Altair, specified with `:N`.
+
+ordinal
+: A data type for ordered categories. In Altair, specified with `:O`.
+
+quantitative
+: A data type for continuous numeric values. In Altair, specified with `:Q`.
+
+selection
+: An Altair interaction mechanism that lets users click or brush data points to filter or highlight subsets of the data.
+
+small multiples
+: A grid of identical charts, each showing a different subset of the data. Created with faceting.
+
+temporal
+: A data type for dates and times. In Altair, specified with `:T`.

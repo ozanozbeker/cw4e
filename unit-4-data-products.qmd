@@ -1,0 +1,39 @@
+# Building Data Products {.unnumbered}
+
+You've come a long way. In the Professional Toolkit, you learned to navigate your computer from the command line, author documents with Quarto, and track your work with Git. In Data with SQL, you learned to think in sets, writing queries that retrieve and transform data. In Python, you wrote scripts that process files, define functions, and build reusable modules. You have three powerful tools in your workflow. This unit connects them.
+
+Building data products is where everything comes together. You'll write SQL queries from Python scripts, transform data with DataFrames, visualize findings with charts, deliver results as formatted Excel reports, structure your projects for reproducibility, ensure code quality with automated tools, author computational documents that weave code and narrative, and build command-line tools that anyone can install and run. Each chapter adds a layer to a progressive analytical workflow, and by the end, you'll have built a complete pipeline from database to deliverable.
+
+This is the "whole game" of data engineering: extracting data, transforming it, understanding it visually, communicating your findings, and packaging it all into something others can use and trust. The earlier units taught individual instruments. This unit teaches you to play them together.
+
+## What You'll Learn
+
+**Python & SQL** (@sec-python-sql) connects Python to DuckDB and establishes the data access layer. You'll write parameterized queries, convert results to Python data structures, and build a reusable module that separates data retrieval from analysis logic.
+
+**Polars** (@sec-polars) introduces DataFrames as the bridge between SQL results and Python computation. You'll learn to express data transformations in Python syntax that mirrors the SQL thinking you already know, and understand when each tool is the better choice.
+
+**Altair** (@sec-altair) adds data visualization through the grammar of graphics. Rather than memorizing chart recipes, you'll learn a composable system of encodings and marks that lets you build any visualization from first principles.
+
+**Excel Delivery** (@sec-excel) closes the analytical loop by delivering results in the format businesses actually use: formatted, multi-sheet Excel workbooks.
+
+**Python Projects** (@sec-python-projects) structures your project so that every subsequent tool has a proper home. You'll use `uv` to create a reproducible project with locked dependencies, a well-organized directory layout, and a configuration file that makes your intentions explicit.
+
+**Code Quality** (@sec-code-quality) reveals the formatting, linting, and type-checking tools that have been working behind the scenes in Zed. You'll learn to configure and run Ruff and basedpyright yourself, understanding why automated quality checks catch bugs that testing alone cannot.
+
+**Computational Documents** (@sec-computational-documents) brings computation to the documents you learned to write in @sec-quarto. You'll add executable code cells to Quarto documents and explore Marimo, a reactive notebook tool, learning when each environment is the right choice for your work.
+
+**Arrow & Database Connectivity** (@sec-arrow) explains the data infrastructure that powers your tools. You'll understand why Polars and DuckDB interoperate so seamlessly, and how Python connects to databases beyond DuckDB through ADBC and other interfaces.
+
+**CLI Tools with Typer** (@sec-typer) closes the book by turning your scripts into professional command-line tools that anyone can install and run. This is the final step in the passenger-to-driver transformation: building tools that serve other people, not just yourself.
+
+## About the Examples
+
+The examples throughout this unit use the Northwind database you've been working with since @sec-databases. Every example and exercise works directly with this dataset. If you're applying these techniques to your own data, the specific tables and columns will differ, but the workflow of extracting, transforming, visualizing, and delivering is the same. When you see a Northwind example, focus on the *pattern* it demonstrates, not the specific data involved.
+
+## How to Learn This Material
+
+This unit asks you to hold multiple tools in your head at once. That's harder than learning any single tool, and it's also more realistic. Professional data work rarely involves just SQL or just Python. It involves connecting them, and the connection points are where most bugs and confusion live.
+
+When you encounter something that feels familiar from an earlier unit, pay attention to how it behaves in its new context. A SQL query that worked in the DuckDB CLI might need small adjustments when executed from Python. A data transformation you wrote in SQL might be easier to express in Polars, or vice versa. These comparisons are where the real learning happens.
+
+The later chapters ask you to revisit code you wrote earlier and improve it. Seeing your own code through the lens of project structure, formatting, linting, and type safety reveals patterns you couldn't have noticed while writing it for the first time. That experience of revising your own work is one of the most valuable things this unit offers.
