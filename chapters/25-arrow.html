@@ -303,6 +303,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -316,38 +328,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  <a href="../chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  <a href="../chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  <a href="../chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  <a href="../chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -514,7 +514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The answer is Apache Arrow, a shared in-memory data format that all three tools speak natively. This chapter lifts the hood to reveal the hidden infrastructure that made your data product fast and seamless. You don’t need to understand Arrow to use these tools effectively, but understanding it explains <em>why</em> your workflows are fast, how they avoid expensive data copying, and what happens under the hood when tools integrate. The chapter then broadens the picture to explain how Python connects to databases beyond DuckDB, tracing the evolution from ODBC in the 1990s to ADBC (Arrow Database Connectivity), the modern standard that brings Arrow’s performance to any database connection.</p>
 <section id="the-hidden-infrastructure" class="level2" data-number="25.1">
 <h2 data-number="25.1" class="anchored" data-anchor-id="the-hidden-infrastructure"><span class="header-section-number">25.1</span> The Hidden Infrastructure</h2>
-<p>When you wrote this code in <a href="19-polars.html" class="quarto-xref"><span>Chapter 19</span></a>:</p>
+<p>When you wrote this code in <a href="21-polars.html" class="quarto-xref"><span>Chapter 21</span></a>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>interop.py</strong></pre>
@@ -540,7 +540,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">    GROUP BY category_name</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>And when Altair received a Polars DataFrame in <a href="20-altair.html" class="quarto-xref"><span>Chapter 20</span></a>, the Narwhals library translated via Arrow’s format with minimal overhead.</p>
+<p>And when Altair received a Polars DataFrame in <a href="22-altair.html" class="quarto-xref"><span>Chapter 22</span></a>, the Narwhals library translated via Arrow’s format with minimal overhead.</p>
 <p>This is the “USB-C of data”: a universal connector that lets different tools share data without conversion.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Columnar vs. Row-Oriented">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -964,7 +964,7 @@ Table&nbsp;25.3: Choosing a database connectivity tool
 <h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
 <p>Apache Arrow is the in-memory columnar data format that powers the seamless interoperability between Polars, DuckDB, and Altair that you experienced in earlier chapters. When two tools both use Arrow as their internal format, they can share data through zero-copy interchange: no serialization, no parsing, no duplication. Arrow’s columnar layout also enables the vectorized operations that make analytical tools fast.</p>
 <p>The database connectivity landscape has evolved from ODBC (row-oriented, painful driver installation) through library-specific drivers (each with its own API) and SQLAlchemy (a unified abstraction layer) to ADBC (Arrow-native, zero-copy, universal). For analytical work, ADBC represents the modern standard: query any supported database and receive results in Arrow format, ready for immediate use in Polars or DuckDB.</p>
-<p>The broader lesson is about standards. Arrow succeeds because it’s a specification, not a product. Any tool can implement it. When tools agree on a shared data format, they interoperate automatically. This principle, shared standards enabling interoperability, applies far beyond data formats. It’s the same reason USB-C works with any device, the same reason SQL works with any relational database, and the same reason the Language Server Protocol (<a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>) works with any editor.</p>
+<p>The broader lesson is about standards. Arrow succeeds because it’s a specification, not a product. Any tool can implement it. When tools agree on a shared data format, they interoperate automatically. This principle, shared standards enabling interoperability, applies far beyond data formats. It’s the same reason USB-C works with any device, the same reason SQL works with any relational database, and the same reason the Language Server Protocol (<a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a>) works with any editor.</p>
 </section>
 <section id="glossary" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="glossary">Glossary</h2>

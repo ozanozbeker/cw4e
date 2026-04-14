@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ozan Ozbeker">
+
+<title>18&nbsp; Python Projects – Computational Workflows for Engineers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/19-code-quality.html" rel="next">
+<link href="../chapters/17-objects.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0bfeffdde32bb1c7607de7a91446fc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b6eb9a42dae6f26db387f79c752c72c8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-3-python.html">Python</a></li><li class="breadcrumb-item"><a href="../chapters/18-python-projects.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Workflows for Engineers</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ozanozbeker/cw4e/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequisites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-1-toolkit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Professional Toolkit</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Computer Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Files and the File System</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Professional Documents with Quarto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version Control with Git</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Collaboration with GitHub</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-2-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data with SQL</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-databases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Databases</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-querying.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Querying Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining Tables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-analytics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Analytical SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Modeling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-3-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-python-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Python Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Collections</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-control-flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Control Flow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Functions &amp; Modules</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-file-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Working with Files</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-projects.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../unit-4-data-products.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building Data Products</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-computational-documents.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Computational Documents</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-arrow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Arrow, ADBC, &amp; Database Connectivity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-typer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">CLI Tools with Typer</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/brew.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Homebrew</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/winget.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">WinGet</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/zed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Zed</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Git Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">GitHub Configuration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/northwind.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Northwind Dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/duckdb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">DuckDB</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/uv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">uv</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Marimo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/ruff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">J</span>&nbsp; <span class="chapter-title">Ruff</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/basedpyright.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">K</span>&nbsp; <span class="chapter-title">basedpyright</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#from-basic-to-professional" id="toc-from-basic-to-professional" class="nav-link active" data-scroll-target="#from-basic-to-professional"><span class="header-section-number">18.1</span> From Basic to Professional</a></li>
+  <li><a href="#the-three-uv-init-modes" id="toc-the-three-uv-init-modes" class="nav-link" data-scroll-target="#the-three-uv-init-modes"><span class="header-section-number">18.2</span> The Three <code>uv init</code> Modes</a>
+  <ul class="collapse">
+  <li><a href="#simple-project-uv-init" id="toc-simple-project-uv-init" class="nav-link" data-scroll-target="#simple-project-uv-init"><span class="header-section-number">18.2.1</span> Simple Project: <code>uv init</code></a></li>
+  <li><a href="#application-package-uv-init---package" id="toc-application-package-uv-init---package" class="nav-link" data-scroll-target="#application-package-uv-init---package"><span class="header-section-number">18.2.2</span> Application Package: <code>uv init --package</code></a></li>
+  <li><a href="#library-uv-init---library" id="toc-library-uv-init---library" class="nav-link" data-scroll-target="#library-uv-init---library"><span class="header-section-number">18.2.3</span> Library: <code>uv init --library</code></a></li>
+  <li><a href="#when-to-use-each" id="toc-when-to-use-each" class="nav-link" data-scroll-target="#when-to-use-each"><span class="header-section-number">18.2.4</span> When to Use Each</a></li>
+  </ul></li>
+  <li><a href="#sec-pyproject" id="toc-sec-pyproject" class="nav-link" data-scroll-target="#sec-pyproject"><span class="header-section-number">18.3</span> <code>pyproject.toml</code> in Depth</a>
+  <ul class="collapse">
+  <li><a href="#project-metadata" id="toc-project-metadata" class="nav-link" data-scroll-target="#project-metadata"><span class="header-section-number">18.3.1</span> <code>[project]</code> Metadata</a></li>
+  <li><a href="#project.dependencies" id="toc-project.dependencies" class="nav-link" data-scroll-target="#project.dependencies"><span class="header-section-number">18.3.2</span> <code>[project.dependencies]</code></a></li>
+  <li><a href="#dependency-groups" id="toc-dependency-groups" class="nav-link" data-scroll-target="#dependency-groups"><span class="header-section-number">18.3.3</span> <code>[dependency-groups]</code></a></li>
+  <li><a href="#beyond-the-project-uv-tool-install" id="toc-beyond-the-project-uv-tool-install" class="nav-link" data-scroll-target="#beyond-the-project-uv-tool-install"><span class="header-section-number">18.3.4</span> Beyond the Project: <code>uv tool install</code></a></li>
+  <li><a href="#project.scripts" id="toc-project.scripts" class="nav-link" data-scroll-target="#project.scripts"><span class="header-section-number">18.3.5</span> <code>[project.scripts]</code></a></li>
+  <li><a href="#build-system" id="toc-build-system" class="nav-link" data-scroll-target="#build-system"><span class="header-section-number">18.3.6</span> <code>[build-system]</code></a></li>
+  </ul></li>
+  <li><a href="#dependency-management" id="toc-dependency-management" class="nav-link" data-scroll-target="#dependency-management"><span class="header-section-number">18.4</span> Dependency Management</a>
+  <ul class="collapse">
+  <li><a href="#adding-and-removing-dependencies" id="toc-adding-and-removing-dependencies" class="nav-link" data-scroll-target="#adding-and-removing-dependencies"><span class="header-section-number">18.4.1</span> Adding and Removing Dependencies</a></li>
+  <li><a href="#the-lock-file" id="toc-the-lock-file" class="nav-link" data-scroll-target="#the-lock-file"><span class="header-section-number">18.4.2</span> The Lock File</a></li>
+  <li><a href="#syncing-an-environment" id="toc-syncing-an-environment" class="nav-link" data-scroll-target="#syncing-an-environment"><span class="header-section-number">18.4.3</span> Syncing an Environment</a></li>
+  <li><a href="#the-universal-command-uv-run" id="toc-the-universal-command-uv-run" class="nav-link" data-scroll-target="#the-universal-command-uv-run"><span class="header-section-number">18.4.4</span> The Universal Command: <code>uv run</code></a></li>
+  </ul></li>
+  <li><a href="#publishing-and-distribution" id="toc-publishing-and-distribution" class="nav-link" data-scroll-target="#publishing-and-distribution"><span class="header-section-number">18.5</span> Publishing and Distribution</a>
+  <ul class="collapse">
+  <li><a href="#publishing-to-pypi" id="toc-publishing-to-pypi" class="nav-link" data-scroll-target="#publishing-to-pypi"><span class="header-section-number">18.5.1</span> Publishing to PyPI</a></li>
+  <li><a href="#installing-from-github" id="toc-installing-from-github" class="nav-link" data-scroll-target="#installing-from-github"><span class="header-section-number">18.5.2</span> Installing from GitHub</a></li>
+  </ul></li>
+  <li><a href="#the-complete-project" id="toc-the-complete-project" class="nav-link" data-scroll-target="#the-complete-project"><span class="header-section-number">18.6</span> The Complete Project</a>
+  <ul class="collapse">
+  <li><a href="#writing-a-readme" id="toc-writing-a-readme" class="nav-link" data-scroll-target="#writing-a-readme"><span class="header-section-number">18.6.1</span> Writing a README</a></li>
+  <li><a href="#git-hygiene-for-python-projects" id="toc-git-hygiene-for-python-projects" class="nav-link" data-scroll-target="#git-hygiene-for-python-projects"><span class="header-section-number">18.6.2</span> Git Hygiene for Python Projects</a></li>
+  <li><a href="#verifying-reproducibility" id="toc-verifying-reproducibility" class="nav-link" data-scroll-target="#verifying-reproducibility"><span class="header-section-number">18.6.3</span> Verifying Reproducibility</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a>
+  <ul class="collapse">
+  <li><a href="#three-modes" id="toc-three-modes" class="nav-link" data-scroll-target="#three-modes">Three Modes</a></li>
+  <li><a href="#northwind-pyproject.toml" id="toc-northwind-pyproject.toml" class="nav-link" data-scroll-target="#northwind-pyproject.toml">Northwind <code>pyproject.toml</code></a></li>
+  <li><a href="#publish-to-test-pypi" id="toc-publish-to-test-pypi" class="nav-link" data-scroll-target="#publish-to-test-pypi">Publish to Test PyPI</a></li>
+  <li><a href="#peer-installation" id="toc-peer-installation" class="nav-link" data-scroll-target="#peer-installation">Peer Installation</a></li>
+  <li><a href="#template-repository" id="toc-template-repository" class="nav-link" data-scroll-target="#template-repository">Template Repository</a></li>
+  <li><a href="#reproducibility-check" id="toc-reproducibility-check" class="nav-link" data-scroll-target="#reproducibility-check">Reproducibility Check</a></li>
+  <li><a href="#readme-review" id="toc-readme-review" class="nav-link" data-scroll-target="#readme-review">README Review</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/18-python-projects.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://ozanozbeker.com/cw4e/playground/"><i class="bi bi-play-circle"></i>SQL &amp; Python Playground</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../unit-3-python.html">Python</a></li><li class="breadcrumb-item"><a href="../chapters/18-python-projects.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-python-projects" class="quarto-section-identifier"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>As you build your data product, your code will grow beyond simple scripts. You’ll create modules, organize your analysis into reusable functions, manage dependencies, and eventually share your work with others. Project engineering is the discipline of organizing this growth.</p>
+<p>In <a href="12-python-fundamentals.html" class="quarto-xref"><span>Chapter 12</span></a>, you ran <code>uv init</code> to create your first Python project. That gave you a <code>pyproject.toml</code>, a <code>.python-version</code> file, a starter script, and just enough structure to start writing code. For the work you’ve done so far, that was sufficient. But when you push your Northwind analysis to GitHub and a colleague clones it, things can go wrong quickly. They run your script and get errors because they don’t have <code>duckdb</code> or <code>polars</code> installed. They install those packages, but they get a different version of Polars than you used, and the API has changed. Your code breaks on their machine even though it works perfectly on yours.</p>
+<p>This is the problem that project engineering solves. A properly structured project declares its dependencies, pins their exact versions, configures its tools, documents its purpose, and can be reproduced by anyone with a single command. The tool that manages all of this is <code>uv</code>, which you’ve been using throughout the book. This chapter goes deep on everything <code>uv</code> can do, so your projects are professional and reproducible from the first commit.</p>
+<section id="from-basic-to-professional" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="from-basic-to-professional"><span class="header-section-number">18.1</span> From Basic to Professional</h2>
+<p>When you ran <code>uv init my-project</code> in <a href="12-python-fundamentals.html" class="quarto-xref"><span>Chapter 12</span></a>, <code>uv</code> created this structure:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>my-project/
+├── pyproject.toml
+├── .python-version
+├── README.md
+├── .gitignore
+└── hello.py</code></pre>
+</div>
+<p>That’s a <em>simple project</em>: a flat directory with a configuration file and some scripts. It’s fine for homework assignments, quick experiments, and standalone scripts. But when your project grows to include modules, notebooks, data files, and multiple dependencies, you need more structure.</p>
+<p><code>uv</code> supports three project initialization modes, each creating a different structure for a different purpose.</p>
+</section>
+<section id="the-three-uv-init-modes" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="the-three-uv-init-modes"><span class="header-section-number">18.2</span> The Three <code>uv init</code> Modes</h2>
+<section id="simple-project-uv-init" class="level3" data-number="18.2.1">
+<h3 data-number="18.2.1" class="anchored" data-anchor-id="simple-project-uv-init"><span class="header-section-number">18.2.1</span> Simple Project: <code>uv init</code></h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init my-scripts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>my-scripts/
+├── pyproject.toml
+├── .python-version
+├── README.md
+├── .gitignore
+└── hello.py</code></pre>
+</div>
+<p>This is what you’ve been using. Scripts live at the top level. There’s no <code>src/</code> directory and no package structure. You run scripts with <code>uv run hello.py</code>. This mode is ideal for one-off scripts, homework, and quick experiments.</p>
+</section>
+<section id="application-package-uv-init---package" class="level3" data-number="18.2.2">
+<h3 data-number="18.2.2" class="anchored" data-anchor-id="application-package-uv-init---package"><span class="header-section-number">18.2.2</span> Application Package: <code>uv init --package</code></h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init <span class="at">--package</span> northwind-analysis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>northwind-analysis/
+├── pyproject.toml
+├── .python-version
+├── README.md
+├── .gitignore
+└── src/
+    └── northwind_analysis/
+        └── __init__.py</code></pre>
+</div>
+<p>The <code>--package</code> flag creates a proper Python package with a <code>src/</code> layout. The code inside <code>src/northwind_analysis/</code> is importable as a module, and the project can define CLI entry points (you’ll use this in <a href="26-typer.html" class="quarto-xref"><span>Chapter 26</span></a>). This mode is for tools and applications you want to distribute.</p>
+<p>Notice that the project name uses hyphens (<code>northwind-analysis</code>) but the package directory uses underscores (<code>northwind_analysis</code>). This is a Python convention: hyphens are standard in project names (what you see on PyPI), and underscores are required in package names (what you use in <code>import</code> statements). <code>uv</code> handles this mapping automatically.</p>
+</section>
+<section id="library-uv-init---library" class="level3" data-number="18.2.3">
+<h3 data-number="18.2.3" class="anchored" data-anchor-id="library-uv-init---library"><span class="header-section-number">18.2.3</span> Library: <code>uv init --library</code></h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init <span class="at">--library</span> northwind-utils</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>output</strong></pre>
+</div>
+<pre class="text" data-filename="output"><code>northwind-utils/
+├── pyproject.toml
+├── .python-version
+├── README.md
+├── .gitignore
+├── src/
+│   └── northwind_utils/
+│       ├── __init__.py
+│       └── py.typed
+└── tests/
+    └── __init__.py</code></pre>
+</div>
+<p>The <code>--library</code> flag is similar to <code>--package</code> but configured for code that others will install as a dependency. It includes a <code>tests/</code> directory and a <code>py.typed</code> marker file that tells type checkers the library ships with type information. This mode is for reusable code that other projects will <code>uv add</code> as a dependency.</p>
+</section>
+<section id="when-to-use-each" class="level3" data-number="18.2.4">
+<h3 data-number="18.2.4" class="anchored" data-anchor-id="when-to-use-each"><span class="header-section-number">18.2.4</span> When to Use Each</h3>
+<div id="tbl-uv-init-modes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-uv-init-modes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;18.1: Choosing a <code>uv init</code> mode
+</figcaption>
+<div aria-describedby="tbl-uv-init-modes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 40%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Use When</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>uv init</code></td>
+<td>Quick scripts, homework, experiments</td>
+<td>A one-off data cleaning script</td>
+</tr>
+<tr class="even">
+<td><code>uv init --package</code></td>
+<td>Tools with CLI entry points, distributable apps</td>
+<td>Your Northwind reporting tool</td>
+</tr>
+<tr class="odd">
+<td><code>uv init --library</code></td>
+<td>Reusable code others will import</td>
+<td>A shared utilities package</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>For the Northwind project in this book, <code>--package</code> is the right choice. You’re building an application with a CLI interface (<a href="26-typer.html" class="quarto-xref"><span>Chapter 26</span></a>), not a library for others to import.</p>
+</section>
+</section>
+<section id="sec-pyproject" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="sec-pyproject"><span class="header-section-number">18.3</span> <code>pyproject.toml</code> in Depth</h2>
+<p>The <code>pyproject.toml</code> file is the single source of truth for your project. It declares metadata, dependencies, tool configuration, and build instructions. Every tool in the Python ecosystem reads it. Here’s a comprehensive example for the Northwind project. Some of the dependencies listed here (DuckDB, Polars, Altair, Typer) are tools you’ll learn in the next unit, but seeing the full picture now shows you where your project is headed:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>pyproject.toml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="pyproject.toml"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[project]</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name</span> <span class="op">=</span> <span class="st">"northwind-analysis"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.1.0"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="dt">description</span> <span class="op">=</span> <span class="st">"Analytical workflows for the Northwind trading database."</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">readme</span> <span class="op">=</span> <span class="st">"README.md"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dt">license</span> <span class="op">=</span> <span class="st">"MIT"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="dt">requires-python</span> <span class="op">=</span> <span class="st">"&gt;=3.13"</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="dt">authors</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">{ </span><span class="dt">name</span><span class="op"> =</span> <span class="st">"Your Name"</span><span class="op">, </span><span class="dt">email</span><span class="op"> =</span> <span class="st">"you@example.com"</span><span class="op"> },</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="kw">[project.dependencies]</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="dt">duckdb</span> <span class="op">=</span> <span class="st">"&gt;=1.0"</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="dt">polars</span> <span class="op">=</span> <span class="st">"&gt;=1.0"</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="dt">altair</span> <span class="op">=</span> <span class="st">"&gt;=5.0"</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="dt">xlsxwriter</span> <span class="op">=</span> <span class="st">"&gt;=3.2"</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="dt">typer</span> <span class="op">=</span> <span class="st">"&gt;=0.12"</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="kw">[dependency-groups]</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="dt">dev</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"basedpyright&gt;=1.20"</span><span class="op">,</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"marimo&gt;=0.9"</span><span class="op">,</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ruff&gt;=0.8"</span><span class="op">,</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="kw">[project.scripts]</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="dt">northwind</span> <span class="op">=</span> <span class="st">"northwind_analysis.cli:app"</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="kw">[build-system]</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="dt">requires</span> <span class="op">=</span> <span class="op">[</span><span class="st">"hatchling"</span><span class="op">]</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="dt">build-backend</span> <span class="op">=</span> <span class="st">"hatchling.build"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s walk through each section.</p>
+<section id="project-metadata" class="level3" data-number="18.3.1">
+<h3 data-number="18.3.1" class="anchored" data-anchor-id="project-metadata"><span class="header-section-number">18.3.1</span> <code>[project]</code> Metadata</h3>
+<p>The <code>[project]</code> section contains human-readable information about your project. The <code>name</code> is what appears on PyPI if you publish it. The <code>version</code> follows semantic versioning (<code>MAJOR.MINOR.PATCH</code>). The <code>requires-python</code> field ensures that anyone installing your project has a compatible Python version.</p>
+</section>
+<section id="project.dependencies" class="level3" data-number="18.3.2">
+<h3 data-number="18.3.2" class="anchored" data-anchor-id="project.dependencies"><span class="header-section-number">18.3.2</span> <code>[project.dependencies]</code></h3>
+<p>These are your <em>runtime</em> dependencies, the packages your code needs to execute. When someone runs <code>uv sync</code> on your project, <code>uv</code> installs exactly these packages (and their transitive dependencies).</p>
+<p>Version specifiers control which versions are acceptable:</p>
+<div id="tbl-version-specifiers" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-version-specifiers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;18.2: Version specifiers
+</figcaption>
+<div aria-describedby="tbl-version-specifiers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Specifier</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&gt;=1.0</code></td>
+<td>Any version 1.0 or higher</td>
+<td><code>polars = "&gt;=1.0"</code></td>
+</tr>
+<tr class="even">
+<td><code>~=1.2</code></td>
+<td>Compatible release (≥1.2, &lt;2.0)</td>
+<td><code>duckdb = "~=1.2"</code></td>
+</tr>
+<tr class="odd">
+<td><code>==1.2.3</code></td>
+<td>Exactly this version</td>
+<td><code>xlsxwriter = "==3.2.0"</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>For most projects, <code>&gt;=</code> is the right choice. It allows updates while preventing downgrades below the version you’ve tested with. The <code>uv.lock</code> file (discussed below) pins the exact versions that were actually installed, so <code>&gt;=</code> in <code>pyproject.toml</code> expresses your <em>intent</em> while <code>uv.lock</code> records the <em>reality</em>.</p>
+</section>
+<section id="dependency-groups" class="level3" data-number="18.3.3">
+<h3 data-number="18.3.3" class="anchored" data-anchor-id="dependency-groups"><span class="header-section-number">18.3.3</span> <code>[dependency-groups]</code></h3>
+<p>Development dependencies are tools you need during development but that your users don’t need. Ruff and basedpyright are development tools: they help you write and check code, but they aren’t imported by your application at runtime. Separating them into a <code>dev</code> group keeps your production dependencies lean.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add <span class="at">--dev</span> ruff basedpyright</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This adds them to the <code>[dependency-groups]</code> section. When a user installs your project, they get only the runtime dependencies. When a developer runs <code>uv sync</code>, they get everything.</p>
+<p>Note that Marimo is a regular dependency (<code>uv add marimo</code>), not a dev dependency, because your notebooks may import your project’s modules and your project’s users may want to run them.</p>
+<p>You might be wondering: if Zed has been running Ruff and basedpyright throughout the book, why add them as dependencies now? The answer is that the same tool can live in different places, and each place serves a different purpose.</p>
+<p><strong>Zed’s built-in version</strong> runs as a language server inside the editor. It formats your code on save and shows diagnostics inline. This is what you’ve been using throughout the book. But this version only talks to Zed. It can’t be run from the terminal, which means you can’t pipe its output to other tools, include it in a CI pipeline, or hand it to an AI coding agent.</p>
+<p><strong>The project dependency</strong> (what <code>uv add --dev</code> installs) puts the tool in your project’s virtual environment. Now you can run <code>uv run ruff check</code> or <code>uv run basedpyright</code> from the command line. The output goes to your terminal, where you can read it, copy it into a prompt, or let an automated tool act on it. And because it’s declared in <code>pyproject.toml</code>, anyone who clones your project gets the same version of the same tool automatically.</p>
+<p>This distinction, editor integration vs.&nbsp;command-line access, shows up throughout the Python ecosystem. DuckDB follows the same pattern: you installed the CLI (via brew or winget) for interactive SQL work, then added the <code>duckdb</code> Python library (via <code>uv add</code>) for scripting. Different installation, different interface, same engine underneath.</p>
+<p>From this module onward, the command-line versions become essential. When you work with AI coding tools, the agent needs to run <code>uv run ruff check</code> and read the output to fix your code. When you set up continuous integration, the CI server runs <code>uv run basedpyright</code> to verify types on every push. The editor version is convenient; the project dependency is what makes the tool part of your engineering workflow.</p>
+</section>
+<section id="beyond-the-project-uv-tool-install" class="level3" data-number="18.3.4">
+<h3 data-number="18.3.4" class="anchored" data-anchor-id="beyond-the-project-uv-tool-install"><span class="header-section-number">18.3.4</span> Beyond the Project: <code>uv tool install</code></h3>
+<p>Everything so far has been scoped to a single project. Dependencies live in <code>pyproject.toml</code>, packages install into the project’s <code>.venv/</code>, and <code>uv run</code> ensures you’re always working inside that environment. This is the right model for real work, and it’s what you should default to.</p>
+<p>But sometimes you want a tool that isn’t tied to any particular project. Maybe you want to open Marimo to sketch out an idea before you’ve even run <code>uv init</code>. Maybe you want a CLI utility available system-wide without adding it to every <code>pyproject.toml</code>. That’s what <code>uv tool install</code> is for.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install marimo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This creates an isolated virtual environment just for Marimo in a central location (<code>~/.local/share/uv/tools/marimo/</code> on macOS and Linux), then symlinks the <code>marimo</code> command into <code>~/.local/bin/</code> so it’s on your PATH. You can now run <code>marimo edit</code> from any directory, no project required. Each tool gets its own isolated environment, so Marimo’s dependencies can never conflict with another tool’s.</p>
+<p>If you’ve used R, this model might feel familiar. R packages install into a user-level library that’s available regardless of which project directory you’re in. <code>uv tool install</code> works the same way, except each tool gets its own isolated environment rather than sharing a single library.</p>
+<p>The important distinction is persistence. <code>uvx marimo edit</code> (which you may see in Marimo’s documentation) creates a temporary, cached environment that gets cleaned up. <code>uv tool install marimo</code> creates a permanent one that survives across sessions. If you want to experiment with Marimo regularly without tying it to a project, the installed version is more convenient.</p>
+<p>You can even install extras:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install marimo<span class="pp">[</span><span class="ss">recommended</span><span class="pp">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This gives you Marimo plus its recommended set of visualization and data libraries, available globally.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Project dependencies always win
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you have both a globally installed tool (<code>uv tool install ruff</code>) and a project dependency (<code>uv add --dev ruff</code>), running <code>uv run ruff</code> inside a project uses the project’s version. The global install is a fallback for when you’re outside any project. This means you can’t accidentally use the wrong version in a project that specifies one.</p>
+</div>
+</div>
+<p>For this book, we keep everything in the project with <code>uv add</code>. This makes your work reproducible and your tools versioned. But knowing that <code>uv tool install</code> exists gives you an escape hatch for quick experimentation outside of a project context.</p>
+</section>
+<section id="project.scripts" class="level3" data-number="18.3.5">
+<h3 data-number="18.3.5" class="anchored" data-anchor-id="project.scripts"><span class="header-section-number">18.3.5</span> <code>[project.scripts]</code></h3>
+<p>This section defines CLI entry points, commands that become available after installation. The line <code>northwind = "northwind_analysis.cli:app"</code> means: when someone runs the <code>northwind</code> command, execute the <code>app</code> object from the <code>northwind_analysis.cli</code> module. You’ll build this in <a href="26-typer.html" class="quarto-xref"><span>Chapter 26</span></a>.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Parse a pyproject.toml">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: Parse a pyproject.toml
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You have this <code>pyproject.toml</code> snippet:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[project]</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name</span> <span class="op">=</span> <span class="st">"data-processor"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.2.0"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="dt">requires-python</span> <span class="op">=</span> <span class="st">"&gt;=3.12"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[project.dependencies]</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="dt">polars</span> <span class="op">=</span> <span class="st">"&gt;=0.20"</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="dt">duckdb</span> <span class="op">=</span> <span class="st">"~=0.9"</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="dt">httpx</span> <span class="op">=</span> <span class="st">"&gt;=0.27"</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">[dependency-groups]</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="dt">dev</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pytest&gt;=7.0"</span><span class="op">,</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ruff&gt;=0.1"</span><span class="op">,</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="kw">[project.scripts]</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="dt">process</span> <span class="op">=</span> <span class="st">"data_processor.cli:main"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Answer these questions: 1. What is the minimum Python version required? 2. What exact range of Duckdb versions are acceptable? 3. What command becomes available after installation, and which Python function does it call?</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Python 3.12 or higher (<code>&gt;=3.12</code>)</li>
+<li>DuckDB &gt;=0.9 and &lt;1.0 (the <code>~=0.9</code> specifier allows only patch-level updates)</li>
+<li>The <code>process</code> command calls the <code>main</code> function in the <code>data_processor.cli</code> module</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="build-system" class="level3" data-number="18.3.6">
+<h3 data-number="18.3.6" class="anchored" data-anchor-id="build-system"><span class="header-section-number">18.3.6</span> <code>[build-system]</code></h3>
+<p>The build system tells <code>uv</code> (and other tools) how to package your project for distribution. Hatchling is a modern, fast build backend that works well with <code>uv</code>. You rarely need to change this section.</p>
+</section>
+</section>
+<section id="dependency-management" class="level2" data-number="18.4">
+<h2 data-number="18.4" class="anchored" data-anchor-id="dependency-management"><span class="header-section-number">18.4</span> Dependency Management</h2>
+<section id="adding-and-removing-dependencies" class="level3" data-number="18.4.1">
+<h3 data-number="18.4.1" class="anchored" data-anchor-id="adding-and-removing-dependencies"><span class="header-section-number">18.4.1</span> Adding and Removing Dependencies</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a runtime dependency</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add polars</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a development dependency</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add <span class="at">--dev</span> ruff</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove a dependency</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> remove xlsxwriter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Each <code>uv add</code> command updates <code>pyproject.toml</code> and regenerates the lock file.</p>
+</section>
+<section id="the-lock-file" class="level3" data-number="18.4.2">
+<h3 data-number="18.4.2" class="anchored" data-anchor-id="the-lock-file"><span class="header-section-number">18.4.2</span> The Lock File</h3>
+<p>When you run <code>uv add</code> or <code>uv lock</code>, <code>uv</code> creates (or updates) a <code>uv.lock</code> file. This file records the <em>exact</em> version of every package that was installed, including transitive dependencies (the dependencies of your dependencies).</p>
+<p>The lock file solves the “it works on my machine” problem. When a collaborator runs <code>uv sync</code>, <code>uv</code> reads the lock file and installs the exact same versions you used. No version mismatches, no surprises.</p>
+<div class="callout callout-style-simple callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Always commit <code>uv.lock</code> to Git
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>uv.lock</code> file belongs in your Git repository. It’s what makes your project reproducible. Without it, <code>uv sync</code> resolves dependencies fresh, potentially picking different versions than you tested with.</p>
+</div>
+</div>
+</section>
+<section id="syncing-an-environment" class="level3" data-number="18.4.3">
+<h3 data-number="18.4.3" class="anchored" data-anchor-id="syncing-an-environment"><span class="header-section-number">18.4.3</span> Syncing an Environment</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install all dependencies (runtime + dev) from the lock file</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install only runtime dependencies</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync <span class="at">--no-dev</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>After cloning a project, <code>uv sync</code> is the first command you run. It creates a virtual environment, installs all dependencies at the locked versions, and makes everything ready to use.</p>
+</section>
+<section id="the-universal-command-uv-run" class="level3" data-number="18.4.4">
+<h3 data-number="18.4.4" class="anchored" data-anchor-id="the-universal-command-uv-run"><span class="header-section-number">18.4.4</span> The Universal Command: <code>uv run</code></h3>
+<p>Throughout this book, you’ve used <code>uv run</code> to execute scripts. What <code>uv run</code> actually does is ensure the virtual environment exists and is synced, then run the command inside that environment. You never need to manually activate a virtual environment:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These all work without manual environment activation</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python script.py</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run ruff format</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run basedpyright</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run marimo edit notebook.py</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run quarto render report.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is one of <code>uv</code>’s best features. In other Python workflows, you have to remember to activate the environment before running commands. With <code>uv run</code>, the environment management is automatic.</p>
+</section>
+</section>
+<section id="publishing-and-distribution" class="level2" data-number="18.5">
+<h2 data-number="18.5" class="anchored" data-anchor-id="publishing-and-distribution"><span class="header-section-number">18.5</span> Publishing and Distribution</h2>
+<section id="publishing-to-pypi" class="level3" data-number="18.5.1">
+<h3 data-number="18.5.1" class="anchored" data-anchor-id="publishing-to-pypi"><span class="header-section-number">18.5.1</span> Publishing to PyPI</h3>
+<p>PyPI, the Python Package Index, is the central repository where Python packages are published and installed from. When you run <code>uv add polars</code>, <code>uv</code> downloads Polars from PyPI. You can publish your own packages there too.</p>
+<p>The workflow is:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Build your package (creates dist/ with wheel and sdist files)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> build</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Publish to Test PyPI (for practice)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> publish <span class="at">--publish-url</span> https://test.pypi.org/simple/</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Publish to real PyPI (when ready)</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> publish</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Before publishing, ensure your <code>pyproject.toml</code> has complete metadata: name, version, description, author, license, and a README. These appear on the package’s PyPI page and help users decide whether to install it.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Practice with Test PyPI
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Test PyPI is a separate instance of the package index meant for experimentation. Publishing there doesn’t affect the real PyPI and lets you practice the workflow without consequences. Create an account at <a href="https://test.pypi.org">test.pypi.org</a> and try publishing a small package.</p>
+</div>
+</div>
+</section>
+<section id="installing-from-github" class="level3" data-number="18.5.2">
+<h3 data-number="18.5.2" class="anchored" data-anchor-id="installing-from-github"><span class="header-section-number">18.5.2</span> Installing from GitHub</h3>
+<p>Not every project needs to be on PyPI. For sharing code with teammates or classmates, you can install directly from a GitHub repository:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install from a GitHub repo</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add git+https://github.com/username/northwind-analysis</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install a specific tag or branch</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add git+https://github.com/username/northwind-analysis@v0.1.0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is useful for projects that are actively developed or not ready for a public release. Push to GitHub, share the URL, and your collaborator can install it with a single command.</p>
+</section>
+</section>
+<section id="the-complete-project" class="level2" data-number="18.6">
+<h2 data-number="18.6" class="anchored" data-anchor-id="the-complete-project"><span class="header-section-number">18.6</span> The Complete Project</h2>
+<p>A professional Python project includes more than source code. Here’s the full inventory of files and their purposes:</p>
+<div id="tbl-project-files" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-project-files-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;18.3: Project file inventory
+</figcaption>
+<div aria-describedby="tbl-project-files-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 34%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Purpose</th>
+<th>Introduced</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pyproject.toml</code></td>
+<td>Project metadata, dependencies, tool config</td>
+<td>This chapter</td>
+</tr>
+<tr class="even">
+<td><code>uv.lock</code></td>
+<td>Exact dependency versions for reproducibility</td>
+<td>This chapter</td>
+</tr>
+<tr class="odd">
+<td><code>.python-version</code></td>
+<td>Pins the Python version</td>
+<td><a href="12-python-fundamentals.html" class="quarto-xref"><span>Chapter 12</span></a></td>
+</tr>
+<tr class="even">
+<td><code>ruff.toml</code></td>
+<td>Formatting and linting configuration</td>
+<td><a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>pyrightconfig.json</code></td>
+<td>Type checking configuration</td>
+<td><a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a></td>
+</tr>
+<tr class="even">
+<td><code>.gitignore</code></td>
+<td>Files Git should ignore</td>
+<td>Foundations</td>
+</tr>
+<tr class="odd">
+<td><code>README.md</code></td>
+<td>Project documentation</td>
+<td>This chapter</td>
+</tr>
+<tr class="even">
+<td><code>src/</code></td>
+<td>Source code (for <code>--package</code> projects)</td>
+<td>This chapter</td>
+</tr>
+<tr class="odd">
+<td><code>notebooks/</code></td>
+<td>Marimo notebooks</td>
+<td><a href="../appendices/marimo.html" class="quarto-xref"><span>Appendix I</span></a></td>
+</tr>
+<tr class="even">
+<td><code>data/</code></td>
+<td>Data files (database, CSV, Parquet)</td>
+<td><a href="16-file-io.html" class="quarto-xref"><span>Chapter 16</span></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<section id="writing-a-readme" class="level3" data-number="18.6.1">
+<h3 data-number="18.6.1" class="anchored" data-anchor-id="writing-a-readme"><span class="header-section-number">18.6.1</span> Writing a README</h3>
+<p>The README is the front door to your project. It’s the first thing a visitor sees on GitHub, and it determines whether they keep reading or move on. A good README answers four questions:</p>
+<p><strong>What does this project do?</strong> A brief description of purpose and scope. One or two sentences is enough.</p>
+<p><strong>Why does it exist?</strong> Context that helps the reader understand the motivation. For a personal project, this might reference what problem it solves or what dataset it analyzes.</p>
+<p><strong>How do I install it?</strong> Step-by-step instructions that a reader can follow without asking you for help. For a <code>uv</code>-managed project, this is usually <code>uv sync</code>.</p>
+<p><strong>How do I use it?</strong> Examples of running the main commands or scripts. Show the exact terminal commands and, if helpful, sample output.</p>
+<p>Here’s a template:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>README.md</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="README.md"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Northwind Analysis</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>Analytical workflows for the Northwind trading database, built with</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>DuckDB, Polars, Altair, and Python. Generates revenue reports, trend</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>visualizations, and formatted Excel deliverables.</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installation</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/username/northwind-analysis.git</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> northwind-analysis</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Usage</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>Generate a revenue report:</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run northwind revenue <span class="at">--category</span> <span class="st">"Beverages"</span> <span class="at">--output</span> report.xlsx</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>Open the interactive analysis notebook:</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run marimo edit notebooks/analysis.py</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project Structure</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{.text filename="output"}</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="in">src/northwind_analysis/   Source code and modules</span></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="in">notebooks/                Marimo analysis notebooks</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="in">data/                     Northwind database and flat files</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="in">output/                   Generated reports</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Write the README for your audience. If it’s a learning project, your audience is collaborators or future employers who have sixty seconds to decide whether your work is worth a closer look.</p>
+</section>
+<section id="git-hygiene-for-python-projects" class="level3" data-number="18.6.2">
+<h3 data-number="18.6.2" class="anchored" data-anchor-id="git-hygiene-for-python-projects"><span class="header-section-number">18.6.2</span> Git Hygiene for Python Projects</h3>
+<p>Not everything in your project directory belongs in Git. Generated files, caches, and environment directories should be ignored:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>.gitignore</strong></pre>
+</div>
+<pre class="text" data-filename=".gitignore"><code># Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Tools
+.ruff_cache/
+.mypy_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project
+output/
+*.xlsx</code></pre>
+</div>
+<p>What <em>should</em> be in Git: <code>pyproject.toml</code>, <code>uv.lock</code>, all source code, notebooks, configuration files (<code>ruff.toml</code>, <code>pyrightconfig.json</code>), data files that are small enough to version (the Northwind <code>.duckdb</code> file), and the README.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Meaningful commit messages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Revisiting a principle from Foundations: write commit messages that explain <em>why</em> you made a change, not just <em>what</em> changed. “Add Polars dependency for DataFrame transformations” is more useful than “update pyproject.toml.” Your future self and your collaborators will thank you.</p>
+</div>
+</div>
+</section>
+<section id="verifying-reproducibility" class="level3" data-number="18.6.3">
+<h3 data-number="18.6.3" class="anchored" data-anchor-id="verifying-reproducibility"><span class="header-section-number">18.6.3</span> Verifying Reproducibility</h3>
+<p>The ultimate test of a well-engineered project is this: can someone else reproduce your entire environment from the repository alone?</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The reproducibility test</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> .venv/          <span class="co"># Delete the virtual environment</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync                <span class="co"># Recreate it from the lock file</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python <span class="at">-c</span> <span class="st">"import northwind_analysis; print('Success!')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If this works, your project is reproducible. If it fails, something is missing from your <code>pyproject.toml</code> or your lock file is out of date.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Dependency Version Mismatch">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: Dependency Version Mismatch
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You committed your project to GitHub with these entries in <code>pyproject.toml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[project.dependencies]</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="dt">polars</span> <span class="op">=</span> <span class="st">"&gt;=0.19"</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="dt">duckdb</span> <span class="op">=</span> <span class="st">"&gt;=1.0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A collaborator clones your project and runs <code>uv sync</code>. They get Polars 0.20.3 and DuckDB 1.2.1, but the <code>uv.lock</code> file you committed recorded Polars 0.19.5 and DuckDB 1.0.8. Now your collaborator’s analysis produces different results than yours, and you both spend an hour debugging before realizing the version difference.</p>
+<p>How does the lock file prevent this? What is the lock file’s job, and why should you always commit it to Git?</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The lock file records the <em>exact</em> versions that were installed when you ran <code>uv add</code> or <code>uv lock</code>. When your collaborator runs <code>uv sync</code>, they install from the lock file, not from <code>pyproject.toml</code>. This means they get Polars 0.19.5 and DuckDB 1.0.8, exactly matching your environment.</p>
+<p>The lock file’s job is reproducibility. The <code>pyproject.toml</code> expresses your <em>intent</em> (any Polars &gt;= 0.19 will work), while the lock file records the <em>reality</em> (we tested with 0.19.5). When the same versions are installed everywhere, you avoid version-related surprises.</p>
+<p>Always commit <code>uv.lock</code> to Git because it’s what makes a project reproducible across machines and time. Without it, each person running <code>uv sync</code> might get different dependency versions, leading to inconsistent behavior.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Think of it like assembly instructions for a product. The <code>pyproject.toml</code> lists the parts (dependencies). The <code>uv.lock</code> specifies the exact part numbers (versions). The README provides the step-by-step assembly guide. If any of these are missing or inaccurate, the person on the other end can’t build what you built.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Choosing Between uv add and uv tool install">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise: Choosing Between uv add and uv tool install
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You’re starting a new data analysis project. You need Jupyter-like interactivity but also DuckDB and Polars for the analysis itself. You’re torn between two approaches:</p>
+<p><strong>Option A:</strong> <code>uv init --package</code> the project, then <code>uv add marimo duckdb polars</code></p>
+<p><strong>Option B:</strong> Keep marimo as a global tool with <code>uv tool install marimo</code>, and <code>uv add duckdb polars</code> only to the project</p>
+<p>Which approach is correct, and why? How would your choice affect a collaborator who clones your project?</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Option A is correct.</strong> Marimo should be a project dependency because your notebooks are part of the project’s deliverable. A collaborator who clones your project and runs <code>uv sync</code> should get marimo automatically, so they can open and run your notebooks without additional installation steps.</p>
+<p>Option B would leave marimo out of the project’s environment. A collaborator could clone and sync, but then <code>uv run marimo edit</code> would fail unless they separately installed marimo as a global tool.</p>
+<p>The principle: if a tool is needed to use your project, it belongs in <code>pyproject.toml</code> as a regular dependency (or in <code>[dependency-groups]</code> if it’s only needed by developers). Global tools via <code>uv tool install</code> are for personal utilities that aren’t tied to specific projects.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="three-modes" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="three-modes">Three Modes</h3>
+<p>Create three separate projects using <code>uv init</code>, <code>uv init --package</code>, and <code>uv init --library</code>. Compare the generated files and directory structures. Write a short note in each project’s README explaining when you would choose that mode.</p>
+</section>
+<section id="northwind-pyproject.toml" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="northwind-pyproject.toml">Northwind <code>pyproject.toml</code></h3>
+<p>Write a complete <code>pyproject.toml</code> for your Northwind analysis project. Include all runtime dependencies (DuckDB, Polars, Altair, XlsxWriter, Typer) and development dependencies (Ruff, basedpyright, Marimo). Set appropriate version specifiers and fill in all metadata fields.</p>
+</section>
+<section id="publish-to-test-pypi" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="publish-to-test-pypi">Publish to Test PyPI</h3>
+<p>Create a small utility package (it can be as simple as a module with a few helper functions), publish it to Test PyPI, then install it in a separate project with <code>uv add --index-url https://test.pypi.org/simple/ your-package-name</code>. Verify that the installed package works.</p>
+</section>
+<section id="peer-installation" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="peer-installation">Peer Installation</h3>
+<p>Push your Northwind project to GitHub. Have a colleague install it with <code>uv add git+https://github.com/your-username/northwind-analysis</code>. If it fails, debug the issue together and fix the project configuration until it works.</p>
+</section>
+<section id="template-repository" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="template-repository">Template Repository</h3>
+<p>Create a personal template repository on GitHub with your preferred project structure, <code>.gitignore</code>, <code>ruff.toml</code>, and <code>pyrightconfig.json</code>. Use it the next time you start a project to save setup time.</p>
+</section>
+<section id="reproducibility-check" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="reproducibility-check">Reproducibility Check</h3>
+<p>Delete your project’s <code>.venv/</code> directory, run <code>uv sync</code>, and confirm that everything works. Run your main script and your notebook to verify. If anything breaks, fix the <code>pyproject.toml</code> until the project is fully reproducible from the lock file alone.</p>
+</section>
+<section id="readme-review" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="readme-review">README Review</h3>
+<p>Write a README for your Northwind project that is detailed enough for someone unfamiliar with it to set up and use the project from scratch without asking you any questions. If possible, trade READMEs with someone else and attempt to follow each other’s instructions exactly. Note where the instructions were unclear and revise.</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Three Modes</strong></p>
+<p>The three <code>uv init</code> modes create different structures for different purposes:</p>
+<ul>
+<li><code>uv init</code>: Simple project with scripts at the top level. No <code>src/</code> directory. Ideal for one-off scripts, homework, and quick experiments where you just run individual Python files.</li>
+<li><code>uv init --package</code>: Application package with a <code>src/</code> layout and an importable package structure. Best for tools with CLI entry points that you want to distribute or that multiple scripts will import from. This is the right choice for the Northwind reporting tool.</li>
+<li><code>uv init --library</code>: Library package with a <code>src/</code> layout, <code>tests/</code> directory, and <code>py.typed</code> marker file. Designed for reusable code that other projects will install as dependencies. Includes testing infrastructure.</li>
+</ul>
+<p><strong>Northwind pyproject.toml</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>pyproject.toml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="pyproject.toml"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[project]</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name</span> <span class="op">=</span> <span class="st">"northwind-analysis"</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.1.0"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="dt">description</span> <span class="op">=</span> <span class="st">"Analytical workflows for the Northwind trading database."</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="dt">readme</span> <span class="op">=</span> <span class="st">"README.md"</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="dt">license</span> <span class="op">=</span> <span class="st">"MIT"</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="dt">requires-python</span> <span class="op">=</span> <span class="st">"&gt;=3.13"</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="dt">authors</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">{ </span><span class="dt">name</span><span class="op"> =</span> <span class="st">"Your Name"</span><span class="op">, </span><span class="dt">email</span><span class="op"> =</span> <span class="st">"you@example.com"</span><span class="op"> },</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="kw">[project.dependencies]</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="dt">duckdb</span> <span class="op">=</span> <span class="st">"&gt;=1.0"</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="dt">polars</span> <span class="op">=</span> <span class="st">"&gt;=1.0"</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="dt">altair</span> <span class="op">=</span> <span class="st">"&gt;=5.0"</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="dt">xlsxwriter</span> <span class="op">=</span> <span class="st">"&gt;=3.2"</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="dt">typer</span> <span class="op">=</span> <span class="st">"&gt;=0.12"</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="kw">[dependency-groups]</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="dt">dev</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"basedpyright&gt;=1.20"</span><span class="op">,</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"marimo&gt;=0.9"</span><span class="op">,</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ruff&gt;=0.8"</span><span class="op">,</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="kw">[project.scripts]</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="dt">northwind</span> <span class="op">=</span> <span class="st">"northwind_analysis.cli:app"</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="kw">[build-system]</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a><span class="dt">requires</span> <span class="op">=</span> <span class="op">[</span><span class="st">"hatchling"</span><span class="op">]</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="dt">build-backend</span> <span class="op">=</span> <span class="st">"hatchling.build"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Publish to Test PyPI</strong></p>
+<p>Follow these steps to publish a small package to Test PyPI:</p>
+<ol type="1">
+<li><p>First, create an account at <a href="https://test.pypi.org">test.pypi.org</a> and generate an API token in your account settings.</p></li>
+<li><p>Create your package with complete <code>pyproject.toml</code> metadata (name, version, description, author, license).</p></li>
+<li><p>Build the package:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> build</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Publish to Test PyPI using your API token:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> publish <span class="at">--publish-url</span> https://test.pypi.org/legacy/ <span class="at">--token</span> pypi-XXXX</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>(Replace <code>XXXX</code> with your actual Test PyPI API token)</p></li>
+<li><p>Verify it’s available at <code>https://test.pypi.org/project/your-package-name/</code></p></li>
+<li><p>Create a separate test project and install it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> init test-install</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> test-install</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add <span class="at">--index-url</span> https://test.pypi.org/simple/ your-package-name</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python <span class="at">-c</span> <span class="st">"import your_package; print('Success!')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Fix any issues (missing metadata, import errors, missing dependencies) and republish with an incremented version number.</p></li>
+</ol>
+<p><strong>Peer Installation</strong></p>
+<p>When installing someone else’s project from GitHub with <code>uv add git+https://github.com/username/project</code>, common issues and fixes:</p>
+<ul>
+<li><strong>ImportError: No module named ‘duckdb’</strong>: Missing dependencies. Ensure <code>pyproject.toml</code> lists all runtime dependencies. Run <code>uv sync</code> to install them.</li>
+<li><strong>ModuleNotFoundError in package code</strong>: The project doesn’t follow the <code>src/</code> layout correctly, or <code>pyproject.toml</code> doesn’t declare the package name. Verify that the <code>name</code> field in <code>[project]</code> matches the actual package directory (with hyphens converted to underscores).</li>
+<li><strong>Wrong Python version</strong>: The project specifies <code>requires-python = "&gt;=3.13"</code> but you have Python 3.12. Either upgrade Python or loosen the requirement if the project actually works on earlier versions.</li>
+<li><strong>Lock file conflicts</strong>: If you’re adding the project to an existing environment with incompatible versions already installed, try <code>uv sync --upgrade</code> to resolve the entire dependency tree.</li>
+</ul>
+<p><strong>Template Repository</strong></p>
+<p>A good template repository for starting new projects should include:</p>
+<ul>
+<li><code>pyproject.toml</code> with complete metadata structure, common dependencies placeholders, <code>[dependency-groups]</code> for dev tools, and build system configuration.</li>
+<li><code>ruff.toml</code> with rule selections (E, W, F, I, UP, D, N) and per-file-ignores for notebooks.</li>
+<li><code>pyrightconfig.json</code> with <code>typeCheckingMode: "basic"</code>, Python version, <code>include</code> and <code>exclude</code> paths.</li>
+<li><code>.gitignore</code> with entries for Python caches (<code>__pycache__/</code>, <code>*.pyc</code>), virtual environment (<code>.venv/</code>), tool caches (<code>.ruff_cache/</code>, <code>.mypy_cache/</code>), OS files, and project outputs.</li>
+<li><code>README.md</code> with sections for description, installation (run <code>uv sync</code>), usage examples, and project structure.</li>
+<li><code>src/</code> directory with a placeholder package directory and <code>__init__.py</code>.</li>
+<li><code>.python-version</code> file set to your default Python version.</li>
+<li><code>notebooks/</code> directory (optional, for Marimo notebooks).</li>
+</ul>
+<p><strong>Reproducibility Check</strong></p>
+<p>The reproducibility test ensures your project can be rebuilt from scratch:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> .venv/              <span class="co"># Delete the virtual environment</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> sync                    <span class="co"># Rebuild from lock file</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run python <span class="at">-m</span> northwind_analysis.cli <span class="at">--help</span>   <span class="co"># Run your main entry point</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If you have notebooks:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run marimo edit notebooks/analysis.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Success means: the virtual environment recreates with all dependencies, your scripts run without import errors, and your notebooks open and execute. If anything fails, check that: - <code>pyproject.toml</code> lists all required dependencies (not just the ones you imported recently). - <code>uv.lock</code> is committed to Git. - Your <code>[project.scripts]</code> entry points are correct. - Relative imports in your modules are correct (use absolute imports like <code>from northwind_analysis.revenue import get_revenue</code>).</p>
+<p><strong>README Review</strong></p>
+<p>A thorough README should answer and address:</p>
+<ul>
+<li><strong>What is this project?</strong> A one-sentence or two-sentence description of what the project does and why it exists.</li>
+<li><strong>Installation instructions</strong>: Clear, step-by-step commands starting from <code>git clone</code>. Include <code>uv sync</code> and any one-time setup (like downloading the Northwind database).</li>
+<li><strong>Quick-start usage</strong>: Examples of the main commands to run. For a reporting tool, show <code>uv run northwind revenue --category "Beverages"</code>. For notebooks, show <code>uv run marimo edit notebooks/analysis.py</code>.</li>
+<li><strong>Project structure</strong>: A text tree showing the main directories and what they contain.</li>
+<li><strong>Dependencies</strong>: A list of major dependencies and what they’re used for (DuckDB for querying, Polars for transformation, Altair for visualization, etc.).</li>
+<li><strong>Contributing or extending</strong>: Notes for anyone who wants to modify or extend the project.</li>
+<li><strong>License</strong>: Explicitly state the license (MIT, Apache 2.0, etc.).</li>
+</ul>
+<p>Test your README by reading it aloud as if you’ve never seen the project before. Can you follow every instruction without guessing? Is every command copy-paste ready? Does someone know where to find the database file or configuration?</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
+<p>Project engineering is the discipline of making your work reproducible and shareable. <code>uv</code> manages the full project lifecycle: initializing projects with the right structure, declaring dependencies in <code>pyproject.toml</code>, locking exact versions in <code>uv.lock</code>, syncing environments with <code>uv sync</code>, and distributing packages via PyPI or GitHub. The three <code>uv init</code> modes, simple, package, and library, provide the right starting structure for different project types.</p>
+<p>A professional project is more than working code. It includes a <code>pyproject.toml</code> with complete metadata and dependencies, a <code>uv.lock</code> for reproducibility, a <code>.gitignore</code> that keeps generated files out of version control, and a README that guides collaborators through installation and usage. The test of quality is simple: can someone else clone your repository and reproduce your results with <code>uv sync</code>?</p>
+<p>Every subsequent chapter in this module builds on the project structure established here. Quarto documents render within the project environment. Ruff and basedpyright are configured in the project’s configuration files. The CLI tool you build in <a href="26-typer.html" class="quarto-xref"><span>Chapter 26</span></a> is registered as an entry point in <code>pyproject.toml</code>. Get the project structure right, and everything else has a place to live.</p>
+</section>
+<section id="glossary" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="glossary">Glossary</h2>
+<dl>
+<dt>build backend</dt>
+<dd>
+The tool that packages your Python code for distribution. Hatchling is the default for <code>uv</code> projects. The build backend is specified in <code>[build-system]</code>.
+</dd>
+<dt>dependency group</dt>
+<dd>
+A named set of dependencies for a specific purpose, like <code>dev</code> for development tools. Groups are declared in <code>[dependency-groups]</code> and installed with <code>uv sync</code>.
+</dd>
+<dt>entry point</dt>
+<dd>
+A command that becomes available when a package is installed. Defined in <code>[project.scripts]</code> as a mapping from command name to a Python function.
+</dd>
+<dt>lock file</dt>
+<dd>
+A file (<code>uv.lock</code>) that records the exact version of every installed package. Ensures reproducible installations across different machines and times.
+</dd>
+<dt><code>pyproject.toml</code></dt>
+<dd>
+The standard configuration file for Python projects. Contains metadata, dependencies, tool configuration, and build instructions.
+</dd>
+<dt>PyPI</dt>
+<dd>
+The Python Package Index, the central repository where Python packages are published. Packages are installed from PyPI by default when you run <code>uv add</code>.
+</dd>
+<dt>sdist</dt>
+<dd>
+A <em>source distribution</em>, a packaged archive of your project’s source code. Built with <code>uv build</code>.
+</dd>
+<dt>semantic versioning</dt>
+<dd>
+A versioning scheme where version numbers follow the pattern <code>MAJOR.MINOR.PATCH</code>. Major changes break compatibility, minor changes add features, patch changes fix bugs.
+</dd>
+<dt><code>uv tool install</code></dt>
+<dd>
+Installs a Python CLI tool into a central, isolated virtual environment so it’s available system-wide without being tied to any project. Useful for tools you want to access outside a project context.
+</dd>
+<dt>virtual environment</dt>
+<dd>
+An isolated Python installation with its own set of packages. <code>uv</code> manages virtual environments automatically in the <code>.venv/</code> directory.
+</dd>
+<dt>wheel</dt>
+<dd>
+A <em>built distribution</em>, a pre-compiled package ready for installation. Faster to install than an sdist because no build step is needed.
+</dd>
+</dl>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ozanozbeker\.com\/cw4e\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/17-objects.html" class="pagination-link" aria-label="Objects &amp; Type Hints">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/19-code-quality.html" class="pagination-link" aria-label="Code Quality: Ruff, basedpyright, &amp; Language Servers">
+        <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Ozan Ozbeker | CC-BY-NC-ND 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/18-python-projects.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

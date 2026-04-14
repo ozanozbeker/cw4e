@@ -303,6 +303,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -316,38 +328,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  <a href="../chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  <a href="../chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  <a href="../chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  <a href="../chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -716,7 +716,7 @@ Table&nbsp;26.1: Typer parameter styles
 </div>
 </figure>
 </div>
-<p>Notice that the type hints do double duty. In <a href="17-objects.html" class="quarto-xref"><span>Chapter 17</span></a>, they documented the function interface for human readers and editor tooling. In <a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>, basedpyright used them to catch type errors. Now Typer uses them to generate the CLI interface. The same annotation serves three purposes: documentation, verification, and interface generation.</p>
+<p>Notice that the type hints do double duty. In <a href="17-objects.html" class="quarto-xref"><span>Chapter 17</span></a>, they documented the function interface for human readers and editor tooling. In <a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a>, basedpyright used them to catch type errors. Now Typer uses them to generate the CLI interface. The same annotation serves three purposes: documentation, verification, and interface generation.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercise: From Function to CLI">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -780,7 +780,7 @@ Table&nbsp;26.1: Typer parameter styles
 </section>
 <section id="building-a-northwind-cli-tool" class="level2" data-number="26.4">
 <h2 data-number="26.4" class="anchored" data-anchor-id="building-a-northwind-cli-tool"><span class="header-section-number">26.4</span> Building a Northwind CLI Tool</h2>
-<p>Let’s build a real tool. The <code>northwind</code> command will generate reports from the Northwind database, combining the data access functions from <a href="18-python-sql.html" class="quarto-xref"><span>Chapter 18</span></a>, the Polars transformations from <a href="19-polars.html" class="quarto-xref"><span>Chapter 19</span></a>, and the Excel output from <a href="21-excel.html" class="quarto-xref"><span>Chapter 21</span></a>.</p>
+<p>Let’s build a real tool. The <code>northwind</code> command will generate reports from the Northwind database, combining the data access functions from <a href="20-python-sql.html" class="quarto-xref"><span>Chapter 20</span></a>, the Polars transformations from <a href="21-polars.html" class="quarto-xref"><span>Chapter 21</span></a>, and the Excel output from <a href="23-excel.html" class="quarto-xref"><span>Chapter 23</span></a>.</p>
 <section id="multiple-commands-with-typer.typer" class="level3" data-number="26.4.1">
 <h3 data-number="26.4.1" class="anchored" data-anchor-id="multiple-commands-with-typer.typer"><span class="header-section-number">26.4.1</span> Multiple Commands with <code>typer.Typer()</code></h3>
 <p>For a tool with multiple subcommands (like <code>git commit</code>, <code>git push</code>, <code>git log</code>), use <code>typer.Typer()</code> as a decorator:</p>
@@ -1039,7 +1039,7 @@ Table&nbsp;26.1: Typer parameter styles
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Report written to </span><span class="sc">{</span>output<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    conn.close()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The <code>northwind_analysis.data</code> module (built from the data access layer in <a href="18-python-sql.html" class="quarto-xref"><span>Chapter 18</span></a>) handles queries. The <code>northwind_analysis.reports</code> module handles output formatting. The CLI module is a thin layer that wires user input to existing functions. This separation means your functions are usable from notebooks, scripts, <em>and</em> the CLI.</p>
+<p>The <code>northwind_analysis.data</code> module (built from the data access layer in <a href="20-python-sql.html" class="quarto-xref"><span>Chapter 20</span></a>) handles queries. The <code>northwind_analysis.reports</code> module handles output formatting. The CLI module is a thin layer that wires user input to existing functions. This separation means your functions are usable from notebooks, scripts, <em>and</em> the CLI.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Exercise: Separate Logic from CLI">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1118,7 +1118,7 @@ Table&nbsp;26.1: Typer parameter styles
 </section>
 <section id="sec-distributing-cli" class="level2" data-number="26.5">
 <h2 data-number="26.5" class="anchored" data-anchor-id="sec-distributing-cli"><span class="header-section-number">26.5</span> Distributing Your CLI Tool</h2>
-<p>The <code>[project.scripts]</code> section in <code>pyproject.toml</code> (<a href="22-python-projects.html#sec-pyproject" class="quarto-xref"><span>Section 22.3</span></a>) registers your CLI as an installable command:</p>
+<p>The <code>[project.scripts]</code> section in <code>pyproject.toml</code> (<a href="18-python-projects.html#sec-pyproject" class="quarto-xref"><span>Section 18.3</span></a>) registers your CLI as an installable command:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>pyproject.toml</strong></pre>
@@ -1148,7 +1148,7 @@ Table&nbsp;26.1: Typer parameter styles
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Now the command is available without uv run</span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="ex">northwind</span> revenue <span class="at">--category</span> <span class="st">"Beverages"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>If you publish to PyPI (<a href="22-python-projects.html" class="quarto-xref"><span>Chapter 22</span></a>), installation is even simpler:</p>
+<p>If you publish to PyPI (<a href="18-python-projects.html" class="quarto-xref"><span>Chapter 18</span></a>), installation is even simpler:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>terminal</strong></pre>
@@ -1297,7 +1297,7 @@ Table&nbsp;26.1: Typer parameter styles
 <p>In <strong>Databases</strong>, you learned SQL, a language for asking questions of data. You wrote queries that the database executed. The database was the driver; you were the navigator.</p>
 <p>In <strong>Programming</strong>, you started driving. You wrote Python scripts that read files, defined functions, and built reusable modules. You controlled the logic. But your scripts only ran on your machine, and only you knew how to use them.</p>
 <p>In <strong>Integration</strong>, you combined everything: SQL for data retrieval, Python for orchestration, Polars for transformation, Altair for visualization, Excel for delivery. You built complete analytical workflows. But they lived in notebooks and scripts that required your presence to run.</p>
-<p>In <strong>Production</strong>, you made your work professional. You structured your project for reproducibility (<a href="22-python-projects.html" class="quarto-xref"><span>Chapter 22</span></a>). You presented your findings in polished documents and slides (<a href="03-quarto.html" class="quarto-xref"><span>Chapter 3</span></a>). You ensured your code meets quality standards (<a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>). You understood the infrastructure that makes your tools interoperate (<a href="25-arrow.html" class="quarto-xref"><span>Chapter 25</span></a>). And now, you’ve turned your scripts into a CLI tool that anyone can install and run without you.</p>
+<p>In <strong>Production</strong>, you made your work professional. You structured your project for reproducibility (<a href="18-python-projects.html" class="quarto-xref"><span>Chapter 18</span></a>). You presented your findings in polished documents and slides (<a href="03-quarto.html" class="quarto-xref"><span>Chapter 3</span></a>). You ensured your code meets quality standards (<a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a>). You understood the infrastructure that makes your tools interoperate (<a href="25-arrow.html" class="quarto-xref"><span>Chapter 25</span></a>). And now, you’ve turned your scripts into a CLI tool that anyone can install and run without you.</p>
 <p>You started this book running <code>git commit</code>. You finish this book having built a tool as polished as the ones you’ve been using throughout. That’s the journey from passenger to driver.</p>
 <section id="what-to-learn-next" class="level3" data-number="26.7.1">
 <h3 data-number="26.7.1" class="anchored" data-anchor-id="what-to-learn-next"><span class="header-section-number">26.7.1</span> What to Learn Next</h3>
@@ -1310,7 +1310,7 @@ Table&nbsp;26.1: Typer parameter styles
 <h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
 <section id="convert-a-script-to-a-cli" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="convert-a-script-to-a-cli">Convert a Script to a CLI</h3>
-<p>Take the revenue report script from <a href="18-python-sql.html" class="quarto-xref"><span>Chapter 18</span></a> and convert it into a Typer CLI with these options: <code>--category</code> (optional string filter on <code>category_name</code>), <code>--start-date</code> and <code>--end-date</code> (date range filters on <code>order_date</code>, accepting <code>YYYY-MM-DD</code> format), and <code>--output</code> (file path with a sensible default like <code>revenue.csv</code>). Use <code>Annotated</code> with <code>typer.Option</code> for all named options. When date filters are provided, include a <code>WHERE order_date &gt;= $start AND order_date &lt;= $end</code> clause in the SQL query.</p>
+<p>Take the revenue report script from <a href="20-python-sql.html" class="quarto-xref"><span>Chapter 20</span></a> and convert it into a Typer CLI with these options: <code>--category</code> (optional string filter on <code>category_name</code>), <code>--start-date</code> and <code>--end-date</code> (date range filters on <code>order_date</code>, accepting <code>YYYY-MM-DD</code> format), and <code>--output</code> (file path with a sensible default like <code>revenue.csv</code>). Use <code>Annotated</code> with <code>typer.Option</code> for all named options. When date filters are provided, include a <code>WHERE order_date &gt;= $start AND order_date &lt;= $end</code> clause in the SQL query.</p>
 </section>
 <section id="multiple-subcommands" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="multiple-subcommands">Multiple Subcommands</h3>

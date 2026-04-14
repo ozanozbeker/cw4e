@@ -302,6 +302,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -315,38 +327,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  <a href="../chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  <a href="../chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  <a href="../chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  <a href="../chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -531,7 +531,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Type-check a specific file</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run basedpyright src/northwind_analysis/revenue.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This is the version you’ll add in <a href="../chapters/23-code-quality.html" class="quarto-xref"><span>23&nbsp; Code Quality: Ruff, basedpyright, &amp; Language Servers</span></a>. Just like with Ruff, having basedpyright in the terminal is essential for AI-assisted workflows: a coding agent can run <code>uv run basedpyright</code>, read the error output, and fix type issues autonomously. It’s also what you’d use in a CI pipeline.</p>
+<p>This is the version you’ll add in <a href="../chapters/19-code-quality.html" class="quarto-xref"><span>19&nbsp; Code Quality: Ruff, basedpyright, &amp; Language Servers</span></a>. Just like with Ruff, having basedpyright in the terminal is essential for AI-assisted workflows: a coding agent can run <code>uv run basedpyright</code>, read the error output, and fix type issues autonomously. It’s also what you’d use in a CI pipeline.</p>
 <p>Because basedpyright is declared in your <code>pyproject.toml</code>, anyone who clones your project and runs <code>uv sync</code> gets the same version automatically. Zed will also detect and prefer the project-local version over its bundled one, so the entire team stays on the same type-checking configuration.</p>
 </section>
 <section id="standalone-tool-uv-tool-install-basedpyright" class="level3">
@@ -553,11 +553,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"exclude"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"**/__pycache__"</span><span class="ot">]</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The <code>typeCheckingMode</code> controls strictness. Start with <code>basic</code> (catches obvious errors without being overwhelming) and increase to <code>standard</code> or <code>strict</code> as your comfort with type hints grows. The details of each mode and how to handle common type-checking patterns are covered in <a href="../chapters/23-code-quality.html" class="quarto-xref"><span>23&nbsp; Code Quality: Ruff, basedpyright, &amp; Language Servers</span></a>.</p>
+<p>The <code>typeCheckingMode</code> controls strictness. Start with <code>basic</code> (catches obvious errors without being overwhelming) and increase to <code>standard</code> or <code>strict</code> as your comfort with type hints grows. The details of each mode and how to handle common type-checking patterns are covered in <a href="../chapters/19-code-quality.html" class="quarto-xref"><span>19&nbsp; Code Quality: Ruff, basedpyright, &amp; Language Servers</span></a>.</p>
 </section>
 <section id="what-happens-next" class="level2">
 <h2 class="anchored" data-anchor-id="what-happens-next">What Happens Next</h2>
-<p>basedpyright runs silently in Zed from the moment you start writing Python. You’ll see its effects as red squiggles, hover type information, and autocomplete suggestions throughout the programming and integration modules. The full explanation of what it’s doing and how to configure it is in <a href="../chapters/23-code-quality.html" class="quarto-xref"><span>23&nbsp; Code Quality: Ruff, basedpyright, &amp; Language Servers</span></a>.</p>
+<p>basedpyright runs silently in Zed from the moment you start writing Python. You’ll see its effects as red squiggles, hover type information, and autocomplete suggestions throughout the programming and integration modules. The full explanation of what it’s doing and how to configure it is in <a href="../chapters/19-code-quality.html" class="quarto-xref"><span>19&nbsp; Code Quality: Ruff, basedpyright, &amp; Language Servers</span></a>.</p>
 </section>
 <section id="resources" class="level2">
 <h2 class="anchored" data-anchor-id="resources">Resources</h2>

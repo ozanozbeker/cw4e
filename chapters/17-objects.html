@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../unit-4-data-products.html" rel="next">
+<link href="../chapters/18-python-projects.html" rel="next">
 <link href="../chapters/16-file-io.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -303,6 +303,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -316,38 +328,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  <a href="../chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  <a href="../chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  <a href="../chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  <a href="../chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -882,9 +882,9 @@ Table&nbsp;17.1: Operators and their dunder methods
 </ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>solution.py</strong></pre>
+<pre><strong>predict.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">10</span>).<span class="fu">__add__</span>(<span class="dv">5</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="predict.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">10</span>).<span class="fu">__add__</span>(<span class="dv">5</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">"hello"</span>.<span class="fu">__len__</span>()</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>].<span class="fu">__contains__</span>(<span class="dv">2</span>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">"Chai"</span>.<span class="fu">__eq__</span>(<span class="st">"Chang"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1113,7 +1113,7 @@ Table&nbsp;17.1: Operators and their dunder methods
 <section id="how-zed-uses-type-hints" class="level3" data-number="17.5.5">
 <h3 data-number="17.5.5" class="anchored" data-anchor-id="how-zed-uses-type-hints"><span class="header-section-number">17.5.5</span> How Zed Uses Type Hints</h3>
 <p>Type hints power the editor features you’ve been using throughout this module. When you hover over a variable in Zed, the type information comes from type hints (and type inference). When you type a dot after a variable, the autocomplete suggestions come from knowing the variable’s type. When Zed draws a red squiggle under a line, it’s often because a type checker detected a mismatch.</p>
-<p>All of this happens through a <em>language server</em> running in the background, a topic we’ll explore fully in <a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>. For now, the practical lesson is: adding type hints to your functions makes your editor significantly more helpful.</p>
+<p>All of this happens through a <em>language server</em> running in the background, a topic we’ll explore fully in <a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a>. For now, the practical lesson is: adding type hints to your functions makes your editor significantly more helpful.</p>
 </section>
 <section id="type-hints-are-hints-not-enforcement" class="level3" data-number="17.5.6">
 <h3 data-number="17.5.6" class="anchored" data-anchor-id="type-hints-are-hints-not-enforcement"><span class="header-section-number">17.5.6</span> Type Hints Are Hints, Not Enforcement</h3>
@@ -1128,7 +1128,7 @@ Table&nbsp;17.1: Operators and their dunder methods
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Python doesn't care that we're passing strings:</span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(add(<span class="st">"hello"</span>, <span class="st">" world"</span>))  <span class="co"># "hello world"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>To actually <em>enforce</em> type hints, you need a static type checker like basedpyright, which analyzes your code without running it and reports type mismatches as errors. You’ll set this up in <a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>. For now, write type hints as documentation and let Zed’s built-in type checking give you early warnings.</p>
+<p>To actually <em>enforce</em> type hints, you need a static type checker like basedpyright, which analyzes your code without running it and reports type mismatches as errors. You’ll set this up in <a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a>. For now, write type hints as documentation and let Zed’s built-in type checking give you early warnings.</p>
 </section>
 <section id="exercises-2" class="level3" data-number="17.5.7">
 <h3 data-number="17.5.7" class="anchored" data-anchor-id="exercises-2"><span class="header-section-number">17.5.7</span> Exercises</h3>
@@ -1137,9 +1137,9 @@ Table&nbsp;17.1: Operators and their dunder methods
 </ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>solution.py</strong></pre>
+<pre><strong>exercise.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_expensive(products, threshold):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="exercise.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_expensive(products, threshold):</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [p <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p[<span class="st">"price"</span>] <span class="op">&gt;</span> threshold]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The function takes a list of dictionaries and a float, and returns a list of dictionaries.</p>
@@ -1487,6 +1487,249 @@ Table&nbsp;17.1: Operators and their dunder methods
 <li>What is <code>dict.setdefault()</code>? How could it simplify the aggregation loop in <code>revenue_by_category</code>?</li>
 <li>What is <code>collections.Counter</code>? How could it simplify counting operations?</li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Object Exploration</strong></p>
+<p><strong>1.</strong> Exploring <code>datetime.date</code> with <code>dir()</code> and <code>help()</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> datetime</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> datetime.date(<span class="dv">2024</span>, <span class="dv">4</span>, <span class="dv">14</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> d.weekday()  <span class="co"># Returns 0=Monday, 6=Sunday</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="dv">6</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> d.isoformat()  <span class="co"># Format as ISO 8601 string</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">'2024-04-14'</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> d.strftime(<span class="st">"%B </span><span class="sc">%d</span><span class="st">, %Y"</span>)  <span class="co"># Format with custom pattern</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">'April 14, 2024'</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> datetime.date.<span class="bu">min</span>  <span class="co"># Earliest representable date</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>datetime.date(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The key discoveries: <code>weekday()</code> returns the day of the week (0=Monday through 6=Sunday), <code>strftime()</code> formats dates with pattern strings, and <code>datetime.date.min</code> is January 1, year 1.</p>
+<p><strong>2.</strong> Three list methods discovered with <code>dir()</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> lst <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">5</span>]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> lst.copy()  <span class="co"># Create a shallow copy</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">5</span>]</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> lst.count(<span class="dv">1</span>)  <span class="co"># Count occurrences of a value</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> lst.index(<span class="dv">4</span>)  <span class="co"># Find index of first occurrence</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Other examples: <code>clear()</code> empties the list, <code>insert()</code> adds at a specific position, <code>pop()</code> removes and returns an item.</p>
+<p><strong>3.</strong> Exploring <code>pathlib.Path</code> and the <code>/</code> operator:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> p <span class="op">=</span> Path(<span class="st">"data"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">dir</span>(p)  <span class="co"># Shows dunder methods including __truediv__</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>[..., <span class="st">'__truediv__'</span>, ...]</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> Path(<span class="st">"data"</span>) <span class="op">/</span> <span class="st">"orders.csv"</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>PosixPath(<span class="st">'data/orders.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>/</code> operator calls <code>__truediv__()</code>, which <code>Path</code> overloads to concatenate path segments. This makes path building readable and cross-platform (works on Windows and Unix).</p>
+<p><strong>Type Hints Practice</strong></p>
+<p><strong>1.</strong> Adding type hints to a <code>northwind_utils.py</code> module:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_products(filepath: Path) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>]]:</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Load products from CSV into a lookup dictionary."""</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    products: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>]] <span class="op">=</span> {}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filepath) <span class="im">as</span> f:</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> row <span class="kw">in</span> csv.DictReader(f):</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>            products[row[<span class="st">"productID"</span>]] <span class="op">=</span> {</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>                <span class="st">"name"</span>: row[<span class="st">"productName"</span>],</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>                <span class="st">"categoryID"</span>: row[<span class="st">"categoryID"</span>],</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">"unitPrice"</span>: row[<span class="st">"unitPrice"</span>]</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> products</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> aggregate_revenue(</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    product_id: <span class="bu">str</span>,</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    quantity: <span class="bu">int</span>,</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>    unit_price: <span class="bu">float</span>,</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>    revenue_by_category: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>],</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>    products: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>]]</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Aggregate revenue by category."""</span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product_id <span class="kw">in</span> products:</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>        category_id: <span class="bu">str</span> <span class="op">=</span> products[product_id][<span class="st">"categoryID"</span>]</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>        revenue: <span class="bu">float</span> <span class="op">=</span> quantity <span class="op">*</span> unit_price</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>        revenue_by_category[category_id] <span class="op">=</span> (</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>            revenue_by_category.get(category_id, <span class="fl">0.0</span>) <span class="op">+</span> revenue</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_currency(amount: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Format a number as currency."""</span></span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"$</span><span class="sc">{</span>amount<span class="sc">:.2f}</span><span class="ss">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>2.</strong> A <code>parse_product_row()</code> function with type hints and Google-style docstring:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Product:</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Represents a product from the Northwind database."""</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, product_id: <span class="bu">str</span>, name: <span class="bu">str</span>, category_id: <span class="bu">str</span>, unit_price: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.product_id: <span class="bu">str</span> <span class="op">=</span> product_id</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.name: <span class="bu">str</span> <span class="op">=</span> name</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.category_id: <span class="bu">str</span> <span class="op">=</span> category_id</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unit_price: <span class="bu">float</span> <span class="op">=</span> unit_price</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse_product_row(row: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>]) <span class="op">-&gt;</span> Product:</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Convert a CSV row to a Product object with proper types.</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co">        row: A dictionary with string keys and values from a CSV row.</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co">        A Product object with typed fields.</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="co">        ValueError: If unit_price cannot be converted to a float.</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Product(</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>        product_id<span class="op">=</span>row[<span class="st">"productID"</span>],</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span>row[<span class="st">"productName"</span>],</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>        category_id<span class="op">=</span>row[<span class="st">"categoryID"</span>],</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>        unit_price<span class="op">=</span><span class="bu">float</span>(row[<span class="st">"unitPrice"</span>])</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Class Building</strong></p>
+<p><strong>1 &amp; 2.</strong> A complete <code>Order</code> class with all required methods:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OrderLine:</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A single line item in an order."""</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, product_name: <span class="bu">str</span>, quantity: <span class="bu">int</span>, unit_price: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.product_name: <span class="bu">str</span> <span class="op">=</span> product_name</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.quantity: <span class="bu">int</span> <span class="op">=</span> quantity</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.unit_price: <span class="bu">float</span> <span class="op">=</span> unit_price</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> line_total(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Calculate total revenue for this line."""</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.quantity <span class="op">*</span> <span class="va">self</span>.unit_price</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Order:</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Represents a customer order with multiple line items."""</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, order_id: <span class="bu">str</span>, customer: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.order_id: <span class="bu">str</span> <span class="op">=</span> order_id</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.customer: <span class="bu">str</span> <span class="op">=</span> customer</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lines: <span class="bu">list</span>[OrderLine] <span class="op">=</span> []</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> add_line(<span class="va">self</span>, line: OrderLine) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Add a line item to the order."""</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lines.append(line)</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> total_revenue(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Calculate total revenue for the entire order."""</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(line.line_total() <span class="cf">for</span> line <span class="kw">in</span> <span class="va">self</span>.lines)</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> line_count(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Count the number of line items."""</span></span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.lines)</span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Return the number of line items."""</span></span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.line_count()</span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> summary(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Return a formatted summary of the order."""</span></span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>        total: <span class="bu">float</span> <span class="op">=</span> <span class="va">self</span>.total_revenue()</span>
+<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a>        count: <span class="bu">int</span> <span class="op">=</span> <span class="va">self</span>.line_count()</span>
+<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Order </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>order_id<span class="sc">}</span><span class="ss"> for </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>customer<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> items, $</span><span class="sc">{</span>total<span class="sc">:.2f}</span><span class="ss">"</span></span>
+<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Return a detailed representation."""</span></span>
+<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Order(order_id=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>order_id<span class="sc">!r}</span><span class="ss">, lines=</span><span class="sc">{</span><span class="bu">len</span>(<span class="va">self</span>.lines)<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Return a human-readable string."""</span></span>
+<span id="cb34-49"><a href="#cb34-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.summary()</span>
+<span id="cb34-50"><a href="#cb34-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-51"><a href="#cb34-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage</span></span>
+<span id="cb34-52"><a href="#cb34-52" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> Order(<span class="st">"ORD-001"</span>, <span class="st">"Acme Corp"</span>)</span>
+<span id="cb34-53"><a href="#cb34-53" aria-hidden="true" tabindex="-1"></a>order.add_line(OrderLine(<span class="st">"Widget"</span>, <span class="dv">10</span>, <span class="fl">25.00</span>))</span>
+<span id="cb34-54"><a href="#cb34-54" aria-hidden="true" tabindex="-1"></a>order.add_line(OrderLine(<span class="st">"Gadget"</span>, <span class="dv">5</span>, <span class="fl">50.00</span>))</span>
+<span id="cb34-55"><a href="#cb34-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-56"><a href="#cb34-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(order))  <span class="co"># 2</span></span>
+<span id="cb34-57"><a href="#cb34-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(order)  <span class="co"># Order ORD-001 for Acme Corp: 2 items, $500.00</span></span>
+<span id="cb34-58"><a href="#cb34-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">repr</span>(order))  <span class="co"># Order(order_id='ORD-001', lines=2)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Documentation Scavenger Hunt</strong></p>
+<p><strong>1.</strong> <code>str.partition()</code> splits a string into exactly three parts: before, separator, and after. Use it instead of <code>split()</code> when you need to capture what came before the separator:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">"key=value"</span>.partition(<span class="st">"="</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>(<span class="st">'key'</span>, <span class="st">'='</span>, <span class="st">'value'</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">"no equals here"</span>.partition(<span class="st">"="</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>(<span class="st">'no equals here'</span>, <span class="st">''</span>, <span class="st">''</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Unlike <code>split()</code>, which returns a variable-length list, <code>partition()</code> always returns a 3-tuple, making it safer when you’re expecting a separator to appear exactly once.</p>
+<p><strong>2.</strong> <code>dict.setdefault(key, default)</code> returns the value for a key if it exists, otherwise it inserts the key with the default value and returns it. This simplifies aggregation loops:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> revenue_by_category <span class="op">=</span> {}</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Without setdefault:</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="cf">if</span> <span class="st">"Beverages"</span> <span class="kw">not</span> <span class="kw">in</span> revenue_by_category:</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>...     revenue_by_category[<span class="st">"Beverages"</span>] <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> revenue_by_category[<span class="st">"Beverages"</span>] <span class="op">+=</span> <span class="fl">42.50</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># With setdefault:</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> revenue_by_category.setdefault(<span class="st">"Beverages"</span>, <span class="fl">0.0</span>) <span class="op">+=</span> <span class="fl">42.50</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> revenue_by_category</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>{<span class="st">'Beverages'</span>: <span class="fl">42.5</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is much cleaner in loops: <code>revenue_by_category.setdefault(category, 0.0) += revenue</code> avoids the KeyError entirely.</p>
+<p><strong>3.</strong> <code>collections.Counter</code> is a dict subclass that counts hashable items automatically. It replaces manual counting loops:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> categories <span class="op">=</span> [<span class="st">"Beverages"</span>, <span class="st">"Condiments"</span>, <span class="st">"Beverages"</span>, <span class="st">"Produce"</span>]</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> Counter(categories)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>Counter({<span class="st">'Beverages'</span>: <span class="dv">2</span>, <span class="st">'Condiments'</span>: <span class="dv">1</span>, <span class="st">'Produce'</span>: <span class="dv">1</span>})</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Most common N items</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> Counter(categories).most_common(<span class="dv">2</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>[(<span class="st">'Beverages'</span>, <span class="dv">2</span>), (<span class="st">'Condiments'</span>, <span class="dv">1</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Instead of a <code>defaultdict</code> with manual incrementing, <code>Counter</code> is purpose-built for counting and provides convenient methods like <code>most_common()</code>.</p>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="summary" class="level2 unnumbered">
@@ -1494,7 +1737,7 @@ Table&nbsp;17.1: Operators and their dunder methods
 <p>This chapter revealed the unifying principle of Python: everything is an object. Integers, strings, lists, functions, modules, and even types themselves are objects with identities, types, attributes, and methods. This consistency is what makes <code>dir()</code> and <code>help()</code> work universally and what powers Zed’s editor intelligence.</p>
 <p>Dunder methods are the hidden protocols that translate Python syntax into method calls. When you write <code>a + b</code>, Python calls <code>a.__add__(b)</code>. When you write <code>for x in collection</code>, Python calls <code>collection.__iter__()</code> and <code>.__next__()</code>. Understanding these protocols lets you predict how any object will behave.</p>
 <p>Classes define blueprints for creating objects. You don’t need to become an object-oriented programming expert, but you do need to read class definitions fluently, because most libraries are built from them. The <code>__init__</code> method sets up new objects, <code>self</code> refers to the current instance, and methods operate on the instance’s data.</p>
-<p>Type hints annotate your code with the types you intend, enabling better documentation, stronger editor support, and static type checking. They’re the bridge to <a href="23-code-quality.html" class="quarto-xref"><span>Chapter 23</span></a>, where tools like basedpyright will enforce them and catch bugs before your code even runs.</p>
+<p>Type hints annotate your code with the types you intend, enabling better documentation, stronger editor support, and static type checking. They’re the bridge to <a href="19-code-quality.html" class="quarto-xref"><span>Chapter 19</span></a>, where tools like basedpyright will enforce them and catch bugs before your code even runs.</p>
 <p>The most transferable skill from this chapter is the <code>type()</code> → <code>dir()</code> → <code>help()</code> exploration loop. Libraries change, tools evolve, and new technologies emerge constantly. The ability to sit down with an unfamiliar object and figure out what it does, without a tutorial, without a video, just by asking the object itself, is the skill that will serve you longest.</p>
 </section>
 <section id="glossary" class="level2 unnumbered">
@@ -1969,8 +2212,8 @@ A type annotation indicating a value can be one of multiple types. Written with 
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../unit-4-data-products.html" class="pagination-link" aria-label="Building Data Products">
-        <span class="nav-page-text">Building Data Products</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/18-python-projects.html" class="pagination-link" aria-label="Python Projects">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

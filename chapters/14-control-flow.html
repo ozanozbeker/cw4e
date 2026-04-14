@@ -303,6 +303,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -316,38 +328,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  <a href="../chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  <a href="../chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  <a href="../chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  <a href="../chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -655,11 +655,8 @@ Processing: Miso</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="enumerate.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, product <span class="kw">in</span> products:  <span class="co"># This would fail! Can't unpack a string</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>index<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, product <span class="kw">in</span> <span class="bu">enumerate</span>(products):</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>index<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> index, product <span class="kw">in</span> <span class="bu">enumerate</span>(products):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>index<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -670,6 +667,28 @@ Processing: Miso</code></pre>
 2: Tofu</code></pre>
 </div>
 <p><code>enumerate()</code> returns pairs of <code>(index, value)</code>, which you unpack directly in the loop header. This is much cleaner than maintaining a separate counter variable.</p>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Don’t forget <code>enumerate()</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A common mistake is trying to unpack index and value directly from the list:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python REPL</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="Python REPL"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="cf">for</span> index, product <span class="kw">in</span> products:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>...     <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>index<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="pp">ValueError</span>: too many values to unpack (expected <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Each element of <code>products</code> is a string like <code>"Chai"</code>, not a two-element tuple. Without <code>enumerate()</code>, Python tries to unpack the string into two variables and fails. Always wrap the iterable in <code>enumerate()</code> when you need both position and value.</p>
+</div>
+</div>
 </section>
 <section id="zip-for-parallel-iteration" class="level3" data-number="14.2.4">
 <h3 data-number="14.2.4" class="anchored" data-anchor-id="zip-for-parallel-iteration"><span class="header-section-number">14.2.4</span> <code>zip()</code> for Parallel Iteration</h3>
@@ -678,11 +697,11 @@ Processing: Miso</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>zip.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="zip.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">6.50</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices):</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="zip.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">6.50</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices):</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -701,13 +720,13 @@ Tofu: $6.50</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>while_loop.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="while_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>countdown <span class="op">=</span> <span class="dv">5</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> countdown <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"T-minus </span><span class="sc">{</span>countdown<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    countdown <span class="op">-=</span> <span class="dv">1</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Launch!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="while_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>countdown <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> countdown <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"T-minus </span><span class="sc">{</span>countdown<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    countdown <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Launch!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Use <code>while</code> when you don’t know in advance how many iterations you need. Use <code>for</code> when you’re iterating over a known collection or range. In data processing, <code>for</code> loops are far more common.</p>
 <div class="callout callout-style-simple callout-warning callout-titled">
@@ -731,28 +750,28 @@ Tofu: $6.50</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>break_continue.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="break_continue.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the first discontinued product</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chef Anton's"</span>, <span class="st">"discontinued"</span>: <span class="va">True</span>},</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product[<span class="st">"discontinued"</span>]:</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Found discontinued: </span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="break_continue.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the first discontinued product</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chef Anton's"</span>, <span class="st">"discontinued"</span>: <span class="va">True</span>},</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product[<span class="st">"discontinued"</span>]:</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Found discontinued: </span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>continue.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="continue.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print only active products</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product[<span class="st">"discontinued"</span>]:</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span>  <span class="co"># Skip this iteration</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(product[<span class="st">"name"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="continue.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print only active products</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product[<span class="st">"discontinued"</span>]:</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span>  <span class="co"># Skip this iteration</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(product[<span class="st">"name"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="exercises" class="level3" data-number="14.2.7">
@@ -764,7 +783,7 @@ Tofu: $6.50</code></pre>
 <li><p>Write a <code>for</code> loop that computes the running total of <code>prices = [18.00, 19.00, 10.00, 22.00, 23.25]</code>. After each iteration, print the current price and the running total so far.</p></li>
 </ol>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -773,24 +792,24 @@ Tofu: $6.50</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong></p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>solution.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_price(unit_price):</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> unit_price <span class="op">&lt;</span> <span class="dv">10</span>:</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Budget"</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> unit_price <span class="op">&lt;=</span> <span class="dv">25</span>:</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Mid-range"</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Premium"</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">8.50</span>)   <span class="co"># "Budget"</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">18.00</span>)  <span class="co"># "Mid-range"</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">45.00</span>)  <span class="co"># "Premium"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_price(unit_price):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> unit_price <span class="op">&lt;</span> <span class="dv">10</span>:</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Budget"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> unit_price <span class="op">&lt;=</span> <span class="dv">25</span>:</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Mid-range"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Premium"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">8.50</span>)   <span class="co"># "Budget"</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">18.00</span>)  <span class="co"># "Mid-range"</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>classify_price(<span class="fl">45.00</span>)  <span class="co"># "Premium"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>2.</strong> For two categories it’s fine: <code>"Premium" if unit_price &gt; 25 else "Other"</code>. But for three categories, nesting ternaries is hard to read: <code>"Budget" if unit_price &lt; 10 else "Mid-range" if unit_price &lt;= 25 else "Premium"</code>. The <code>if</code>/<code>elif</code>/<code>else</code> chain is clearer for three or more branches.</p>
 <p><strong>3.</strong></p>
@@ -798,24 +817,24 @@ Tofu: $6.50</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>solution.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, product <span class="kw">in</span> <span class="bu">enumerate</span>(products):</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">22.00</span>, <span class="fl">6.50</span>]</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices):</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, product <span class="kw">in</span> <span class="bu">enumerate</span>(products):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">22.00</span>, <span class="fl">6.50</span>]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices):</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>4.</strong></p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>solution.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">10.00</span>, <span class="fl">22.00</span>, <span class="fl">23.25</span>]</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>running_total <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> price <span class="kw">in</span> prices:</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    running_total <span class="op">+=</span> price</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Price: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">, Running total: $</span><span class="sc">{</span>running_total<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">10.00</span>, <span class="fl">22.00</span>, <span class="fl">23.25</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>running_total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> price <span class="kw">in</span> prices:</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    running_total <span class="op">+=</span> price</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Price: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">, Running total: $</span><span class="sc">{</span>running_total<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -832,23 +851,23 @@ Tofu: $6.50</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>loop_version.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="loop_version.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> []</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> numbers:</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    squares.append(n <span class="op">**</span> <span class="dv">2</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># squares = [1, 4, 9, 16, 25]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="loop_version.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> []</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> numbers:</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    squares.append(n <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># squares = [1, 4, 9, 16, 25]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The equivalent list comprehension:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>comprehension_version.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="comprehension_version.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> [n <span class="op">**</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers]</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># squares = [1, 4, 9, 16, 25]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="comprehension_version.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> [n <span class="op">**</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># squares = [1, 4, 9, 16, 25]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The comprehension reads as: “give me <code>n ** 2</code> for each <code>n</code> in <code>numbers</code>.” It’s more concise, and once you’re used to the pattern, it’s more readable too.</p>
 </section>
@@ -859,13 +878,13 @@ Tofu: $6.50</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>filtered_comprehension.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="filtered_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>evens <span class="op">=</span> [n <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>]</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [2, 4, 6, 8, 10]</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>large_squares <span class="op">=</span> [n <span class="op">**</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">&gt;</span> <span class="dv">5</span>]</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># [36, 49, 64, 81, 100]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="filtered_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>evens <span class="op">=</span> [n <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [2, 4, 6, 8, 10]</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>large_squares <span class="op">=</span> [n <span class="op">**</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">&gt;</span> <span class="dv">5</span>]</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># [36, 49, 64, 81, 100]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This reads as: “give me <code>n ** 2</code> for each <code>n</code> in <code>numbers</code>, but only if <code>n &gt; 5</code>.”</p>
 </section>
@@ -876,19 +895,19 @@ Tofu: $6.50</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>dict_comprehension.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="dict_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">6.50</span>]</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>price_lookup <span class="op">=</span> {name: price <span class="cf">for</span> name, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices)}</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># {"Chai": 18.0, "Chang": 19.0, "Tofu": 6.5}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="dict_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">6.50</span>]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>price_lookup <span class="op">=</span> {name: price <span class="cf">for</span> name, price <span class="kw">in</span> <span class="bu">zip</span>(products, prices)}</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># {"Chai": 18.0, "Chang": 19.0, "Tofu": 6.5}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>set_comprehension.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="set_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> [<span class="st">"hello"</span>, <span class="st">"world"</span>, <span class="st">"hello"</span>, <span class="st">"python"</span>]</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>unique_lengths <span class="op">=</span> {<span class="bu">len</span>(word) <span class="cf">for</span> word <span class="kw">in</span> words}</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># {5, 6}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="set_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> [<span class="st">"hello"</span>, <span class="st">"world"</span>, <span class="st">"hello"</span>, <span class="st">"python"</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>unique_lengths <span class="op">=</span> {<span class="bu">len</span>(word) <span class="cf">for</span> word <span class="kw">in</span> words}</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># {5, 6}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="a-practical-example" class="level3" data-number="14.3.4">
@@ -898,22 +917,22 @@ Tofu: $6.50</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>northwind_comprehension.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="northwind_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"stock"</span>: <span class="dv">39</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"stock"</span>: <span class="dv">17</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chef Anton's"</span>, <span class="st">"price"</span>: <span class="fl">22.00</span>, <span class="st">"stock"</span>: <span class="dv">53</span>, <span class="st">"discontinued"</span>: <span class="va">True</span>},</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"stock"</span>: <span class="dv">35</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Stock values for active products only</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>stock_values <span class="op">=</span> [</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: p[<span class="st">"name"</span>], <span class="st">"value"</span>: p[<span class="st">"price"</span>] <span class="op">*</span> p[<span class="st">"stock"</span>]}</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> products</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> p[<span class="st">"discontinued"</span>]</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> stock_values:</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>item[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>item[<span class="st">'value'</span>]<span class="sc">:,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="northwind_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"stock"</span>: <span class="dv">39</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"stock"</span>: <span class="dv">17</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chef Anton's"</span>, <span class="st">"price"</span>: <span class="fl">22.00</span>, <span class="st">"stock"</span>: <span class="dv">53</span>, <span class="st">"discontinued"</span>: <span class="va">True</span>},</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"stock"</span>: <span class="dv">35</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>},</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Stock values for active products only</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>stock_values <span class="op">=</span> [</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: p[<span class="st">"name"</span>], <span class="st">"value"</span>: p[<span class="st">"price"</span>] <span class="op">*</span> p[<span class="st">"stock"</span>]}</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> p <span class="kw">in</span> products</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> p[<span class="st">"discontinued"</span>]</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> stock_values:</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>item[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>item[<span class="st">'value'</span>]<span class="sc">:,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -931,14 +950,14 @@ Tofu: $813.75</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>too_complex.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="too_complex.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is too complex for a comprehension. Use a loop.</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> [</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    (x, y, z)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">30</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> y <span class="kw">in</span> <span class="bu">range</span>(x, <span class="dv">30</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> <span class="bu">range</span>(y, <span class="dv">30</span>)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> y <span class="op">**</span> <span class="dv">2</span> <span class="op">==</span> z <span class="op">**</span> <span class="dv">2</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="too_complex.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is too complex for a comprehension. Use a loop.</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> [</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    (x, y, z)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">30</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> y <span class="kw">in</span> <span class="bu">range</span>(x, <span class="dv">30</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> <span class="bu">range</span>(y, <span class="dv">30</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> y <span class="op">**</span> <span class="dv">2</span> <span class="op">==</span> z <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -949,44 +968,41 @@ Tofu: $813.75</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>order_processing.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="order_processing.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample order details (in later chapters, we'll read this from files)</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>order_details <span class="op">=</span> [</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chai"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"quantity"</span>: <span class="dv">10</span>},</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chang"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"quantity"</span>: <span class="dv">5</span>},</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Aniseed Syrup"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">10.00</span>, <span class="st">"quantity"</span>: <span class="dv">20</span>},</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Tofu"</span>, <span class="st">"category"</span>: <span class="st">"Produce"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"quantity"</span>: <span class="dv">15</span>},</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Miso"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">13.00</span>, <span class="st">"quantity"</span>: <span class="dv">8</span>},</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute revenue per item</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>revenues <span class="op">=</span> [</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    {<span class="op">**</span>item, <span class="st">"revenue"</span>: item[<span class="st">"price"</span>] <span class="op">*</span> item[<span class="st">"quantity"</span>]}</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> order_details</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate revenue by category using a dictionary</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>category_totals <span class="op">=</span> {}</span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> revenues:</span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    category <span class="op">=</span> item[<span class="st">"category"</span>]</span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    revenue <span class="op">=</span> item[<span class="st">"revenue"</span>]</span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> category <span class="kw">in</span> category_totals:</span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>        category_totals[category] <span class="op">+=</span> revenue</span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>        category_totals[category] <span class="op">=</span> revenue</span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by revenue (descending) and display</span></span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>sorted_categories <span class="op">=</span> <span class="bu">sorted</span>(</span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    category_totals.items(),</span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    key<span class="op">=</span><span class="kw">lambda</span> pair: pair[<span class="dv">1</span>],</span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    reverse<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Category'</span><span class="sc">:&lt;15}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Revenue'</span><span class="sc">:&gt;10}</span><span class="ss">"</span>)</span>
-<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">15</span><span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">10</span><span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> category, total <span class="kw">in</span> sorted_categories:</span>
-<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>category<span class="sc">:&lt;15}</span><span class="ss"> $</span><span class="sc">{</span>total<span class="sc">:&gt;9,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="order_processing.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample order details (in later chapters, we'll read this from files)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>order_details <span class="op">=</span> [</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chai"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"quantity"</span>: <span class="dv">10</span>},</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chang"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"quantity"</span>: <span class="dv">5</span>},</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Aniseed Syrup"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">10.00</span>, <span class="st">"quantity"</span>: <span class="dv">20</span>},</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Tofu"</span>, <span class="st">"category"</span>: <span class="st">"Produce"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"quantity"</span>: <span class="dv">15</span>},</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Miso"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">13.00</span>, <span class="st">"quantity"</span>: <span class="dv">8</span>},</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate revenue by category using a dictionary</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>category_totals <span class="op">=</span> {}</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> order_details:</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    category <span class="op">=</span> item[<span class="st">"category"</span>]</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    revenue <span class="op">=</span> item[<span class="st">"price"</span>] <span class="op">*</span> item[<span class="st">"quantity"</span>]</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> category <span class="kw">in</span> category_totals:</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>        category_totals[category] <span class="op">+=</span> revenue</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>        category_totals[category] <span class="op">=</span> revenue</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by revenue (descending) and display</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> by_revenue(pair):</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pair[<span class="dv">1</span>]</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>sorted_categories <span class="op">=</span> <span class="bu">sorted</span>(</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>    category_totals.items(),</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>    key<span class="op">=</span>by_revenue,</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    reverse<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Category'</span><span class="sc">:&lt;15}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Revenue'</span><span class="sc">:&gt;10}</span><span class="ss">"</span>)</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">15</span><span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">10</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> category, total <span class="kw">in</span> sorted_categories:</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>category<span class="sc">:&lt;15}</span><span class="ss"> $</span><span class="sc">{</span>total<span class="sc">:&gt;9,.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -998,7 +1014,7 @@ Produce         $   348.75
 Condiments      $   304.00
 Beverages       $   275.00</code></pre>
 </div>
-<p>This script uses lists of dictionaries, a <code>for</code> loop with an <code>if</code>/<code>else</code> branch to build an aggregation dictionary, <code>sorted()</code> with a <code>key</code> function, tuple unpacking, and f-strings with alignment. It’s a miniature version of what SQL’s <code>GROUP BY</code> does, implemented entirely in Python. In later chapters, you’ll read this data from actual CSV files instead of hardcoding it.</p>
+<p>This script uses lists of dictionaries, a <code>for</code> loop with an <code>if</code>/<code>else</code> branch to build an aggregation dictionary, a helper function as a <code>key</code> for <code>sorted()</code>, tuple unpacking, and f-strings with alignment. It’s a miniature version of what SQL’s <code>GROUP BY</code> does, implemented entirely in Python. In later chapters, you’ll read this data from actual CSV files instead of hardcoding it. In <a href="15-functions.html" class="quarto-xref"><span>Chapter 15</span></a>, you’ll learn about <code>lambda</code> expressions, which provide a more compact way to write the <code>by_revenue</code> helper.</p>
 </section>
 <section id="exercises-1" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="exercises-1">Exercises</h2>
@@ -1026,23 +1042,23 @@ Beverages       $   275.00</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>to_comprehension.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="to_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 1</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> []</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> products:</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    names.append(p[<span class="st">"name"</span>].upper())</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 2</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>expensive <span class="op">=</span> []</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> products:</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p[<span class="st">"price"</span>] <span class="op">&gt;</span> <span class="dv">20</span>:</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>        expensive.append(p[<span class="st">"name"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="to_comprehension.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 1</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> []</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> products:</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    names.append(p[<span class="st">"name"</span>].upper())</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 2</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>expensive <span class="op">=</span> []</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> products:</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p[<span class="st">"price"</span>] <span class="op">&gt;</span> <span class="dv">20</span>:</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        expensive.append(p[<span class="st">"name"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Now go the other direction. Rewrite this comprehension as an explicit loop:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>to_loop.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="to_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> {p[<span class="st">"name"</span>]: p[<span class="st">"price"</span>] <span class="op">*</span> p[<span class="st">"stock"</span>] <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p[<span class="st">"stock"</span>] <span class="op">&gt;</span> <span class="dv">0</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="to_loop.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> {p[<span class="st">"name"</span>]: p[<span class="st">"price"</span>] <span class="op">*</span> p[<span class="st">"stock"</span>] <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p[<span class="st">"stock"</span>] <span class="op">&gt;</span> <span class="dv">0</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Given the <code>order_details</code> list from the chapter example, write a comprehension that produces a list of product names where revenue exceeds $150.</p></li>
 </ol>
@@ -1055,6 +1071,222 @@ Beverages       $   275.00</code></pre>
 <li>For each category, computes the average unit price and total quantity ordered.</li>
 <li>Prints a formatted summary table.</li>
 </ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<section id="collection-operations-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="collection-operations-1">Collection Operations</h3>
+<p><strong>1.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>first_three <span class="op">=</span> numbers[:<span class="dv">3</span>]          <span class="co"># [1, 2, 3]</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>last_three <span class="op">=</span> numbers[<span class="op">-</span><span class="dv">3</span>:]          <span class="co"># [8, 9, 10]</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>every_other <span class="op">=</span> numbers[::<span class="dv">2</span>]         <span class="co"># [1, 3, 5, 7, 9]</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>descending <span class="op">=</span> <span class="bu">sorted</span>(numbers, reverse<span class="op">=</span><span class="va">True</span>)  <span class="co"># [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"First three: </span><span class="sc">{</span>first_three<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Last three: </span><span class="sc">{</span>last_three<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Every other: </span><span class="sc">{</span>every_other<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Descending: </span><span class="sc">{</span>descending<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>2.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>keys <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>]</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">6.50</span>]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>price_lookup <span class="op">=</span> {k: v <span class="cf">for</span> k, v <span class="kw">in</span> <span class="bu">zip</span>(keys, values)}</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># {"Chai": 18.0, "Chang": 19.0, "Tofu": 6.5}</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(price_lookup)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>3.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>product_names <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>, <span class="st">"Chai"</span>, <span class="st">"Miso"</span>, <span class="st">"Chang"</span>]</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>unique_names <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">set</span>(product_names))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ["Chai", "Chang", "Miso", "Tofu"]</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(unique_names)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="loop-practice-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="loop-practice-1">Loop Practice</h3>
+<p><strong>1.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>a, b <span class="op">=</span> <span class="dv">1</span>, <span class="dv">1</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(a)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(b)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>count <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> count <span class="op">&lt;</span> <span class="dv">20</span>:</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    next_val <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(next_val)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    a, b <span class="op">=</span> b, next_val</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    count <span class="op">+=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>2.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"stock"</span>: <span class="dv">39</span>},</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"stock"</span>: <span class="dv">17</span>},</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chef Anton's"</span>, <span class="st">"price"</span>: <span class="fl">22.00</span>, <span class="st">"stock"</span>: <span class="dv">53</span>},</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"stock"</span>: <span class="dv">35</span>},</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>most_expensive <span class="op">=</span> products[<span class="dv">0</span>]</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> products:</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> product[<span class="st">"price"</span>] <span class="op">&gt;</span> most_expensive[<span class="st">"price"</span>]:</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        most_expensive <span class="op">=</span> product</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Most expensive: </span><span class="sc">{</span>most_expensive[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss"> at $</span><span class="sc">{</span>most_expensive[<span class="st">'price'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>3.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Tofu"</span>, <span class="st">"Miso"</span>]</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx, product <span class="kw">in</span> <span class="bu">enumerate</span>(products, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>idx<span class="sc">}</span><span class="ss">. </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="comprehension-practice-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="comprehension-practice-1">Comprehension Practice</h3>
+<p><strong>1.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>},</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>},</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>},</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 1 as comprehension</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [p[<span class="st">"name"</span>].upper() <span class="cf">for</span> p <span class="kw">in</span> products]</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ["CHAI", "CHANG", "TOFU"]</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop 2 as comprehension</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>expensive <span class="op">=</span> [p[<span class="st">"name"</span>] <span class="cf">for</span> p <span class="kw">in</span> products <span class="cf">if</span> p[<span class="st">"price"</span>] <span class="op">&gt;</span> <span class="dv">20</span>]</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ["Tofu"]</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(names)</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(expensive)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>2.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> [</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"stock"</span>: <span class="dv">39</span>},</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Chang"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"stock"</span>: <span class="dv">17</span>},</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Tofu"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"stock"</span>: <span class="dv">35</span>},</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Rewrite as an explicit loop</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> {}</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> products:</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p[<span class="st">"stock"</span>] <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>        summary[p[<span class="st">"name"</span>]] <span class="op">=</span> p[<span class="st">"price"</span>] <span class="op">*</span> p[<span class="st">"stock"</span>]</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>3.</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>order_details <span class="op">=</span> [</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chai"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"quantity"</span>: <span class="dv">10</span>},</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chang"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"quantity"</span>: <span class="dv">5</span>},</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Aniseed Syrup"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">10.00</span>, <span class="st">"quantity"</span>: <span class="dv">20</span>},</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Tofu"</span>, <span class="st">"category"</span>: <span class="st">"Produce"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"quantity"</span>: <span class="dv">15</span>},</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Miso"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">13.00</span>, <span class="st">"quantity"</span>: <span class="dv">8</span>},</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>high_revenue <span class="op">=</span> [</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    item[<span class="st">"product"</span>]</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> order_details</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> item[<span class="st">"price"</span>] <span class="op">*</span> item[<span class="st">"quantity"</span>] <span class="op">&gt;</span> <span class="dv">150</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ["Chai", "Aniseed Syrup", "Tofu"]</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(high_revenue)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="northwind-category-analysis-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="northwind-category-analysis-1">Northwind Category Analysis</h3>
+<p><strong>1., 2., 3.</strong> (Combined solution):</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>order_details <span class="op">=</span> [</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chai"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"quantity"</span>: <span class="dv">10</span>},</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Chang"</span>, <span class="st">"category"</span>: <span class="st">"Beverages"</span>, <span class="st">"price"</span>: <span class="fl">19.00</span>, <span class="st">"quantity"</span>: <span class="dv">5</span>},</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Aniseed Syrup"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">10.00</span>, <span class="st">"quantity"</span>: <span class="dv">20</span>},</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Tofu"</span>, <span class="st">"category"</span>: <span class="st">"Produce"</span>, <span class="st">"price"</span>: <span class="fl">23.25</span>, <span class="st">"quantity"</span>: <span class="dv">15</span>},</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"product"</span>: <span class="st">"Miso"</span>, <span class="st">"category"</span>: <span class="st">"Condiments"</span>, <span class="st">"price"</span>: <span class="fl">13.00</span>, <span class="st">"quantity"</span>: <span class="dv">8</span>},</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Group items by category</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>groups <span class="op">=</span> {}</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> order_details:</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    category <span class="op">=</span> item[<span class="st">"category"</span>]</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> category <span class="kw">not</span> <span class="kw">in</span> groups:</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        groups[category] <span class="op">=</span> []</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    groups[category].append(item)</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Compute average price and total quantity per category</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>summaries <span class="op">=</span> {}</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> category, items <span class="kw">in</span> groups.items():</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    prices <span class="op">=</span> [item[<span class="st">"price"</span>] <span class="cf">for</span> item <span class="kw">in</span> items]</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>    avg_price <span class="op">=</span> <span class="bu">sum</span>(prices) <span class="op">/</span> <span class="bu">len</span>(prices)</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>    total_qty <span class="op">=</span> <span class="bu">sum</span>(item[<span class="st">"quantity"</span>] <span class="cf">for</span> item <span class="kw">in</span> items)</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    summaries[category] <span class="op">=</span> {<span class="st">"avg_price"</span>: avg_price, <span class="st">"total_qty"</span>: total_qty}</span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Print formatted table</span></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Category'</span><span class="sc">:&lt;20}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Avg Price'</span><span class="sc">:&gt;12}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Total Qty'</span><span class="sc">:&gt;10}</span><span class="ss">"</span>)</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">20</span><span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">12</span><span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'-'</span> <span class="op">*</span> <span class="dv">10</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> category <span class="kw">in</span> <span class="bu">sorted</span>(summaries.keys()):</span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>    avg_price <span class="op">=</span> summaries[category][<span class="st">"avg_price"</span>]</span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>    total_qty <span class="op">=</span> summaries[category][<span class="st">"total_qty"</span>]</span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>category<span class="sc">:&lt;20}</span><span class="ss"> $</span><span class="sc">{</span>avg_price<span class="sc">:&gt;11,.2f}</span><span class="ss"> </span><span class="sc">{</span>total_qty<span class="sc">:&gt;10}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="summary" class="level2 unnumbered">

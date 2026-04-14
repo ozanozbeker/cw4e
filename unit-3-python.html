@@ -268,6 +268,18 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/18-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -281,38 +293,26 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  <a href="./chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/19-polars.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  <a href="./chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/20-altair.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  <a href="./chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/21-excel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  <a href="./chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -460,12 +460,14 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Control Flow</strong> (<a href="chapters/14-control-flow.html" class="quarto-xref"><span>14&nbsp; Control Flow</span></a>) teaches you to direct program execution with conditionals and loops, and introduces comprehensions, Python’s concise syntax for transforming collections. Combined with the data structures from the previous chapter, these tools let you write programs that make decisions and process data.</p>
 <p><strong>Functions</strong> (<a href="chapters/15-functions.html" class="quarto-xref"><span>15&nbsp; Functions &amp; Modules</span></a>) teaches you to organize code into reusable, documented units. You’ll write functions with type-annotated signatures and Google-style docstrings, then package them into modules that can be imported across your project.</p>
 <p><strong>Working with Files</strong> (<a href="chapters/16-file-io.html" class="quarto-xref"><span>16&nbsp; Working with Files</span></a>) bridges Python and the outside world. You’ll read and write text, CSV, and JSON files, fetch data from web APIs with <code>httpx</code>, navigate the file system with <code>pathlib</code>, and handle the errors that inevitably arise when working with external data.</p>
-<p><strong>The Python Object Model</strong> (<a href="chapters/17-objects.html" class="quarto-xref"><span>17&nbsp; Objects &amp; Type Hints</span></a>) reveals that everything in Python, from integers to functions to modules themselves, is an object. Understanding the object model is what separates someone who can write Python scripts from someone who can read and understand any Python library. You’ll also learn to use type hints as both documentation and a verification tool. This chapter serves as the capstone for the Python unit, tying together everything you’ve learned about the language.</p>
+<p><strong>The Python Object Model</strong> (<a href="chapters/17-objects.html" class="quarto-xref"><span>17&nbsp; Objects &amp; Type Hints</span></a>) reveals that everything in Python, from integers to functions to modules themselves, is an object. Understanding the object model is what separates someone who can write Python scripts from someone who can read and understand any Python library. You’ll also learn to use type hints as both documentation and a verification tool.</p>
+<p><strong>Python Projects</strong> (<a href="chapters/18-python-projects.html" class="quarto-xref"><span>18&nbsp; Python Projects</span></a>) structures your work for reproducibility and collaboration. You’ll use <code>uv</code> to create a project with locked dependencies, a well-organized directory layout, and a <code>pyproject.toml</code> that makes your intentions explicit. The examples in this chapter preview dependencies you’ll use in the next unit (Polars, DuckDB, Altair), giving you a sense of where you’re headed.</p>
+<p><strong>Code Quality</strong> (<a href="chapters/19-code-quality.html" class="quarto-xref"><span>19&nbsp; Code Quality: Ruff, basedpyright, &amp; Language Servers</span></a>) reveals the formatting, linting, and type-checking tools that have been working behind the scenes in Zed. You’ll learn to configure and run Ruff and basedpyright yourself, understanding why automated quality checks catch bugs that testing alone cannot. This chapter serves as the capstone for the Python unit: by the end, you’ll have the language skills <em>and</em> the engineering discipline to build professional data workflows.</p>
 </section>
 <section id="why-this-order" class="level2">
 <h2 class="anchored" data-anchor-id="why-this-order">Why This Order?</h2>
-<p>Each chapter builds on the previous one. Fundamentals gives you the vocabulary of expressions and types. Collections gives you data structures to hold and organize data. Control flow teaches you to write programs that make decisions and repeat actions. Functions let you package logic into reusable units. File I/O connects your code to external data sources. And the object model ties it all together, revealing the unified design that underlies everything you’ve been using.</p>
-<p>This progression mirrors how you’ll actually work. A typical Python data script reads files (File I/O), stores the data in collections (Collections), processes it through functions (Functions) using conditionals and loops (Control Flow), and uses the object model to interact with libraries like DuckDB and Polars. By the end of this unit, you’ll have the language skills to build complete data workflows.</p>
+<p>Each chapter builds on the previous one. Fundamentals gives you the vocabulary of expressions and types. Collections gives you data structures to hold and organize data. Control flow teaches you to write programs that make decisions and repeat actions. Functions let you package logic into reusable units. File I/O connects your code to external data sources. The object model ties the language together, revealing the unified design that underlies everything you’ve been using. Project structure and code quality then wrap everything in the engineering practices that make your work reproducible, shareable, and maintainable.</p>
+<p>This progression mirrors how you’ll actually work. A typical Python data script reads files (File I/O), stores the data in collections (Collections), processes it through functions (Functions) using conditionals and loops (Control Flow), and uses the object model to interact with libraries like DuckDB and Polars. Project engineering and quality tooling ensure that the result is something a collaborator can clone, understand, and trust. By the end of this unit, you’ll have both the language skills and the project infrastructure to build complete data workflows.</p>
 </section>
 <section id="the-primary-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="the-primary-workflow">The Primary Workflow</h2>
@@ -475,7 +477,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="how-to-learn-this-material" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-learn-this-material">How to Learn This Material</h2>
 <p>Type the code. Don’t copy and paste, don’t just read. Programming is a physical skill as much as a mental one, and typing builds muscle memory for syntax patterns that reading alone never will. When an example doesn’t work the way you expected, resist the urge to move on. Stop and figure out why. That moment of confusion, followed by understanding, is where the real learning happens.</p>
-<p>The exercises at the end of each chapter connect back to the Northwind database you know from the previous unit. You’ll work with the same data, but now exported as CSV and JSON files that you process with Python scripts. By the end of the unit, you’ll have built a complete, well-organized, documented, and typed Python module.</p>
+<p>The exercises at the end of each chapter connect back to the Northwind database you know from the previous unit. You’ll work with the same data, but now exported as CSV and JSON files that you process with Python scripts. By the end of the unit, you’ll have built a complete, well-organized, documented, typed, and quality-checked Python project.</p>
 <p>Let’s begin.</p>
 
 

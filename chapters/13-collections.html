@@ -303,6 +303,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Objects &amp; Type Hints</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-python-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-code-quality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -316,38 +328,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/18-python-sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
+  <a href="../chapters/20-python-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Python Meets SQL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/19-polars.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
+  <a href="../chapters/21-polars.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">DataFrames with Polars</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/20-altair.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
+  <a href="../chapters/22-altair.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Visualization with Altair</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/21-excel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/22-python-projects.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Python Projects</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/23-code-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Code Quality: Ruff, basedpyright, &amp; Language Servers</span></span></a>
+  <a href="../chapters/23-excel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with Excel</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -479,6 +479,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#sets" id="toc-sets" class="nav-link" data-scroll-target="#sets"><span class="header-section-number">13.4</span> Sets</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#exercises-2" id="toc-exercises-2" class="nav-link" data-scroll-target="#exercises-2">Exercises</a></li>
   <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/ozanozbeker/cw4e/edit/main/chapters/13-collections.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/ozanozbeker/cw4e/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://ozanozbeker.com/cw4e/playground/"><i class="bi bi-play-circle"></i>SQL &amp; Python Playground</a></li></ul></div></nav>
@@ -873,9 +874,9 @@ stock: 39</code></pre>
 </ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>solution.py</strong></pre>
+<pre><strong>setup.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"stock"</span>: <span class="dv">39</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="setup.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> {<span class="st">"name"</span>: <span class="st">"Chai"</span>, <span class="st">"price"</span>: <span class="fl">18.00</span>, <span class="st">"stock"</span>: <span class="dv">39</span>, <span class="st">"discontinued"</span>: <span class="va">False</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="2" type="1">
 <li><p>Given <code>order</code> (the nested dictionary from the chapter), write an expression to get the quantity of the second item in the order. Then write a loop that prints each item’s product name and total cost (quantity × unit_price).</p></li>
@@ -988,6 +989,145 @@ stock: 39</code></pre>
 <h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
 <p>Python provides four built-in collection types, each serving a specific purpose. Lists store ordered, mutable sequences you access by position, making them ideal for processing data where order matters. Tuples offer immutable, fixed-length collections for grouping related values, and their unpacking feature lets you elegantly assign multiple values in a single statement. Dictionaries map keys to values, mirroring database records and providing efficient lookup by name rather than position. Sets store unique elements and support mathematical operations like union and intersection, useful for deduplication and membership testing.</p>
 <p>These collections are the foundation for data processing. In the next chapter, you’ll learn how to make decisions about data and process collections systematically using control flow: <code>if</code> statements for conditionals and <code>for</code>/<code>while</code> loops for repetition. Together, collections and control flow form the core of Python programming.</p>
+</section>
+<section id="exercises-2" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises-2">Exercises</h2>
+<ol type="1">
+<li><p><strong>Tuple Unpacking and Structured Data.</strong> You have a tuple representing a product from the Northwind database: <code>product = ("Chai", 18.00, 39, False)</code> (name, price, units_in_stock, discontinued). Unpack this tuple into four variables and print a statement like: <code>"Chai (18.00) - 39 units in stock - Active"</code>. Create three similar tuples for “Chang”, “Aniseed Syrup”, and “Chef Anton’s Cajun Seasoning” with realistic Northwind values, unpack each one, and print their summaries.</p></li>
+<li><p><strong>Dictionary Building with <code>zip()</code>.</strong> You have two lists: product names <code>["Chai", "Chang", "Aniseed Syrup"]</code> and their prices <code>[18.00, 19.00, 10.00]</code>. Use <code>zip()</code> to combine them into a dictionary where each product name is a key and its price is the value. Then use this dictionary to look up the price of “Chang” and print all products with their prices in the format <code>"Product: $price"</code>.</p></li>
+<li><p><strong>Set Operations with Northwind Data.</strong> You have two sets representing customer countries from different sales regions: <code>region_a = {"France", "Germany", "UK", "Spain", "Italy"}</code> and <code>region_b = {"Germany", "Italy", "USA", "Brazil", "Canada"}</code>. Use set operations to find: countries appearing in both regions (intersection), countries unique to Region A, countries unique to Region B, and the complete list of countries across both regions (union).</p></li>
+<li><p><strong>Northwind Inventory Report (Capstone).</strong> Create a comprehensive inventory report by combining lists, dictionaries, and sets. You’ll track three product categories, their products, and warehouse locations. Structure: a dictionary where keys are category names and values are lists of product names. Another dictionary for product-to-warehouse mappings (each product maps to a set of warehouse locations). Write code to: (a) print all products in the “Beverages” category, (b) find which warehouses stock “Chai”, (c) identify products that are stocked in multiple warehouses, and (d) count the total number of unique warehouse locations across all products.</p></li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Tuple Unpacking and Structured Data</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chai</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> (<span class="st">"Chai"</span>, <span class="fl">18.00</span>, <span class="dv">39</span>, <span class="va">False</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>name, price, units_in_stock, discontinued <span class="op">=</span> product</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"Active"</span> <span class="cf">if</span> <span class="kw">not</span> discontinued <span class="cf">else</span> <span class="st">"Discontinued"</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">) - </span><span class="sc">{</span>units_in_stock<span class="sc">}</span><span class="ss"> units in stock - </span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Chang</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> (<span class="st">"Chang"</span>, <span class="fl">19.00</span>, <span class="dv">17</span>, <span class="va">False</span>)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>name, price, units_in_stock, discontinued <span class="op">=</span> product</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"Active"</span> <span class="cf">if</span> <span class="kw">not</span> discontinued <span class="cf">else</span> <span class="st">"Discontinued"</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">) - </span><span class="sc">{</span>units_in_stock<span class="sc">}</span><span class="ss"> units in stock - </span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Aniseed Syrup</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> (<span class="st">"Aniseed Syrup"</span>, <span class="fl">10.00</span>, <span class="dv">13</span>, <span class="va">False</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>name, price, units_in_stock, discontinued <span class="op">=</span> product</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"Active"</span> <span class="cf">if</span> <span class="kw">not</span> discontinued <span class="cf">else</span> <span class="st">"Discontinued"</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">) - </span><span class="sc">{</span>units_in_stock<span class="sc">}</span><span class="ss"> units in stock - </span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Chef Anton's Cajun Seasoning</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> (<span class="st">"Chef Anton's Cajun Seasoning"</span>, <span class="fl">22.00</span>, <span class="dv">53</span>, <span class="va">False</span>)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>name, price, units_in_stock, discontinued <span class="op">=</span> product</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"Active"</span> <span class="cf">if</span> <span class="kw">not</span> discontinued <span class="cf">else</span> <span class="st">"Discontinued"</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">) - </span><span class="sc">{</span>units_in_stock<span class="sc">}</span><span class="ss"> units in stock - </span><span class="sc">{</span>status<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Dictionary Building with <code>zip()</code></strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>product_names <span class="op">=</span> [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Aniseed Syrup"</span>]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> [<span class="fl">18.00</span>, <span class="fl">19.00</span>, <span class="fl">10.00</span>]</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Build dictionary using zip()</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>product_prices <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(product_names, prices))</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Look up Chang's price</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>chang_price <span class="op">=</span> product_prices[<span class="st">"Chang"</span>]</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Chang costs $</span><span class="sc">{</span>chang_price<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print all products with prices</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product, price <span class="kw">in</span> product_prices.items():</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">: $</span><span class="sc">{</span>price<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Set Operations with Northwind Data</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>region_a <span class="op">=</span> {<span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"UK"</span>, <span class="st">"Spain"</span>, <span class="st">"Italy"</span>}</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>region_b <span class="op">=</span> {<span class="st">"Germany"</span>, <span class="st">"Italy"</span>, <span class="st">"USA"</span>, <span class="st">"Brazil"</span>, <span class="st">"Canada"</span>}</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Intersection: countries in both regions</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> region_a <span class="op">&amp;</span> region_b</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"In both regions: </span><span class="sc">{</span>both<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Unique to Region A</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>unique_a <span class="op">=</span> region_a <span class="op">-</span> region_b</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique to Region A: </span><span class="sc">{</span>unique_a<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Unique to Region B</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>unique_b <span class="op">=</span> region_b <span class="op">-</span> region_a</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Unique to Region B: </span><span class="sc">{</span>unique_b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Union: all countries</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>all_countries <span class="op">=</span> region_a <span class="op">|</span> region_b</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"All countries: </span><span class="sc">{</span>all_countries<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Northwind Inventory Report</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solution.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34" data-filename="solution.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Category to products mapping</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>categories <span class="op">=</span> {</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Beverages"</span>: [<span class="st">"Chai"</span>, <span class="st">"Chang"</span>, <span class="st">"Guarana Fantastica"</span>],</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Condiments"</span>: [<span class="st">"Chef Anton's Cajun Seasoning"</span>, <span class="st">"Louisiana Hot Spicy Sauce"</span>],</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Seafood"</span>: [<span class="st">"Carnarvon Tigers"</span>, <span class="st">"Escargots de Bourgogne"</span>],</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Product to warehouses mapping (each product in a set of warehouses)</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>product_warehouses <span class="op">=</span> {</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Chai"</span>: {<span class="st">"New York"</span>, <span class="st">"London"</span>, <span class="st">"Tokyo"</span>},</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Chang"</span>: {<span class="st">"New York"</span>, <span class="st">"Sydney"</span>},</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Guarana Fantastica"</span>: {<span class="st">"Rio"</span>, <span class="st">"New York"</span>},</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Chef Anton's Cajun Seasoning"</span>: {<span class="st">"New Orleans"</span>},</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Louisiana Hot Spicy Sauce"</span>: {<span class="st">"New Orleans"</span>, <span class="st">"New York"</span>},</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Carnarvon Tigers"</span>: {<span class="st">"Sydney"</span>},</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Escargots de Bourgogne"</span>: {<span class="st">"London"</span>, <span class="st">"Paris"</span>},</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="co"># (a) Print all products in Beverages category</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Beverages category:"</span>)</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> product <span class="kw">in</span> categories[<span class="st">"Beverages"</span>]:</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  - </span><span class="sc">{</span>product<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a><span class="co"># (b) Find warehouses stocking Chai</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>chai_warehouses <span class="op">=</span> product_warehouses[<span class="st">"Chai"</span>]</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Warehouses stocking Chai: </span><span class="sc">{</span>chai_warehouses<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a><span class="co"># (c) Identify products stocked in multiple warehouses</span></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>multi_warehouse <span class="op">=</span> [product <span class="cf">for</span> product, warehouses <span class="kw">in</span> product_warehouses.items()</span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">if</span> <span class="bu">len</span>(warehouses) <span class="op">&gt;</span> <span class="dv">1</span>]</span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Products in multiple warehouses: </span><span class="sc">{</span>multi_warehouse<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a><span class="co"># (d) Count unique warehouse locations</span></span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>all_warehouses <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> warehouses <span class="kw">in</span> product_warehouses.values():</span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a>    all_warehouses <span class="op">=</span> all_warehouses <span class="op">|</span> warehouses</span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Total unique warehouses: </span><span class="sc">{</span><span class="bu">len</span>(all_warehouses)<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>all_warehouses<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="glossary" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="glossary">Glossary</h2>
