@@ -265,7 +265,7 @@ You rarely need to call dunder methods directly. Their value is *conceptual*: un
 ### Exercises
 
 1. Predict what each of these dunder method calls returns, then verify:
-```{.python filename="solution.py"}
+```{.python filename="predict.py"}
 (10).__add__(5)
 "hello".__len__()
 [1, 2, 3].__contains__(2)
@@ -498,7 +498,7 @@ To actually *enforce* type hints, you need a static type checker like basedpyrig
 ### Exercises
 
 1. Add type hints to this function signature:
-```{.python filename="solution.py"}
+```{.python filename="exercise.py"}
 def find_expensive(products, threshold):
     return [p for p in products if p["price"] > threshold]
 ```
@@ -830,6 +830,239 @@ Using only `dir()`, `help()`, and the official Python documentation, answer thes
 1. What does `str.partition()` do? When would you use it instead of `str.split()`?
 2. What is `dict.setdefault()`? How could it simplify the aggregation loop in `revenue_by_category`?
 3. What is `collections.Counter`? How could it simplify counting operations?
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**Object Exploration**
+
+**1.** Exploring `datetime.date` with `dir()` and `help()`:
+
+```{.python filename="Python REPL"}
+>>> import datetime
+>>> d = datetime.date(2024, 4, 14)
+>>> d.weekday()  # Returns 0=Monday, 6=Sunday
+6
+>>> d.isoformat()  # Format as ISO 8601 string
+'2024-04-14'
+>>> d.strftime("%B %d, %Y")  # Format with custom pattern
+'April 14, 2024'
+>>> datetime.date.min  # Earliest representable date
+datetime.date(1, 1, 1)
+```
+
+The key discoveries: `weekday()` returns the day of the week (0=Monday through 6=Sunday), `strftime()` formats dates with pattern strings, and `datetime.date.min` is January 1, year 1.
+
+**2.** Three list methods discovered with `dir()`:
+
+```{.python filename="Python REPL"}
+>>> lst = [3, 1, 4, 1, 5]
+>>> lst.copy()  # Create a shallow copy
+[3, 1, 4, 1, 5]
+>>> lst.count(1)  # Count occurrences of a value
+2
+>>> lst.index(4)  # Find index of first occurrence
+2
+```
+
+Other examples: `clear()` empties the list, `insert()` adds at a specific position, `pop()` removes and returns an item.
+
+**3.** Exploring `pathlib.Path` and the `/` operator:
+
+```{.python filename="Python REPL"}
+>>> from pathlib import Path
+>>> p = Path("data")
+>>> dir(p)  # Shows dunder methods including __truediv__
+[..., '__truediv__', ...]
+>>> Path("data") / "orders.csv"
+PosixPath('data/orders.csv')
+```
+
+The `/` operator calls `__truediv__()`, which `Path` overloads to concatenate path segments. This makes path building readable and cross-platform (works on Windows and Unix).
+
+**Type Hints Practice**
+
+**1.** Adding type hints to a `northwind_utils.py` module:
+
+```{.python filename="solution.py"}
+from pathlib import Path
+import csv
+from collections import defaultdict
+
+def load_products(filepath: Path) -> dict[str, dict[str, str]]:
+    """Load products from CSV into a lookup dictionary."""
+    products: dict[str, dict[str, str]] = {}
+    with open(filepath) as f:
+        for row in csv.DictReader(f):
+            products[row["productID"]] = {
+                "name": row["productName"],
+                "categoryID": row["categoryID"],
+                "unitPrice": row["unitPrice"]
+            }
+    return products
+
+def aggregate_revenue(
+    product_id: str,
+    quantity: int,
+    unit_price: float,
+    revenue_by_category: dict[str, float],
+    products: dict[str, dict[str, str]]
+) -> None:
+    """Aggregate revenue by category."""
+    if product_id in products:
+        category_id: str = products[product_id]["categoryID"]
+        revenue: float = quantity * unit_price
+        revenue_by_category[category_id] = (
+            revenue_by_category.get(category_id, 0.0) + revenue
+        )
+
+def format_currency(amount: float) -> str:
+    """Format a number as currency."""
+    return f"${amount:.2f}"
+```
+
+**2.** A `parse_product_row()` function with type hints and Google-style docstring:
+
+```{.python filename="solution.py"}
+class Product:
+    """Represents a product from the Northwind database."""
+
+    def __init__(self, product_id: str, name: str, category_id: str, unit_price: float) -> None:
+        self.product_id: str = product_id
+        self.name: str = name
+        self.category_id: str = category_id
+        self.unit_price: float = unit_price
+
+def parse_product_row(row: dict[str, str]) -> Product:
+    """Convert a CSV row to a Product object with proper types.
+
+    Args:
+        row: A dictionary with string keys and values from a CSV row.
+
+    Returns:
+        A Product object with typed fields.
+
+    Raises:
+        ValueError: If unit_price cannot be converted to a float.
+    """
+    return Product(
+        product_id=row["productID"],
+        name=row["productName"],
+        category_id=row["categoryID"],
+        unit_price=float(row["unitPrice"])
+    )
+```
+
+**Class Building**
+
+**1 & 2.** A complete `Order` class with all required methods:
+
+```{.python filename="solution.py"}
+class OrderLine:
+    """A single line item in an order."""
+
+    def __init__(self, product_name: str, quantity: int, unit_price: float) -> None:
+        self.product_name: str = product_name
+        self.quantity: int = quantity
+        self.unit_price: float = unit_price
+
+    def line_total(self) -> float:
+        """Calculate total revenue for this line."""
+        return self.quantity * self.unit_price
+
+class Order:
+    """Represents a customer order with multiple line items."""
+
+    def __init__(self, order_id: str, customer: str) -> None:
+        self.order_id: str = order_id
+        self.customer: str = customer
+        self.lines: list[OrderLine] = []
+
+    def add_line(self, line: OrderLine) -> None:
+        """Add a line item to the order."""
+        self.lines.append(line)
+
+    def total_revenue(self) -> float:
+        """Calculate total revenue for the entire order."""
+        return sum(line.line_total() for line in self.lines)
+
+    def line_count(self) -> int:
+        """Count the number of line items."""
+        return len(self.lines)
+
+    def __len__(self) -> int:
+        """Return the number of line items."""
+        return self.line_count()
+
+    def summary(self) -> str:
+        """Return a formatted summary of the order."""
+        total: float = self.total_revenue()
+        count: int = self.line_count()
+        return f"Order {self.order_id} for {self.customer}: {count} items, ${total:.2f}"
+
+    def __repr__(self) -> str:
+        """Return a detailed representation."""
+        return f"Order(order_id={self.order_id!r}, lines={len(self.lines)})"
+
+    def __str__(self) -> str:
+        """Return a human-readable string."""
+        return self.summary()
+
+# Usage
+order = Order("ORD-001", "Acme Corp")
+order.add_line(OrderLine("Widget", 10, 25.00))
+order.add_line(OrderLine("Gadget", 5, 50.00))
+
+print(len(order))  # 2
+print(order)  # Order ORD-001 for Acme Corp: 2 items, $500.00
+print(repr(order))  # Order(order_id='ORD-001', lines=2)
+```
+
+**Documentation Scavenger Hunt**
+
+**1.** `str.partition()` splits a string into exactly three parts: before, separator, and after. Use it instead of `split()` when you need to capture what came before the separator:
+
+```{.python filename="Python REPL"}
+>>> "key=value".partition("=")
+('key', '=', 'value')
+>>> "no equals here".partition("=")
+('no equals here', '', '')
+```
+
+Unlike `split()`, which returns a variable-length list, `partition()` always returns a 3-tuple, making it safer when you're expecting a separator to appear exactly once.
+
+**2.** `dict.setdefault(key, default)` returns the value for a key if it exists, otherwise it inserts the key with the default value and returns it. This simplifies aggregation loops:
+
+```{.python filename="Python REPL"}
+>>> revenue_by_category = {}
+>>> # Without setdefault:
+>>> if "Beverages" not in revenue_by_category:
+...     revenue_by_category["Beverages"] = 0.0
+>>> revenue_by_category["Beverages"] += 42.50
+
+>>> # With setdefault:
+>>> revenue_by_category.setdefault("Beverages", 0.0) += 42.50
+>>> revenue_by_category
+{'Beverages': 42.5}
+```
+
+This is much cleaner in loops: `revenue_by_category.setdefault(category, 0.0) += revenue` avoids the KeyError entirely.
+
+**3.** `collections.Counter` is a dict subclass that counts hashable items automatically. It replaces manual counting loops:
+
+```{.python filename="Python REPL"}
+>>> from collections import Counter
+>>> categories = ["Beverages", "Condiments", "Beverages", "Produce"]
+>>> Counter(categories)
+Counter({'Beverages': 2, 'Condiments': 1, 'Produce': 1})
+
+>>> # Most common N items
+>>> Counter(categories).most_common(2)
+[('Beverages', 2), ('Condiments', 1)]
+```
+
+Instead of a `defaultdict` with manual incrementing, `Counter` is purpose-built for counting and provides convenient methods like `most_common()`.
+
+:::
 
 ## Summary {.unnumbered}
 

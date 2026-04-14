@@ -226,7 +226,7 @@ Both forms are equivalent. Use whichever feels more natural.
 ### Exercises
 
 1. What is wrong with this code? Rewrite it using a context manager.
-```{.python filename="solution.py"}
+```{.python filename="exercise.py"}
 f = open("data.txt")
 content = f.read()
 # ... some processing that might raise an error ...
@@ -781,7 +781,7 @@ Handle when you can recover (use a default value, skip a bad record, try an alte
 1. Write a `try`/`except` block that attempts to convert a string to a float. If the conversion fails, print a warning and assign a default value of `0.0`. Test it with both `"18.50"` and `"N/A"`.
 
 2. Predict what this code prints:
-```{.python filename="solution.py"}
+```{.python filename="predict.py"}
 try:
     x = int("hello")
     print("Success")
@@ -1036,6 +1036,234 @@ This script demonstrates every concept from this chapter: `pathlib` for file pat
 ### Northwind Pipeline {.unnumbered}
 
 Write the complete Northwind revenue pipeline described in this chapter. Using the CSV files from the `data/` directory (`products.csv`, `order_details.csv`, and `categories.csv`), verify that your script produces revenue totals by category. Compare your results with the SQL query `SELECT c.categoryName, SUM(od.unitPrice * od.quantity) AS revenue FROM order_details od JOIN products p ON od.productID = p.productID JOIN categories c ON p.categoryID = c.categoryID GROUP BY c.categoryName ORDER BY revenue DESC` from the Databases module.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**File Reading**
+
+**1.** This script reads a file and counts lines, words, and characters using basic string operations:
+
+```{.python filename="solution.py"}
+from pathlib import Path
+
+def count_stats(filepath):
+    """Count lines, words, and characters in a file."""
+    path = Path(filepath)
+    content = path.read_text()
+
+    lines = len(content.splitlines())
+    words = len(content.split())
+    chars = len(content)
+
+    print(f"Lines: {lines}")
+    print(f"Words: {words}")
+    print(f"Characters: {chars}")
+
+# Usage
+count_stats("data.txt")
+```
+
+**2.** The `read_csv_safe` function uses `try`/`except` to handle missing files gracefully:
+
+```{.python filename="solution.py"}
+import csv
+from pathlib import Path
+
+def read_csv_safe(filepath):
+    """Load a CSV file, returning an empty list if it doesn't exist."""
+    try:
+        with open(filepath) as f:
+            reader = csv.DictReader(f)
+            return list(reader)
+    except FileNotFoundError:
+        print(f"Warning: File {filepath} not found.")
+        return []
+
+# Usage
+data = read_csv_safe("missing.csv")
+print(len(data))  # prints 0
+```
+
+**Pathlib Practice**
+
+**1.** This script groups files by extension and calculates statistics:
+
+```{.python filename="solution.py"}
+from pathlib import Path
+
+def analyze_directory(directory):
+    """Group files by extension and show counts and sizes."""
+    path = Path(directory)
+    extensions = {}
+
+    for file in path.rglob("*"):
+        if file.is_file():
+            ext = file.suffix if file.suffix else "no_extension"
+            if ext not in extensions:
+                extensions[ext] = {"count": 0, "total_size": 0}
+            extensions[ext]["count"] += 1
+            extensions[ext]["total_size"] += file.stat().st_size
+
+    for ext, stats in sorted(extensions.items()):
+        print(f"{ext}: {stats['count']} files, {stats['total_size']} bytes")
+
+# Usage
+analyze_directory(".")
+```
+
+**2.** Using `rglob()` to find all CSV files recursively:
+
+```{.python filename="solution.py"}
+from pathlib import Path
+
+def find_csv_files(start_dir):
+    """Find all CSV files and print relative paths."""
+    start_path = Path(start_dir)
+
+    for csv_file in start_path.rglob("*.csv"):
+        relative = csv_file.relative_to(start_path)
+        print(relative)
+
+# Usage
+find_csv_files("data")
+```
+
+**Data Processing**
+
+**1.** Reading a JSON config file and using it in the pipeline:
+
+```{.python filename="solution.py"}
+import json
+import csv
+from pathlib import Path
+from collections import defaultdict
+
+def load_config(config_file):
+    """Load configuration from JSON file."""
+    with open(config_file) as f:
+        return json.load(f)
+
+def process_with_config(config_file):
+    """Process revenue pipeline using configuration."""
+    config = load_config(config_file)
+
+    input_dir = Path(config["input_dir"])
+    output_file = Path(config["output_file"])
+    categories = set(config["categories"])
+
+    # Load categories
+    categories_lookup = {}
+    with open(input_dir / "categories.csv") as f:
+        for row in csv.DictReader(f):
+            categories_lookup[row["categoryID"]] = row["categoryName"]
+
+    # Load products
+    products_lookup = {}
+    with open(input_dir / "products.csv") as f:
+        for row in csv.DictReader(f):
+            products_lookup[row["productID"]] = {
+                "name": row["productName"],
+                "categoryID": row["categoryID"]
+            }
+
+    # Process order details
+    revenue_by_category = defaultdict(float)
+    with open(input_dir / "order_details.csv") as f:
+        for row in csv.DictReader(f):
+            product_id = row["productID"]
+            product = products_lookup.get(product_id)
+            if product:
+                category_name = categories_lookup.get(product["categoryID"])
+                if category_name in categories:
+                    revenue = float(row["unitPrice"]) * int(row["quantity"])
+                    revenue_by_category[category_name] += revenue
+
+    # Write output
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "w") as f:
+        writer = csv.DictWriter(f, fieldnames=["category", "revenue"])
+        writer.writeheader()
+        for cat, rev in sorted(revenue_by_category.items(), key=lambda x: x[1], reverse=True):
+            writer.writerow({"category": cat, "revenue": rev})
+
+# Usage
+process_with_config("pipeline_config.json")
+```
+
+**2.** Making the revenue pipeline robust to malformed data:
+
+```{.python filename="solution.py"}
+import csv
+from pathlib import Path
+from collections import defaultdict
+
+def process_pipeline_robust(data_dir):
+    """Process revenue pipeline with error handling for malformed data."""
+    data_path = Path(data_dir)
+
+    # Load categories
+    categories_lookup = {}
+    with open(data_path / "categories.csv") as f:
+        for row in csv.DictReader(f):
+            categories_lookup[row["categoryID"]] = row["categoryName"]
+
+    # Load products
+    products_lookup = {}
+    with open(data_path / "products.csv") as f:
+        for row in csv.DictReader(f):
+            products_lookup[row["productID"]] = {
+                "name": row["productName"],
+                "categoryID": row["categoryID"]
+            }
+
+    # Process order details with error handling
+    revenue_by_category = defaultdict(float)
+    with open(data_path / "order_details.csv") as f:
+        for line_num, row in enumerate(csv.DictReader(f), start=2):
+            try:
+                product_id = row.get("productID")
+                if not product_id or product_id not in products_lookup:
+                    print(f"Warning: Line {line_num} has missing or invalid productID")
+                    continue
+
+                unit_price = float(row.get("unitPrice", ""))
+                quantity = int(row.get("quantity", ""))
+
+                if unit_price < 0 or quantity < 0:
+                    print(f"Warning: Line {line_num} has negative price or quantity")
+                    continue
+
+                product = products_lookup[product_id]
+                category_name = categories_lookup.get(product["categoryID"])
+
+                revenue = unit_price * quantity
+                revenue_by_category[category_name] += revenue
+
+            except (ValueError, KeyError) as e:
+                print(f"Warning: Line {line_num} has malformed data: {e}")
+                continue
+
+    return revenue_by_category
+
+# Usage
+results = process_pipeline_robust("data")
+for cat, rev in sorted(results.items(), key=lambda x: x[1], reverse=True):
+    print(f"{cat}: ${rev:.2f}")
+```
+
+**Northwind Pipeline**
+
+The Northwind Pipeline exercise asks you to implement the complete revenue pipeline described in this chapter. The solution is the `revenue_pipeline.py` script shown earlier in the chapter, which:
+
+1. Loads the three CSV files from `data/`
+2. Builds lookup dictionaries for categories and products
+3. Iterates through order details, joining them with product and category information
+4. Aggregates revenue by category
+5. Writes results to a CSV file
+
+The expected output should show total revenue by category, sorted in descending order. You can verify your results against the SQL query by comparing the revenue totals, and the numbers should match exactly (within floating-point precision).
+
+:::
 
 ## Summary {.unnumbered}
 

@@ -99,7 +99,7 @@ For the Northwind project in this book, `--package` is the right choice. You're 
 
 ## `pyproject.toml` in Depth {#sec-pyproject}
 
-The `pyproject.toml` file is the single source of truth for your project. It declares metadata, dependencies, tool configuration, and build instructions. Every tool in the Python ecosystem reads it. Here's a comprehensive example for the Northwind project:
+The `pyproject.toml` file is the single source of truth for your project. It declares metadata, dependencies, tool configuration, and build instructions. Every tool in the Python ecosystem reads it. Here's a comprehensive example for the Northwind project. Some of the dependencies listed here (DuckDB, Polars, Altair, Typer) are tools you'll learn in the next unit, but seeing the full picture now shows you where your project is headed:
 
 ```{.toml filename="pyproject.toml"}
 [project]
@@ -227,7 +227,7 @@ requires-python = ">=3.12"
 [project.dependencies]
 polars = ">=0.20"
 duckdb = "~=0.9"
-requests = ">=2.28"
+httpx = ">=0.27"
 
 [dependency-groups]
 dev = [
@@ -542,6 +542,137 @@ Delete your project's `.venv/` directory, run `uv sync`, and confirm that everyt
 ### README Review {.unnumbered}
 
 Write a README for your Northwind project that is detailed enough for someone unfamiliar with it to set up and use the project from scratch without asking you any questions. If possible, trade READMEs with someone else and attempt to follow each other's instructions exactly. Note where the instructions were unclear and revise.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**Three Modes**
+
+The three `uv init` modes create different structures for different purposes:
+
+- `uv init`: Simple project with scripts at the top level. No `src/` directory. Ideal for one-off scripts, homework, and quick experiments where you just run individual Python files.
+- `uv init --package`: Application package with a `src/` layout and an importable package structure. Best for tools with CLI entry points that you want to distribute or that multiple scripts will import from. This is the right choice for the Northwind reporting tool.
+- `uv init --library`: Library package with a `src/` layout, `tests/` directory, and `py.typed` marker file. Designed for reusable code that other projects will install as dependencies. Includes testing infrastructure.
+
+**Northwind pyproject.toml**
+
+```{.toml filename="pyproject.toml"}
+[project]
+name = "northwind-analysis"
+version = "0.1.0"
+description = "Analytical workflows for the Northwind trading database."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13"
+authors = [
+    { name = "Your Name", email = "you@example.com" },
+]
+
+[project.dependencies]
+duckdb = ">=1.0"
+polars = ">=1.0"
+altair = ">=5.0"
+xlsxwriter = ">=3.2"
+typer = ">=0.12"
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.20",
+    "marimo>=0.9",
+    "ruff>=0.8",
+]
+
+[project.scripts]
+northwind = "northwind_analysis.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+```
+
+**Publish to Test PyPI**
+
+Follow these steps to publish a small package to Test PyPI:
+
+1. First, create an account at [test.pypi.org](https://test.pypi.org) and generate an API token in your account settings.
+2. Create your package with complete `pyproject.toml` metadata (name, version, description, author, license).
+3. Build the package:
+   ```bash
+   uv build
+   ```
+4. Publish to Test PyPI using your API token:
+   ```bash
+   uv publish --publish-url https://test.pypi.org/legacy/ --token pypi-XXXX
+   ```
+   (Replace `XXXX` with your actual Test PyPI API token)
+5. Verify it's available at `https://test.pypi.org/project/your-package-name/`
+6. Create a separate test project and install it:
+   ```bash
+   uv init test-install
+   cd test-install
+   uv add --index-url https://test.pypi.org/simple/ your-package-name
+   uv run python -c "import your_package; print('Success!')"
+   ```
+7. Fix any issues (missing metadata, import errors, missing dependencies) and republish with an incremented version number.
+
+**Peer Installation**
+
+When installing someone else's project from GitHub with `uv add git+https://github.com/username/project`, common issues and fixes:
+
+- **ImportError: No module named 'duckdb'**: Missing dependencies. Ensure `pyproject.toml` lists all runtime dependencies. Run `uv sync` to install them.
+- **ModuleNotFoundError in package code**: The project doesn't follow the `src/` layout correctly, or `pyproject.toml` doesn't declare the package name. Verify that the `name` field in `[project]` matches the actual package directory (with hyphens converted to underscores).
+- **Wrong Python version**: The project specifies `requires-python = ">=3.13"` but you have Python 3.12. Either upgrade Python or loosen the requirement if the project actually works on earlier versions.
+- **Lock file conflicts**: If you're adding the project to an existing environment with incompatible versions already installed, try `uv sync --upgrade` to resolve the entire dependency tree.
+
+**Template Repository**
+
+A good template repository for starting new projects should include:
+
+- `pyproject.toml` with complete metadata structure, common dependencies placeholders, `[dependency-groups]` for dev tools, and build system configuration.
+- `ruff.toml` with rule selections (E, W, F, I, UP, D, N) and per-file-ignores for notebooks.
+- `pyrightconfig.json` with `typeCheckingMode: "basic"`, Python version, `include` and `exclude` paths.
+- `.gitignore` with entries for Python caches (`__pycache__/`, `*.pyc`), virtual environment (`.venv/`), tool caches (`.ruff_cache/`, `.mypy_cache/`), OS files, and project outputs.
+- `README.md` with sections for description, installation (run `uv sync`), usage examples, and project structure.
+- `src/` directory with a placeholder package directory and `__init__.py`.
+- `.python-version` file set to your default Python version.
+- `notebooks/` directory (optional, for Marimo notebooks).
+
+**Reproducibility Check**
+
+The reproducibility test ensures your project can be rebuilt from scratch:
+
+```bash
+rm -rf .venv/              # Delete the virtual environment
+uv sync                    # Rebuild from lock file
+uv run python -m northwind_analysis.cli --help   # Run your main entry point
+```
+
+If you have notebooks:
+
+```bash
+uv run marimo edit notebooks/analysis.py
+```
+
+Success means: the virtual environment recreates with all dependencies, your scripts run without import errors, and your notebooks open and execute. If anything fails, check that:
+- `pyproject.toml` lists all required dependencies (not just the ones you imported recently).
+- `uv.lock` is committed to Git.
+- Your `[project.scripts]` entry points are correct.
+- Relative imports in your modules are correct (use absolute imports like `from northwind_analysis.revenue import get_revenue`).
+
+**README Review**
+
+A thorough README should answer and address:
+
+- **What is this project?** A one-sentence or two-sentence description of what the project does and why it exists.
+- **Installation instructions**: Clear, step-by-step commands starting from `git clone`. Include `uv sync` and any one-time setup (like downloading the Northwind database).
+- **Quick-start usage**: Examples of the main commands to run. For a reporting tool, show `uv run northwind revenue --category "Beverages"`. For notebooks, show `uv run marimo edit notebooks/analysis.py`.
+- **Project structure**: A text tree showing the main directories and what they contain.
+- **Dependencies**: A list of major dependencies and what they're used for (DuckDB for querying, Polars for transformation, Altair for visualization, etc.).
+- **Contributing or extending**: Notes for anyone who wants to modify or extend the project.
+- **License**: Explicitly state the license (MIT, Apache 2.0, etc.).
+
+Test your README by reading it aloud as if you've never seen the project before. Can you follow every instruction without guessing? Is every command copy-paste ready? Does someone know where to find the database file or configuration?
+
+:::
 
 ## Summary {.unnumbered}
 

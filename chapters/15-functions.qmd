@@ -255,7 +255,7 @@ Keyword-only arguments prevent positional confusion. When a function has several
 1. Write a function `compute_line_total(unit_price, quantity, discount=0.0)` that returns the line total after discount. Include a Google-style docstring. Test it with `compute_line_total(18.00, 10)` and `compute_line_total(18.00, 10, discount=0.15)`.
 
 2. Predict the output of this code without running it:
-```{.python filename="solution.py"}
+```{.python filename="predict.py"}
 def add_item(item, items=[]):
     items.append(item)
     return items
@@ -380,7 +380,7 @@ new_list = list(range(5)) # TypeError: 'list' object is not callable
 ### Exercises
 
 1. Predict the output of this code:
-```{.python filename="solution.py"}
+```{.python filename="predict.py"}
 x = 10
 
 def outer():
@@ -394,7 +394,7 @@ print(x)
 ```
 
 2. Why does this code raise an error?
-```{.python filename="solution.py"}
+```{.python filename="predict.py"}
 count = 0
 def increment():
     count = count + 1
@@ -926,6 +926,259 @@ Running this directly (`uv run northwind_utils.py`) prints the report. Importing
 1. Create a file called `conversions.py` that contains functions for common engineering unit conversions (PSI to kPa, Fahrenheit to Celsius, miles to kilometers, etc.). Include a module docstring and Google-style docstrings for each function. Write a separate script that imports and uses these functions.
 
 2. Add to your `northwind_utils.py`: a function that takes a list of products and returns the top N products by stock value (price × quantity). Include a default of `n=5`.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+### Function Design {.unnumbered}
+
+**1.**
+```{.python filename="solution.py"}
+def classify_stock_level(units_in_stock, reorder_level):
+    """Classify inventory stock level based on reorder threshold.
+
+    Args:
+        units_in_stock: Current number of units in inventory.
+        reorder_level: The target minimum stock level.
+
+    Returns:
+        A classification string: "Critical", "Low", "Adequate", or "Overstocked".
+    """
+    if units_in_stock == 0:
+        return "Critical"
+    elif units_in_stock <= reorder_level:
+        return "Low"
+    elif units_in_stock < 3 * reorder_level:
+        return "Adequate"
+    else:
+        return "Overstocked"
+
+# Test cases
+print(classify_stock_level(0, 10))      # "Critical"
+print(classify_stock_level(5, 10))      # "Low"
+print(classify_stock_level(15, 10))     # "Adequate"
+print(classify_stock_level(35, 10))     # "Overstocked"
+```
+
+**2.**
+```{.python filename="solution.py"}
+def format_product_line(name, price, quantity):
+    """Format a product line with alignment for display.
+
+    Args:
+        name: Product name.
+        price: Unit price in dollars.
+        quantity: Quantity ordered.
+
+    Returns:
+        A formatted string like 'Chai ............. $18.00 x 10'.
+    """
+    dots = "." * (20 - len(name))
+    return f"{name} {dots} ${price:>7.2f} x {quantity:>3}"
+
+print(format_product_line("Chai", 18.00, 10))
+print(format_product_line("Aniseed Syrup", 10.00, 20))
+print(format_product_line("Tofu", 23.25, 5))
+```
+
+**3.**
+```{.python filename="solution.py"}
+def group_orders(order_details):
+    """Group orders by category."""
+    groups = {}
+    for item in order_details:
+        category = item["category"]
+        if category not in groups:
+            groups[category] = []
+        groups[category].append(item)
+    return groups
+
+
+def compute_category_totals(order_details):
+    """Compute revenue totals by category."""
+    groups = group_orders(order_details)
+    totals = {}
+    for category, items in groups.items():
+        revenue = sum(item["price"] * item["quantity"] for item in items)
+        totals[category] = revenue
+    return totals
+
+
+def format_summary(category_totals):
+    """Format category totals as a printable table."""
+    sorted_items = sorted(category_totals.items(), key=lambda x: x[1], reverse=True)
+    lines = [f"{'Category':<15} {'Revenue':>10}"]
+    lines.append(f"{'-' * 15} {'-' * 10}")
+    for category, total in sorted_items:
+        lines.append(f"{category:<15} ${total:>9,.2f}")
+    return "\n".join(lines)
+
+
+# Usage
+order_details = [
+    {"product": "Chai", "category": "Beverages", "price": 18.00, "quantity": 10},
+    {"product": "Chang", "category": "Beverages", "price": 19.00, "quantity": 5},
+    {"product": "Tofu", "category": "Produce", "price": 23.25, "quantity": 15},
+]
+
+totals = compute_category_totals(order_details)
+print(format_summary(totals))
+```
+
+### Generator Practice {.unnumbered}
+
+**1.**
+```{.python filename="solution.py"}
+def fibonacci():
+    """Generate Fibonacci numbers indefinitely."""
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+# Print first 20 Fibonacci numbers
+count = 0
+for num in fibonacci():
+    if count >= 20:
+        break
+    print(num)
+    count += 1
+```
+
+**2.**
+```{.python filename="solution.py"}
+import math
+
+# Generator expression for square roots
+sqrt_gen = (math.sqrt(n) for n in range(1, 1_000_001))
+
+# Sum without creating a list
+total = sum(sqrt_gen)
+print(f"Sum of square roots: {total:.2f}")
+```
+
+**3.**
+```{.python filename="solution.py"}
+import sys
+
+# List comprehension (uses significant memory)
+list_comp = [n ** 2 for n in range(10_000_000)]
+list_size = sys.getsizeof(list_comp)
+
+# Generator expression (uses almost no memory)
+gen_expr = (n ** 2 for n in range(10_000_000))
+gen_size = sys.getsizeof(gen_expr)
+
+print(f"List comprehension size: {list_size:,} bytes")
+print(f"Generator expression size: {gen_size:,} bytes")
+print(f"The list comprehension uses ~{list_size / gen_size:.0f}x more memory")
+```
+
+### Module Building {.unnumbered}
+
+**1.**
+
+File: `conversions.py`
+```{.python filename="conversions.py"}
+"""Unit conversion utilities for engineering calculations.
+
+Provides functions for common unit conversions used in industrial
+engineering, including pressure, temperature, and distance.
+"""
+
+
+def psi_to_kpa(psi):
+    """Convert pressure from PSI to kilopascals.
+
+    Args:
+        psi: Pressure in pounds per square inch.
+
+    Returns:
+        Pressure in kilopascals.
+    """
+    return psi * 6.89476
+
+
+def fahrenheit_to_celsius(fahrenheit):
+    """Convert temperature from Fahrenheit to Celsius.
+
+    Args:
+        fahrenheit: Temperature in degrees Fahrenheit.
+
+    Returns:
+        Temperature in degrees Celsius.
+    """
+    return (fahrenheit - 32) * 5 / 9
+
+
+def miles_to_kilometers(miles):
+    """Convert distance from miles to kilometers.
+
+    Args:
+        miles: Distance in miles.
+
+    Returns:
+        Distance in kilometers.
+    """
+    return miles * 1.60934
+
+
+if __name__ == "__main__":
+    print(f"100 PSI = {psi_to_kpa(100):.2f} kPa")
+    print(f"72°F = {fahrenheit_to_celsius(72):.2f}°C")
+    print(f"10 miles = {miles_to_kilometers(10):.2f} km")
+```
+
+File: `use_conversions.py`
+```{.python filename="use_conversions.py"}
+"""Example script using the conversions module."""
+
+from conversions import psi_to_kpa, fahrenheit_to_celsius, miles_to_kilometers
+
+# Convert various measurements
+pressure = 50
+temperature = 98.6
+distance = 26.2
+
+print(f"{pressure} PSI = {psi_to_kpa(pressure):.2f} kPa")
+print(f"{temperature}°F = {fahrenheit_to_celsius(temperature):.2f}°C")
+print(f"{distance} miles = {miles_to_kilometers(distance):.2f} km")
+```
+
+**2.**
+
+Add this function to `northwind_utils.py`:
+
+```{.python filename="solution.py"}
+def top_products_by_value(products, n=5):
+    """Return the top N products by stock value (price × quantity).
+
+    Args:
+        products: List of product dictionaries, each with 'name',
+            'price', and 'stock' keys.
+        n: Number of top products to return. Defaults to 5.
+
+    Returns:
+        A list of the top N products sorted by stock value (descending),
+        each as a dictionary with 'name' and 'value' keys.
+    """
+    products_with_value = [
+        {
+            "name": p["name"],
+            "value": p["price"] * p["stock"],
+        }
+        for p in products
+    ]
+
+    sorted_products = sorted(
+        products_with_value,
+        key=lambda p: p["value"],
+        reverse=True,
+    )
+
+    return sorted_products[:n]
+```
+
+:::
 
 ## Summary {.unnumbered}
 

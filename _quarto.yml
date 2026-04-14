@@ -46,14 +46,14 @@ book:
         - chapters/15-functions.qmd
         - chapters/16-file-io.qmd
         - chapters/17-objects.qmd
+        - chapters/18-python-projects.qmd
+        - chapters/19-code-quality.qmd
     - part: unit-4-data-products.qmd
       chapters:
-        - chapters/18-python-sql.qmd
-        - chapters/19-polars.qmd
-        - chapters/20-altair.qmd
-        - chapters/21-excel.qmd
-        - chapters/22-python-projects.qmd
-        - chapters/23-code-quality.qmd
+        - chapters/20-python-sql.qmd
+        - chapters/21-polars.qmd
+        - chapters/22-altair.qmd
+        - chapters/23-excel.qmd
         - chapters/24-computational-documents.qmd
         - chapters/25-arrow.qmd
         - chapters/26-typer.qmd

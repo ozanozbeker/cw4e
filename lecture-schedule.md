@@ -34,20 +34,20 @@
 | 8 | 2 | Ch 12 | Python Fundamentals |
 | 9 | 1 | Ch 13 | Collections |
 | 9 | 2 | Ch 14 | Control Flow |
-| 10 | 1 | Ch 15 | Functions |
-| 10 | 2 | Ch 16 | File I/O |
-| 11 | 1 | Ch 17 | The Python Object Model |
-| 11 | 2 | — | Unit 3 Review |
-| 12 | 1 | — | **Test 3** |
+| 10 | 1 | Ch 15 | Functions & Modules |
+| 10 | 2 | Ch 16 | Working with Files |
+| 11 | 1 | Ch 17 | Objects & Type Hints |
+| 11 | 2 | Ch 18–19 | Python Projects with uv + Code Quality |
+| 12 | 1 | — | Unit 3 Review |
+| 12 | 2 | — | **Test 3** |
 
 ## Building Data Products (Final Project)
 
 | Week | Day | Chapter | Topic |
 |------|-----|---------|-------|
-| 12 | 2 | Ch 18 | Python Meets SQL |
-| 13 | 1 | Ch 19 | DataFrames with Polars |
-| 13 | 2 | Ch 20–21 | Visualization with Altair + Working with Excel |
-| 14 | 1 | Ch 22–23 | Python Projects with uv + Code Quality |
+| 13 | 1 | Ch 20 | Python Meets SQL |
+| 13 | 2 | Ch 21 | DataFrames with Polars |
+| 14 | 1 | Ch 22–23 | Visualization with Altair + Working with Excel |
 | 14 | 2 | Ch 24 | Computational Documents (Quarto + Marimo) |
 | 15 | 1 | Ch 25–26 | Apache Arrow + Building CLI Tools with Typer |
 | 15 | 2 | — | **Project presentations / Final project due** |

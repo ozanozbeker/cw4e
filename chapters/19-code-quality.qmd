@@ -6,7 +6,7 @@ Professional data products don't just work, they're built with intention. You've
 
 ## The Triple Reveal
 
-Let's start with a concrete demonstration. Here's a Python script written without any quality tooling:
+Let's start with a concrete demonstration. The script below uses DuckDB, which you'll learn in the next unit. Don't worry about the SQL or DuckDB details; focus on the *Python* quality issues that the tools catch:
 
 ```{.python filename="before.py"}
 import json
@@ -491,6 +491,186 @@ Run `uv run basedpyright` on your Northwind project. Categorize the errors: how 
 ### Runtime Confirmation {.unnumbered}
 
 Intentionally introduce a type error into one of your functions (for example, pass a string where an integer is expected). Observe basedpyright catching it in Zed with a red squiggle. Then run the script and confirm that it also fails at runtime with a `TypeError`. This demonstrates that type checking catches *real* bugs, not just stylistic preferences.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**Clean Up a Messy Script**
+
+After running `uv run ruff format messy.py`, the script becomes:
+
+```{.python filename="solution.py"}
+import duckdb
+
+
+def process_orders(conn, category_name, min_price):
+    """Process orders for a category above a minimum price."""
+    result = conn.sql(
+        f"SELECT product_name, unit_price FROM products WHERE category_id IN "
+        f"(SELECT category_id FROM categories WHERE category_name='{category_name}') "
+        f"AND unit_price>{min_price}"
+    )
+    data = result.fetchall()
+    total = 0
+    for row in data:
+        total = total + row[1]
+    if total is None:
+        return 0
+    return total
+
+
+c = duckdb.connect("data/northwind.duckdb")
+t = process_orders(c, "Beverages", 10)
+print(f"Total:  {t}")
+```
+
+Ruff's formatter fixed: unused imports removed (`os`, `sys`, `json`), consistent spacing, function renamed to `snake_case`, `== None` changed to `is None`, and double quotes for strings.
+
+Running `uv run ruff check --fix` additionally fixes: import ordering (moved `duckdb` to top, removed unused imports).
+
+After adding type hints and a parameterized query:
+
+```{.python filename="solution.py"}
+"""Revenue analysis for product categories."""
+
+import duckdb
+
+
+def process_orders(
+    conn: duckdb.DuckDBPyConnection, category_name: str, min_price: float
+) -> float:
+    """Calculate total revenue for products in a category above a minimum price.
+
+    Args:
+        conn: DuckDB connection object.
+        category_name: The product category name to filter by.
+        min_price: Minimum unit price threshold.
+
+    Returns:
+        Total revenue as a float.
+    """
+    result = conn.sql("""
+        SELECT SUM(p.unit_price) AS total
+        FROM products AS p
+        JOIN categories AS c ON p.category_id = c.category_id
+        WHERE c.category_name = $1 AND p.unit_price > $2
+    """, params=[category_name, min_price])
+
+    row = result.fetchone()
+    if row is None:
+        return 0.0
+    return row[0] if row[0] is not None else 0.0
+
+
+conn = duckdb.connect("data/northwind.duckdb", read_only=True)
+total = process_orders(conn, "Beverages", 10.0)
+print(f"Total: {total}")
+```
+
+**Configure Your Project**
+
+The configurations are provided in the chapter as shown:
+
+`ruff.toml`:
+```{.toml filename="ruff.toml"}
+target-version = "py313"
+line-length = 88
+
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "D",    # docstrings
+    "N",    # pep8-naming
+]
+
+ignore = [
+    "D100",  # Missing docstring in public module (relaxed for scripts)
+    "D104",  # Missing docstring in public package
+]
+
+[lint.pydocstyle]
+convention = "google"
+
+[lint.per-file-ignores]
+"notebooks/*.py" = ["D100", "E402"]
+```
+
+`pyrightconfig.json`:
+```{.json filename="pyrightconfig.json"}
+{
+    "typeCheckingMode": "basic",
+    "pythonVersion": "3.13",
+    "include": ["src"],
+    "exclude": ["**/__pycache__"]
+}
+```
+
+Add both tools as dev dependencies:
+```bash
+uv add --dev ruff basedpyright
+```
+
+Then run:
+```bash
+uv run ruff check                # Check all linting issues
+uv run ruff check --fix          # Auto-fix what's fixable
+uv run basedpyright              # Type check all files
+```
+
+**Docstring Enforcement**
+
+Enable the `D` rules in `ruff.toml` (they should be in the `select` list). Run `uv run ruff check` on your module. The output will show each missing docstring with its location. For each `D103` (missing function docstring), add a Google-style docstring to that function. For `D100` (missing module docstring), add a one-line module docstring at the very top of the file.
+
+Once all docstrings are present and properly formatted, `ruff check` will report no `D`-category issues.
+
+**Type Hint Your Module**
+
+Run `uv run basedpyright` and review the output. Categorize errors into three types:
+
+1. **Missing annotations**: Function parameters or return types that lack type hints. Add type hints to the function signature based on how the parameter is used (is it an int, str, float, list, DuckDB connection?). For return types, what does the function actually return?
+2. **Unhandled None**: Code that accesses attributes or indexes on values that could be `None`. Fix with type narrowing: `if row is None: raise ValueError(...)` or `if result is not None:` guards.
+3. **Type mismatches**: Passing a string where an int is expected, or returning the wrong type. Fix by converting values or changing the type hint if you misidentified the type.
+
+Start with the highest-value places: function signatures first, then add `None` checks where basedpyright flags optional member access. Run `uv run basedpyright` repeatedly as you fix issues.
+
+**Runtime Confirmation**
+
+Intentionally create a type error. Here's an example:
+
+```{.python filename="type_error.py"}
+def calculate_total(price: float, quantity: int) -> float:
+    """Calculate total price."""
+    return price * quantity
+
+
+# This is wrong: "ten" is a string, not an int
+result = calculate_total(19.99, "ten")
+print(f"Result: {result}")
+```
+
+In Zed, you'll see a red squiggle under `"ten"` with the message: "Argument of type `str` is not assignable to parameter `quantity` of type `int` (reportArgumentType)".
+
+Now run the script:
+```bash
+uv run python type_error.py
+```
+
+Output:
+```
+Traceback (most recent call last):
+  File "type_error.py", line 6, in <module>
+    result = calculate_total(19.99, "ten")
+  File "type_error.py", line 2, in calculate_total
+    return price * quantity
+TypeError: can't multiply sequence by non-int of type 'float'
+```
+
+basedpyright caught the error before runtime. Python crashed at runtime with a `TypeError` when it tried to multiply a float by a string. This demonstrates that type checking finds *real* bugs that would cause runtime failures.
+
+:::
 
 ## Summary {.unnumbered}
 

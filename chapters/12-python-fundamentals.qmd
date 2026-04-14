@@ -232,12 +232,17 @@ Python has a small set of built-in types that cover most everyday needs:
 
 You can check the type of any value using the `type()` function:
 
-```{.python filename="type_checking.py"}
-type(42)          # <class 'int'>
-type(3.14)        # <class 'float'>
-type("hello")     # <class 'str'>
-type(True)        # <class 'bool'>
-type(None)        # <class 'NoneType'>
+```{.python filename="Python REPL"}
+>>> type(42)
+<class 'int'>
+>>> type(3.14)
+<class 'float'>
+>>> type("hello")
+<class 'str'>
+>>> type(True)
+<class 'bool'>
+>>> type(None)
+<class 'NoneType'>
 ```
 
 ::: {.callout-note}
@@ -257,8 +262,9 @@ print(big_number)  # 1267650600228229401496703205376
 
 Floats, on the other hand, follow the IEEE 754 standard for double-precision floating point. This means they have limited precision, and you'll occasionally see rounding artifacts:
 
-```{.python filename="float_precision.py"}
-0.1 + 0.2  # 0.30000000000000004
+```{.python filename="Python REPL"}
+>>> 0.1 + 0.2
+0.30000000000000004
 ```
 
 This isn't a Python bug. It's a fundamental property of how computers represent decimal numbers in binary. For most engineering calculations, the precision is more than sufficient. When exact decimal arithmetic matters (financial calculations, for example), Python provides the `decimal` module.
@@ -360,14 +366,21 @@ In most languages, swapping requires a temporary variable. Python handles it nat
 
 Python's arithmetic operators work the way you'd expect, with a few additions that are worth knowing:
 
-```{.python filename="arithmetic.py"}
-10 + 3    # 13    Addition
-10 - 3    # 7     Subtraction
-10 * 3    # 30    Multiplication
-10 / 3    # 3.333... Division (always returns float)
-10 // 3   # 3     Floor division (rounds down to int)
-10 % 3    # 1     Modulo (remainder)
-10 ** 3   # 1000  Exponentiation
+```{.python filename="Python REPL"}
+>>> 10 + 3     # Addition
+13
+>>> 10 - 3     # Subtraction
+7
+>>> 10 * 3     # Multiplication
+30
+>>> 10 / 3     # Division (always returns float)
+3.3333333333333335
+>>> 10 // 3    # Floor division (rounds down to int)
+3
+>>> 10 % 3     # Modulo (remainder)
+1
+>>> 10 ** 3    # Exponentiation
+1000
 ```
 
 Two operators deserve special attention. Floor division (`//`) divides and rounds down to the nearest integer. Modulo (`%`) returns the remainder after division. Together, they're useful for tasks like converting units or cycling through indices:
@@ -420,13 +433,19 @@ The `:,.2f` format adds comma separators and two decimal places, perfect for cur
 
 Comparison operators return `True` or `False`:
 
-```{.python filename="comparisons.py"}
-10 > 5     # True
-10 < 5     # False
-10 >= 10   # True
-10 <= 9    # False
-10 == 10   # True   (equality check, not assignment)
-10 != 5    # True   (not equal)
+```{.python filename="Python REPL"}
+>>> 10 > 5
+True
+>>> 10 < 5
+False
+>>> 10 >= 10
+True
+>>> 10 <= 9
+False
+>>> 10 == 10   # Equality check, not assignment
+True
+>>> 10 != 5    # Not equal
+True
 ```
 
 ::: {.callout-warning}
@@ -437,11 +456,14 @@ A single `=` is assignment: `x = 5` stores the value 5 in `x`. A double `==` is 
 
 Python also supports *chained comparisons*, a feature that reads like natural language:
 
-```{.python filename="chained.py"}
-x = 7
-1 < x < 10        # True (x is between 1 and 10)
-1 < x < 5         # False
-0 <= x <= 100     # True
+```{.python filename="Python REPL"}
+>>> x = 7
+>>> 1 < x < 10
+True
+>>> 1 < x < 5
+False
+>>> 0 <= x <= 100
+True
 ```
 
 This is equivalent to `1 < x and x < 10`, but the chained form is more readable.
@@ -450,10 +472,13 @@ This is equivalent to `1 < x and x < 10`, but the chained form is more readable.
 
 The `in` operator tests whether a value exists inside a collection:
 
-```{.python filename="in_operator.py"}
-"a" in "apple"          # True
-"z" in "apple"          # False
-5 in [1, 2, 3, 4, 5]   # True
+```{.python filename="Python REPL"}
+>>> "a" in "apple"
+True
+>>> "z" in "apple"
+False
+>>> 5 in [1, 2, 3, 4, 5]
+True
 ```
 
 You'll use `in` constantly in Python, especially with collections (@sec-collections) and loops.
@@ -485,9 +510,9 @@ print(f"{hours}h {minutes}m")  # 8h 17m
 **4.**
 ```{.python filename="solution.py"}
 name = "Northwind Traders"
-"wind" in name              # True
-name.startswith("North")    # True
-name.endswith("Inc")        # False
+print("wind" in name)              # True
+print(name.startswith("North"))    # True
+print(name.endswith("Inc"))        # False
 ```
 
 :::
@@ -516,14 +541,19 @@ The following values are *falsy*, meaning they evaluate to `False`:
 
 Everything else is *truthy*: it evaluates to `True`. Non-zero numbers, non-empty strings, non-empty collections, and most objects are all truthy.
 
-```{.python filename="truthiness.py"}
-# All of these are truthy
-bool(1)            # True
-bool(-1)           # True (any non-zero number)
-bool(0.001)        # True
-bool("hello")      # True (any non-empty string)
-bool(" ")          # True (a space is not empty!)
-bool([0])          # True (a list with one element, even if that element is 0)
+```{.python filename="Python REPL"}
+>>> bool(1)
+True
+>>> bool(-1)           # Any non-zero number
+True
+>>> bool(0.001)
+True
+>>> bool("hello")      # Any non-empty string
+True
+>>> bool(" ")          # A space is not empty!
+True
+>>> bool([0])          # A list with one element, even if that element is 0
+True
 ```
 
 That last example is important: a list containing `0` is truthy because the *list* is non-empty. The truthiness of a collection depends on whether the collection itself is empty, not on the values it contains.
@@ -534,20 +564,28 @@ Python's `and` and `or` operators don't just return `True` or `False`. They retu
 
 **`and`** returns the first falsy value it encounters, or the last value if all are truthy:
 
-```{.python filename="and_operator.py"}
-"hello" and "world"    # "world"  (both truthy, returns the last one)
-"hello" and 0          # 0        (0 is falsy, returns it)
-"" and "world"         # ""       (empty string is falsy, returns it)
-0 and ""               # 0        (0 is falsy, stops immediately)
+```{.python filename="Python REPL"}
+>>> "hello" and "world"
+'world'
+>>> "hello" and 0
+0
+>>> "" and "world"
+''
+>>> 0 and ""
+0
 ```
 
 **`or`** returns the first truthy value it encounters, or the last value if all are falsy:
 
-```{.python filename="or_operator.py"}
-"hello" or "world"     # "hello"  (first is truthy, returns it immediately)
-"" or "world"          # "world"  (first is falsy, tries second)
-0 or ""                # ""       (both falsy, returns the last one)
-0 or None              # None     (both falsy, returns the last one)
+```{.python filename="Python REPL"}
+>>> "hello" or "world"
+'hello'
+>>> "" or "world"
+'world'
+>>> 0 or ""
+''
+>>> print(0 or None)
+None
 ```
 
 This behavior enables a common Python pattern for default values:
@@ -581,12 +619,17 @@ result = quantity if quantity is not None else 10
 
 `not` inverts truthiness:
 
-```{.python filename="not_operator.py"}
-not True      # False
-not False     # True
-not 0         # True  (0 is falsy, so not 0 is True)
-not "hello"   # False ("hello" is truthy, so not "hello" is False)
-not None      # True  (None is falsy)
+```{.python filename="Python REPL"}
+>>> not True
+False
+>>> not False
+True
+>>> not 0         # 0 is falsy, so not 0 is True
+True
+>>> not "hello"   # "hello" is truthy, so not "hello" is False
+False
+>>> not None      # None is falsy
+True
 ```
 
 You'll see `not` most often in conditions: `if not results:` is a concise way to check whether a list is empty.
@@ -714,6 +757,99 @@ Use these products (values from the actual Northwind database):
 | Chai | 18.00 | 29 | 48 | No |
 | Chang | 19.00 | 68 | 46 | No |
 | Chef Anton's Gumbo Mix | 21.35 | 45 | 37 | Yes |
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**Predict the Output**
+
+1. `False` (empty list is falsy)
+2. `True` (non-empty list, even if elements are 0)
+3. `"default"` (empty string is falsy, `or` returns second)
+4. `"hello"` (first is truthy, `or` returns it immediately)
+5. `0` (`and` returns first falsy value)
+6. `"hello"` (`and` returns last value when all truthy)
+7. `"finally"` (`or` chains through falsy values until it finds truthy)
+8. `True` (`not "hello"` is `False`, `not False` is `True`)
+9. `3` (`True` is `1` in arithmetic, so `1 + 1 + 1 = 3`)
+10. `""` (`and` returns first falsy, `""` is falsy, stops there before `"world"`)
+
+**Unit Conversion Script**
+
+```{.python filename="solution.py"}
+# Convert PSI to kPa using the ISO 80000-4 conversion factor
+pressure_psi = 1500
+pressure_kpa = pressure_psi * 6.894757  # 1 PSI = 6.894757 kPa
+pressure_mpa = pressure_kpa / 1000      # 1 MPa = 1000 kPa
+print(f"{pressure_psi} PSI = {pressure_kpa:.2f} kPa = {pressure_mpa:.2f} MPa")
+
+# Convert Fahrenheit to Celsius and Kelvin
+temperature_f = 72
+temperature_c = (temperature_f - 32) * 5 / 9  # Standard formula
+temperature_k = temperature_c + 273.15        # Absolute zero offset
+print(f"{temperature_f}°F = {temperature_c:.2f}°C = {temperature_k:.2f}K")
+
+# Convert miles to kilometers and meters (1 mile = 1.60934 km)
+miles = 5.5
+kilometers = miles * 1.60934
+meters = kilometers * 1000
+print(f"{miles} miles = {kilometers:.2f} km = {meters:.2f} m")
+
+# Convert pounds-force to Newtons (1 lbf = 4.44822 N)
+force_lbf = 2000
+force_n = force_lbf * 4.44822
+force_kn = force_n / 1000
+print(f"{force_lbf} lbf = {force_n:.2f} N = {force_kn:.2f} kN")
+```
+
+**REPL Exploration**
+
+```{.python filename="solution.py"}
+# 1. What happens when you add a string and an integer?
+# TypeError: can only concatenate str (not "int") to str
+
+# 2. What does type(True + 1) return? What does True + 1 evaluate to?
+# type(True + 1) → <class 'int'>, evaluates to 2
+
+# 3. What is "hello" * 0? What about "hello" * -1?
+# Both return "" (empty string)
+
+# 4. Can you chain more than two comparisons? Try 1 < 2 < 3 < 4.
+# Yes, returns True
+
+# 5. What does type(None) return?
+# <class 'NoneType'>
+```
+
+**Northwind Product Card**
+
+```{.python filename="solution.py"}
+def print_product_card(product_name, unit_price, units_in_stock, discontinued, reorder_level):
+    """Print a formatted product card."""
+    needs_reorder = units_in_stock <= reorder_level and not discontinued
+    status = "DISCONTINUED" if discontinued else "Active"
+    reorder_flag = " [REORDER NEEDED]" if needs_reorder else ""
+
+    print(f"{'=' * 50}")
+    print(f"Product: {product_name}")
+    print(f"Status: {status}{reorder_flag}")
+    print(f"Unit Price: ${unit_price:,.2f}")
+    print(f"In Stock: {units_in_stock} units")
+    print(f"Reorder Level: {reorder_level} units")
+    print(f"Stock Value: ${unit_price * units_in_stock:,.2f}")
+    print(f"{'=' * 50}\n")
+
+
+# Chai
+print_product_card("Chai", 18.00, 29, False, 48)
+
+# Chang
+print_product_card("Chang", 19.00, 68, False, 46)
+
+# Chef Anton's Gumbo Mix
+print_product_card("Chef Anton's Gumbo Mix", 21.35, 45, True, 37)
+```
+
+:::
 
 ## Summary {.unnumbered}
 

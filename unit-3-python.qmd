@@ -16,13 +16,17 @@ Python is a general-purpose programming language, which means it isn't designed 
 
 **Working with Files** (@sec-file-io) bridges Python and the outside world. You'll read and write text, CSV, and JSON files, fetch data from web APIs with `httpx`, navigate the file system with `pathlib`, and handle the errors that inevitably arise when working with external data.
 
-**The Python Object Model** (@sec-objects) reveals that everything in Python, from integers to functions to modules themselves, is an object. Understanding the object model is what separates someone who can write Python scripts from someone who can read and understand any Python library. You'll also learn to use type hints as both documentation and a verification tool. This chapter serves as the capstone for the Python unit, tying together everything you've learned about the language.
+**The Python Object Model** (@sec-objects) reveals that everything in Python, from integers to functions to modules themselves, is an object. Understanding the object model is what separates someone who can write Python scripts from someone who can read and understand any Python library. You'll also learn to use type hints as both documentation and a verification tool.
+
+**Python Projects** (@sec-python-projects) structures your work for reproducibility and collaboration. You'll use `uv` to create a project with locked dependencies, a well-organized directory layout, and a `pyproject.toml` that makes your intentions explicit. The examples in this chapter preview dependencies you'll use in the next unit (Polars, DuckDB, Altair), giving you a sense of where you're headed.
+
+**Code Quality** (@sec-code-quality) reveals the formatting, linting, and type-checking tools that have been working behind the scenes in Zed. You'll learn to configure and run Ruff and basedpyright yourself, understanding why automated quality checks catch bugs that testing alone cannot. This chapter serves as the capstone for the Python unit: by the end, you'll have the language skills *and* the engineering discipline to build professional data workflows.
 
 ## Why This Order?
 
-Each chapter builds on the previous one. Fundamentals gives you the vocabulary of expressions and types. Collections gives you data structures to hold and organize data. Control flow teaches you to write programs that make decisions and repeat actions. Functions let you package logic into reusable units. File I/O connects your code to external data sources. And the object model ties it all together, revealing the unified design that underlies everything you've been using.
+Each chapter builds on the previous one. Fundamentals gives you the vocabulary of expressions and types. Collections gives you data structures to hold and organize data. Control flow teaches you to write programs that make decisions and repeat actions. Functions let you package logic into reusable units. File I/O connects your code to external data sources. The object model ties the language together, revealing the unified design that underlies everything you've been using. Project structure and code quality then wrap everything in the engineering practices that make your work reproducible, shareable, and maintainable.
 
-This progression mirrors how you'll actually work. A typical Python data script reads files (File I/O), stores the data in collections (Collections), processes it through functions (Functions) using conditionals and loops (Control Flow), and uses the object model to interact with libraries like DuckDB and Polars. By the end of this unit, you'll have the language skills to build complete data workflows.
+This progression mirrors how you'll actually work. A typical Python data script reads files (File I/O), stores the data in collections (Collections), processes it through functions (Functions) using conditionals and loops (Control Flow), and uses the object model to interact with libraries like DuckDB and Polars. Project engineering and quality tooling ensure that the result is something a collaborator can clone, understand, and trust. By the end of this unit, you'll have both the language skills and the project infrastructure to build complete data workflows.
 
 ## The Primary Workflow
 
@@ -34,6 +38,6 @@ If you have prior programming experience in Matlab or another language, you'll f
 
 Type the code. Don't copy and paste, don't just read. Programming is a physical skill as much as a mental one, and typing builds muscle memory for syntax patterns that reading alone never will. When an example doesn't work the way you expected, resist the urge to move on. Stop and figure out why. That moment of confusion, followed by understanding, is where the real learning happens.
 
-The exercises at the end of each chapter connect back to the Northwind database you know from the previous unit. You'll work with the same data, but now exported as CSV and JSON files that you process with Python scripts. By the end of the unit, you'll have built a complete, well-organized, documented, and typed Python module.
+The exercises at the end of each chapter connect back to the Northwind database you know from the previous unit. You'll work with the same data, but now exported as CSV and JSON files that you process with Python scripts. By the end of the unit, you'll have built a complete, well-organized, documented, typed, and quality-checked Python project.
 
 Let's begin.

@@ -131,9 +131,6 @@ When you need both the index and the value, use `enumerate()`:
 ```{.python filename="enumerate.py"}
 products = ["Chai", "Chang", "Tofu"]
 
-for index, product in products:  # This would fail! Can't unpack a string
-    print(f"{index}: {product}")
-
 for index, product in enumerate(products):
     print(f"{index}: {product}")
 ```
@@ -145,6 +142,20 @@ for index, product in enumerate(products):
 ```
 
 `enumerate()` returns pairs of `(index, value)`, which you unpack directly in the loop header. This is much cleaner than maintaining a separate counter variable.
+
+::: {.callout-warning}
+## Don't forget `enumerate()`
+
+A common mistake is trying to unpack index and value directly from the list:
+
+```{.python filename="Python REPL"}
+>>> for index, product in products:
+...     print(f"{index}: {product}")
+ValueError: too many values to unpack (expected 2)
+```
+
+Each element of `products` is a string like `"Chai"`, not a two-element tuple. Without `enumerate()`, Python tries to unpack the string into two variables and fails. Always wrap the iterable in `enumerate()` when you need both position and value.
+:::
 
 ### `zip()` for Parallel Iteration
 
@@ -387,18 +398,12 @@ order_details = [
     {"product": "Miso", "category": "Condiments", "price": 13.00, "quantity": 8},
 ]
 
-# Compute revenue per item
-revenues = [
-    {**item, "revenue": item["price"] * item["quantity"]}
-    for item in order_details
-]
-
 # Aggregate revenue by category using a dictionary
 category_totals = {}
 
-for item in revenues:
+for item in order_details:
     category = item["category"]
-    revenue = item["revenue"]
+    revenue = item["price"] * item["quantity"]
 
     if category in category_totals:
         category_totals[category] += revenue
@@ -406,9 +411,12 @@ for item in revenues:
         category_totals[category] = revenue
 
 # Sort by revenue (descending) and display
+def by_revenue(pair):
+    return pair[1]
+
 sorted_categories = sorted(
     category_totals.items(),
-    key=lambda pair: pair[1],
+    key=by_revenue,
     reverse=True,
 )
 
@@ -426,7 +434,7 @@ Condiments      $   304.00
 Beverages       $   275.00
 ```
 
-This script uses lists of dictionaries, a `for` loop with an `if`/`else` branch to build an aggregation dictionary, `sorted()` with a `key` function, tuple unpacking, and f-strings with alignment. It's a miniature version of what SQL's `GROUP BY` does, implemented entirely in Python. In later chapters, you'll read this data from actual CSV files instead of hardcoding it.
+This script uses lists of dictionaries, a `for` loop with an `if`/`else` branch to build an aggregation dictionary, a helper function as a `key` for `sorted()`, tuple unpacking, and f-strings with alignment. It's a miniature version of what SQL's `GROUP BY` does, implemented entirely in Python. In later chapters, you'll read this data from actual CSV files instead of hardcoding it. In @sec-functions, you'll learn about `lambda` expressions, which provide a more compact way to write the `by_revenue` helper.
 
 ## Exercises {.unnumbered}
 
@@ -478,6 +486,188 @@ Using the `order_details` list from the chapter, write a script that:
 1. Groups items by category into a dictionary of lists (each category key maps to a list of its items).
 2. For each category, computes the average unit price and total quantity ordered.
 3. Prints a formatted summary table.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+### Collection Operations {.unnumbered}
+
+**1.**
+```{.python filename="solution.py"}
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+first_three = numbers[:3]          # [1, 2, 3]
+last_three = numbers[-3:]          # [8, 9, 10]
+every_other = numbers[::2]         # [1, 3, 5, 7, 9]
+
+descending = sorted(numbers, reverse=True)  # [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+print(f"First three: {first_three}")
+print(f"Last three: {last_three}")
+print(f"Every other: {every_other}")
+print(f"Descending: {descending}")
+```
+
+**2.**
+```{.python filename="solution.py"}
+keys = ["Chai", "Chang", "Tofu"]
+values = [18.00, 19.00, 6.50]
+
+price_lookup = {k: v for k, v in zip(keys, values)}
+# {"Chai": 18.0, "Chang": 19.0, "Tofu": 6.5}
+
+print(price_lookup)
+```
+
+**3.**
+```{.python filename="solution.py"}
+product_names = ["Chai", "Chang", "Tofu", "Chai", "Miso", "Chang"]
+
+unique_names = sorted(set(product_names))
+# ["Chai", "Chang", "Miso", "Tofu"]
+
+print(unique_names)
+```
+
+### Loop Practice {.unnumbered}
+
+**1.**
+```{.python filename="solution.py"}
+a, b = 1, 1
+print(a)
+print(b)
+
+count = 2
+while count < 20:
+    next_val = a + b
+    print(next_val)
+    a, b = b, next_val
+    count += 1
+```
+
+**2.**
+```{.python filename="solution.py"}
+products = [
+    {"name": "Chai", "price": 18.00, "stock": 39},
+    {"name": "Chang", "price": 19.00, "stock": 17},
+    {"name": "Chef Anton's", "price": 22.00, "stock": 53},
+    {"name": "Tofu", "price": 23.25, "stock": 35},
+]
+
+most_expensive = products[0]
+for product in products:
+    if product["price"] > most_expensive["price"]:
+        most_expensive = product
+
+print(f"Most expensive: {most_expensive['name']} at ${most_expensive['price']}")
+```
+
+**3.**
+```{.python filename="solution.py"}
+products = ["Chai", "Chang", "Tofu", "Miso"]
+
+for idx, product in enumerate(products, start=1):
+    print(f"{idx}. {product}")
+```
+
+### Comprehension Practice {.unnumbered}
+
+**1.**
+```{.python filename="solution.py"}
+products = [
+    {"name": "Chai", "price": 18.00},
+    {"name": "Chang", "price": 19.00},
+    {"name": "Tofu", "price": 23.25},
+]
+
+# Loop 1 as comprehension
+names = [p["name"].upper() for p in products]
+# ["CHAI", "CHANG", "TOFU"]
+
+# Loop 2 as comprehension
+expensive = [p["name"] for p in products if p["price"] > 20]
+# ["Tofu"]
+
+print(names)
+print(expensive)
+```
+
+**2.**
+```{.python filename="solution.py"}
+products = [
+    {"name": "Chai", "price": 18.00, "stock": 39},
+    {"name": "Chang", "price": 19.00, "stock": 17},
+    {"name": "Tofu", "price": 23.25, "stock": 35},
+]
+
+# Rewrite as an explicit loop
+summary = {}
+for p in products:
+    if p["stock"] > 0:
+        summary[p["name"]] = p["price"] * p["stock"]
+
+print(summary)
+```
+
+**3.**
+```{.python filename="solution.py"}
+order_details = [
+    {"product": "Chai", "category": "Beverages", "price": 18.00, "quantity": 10},
+    {"product": "Chang", "category": "Beverages", "price": 19.00, "quantity": 5},
+    {"product": "Aniseed Syrup", "category": "Condiments", "price": 10.00, "quantity": 20},
+    {"product": "Tofu", "category": "Produce", "price": 23.25, "quantity": 15},
+    {"product": "Miso", "category": "Condiments", "price": 13.00, "quantity": 8},
+]
+
+high_revenue = [
+    item["product"]
+    for item in order_details
+    if item["price"] * item["quantity"] > 150
+]
+
+# ["Chai", "Aniseed Syrup", "Tofu"]
+print(high_revenue)
+```
+
+### Northwind Category Analysis {.unnumbered}
+
+**1., 2., 3.** (Combined solution):
+
+```{.python filename="solution.py"}
+order_details = [
+    {"product": "Chai", "category": "Beverages", "price": 18.00, "quantity": 10},
+    {"product": "Chang", "category": "Beverages", "price": 19.00, "quantity": 5},
+    {"product": "Aniseed Syrup", "category": "Condiments", "price": 10.00, "quantity": 20},
+    {"product": "Tofu", "category": "Produce", "price": 23.25, "quantity": 15},
+    {"product": "Miso", "category": "Condiments", "price": 13.00, "quantity": 8},
+]
+
+# Step 1: Group items by category
+groups = {}
+for item in order_details:
+    category = item["category"]
+    if category not in groups:
+        groups[category] = []
+    groups[category].append(item)
+
+# Step 2: Compute average price and total quantity per category
+summaries = {}
+for category, items in groups.items():
+    prices = [item["price"] for item in items]
+    avg_price = sum(prices) / len(prices)
+    total_qty = sum(item["quantity"] for item in items)
+    summaries[category] = {"avg_price": avg_price, "total_qty": total_qty}
+
+# Step 3: Print formatted table
+print(f"{'Category':<20} {'Avg Price':>12} {'Total Qty':>10}")
+print(f"{'-' * 20} {'-' * 12} {'-' * 10}")
+
+for category in sorted(summaries.keys()):
+    avg_price = summaries[category]["avg_price"]
+    total_qty = summaries[category]["total_qty"]
+    print(f"{category:<20} ${avg_price:>11,.2f} {total_qty:>10}")
+```
+
+:::
 
 ## Summary {.unnumbered}
 

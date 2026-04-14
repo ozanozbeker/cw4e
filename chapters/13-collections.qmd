@@ -313,7 +313,7 @@ This structure mirrors how you'll see data in the real world. A database query m
 ### Exercises
 
 1. Given the Northwind product dictionary below, write expressions to: get the product name, safely get a `"color"` key that doesn't exist (returning `"N/A"`), and add a new key `"category"` with value `"Beverages"`.
-```{.python filename="solution.py"}
+```{.python filename="setup.py"}
 product = {"name": "Chai", "price": 18.00, "stock": 39, "discontinued": False}
 ```
 
@@ -396,6 +396,131 @@ empty_set = set()     # This is a set
 Python provides four built-in collection types, each serving a specific purpose. Lists store ordered, mutable sequences you access by position, making them ideal for processing data where order matters. Tuples offer immutable, fixed-length collections for grouping related values, and their unpacking feature lets you elegantly assign multiple values in a single statement. Dictionaries map keys to values, mirroring database records and providing efficient lookup by name rather than position. Sets store unique elements and support mathematical operations like union and intersection, useful for deduplication and membership testing.
 
 These collections are the foundation for data processing. In the next chapter, you'll learn how to make decisions about data and process collections systematically using control flow: `if` statements for conditionals and `for`/`while` loops for repetition. Together, collections and control flow form the core of Python programming.
+
+## Exercises {.unnumbered}
+
+1. **Tuple Unpacking and Structured Data.** You have a tuple representing a product from the Northwind database: `product = ("Chai", 18.00, 39, False)` (name, price, units_in_stock, discontinued). Unpack this tuple into four variables and print a statement like: `"Chai (18.00) - 39 units in stock - Active"`. Create three similar tuples for "Chang", "Aniseed Syrup", and "Chef Anton's Cajun Seasoning" with realistic Northwind values, unpack each one, and print their summaries.
+
+2. **Dictionary Building with `zip()`.** You have two lists: product names `["Chai", "Chang", "Aniseed Syrup"]` and their prices `[18.00, 19.00, 10.00]`. Use `zip()` to combine them into a dictionary where each product name is a key and its price is the value. Then use this dictionary to look up the price of "Chang" and print all products with their prices in the format `"Product: $price"`.
+
+3. **Set Operations with Northwind Data.** You have two sets representing customer countries from different sales regions: `region_a = {"France", "Germany", "UK", "Spain", "Italy"}` and `region_b = {"Germany", "Italy", "USA", "Brazil", "Canada"}`. Use set operations to find: countries appearing in both regions (intersection), countries unique to Region A, countries unique to Region B, and the complete list of countries across both regions (union).
+
+4. **Northwind Inventory Report (Capstone).** Create a comprehensive inventory report by combining lists, dictionaries, and sets. You'll track three product categories, their products, and warehouse locations. Structure: a dictionary where keys are category names and values are lists of product names. Another dictionary for product-to-warehouse mappings (each product maps to a set of warehouse locations). Write code to: (a) print all products in the "Beverages" category, (b) find which warehouses stock "Chai", (c) identify products that are stocked in multiple warehouses, and (d) count the total number of unique warehouse locations across all products.
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**Tuple Unpacking and Structured Data**
+
+```{.python filename="solution.py"}
+# Chai
+product = ("Chai", 18.00, 39, False)
+name, price, units_in_stock, discontinued = product
+status = "Active" if not discontinued else "Discontinued"
+print(f"{name} ({price:.2f}) - {units_in_stock} units in stock - {status}")
+
+# Chang
+product = ("Chang", 19.00, 17, False)
+name, price, units_in_stock, discontinued = product
+status = "Active" if not discontinued else "Discontinued"
+print(f"{name} ({price:.2f}) - {units_in_stock} units in stock - {status}")
+
+# Aniseed Syrup
+product = ("Aniseed Syrup", 10.00, 13, False)
+name, price, units_in_stock, discontinued = product
+status = "Active" if not discontinued else "Discontinued"
+print(f"{name} ({price:.2f}) - {units_in_stock} units in stock - {status}")
+
+# Chef Anton's Cajun Seasoning
+product = ("Chef Anton's Cajun Seasoning", 22.00, 53, False)
+name, price, units_in_stock, discontinued = product
+status = "Active" if not discontinued else "Discontinued"
+print(f"{name} ({price:.2f}) - {units_in_stock} units in stock - {status}")
+```
+
+**Dictionary Building with `zip()`**
+
+```{.python filename="solution.py"}
+product_names = ["Chai", "Chang", "Aniseed Syrup"]
+prices = [18.00, 19.00, 10.00]
+
+# Build dictionary using zip()
+product_prices = dict(zip(product_names, prices))
+
+# Look up Chang's price
+chang_price = product_prices["Chang"]
+print(f"Chang costs ${chang_price:.2f}")
+
+# Print all products with prices
+for product, price in product_prices.items():
+    print(f"{product}: ${price:.2f}")
+```
+
+**Set Operations with Northwind Data**
+
+```{.python filename="solution.py"}
+region_a = {"France", "Germany", "UK", "Spain", "Italy"}
+region_b = {"Germany", "Italy", "USA", "Brazil", "Canada"}
+
+# Intersection: countries in both regions
+both = region_a & region_b
+print(f"In both regions: {both}")
+
+# Unique to Region A
+unique_a = region_a - region_b
+print(f"Unique to Region A: {unique_a}")
+
+# Unique to Region B
+unique_b = region_b - region_a
+print(f"Unique to Region B: {unique_b}")
+
+# Union: all countries
+all_countries = region_a | region_b
+print(f"All countries: {all_countries}")
+```
+
+**Northwind Inventory Report**
+
+```{.python filename="solution.py"}
+# Category to products mapping
+categories = {
+    "Beverages": ["Chai", "Chang", "Guarana Fantastica"],
+    "Condiments": ["Chef Anton's Cajun Seasoning", "Louisiana Hot Spicy Sauce"],
+    "Seafood": ["Carnarvon Tigers", "Escargots de Bourgogne"],
+}
+
+# Product to warehouses mapping (each product in a set of warehouses)
+product_warehouses = {
+    "Chai": {"New York", "London", "Tokyo"},
+    "Chang": {"New York", "Sydney"},
+    "Guarana Fantastica": {"Rio", "New York"},
+    "Chef Anton's Cajun Seasoning": {"New Orleans"},
+    "Louisiana Hot Spicy Sauce": {"New Orleans", "New York"},
+    "Carnarvon Tigers": {"Sydney"},
+    "Escargots de Bourgogne": {"London", "Paris"},
+}
+
+# (a) Print all products in Beverages category
+print("Beverages category:")
+for product in categories["Beverages"]:
+    print(f"  - {product}")
+
+# (b) Find warehouses stocking Chai
+chai_warehouses = product_warehouses["Chai"]
+print(f"\nWarehouses stocking Chai: {chai_warehouses}")
+
+# (c) Identify products stocked in multiple warehouses
+multi_warehouse = [product for product, warehouses in product_warehouses.items()
+                   if len(warehouses) > 1]
+print(f"\nProducts in multiple warehouses: {multi_warehouse}")
+
+# (d) Count unique warehouse locations
+all_warehouses = set()
+for warehouses in product_warehouses.values():
+    all_warehouses = all_warehouses | warehouses
+print(f"\nTotal unique warehouses: {len(all_warehouses)} - {all_warehouses}")
+```
+
+:::
 
 ## Glossary {.unnumbered}
 

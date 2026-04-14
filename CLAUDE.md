@@ -16,13 +16,13 @@ The book is designed to be self-teachable: someone finding it online should be a
 ## Book Structure (3 Units + Capstone)
 1. **The Professional Toolkit** (Ch 01–06) - Computers, filesystems, Quarto authoring, CLI, Git, GitHub
 2. **Data with SQL** (Ch 07–11) - DuckDB, querying, joins, analytics, data modeling
-3. **Python** (Ch 12–17) - Fundamentals, collections, control flow, functions, file I/O, object model
-4. **Building Data Products** (Ch 18–26) - Python-SQL, Polars, Altair, Excel, uv, code quality, computational documents, Arrow, Typer
+3. **Python** (Ch 12–19) - Fundamentals, collections, control flow, functions, file I/O, object model, project engineering with uv, code quality with Ruff & basedpyright
+4. **Building Data Products** (Ch 20–26) - Python-SQL, Polars, Altair, Excel, computational documents, Arrow, Typer
 
 ### Assessment Structure
 - **Test 1** after Unit 1: CLI, Git, filesystem concepts
 - **Test 2** after Unit 2: SQL queries, schema design
-- **Test 3** after Unit 3: Python language skills
+- **Test 3** after Unit 3: Python language skills, project engineering, code quality
 - **Final Project** for capstone: Build a complete data product
 
 ### Chapter Listing
@@ -42,15 +42,15 @@ The book is designed to be self-teachable: someone finding it online should be a
 | 12 | 12-python-fundamentals.qmd | Python Fundamentals |
 | 13 | 13-collections.qmd | Collections |
 | 14 | 14-control-flow.qmd | Control Flow |
-| 15 | 15-functions.qmd | Functions |
+| 15 | 15-functions.qmd | Functions & Modules |
 | 16 | 16-file-io.qmd | File I/O |
 | 17 | 17-objects.qmd | The Python Object Model |
-| 18 | 18-python-sql.qmd | Python Meets SQL |
-| 19 | 19-polars.qmd | DataFrames with Polars |
-| 20 | 20-altair.qmd | Visualization with Altair |
-| 21 | 21-excel.qmd | Working with Excel |
-| 22 | 22-python-projects.qmd | Python Projects with uv |
-| 23 | 23-code-quality.qmd | Code Quality |
+| 18 | 18-python-projects.qmd | Python Projects with uv |
+| 19 | 19-code-quality.qmd | Code Quality |
+| 20 | 20-python-sql.qmd | Python Meets SQL |
+| 21 | 21-polars.qmd | DataFrames with Polars |
+| 22 | 22-altair.qmd | Visualization with Altair |
+| 23 | 23-excel.qmd | Working with Excel |
 | 24 | 24-computational-documents.qmd | Computational Documents |
 | 25 | 25-arrow.qmd | Apache Arrow & the Columnar Revolution |
 | 26 | 26-typer.qmd | Building CLI Tools with Typer |
@@ -153,19 +153,20 @@ Every `## Exercises` section needs a `::: {.callout-tip title="Solutions" collap
 - [ ] **Ch 06** `06-github.qmd` — 10 multiple-choice questions, needs answer key
 
 ### Unit 3: Python
-- [ ] **Ch 12** `12-python-fundamentals.qmd` — 4 hands-on exercises (Predict, Unit Conversion, REPL Exploration, Northwind Product Card)
-- [ ] **Ch 14** `14-control-flow.qmd` — end-of-chapter exercises
-- [ ] **Ch 15** `15-functions.qmd` — end-of-chapter exercises
-- [ ] **Ch 16** `16-file-io.qmd` — end-of-chapter exercises
-- [ ] **Ch 17** `17-objects.qmd` — end-of-chapter exercises
+- [x] **Ch 12** `12-python-fundamentals.qmd` — 4 hands-on exercises (Predict, Unit Conversion, REPL Exploration, Northwind Product Card)
+- [x] **Ch 13** `13-collections.qmd` — end-of-chapter exercises added (were missing entirely)
+- [x] **Ch 14** `14-control-flow.qmd` — end-of-chapter exercises
+- [x] **Ch 15** `15-functions.qmd` — end-of-chapter exercises
+- [x] **Ch 16** `16-file-io.qmd` — end-of-chapter exercises
+- [x] **Ch 17** `17-objects.qmd` — end-of-chapter exercises
+- [x] **Ch 18** `18-python-projects.qmd` — 3 hands-on exercises (Peer Installation, Template Repository, Reproducibility Check, README Review)
+- [x] **Ch 19** `19-code-quality.qmd` — 3 hands-on exercises
 
 ### Unit 4: Building Data Products
-- [ ] **Ch 18** `18-python-sql.qmd` — end-of-chapter exercises
-- [ ] **Ch 19** `19-polars.qmd` — end-of-chapter exercises
-- [ ] **Ch 20** `20-altair.qmd` — end-of-chapter exercises
-- [ ] **Ch 21** `21-excel.qmd` — end-of-chapter exercises
-- [ ] **Ch 22** `22-python-projects.qmd` — 3 hands-on exercises (Peer Installation, Template Repository, Reproducibility Check, README Review)
-- [ ] **Ch 23** `23-code-quality.qmd` — 3 hands-on exercises
+- [ ] **Ch 20** `20-python-sql.qmd` — end-of-chapter exercises
+- [ ] **Ch 21** `21-polars.qmd` — end-of-chapter exercises
+- [ ] **Ch 22** `22-altair.qmd` — end-of-chapter exercises
+- [ ] **Ch 23** `23-excel.qmd` — end-of-chapter exercises
 - [ ] **Ch 25** `25-arrow.qmd` — 2 hands-on exercises
 - [ ] **Ch 26** `26-typer.qmd` — 2 hands-on exercises + Final Project Assembly
 
