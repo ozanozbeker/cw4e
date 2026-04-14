@@ -1073,18 +1073,76 @@ Quotations or important statements use a greater-than symbol:
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span><span class="kw">:</span><span class="at"> cosmo</span></span>
 <span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Render it with this new theme. Try other themes (e.g., <code>journal</code>, <code>dark</code>, <code>flatly</code>) by changing the <code>theme:</code> line. Which theme do you prefer for a technical report?</p>
-<div class="callout callout-style-simple callout-tip callout-titled" title="Solution">
+<div class="callout callout-style-simple callout-tip callout-titled" title="Solutions">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Solution
+<span class="screen-reader-only">Tip</span>Solutions
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p><strong>Exercise 1</strong> Solution:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>engineering_report.qmd</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="engineering_report.qmd"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Analysis of a Recent Project"</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your Name"</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> today</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> true</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>This report examines the outcomes of the bridge inspection project completed in February 2024.</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>The project aimed to assess structural integrity and identify needed repairs.</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>We inspected four spans and documented findings in detail.</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Methodology {#sec-methodology}</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>Our inspection process followed these steps:</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Visual inspection of all visible structural elements</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Measurement of crack widths and rust extent using calibrated tools</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Ultrasonic testing of concrete strength at five locations per span</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Documentation of findings in standardized forms</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Findings {#sec-findings}</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="Critical Finding"}</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>Span 2 shows active corrosion of the main steel reinforcement,</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>requiring repair within 6 months to prevent structural compromise.</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>As described in @sec-methodology, our testing revealed three categories of defects:</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Minor surface scaling (all spans)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Moderate reinforcement corrosion (Span 2)</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Expansion joint deterioration (Span 3)</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>The structure is safe for continued use with planned maintenance.</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>Priority should be given to Span 2 corrosion repair as detailed in @sec-findings.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Key points in the solution: - The YAML front matter includes all required fields - Sections are clearly labeled with headings and labels - Cross-references use the <code>@sec-</code> syntax - A callout box draws attention to critical information - The numbered list in Methodology is clearly formatted - The cross-reference in the conclusion refers to the findings section</p>
+<p><strong>Exercise 2</strong> Solution:</p>
+<p>Running these three commands produces three different output files from the same source. Observations:</p>
+<ul>
+<li><strong>HTML</strong>: Interactive, compact on screen, easiest to read on a computer. Tables and links are clickable. No installation required.</li>
+<li><strong>DOCX</strong>: Opens in Word. You can edit it further, add comments, or send it to colleagues who use Word. Formatting is clean but may differ slightly from HTML.</li>
+<li><strong>PDF</strong>: Printable. Looks the same on any device. Professional for archiving or formal distribution, but harder to edit.</li>
+</ul>
+<p>Choice depends on audience: - Send <strong>HTML</strong> to a technical audience or for web publication - Send <strong>DOCX</strong> to collaborators who need to edit or comment - Send <strong>PDF</strong> to clients or for formal reports that shouldn’t be modified</p>
+<p>The power of Quarto is that you write once and choose the format based on where the document is going.</p>
+<p><strong>Exercise 3</strong> Solution:</p>
 <p>Adding theme options changes the visual appearance without touching your content. Try these themes and see which suits your taste:</p>
 <ul>
 <li><code>cosmo</code> — Modern, colorful, clean</li>
@@ -1094,7 +1152,7 @@ Quotations or important statements use a greater-than symbol:
 <li><code>sandstone</code> — Warm, earthy tones</li>
 </ul>
 <p>There’s no “right” answer. Pick a theme that matches your professional context. For internal reports, a clean theme like <code>cosmo</code> or <code>journal</code> works well. For presentations, <code>dark</code> or <code>sandstone</code> often look better.</p>
-<p>The point is that appearance and content are separate. You write the report once, and changing <code>theme:</code> line instantly changes how it looks.</p>
+<p>The point is that appearance and content are separate. You write the report once, and changing the <code>theme:</code> line instantly changes how it looks.</p>
 </div>
 </div>
 </div>
