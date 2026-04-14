@@ -64,6 +64,7 @@ The book is designed to be self-teachable: someone finding it online should be a
 - **Documentation**: Quarto
 - **Code quality**: Ruff, basedpyright
 - **Dataset**: Northwind (used consistently throughout the book; course projects may use different datasets)
+- **Interactive playground**: `marimo/playground.py` — a WASM-deployed marimo app with SQL editors (connected to Northwind via DuckDB) and standalone Python editors. Both are operational. Uses `mo.ui.code_editor()` for input and `exec()` with `redirect_stdout` for Python output capture.
 
 ## Writing Guidelines
 
@@ -142,6 +143,53 @@ Inline exercises use this exact format:
 4. Include debug/troubleshooting scenarios
 5. Vary difficulty levels
 
+## TODO: Add Missing End-of-Chapter Exercise Solutions
+
+Every `## Exercises` section needs a `::: {.callout-tip title="Solutions" collapse="true"}` block with worked solutions. Inline `### Exercises` (mid-chapter) already have solutions. The following end-of-chapter sections are missing them:
+
+### Unit 1: The Professional Toolkit
+- [ ] **Ch 04** `04-cli.qmd` — 10 multiple-choice questions, needs answer key
+- [ ] **Ch 05** `05-git.qmd` — 10 multiple-choice questions, needs answer key
+- [ ] **Ch 06** `06-github.qmd` — 10 multiple-choice questions, needs answer key
+
+### Unit 3: Python
+- [ ] **Ch 12** `12-python-fundamentals.qmd` — 4 hands-on exercises (Predict, Unit Conversion, REPL Exploration, Northwind Product Card)
+- [ ] **Ch 14** `14-control-flow.qmd` — end-of-chapter exercises
+- [ ] **Ch 15** `15-functions.qmd` — end-of-chapter exercises
+- [ ] **Ch 16** `16-file-io.qmd` — end-of-chapter exercises
+- [ ] **Ch 17** `17-objects.qmd` — end-of-chapter exercises
+
+### Unit 4: Building Data Products
+- [ ] **Ch 18** `18-python-sql.qmd` — end-of-chapter exercises
+- [ ] **Ch 19** `19-polars.qmd` — end-of-chapter exercises
+- [ ] **Ch 20** `20-altair.qmd` — end-of-chapter exercises
+- [ ] **Ch 21** `21-excel.qmd` — end-of-chapter exercises
+- [ ] **Ch 22** `22-python-projects.qmd` — 3 hands-on exercises (Peer Installation, Template Repository, Reproducibility Check, README Review)
+- [ ] **Ch 23** `23-code-quality.qmd` — 3 hands-on exercises
+- [ ] **Ch 25** `25-arrow.qmd` — 2 hands-on exercises
+- [ ] **Ch 26** `26-typer.qmd` — 2 hands-on exercises + Final Project Assembly
+
+Chapters 1-3 were completed. Chapters 7-11 (SQL) and 13 (Collections) already have complete solutions. Chapter 24 (Computational Documents) already has complete solutions.
+
+Also check: some `solution.py` filename attributes on code blocks in exercise solutions may need standardization.
+
+### Format reminder
+Solutions go AFTER the numbered questions:
+```
+## Exercises {.unnumbered}
+
+1. Question...
+2. Question...
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.** Answer...
+
+**2.** Answer...
+
+:::
+```
+
 ## Reference Materials
 - Making Learning Whole Notes: `_making-learning-whole-notes.md`
 - Lecture Schedule: `lecture-schedule.md`
@@ -149,9 +197,10 @@ Inline exercises use this exact format:
 - O'Reilly resources (with proper attribution)
 
 ## Important Constraints
-- Don't explicitly say "for industrial engineers" (course attracts multiple disciplines)
+- The book must read as a **standalone, self-teachable resource** — never use "course", "semester", "class" (academic), "instructor", "classmate", or "student" in chapters or appendices. Use "this book", "colleague", "reader", etc. instead. (Slides are instructor-facing and exempt.)
+- Don't explicitly say "for industrial engineers" (audience includes multiple disciplines)
 - Maintain professional tone without being dry
-- Challenge students appropriately for 300-level
+- Challenge readers appropriately for 300-level
 - Emphasize production-quality work over academic exercises
-- Focus on tools that prepare students for real data work
-- Book uses Northwind for all examples; don't tie the capstone project exclusively to Northwind (students in the class use different project datasets)
+- Focus on tools that prepare readers for real data work
+- Book uses Northwind for all examples; capstone patterns should transfer to any dataset

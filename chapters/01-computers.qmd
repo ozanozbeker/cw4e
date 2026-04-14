@@ -296,5 +296,29 @@ D) Makes all text the same color for consistency
 ### Question 1.10
 True or False: Closing a program frees the RAM that program was using.
 
-A) True   
-B) False  
+A) True
+B) False
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**1.1** B) Applications are designed for end-user interaction with thoughtful interfaces
+
+**1.2** C) RAM is where programs run and files are actively edited
+
+**1.3** B) The file must be copied from disk into RAM before work can begin
+
+**1.4** C) They are lost because they only existed in volatile RAM
+
+**1.5** B) Word embeds hidden formatting codes that confuse programming languages
+
+**1.6** B) The memory contents are lost when power is removed
+
+**1.7** B) Package managers automatically handle dependencies when installing software
+
+**1.8** B) A program written in an interpreted language like Python
+
+**1.9** B) Colors different parts of code based on their grammatical role
+
+**1.10** A) True
+
+:::

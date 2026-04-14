@@ -529,7 +529,31 @@ D) Text files compress better than binary files
 ### Question 2.10
 Given the path `../../shared/data/file.csv`, how many directory levels up does this path navigate before descending?
 
-A) 0  
-B) 1  
-C) 2   
-D) 3  
+A) 0
+B) 1
+C) 2
+D) 3
+
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**2.1** C) .csv (comma-separated values)
+
+**2.2** B) A location starting from the root of the file system
+
+**2.3** B) Forward slash `/`
+
+**2.4** C) The home directory
+
+**2.5** D) The parent directory (one level up)
+
+**2.6** B) They are typically configuration files that reduce clutter when hidden
+
+**2.7** C) They are conventions that tell programs how to interpret the file
+
+**2.8** C) .xlsx
+
+**2.9** B) Text files can track line-by-line changes meaningfully
+
+**2.10** C) 2
+
+:::

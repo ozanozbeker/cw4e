@@ -108,5 +108,85 @@ def _(sql_editor_2):
     return
 
 
+@app.cell(hide_code=True)
+def _():
+    mo.md(r"""
+    ## Python Editors
+    """)
+    return
+
+
+@app.cell
+def _():
+    py_editor_1 = mo.ui.code_editor(
+        value='# Write your Python code here\nprint("Hello, World!")',
+        language="python",
+        min_height=150,
+        label="**Python**",
+    )
+    py_editor_1
+    return (py_editor_1,)
+
+
+@app.cell
+def _(py_editor_1):
+    import io as _io
+    import traceback as _tb
+    import contextlib as _cl
+
+    _stdout = _io.StringIO()
+    _result_parts: list[str] = []
+
+    try:
+        with _cl.redirect_stdout(_stdout):
+            exec(py_editor_1.value)
+        _captured = _stdout.getvalue()
+        if _captured:
+            _result_parts.append(f"```\n{_captured}```")
+        else:
+            _result_parts.append("*No output. Use `print()` to see results.*")
+    except Exception:
+        _result_parts.append(f"```\n{_tb.format_exc()}```")
+
+    mo.md("\n".join(_result_parts))
+    return
+
+
+@app.cell
+def _():
+    py_editor_2 = mo.ui.code_editor(
+        value='# Write your Python code here\nprint("Hello, World!")',
+        language="python",
+        min_height=150,
+        label="**Python**",
+    )
+    py_editor_2
+    return (py_editor_2,)
+
+
+@app.cell
+def _(py_editor_2):
+    import io as _io
+    import traceback as _tb
+    import contextlib as _cl
+
+    _stdout = _io.StringIO()
+    _result_parts: list[str] = []
+
+    try:
+        with _cl.redirect_stdout(_stdout):
+            exec(py_editor_2.value)
+        _captured = _stdout.getvalue()
+        if _captured:
+            _result_parts.append(f"```\n{_captured}```")
+        else:
+            _result_parts.append("*No output. Use `print()` to see results.*")
+    except Exception:
+        _result_parts.append(f"```\n{_tb.format_exc()}```")
+
+    mo.md("\n".join(_result_parts))
+    return
+
+
 if __name__ == "__main__":
     app.run()

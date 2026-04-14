@@ -120,7 +120,7 @@ Note the difference between `sorted(numbers)`, which returns a *new* sorted list
 1. Given `prices = [18.00, 19.00, 10.00, 22.00, 23.25, 6.50]`, write expressions to get: the first three prices, the last two prices, and every other price starting from the first. What does `prices[10]` produce? What about `prices[10:20]`?
 
 2. Predict the output of this code without running it, then verify:
-```{.python filename="solution.py"}
+```{.python filename="setup.py"}
 items = [1, 2, 3]
 items.append([4, 5])
 print(len(items))

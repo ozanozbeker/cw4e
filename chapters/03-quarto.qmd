@@ -560,7 +560,78 @@ theme: cosmo
 
 Render it with this new theme. Try other themes (e.g., `journal`, `dark`, `flatly`) by changing the `theme:` line. Which theme do you prefer for a technical report?
 
-::: {.callout-tip title="Solution" collapse="true"}
+::: {.callout-tip title="Solutions" collapse="true"}
+
+**Exercise 1** Solution:
+
+```{.markdown filename="engineering_report.qmd"}
+---
+title: "Analysis of a Recent Project"
+author: "Your Name"
+date: today
+format: html
+toc: true
+number-sections: true
+---
+
+## Introduction
+
+This report examines the outcomes of the bridge inspection project completed in February 2024.
+The project aimed to assess structural integrity and identify needed repairs.
+We inspected four spans and documented findings in detail.
+
+## Methodology {#sec-methodology}
+
+Our inspection process followed these steps:
+
+1. Visual inspection of all visible structural elements
+2. Measurement of crack widths and rust extent using calibrated tools
+3. Ultrasonic testing of concrete strength at five locations per span
+4. Documentation of findings in standardized forms
+
+## Key Findings {#sec-findings}
+
+::: {.callout-warning title="Critical Finding"}
+Span 2 shows active corrosion of the main steel reinforcement,
+requiring repair within 6 months to prevent structural compromise.
+:::
+
+As described in @sec-methodology, our testing revealed three categories of defects:
+
+- Minor surface scaling (all spans)
+- Moderate reinforcement corrosion (Span 2)
+- Expansion joint deterioration (Span 3)
+
+## Conclusion
+
+The structure is safe for continued use with planned maintenance.
+Priority should be given to Span 2 corrosion repair as detailed in @sec-findings.
+```
+
+Key points in the solution:
+- The YAML front matter includes all required fields
+- Sections are clearly labeled with headings and labels
+- Cross-references use the `@sec-` syntax
+- A callout box draws attention to critical information
+- The numbered list in Methodology is clearly formatted
+- The cross-reference in the conclusion refers to the findings section
+
+**Exercise 2** Solution:
+
+Running these three commands produces three different output files from the same source. Observations:
+
+- **HTML**: Interactive, compact on screen, easiest to read on a computer. Tables and links are clickable. No installation required.
+- **DOCX**: Opens in Word. You can edit it further, add comments, or send it to colleagues who use Word. Formatting is clean but may differ slightly from HTML.
+- **PDF**: Printable. Looks the same on any device. Professional for archiving or formal distribution, but harder to edit.
+
+Choice depends on audience:
+- Send **HTML** to a technical audience or for web publication
+- Send **DOCX** to collaborators who need to edit or comment
+- Send **PDF** to clients or for formal reports that shouldn't be modified
+
+The power of Quarto is that you write once and choose the format based on where the document is going.
+
+**Exercise 3** Solution:
 
 Adding theme options changes the visual appearance without touching your content. Try these themes and see which suits your taste:
 
@@ -572,7 +643,7 @@ Adding theme options changes the visual appearance without touching your content
 
 There's no "right" answer. Pick a theme that matches your professional context. For internal reports, a clean theme like `cosmo` or `journal` works well. For presentations, `dark` or `sandstone` often look better.
 
-The point is that appearance and content are separate. You write the report once, and changing `theme:` line instantly changes how it looks.
+The point is that appearance and content are separate. You write the report once, and changing the `theme:` line instantly changes how it looks.
 
 :::
 
